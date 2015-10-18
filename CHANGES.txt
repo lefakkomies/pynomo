@@ -1,0 +1,63 @@
+PyNomo
+
+0.3.0
+=====
+- double alignment
+- main repo of code moved to github
+- documentation in github: pynomo-doc
+
+0.2.2
+=====
+- new scale (smart) scale types: 'smart linear', 'smart log'
+- isopleths easily defined
+- default number formatting ('text_format') is %4.4g
+
+
+0.2.1
+=====
+- small bug fixes
+- negative values in linear axis sometimes caused errors (e.g. -30...400), now corrected.
+- colors
+- axis with arrow markings
+- R titles over pivot lines can be set manually
+- Extra titles for axes
+- option to print grid for text placement
+- brute force manual line drawing (for isopleths)
+- pre_func to draw with pyx primitives under nomograph
+- post_func to draw with pyx primitives over nomograph
+
+0.2.0b0
+=======
+Totally new approach.
+
+
+0.1.0b1
+=======
+Added functionality
+-------------------
+- axis title position can be tuned
+- log axis
+- two more examples
+- title box added
+- default values for "functions" (nomogram definition) added
+
+
+0.1.0a1
+=======
+Three basic nomograms (three variable)
+--------------------------------------
+	* three parallel lines 'F2(v)=F1(u)+F3(w)'
+	* N nomograph 'F2(v)=F1(u)*F3(w)'
+	* general determinant
+              -------------------------
+              | f1(u) | g1(u) | h1(u) |
+              -------------------------
+              | f2(v) | g2(v) | h2(v) | = 0
+              -------------------------
+              | f3(w) | g3(w) | h3(w) |
+              -------------------------
+
+In general
+----------
+First distribution
+

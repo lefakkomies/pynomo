@@ -1,0 +1,4 @@
+Installation
+============
+
+See instructions in pynomo-doc at github.
