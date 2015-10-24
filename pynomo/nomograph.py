@@ -122,7 +122,7 @@ class Nomograph:
              'F2(v)=F3(w)/F1(u)': self.init_product_three,
              'general3': self.init_general}[nomo_type]()
         except KeyError:
-            print "nomo_type not valid"
+            print("nomo_type not valid")
         # This structure sets the limits
         vk = [['u', self.functions['u_start'], 'x', self.functions['u_start_x_coord']],
               ['u', self.functions['u_start'], 'y', self.functions['u_start_y_coord']],
