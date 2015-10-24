@@ -198,14 +198,14 @@ if __name__ == '__main__':
         ##    cc=np.array([bb,bb,bb])
         ##    print 'cc'+`cc`
         ##    print 5*nomograph._make_transformation_matrix_()
-        print nomograph.give_x1(0.5)
-        print nomograph.give_x1(1.0)
-        print nomograph.give_y1(0.5)
-        print nomograph.give_y1(1.0)
-        print nomograph.give_x3(0.5)
-        print nomograph.give_x3(1.0)
-        print nomograph.give_y3(0.5)
-        print nomograph.give_y3(1.0)
+        print(nomograph.give_x1(0.5))
+        print(nomograph.give_x1(1.0))
+        print(nomograph.give_y1(0.5))
+        print(nomograph.give_y1(1.0))
+        print(nomograph.give_x3(0.5))
+        print(nomograph.give_x3(1.0))
+        print(nomograph.give_y3(0.5))
+        print(nomograph.give_y3(1.0))
 
 
     main()

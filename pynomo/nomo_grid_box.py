@@ -522,7 +522,7 @@ class Nomo_Grid_Box(object):
                         # print "selvitty"
                         break
                     if count > 1e3:  # cancel if not solution
-                        print "Warning no solution found in contour"
+                        print("Warning no solution found in contour")
                         break
 
                 u += delta_u
@@ -630,7 +630,7 @@ if __name__ == '__main__':
     tic = time.time()
     test = Nomo_Grid_Box(params=params)
     toc = time.time()
-    print toc - tic, ' has elapsed'
+    #print toc - tic, ' has elapsed'
 
     manual_axis_data = {1.0: 'first',
                         2.0: 'second',

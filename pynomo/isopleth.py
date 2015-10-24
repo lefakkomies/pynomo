@@ -74,7 +74,7 @@ class Isopleth_Wrapper(object):
             ref_atoms = block.atom_stack[N:(N + ref_N)]
             # set ref axes
             for idx, ref_atom in enumerate(ref_atoms):
-                ref_atom.params['tag'] = 'ref' + `idx` + `self.ref_tag_number`
+                ref_atom.params['tag'] = 'ref' + repr(idx) + repr(self.ref_tag_number)
             self.ref_tag_number = self.ref_tag_number + 1
             atoms = block.atom_stack[:N]
             atom_stack_start = [atoms[0], atoms[1], ref_atoms[0]]
@@ -115,7 +115,7 @@ class Isopleth_Wrapper(object):
             atom_stack_12 = [atoms[0], atoms[1], atoms[4]]  # 4 = ref line
             atom_stack_34 = [atoms[2], atoms[3], atoms[4]]
             # tag the reference line
-            atoms[4].params['tag'] = 'ref_type4' + `self.ref_tag_number`
+            atoms[4].params['tag'] = 'ref_type4' + repr(self.ref_tag_number)
             self.ref_tag_number = self.ref_tag_number + 1
             # make blocks
             block_para_12 = copy.deepcopy(block_para)
@@ -539,7 +539,7 @@ class Isopleth_Block(object):
         if not re.search("dashdotted", line_style, re.IGNORECASE) == None:
             return style.linestyle.dashdotted
         # no match return default
-        print "unknown linestyle: %s" % line_style
+        print("unknown linestyle: %s" % line_style)
         return style.linestyle.dashed
 
     def parse_linewidth(self, line_width):
@@ -571,7 +571,7 @@ class Isopleth_Block(object):
         if not re.search("normal", line_width, re.IGNORECASE) == None:
             return style.linewidth.normal
         # no match return default
-        print "unknown linewidth: %s" % line_width
+        print("unknown linewidth: %s" % line_width)
         return style.linewidth.normal
 
     def parse_color(self, color_str):
@@ -715,7 +715,7 @@ class Isopleth_Block(object):
         if re.match("White", color_str, re.IGNORECASE):
             return color.cmyk.White
         # default
-        print "unknown color: %s" % color
+        print("unknown color: %s" % color)
         return color.cmyk.Black
 
     def parse_isopleth_params(self, params):
@@ -727,19 +727,19 @@ class Isopleth_Block(object):
                               'circle_size':0.05}]
         """
         # color
-        if params.has_key('color'):
+        if 'color' in params:
             color_param = self.parse_color(params['color'])
         else:
             color_param = self.parse_color('black')
 
         # color rgb
-        if params.has_key('color_rgb'):
+        if 'color_rgb' in params:
             r = params['color_rgb'][0]
             g = params['color_rgb'][1]
             b = params['color_rgb'][2]
             color_param = color.rgb(r, g, b)
         # color cmyk
-        if params.has_key('color_cmyk'):
+        if 'color_cmyk' in params:
             c = params['color_cmyk'][0]
             m = params['color_cmyk'][1]
             y = params['color_cmyk'][2]
@@ -747,16 +747,16 @@ class Isopleth_Block(object):
             color_param = color.cmyk(c, m, y, k)
         # transparent
         transparent = False
-        if params.has_key('transparency'):
+        if 'transparency' in params:
             color_param_transparency = color.transparency(params['transparency'])
             transparent = True
         # linestyle
-        if params.has_key('linestyle'):
+        if 'linestyle' in params:
             linestyle_param = self.parse_linestyle(params['linestyle'])
         else:
             linestyle_param = self.parse_linestyle('dashed')
         # linewidth
-        if params.has_key('linewidth'):
+        if 'linewidth' in params:
             linewidth_param = self.parse_linewidth(params['linewidth'])
         else:
             linewidth_param = self.parse_linewidth('thick')
@@ -768,7 +768,7 @@ class Isopleth_Block(object):
     def parse_circle_size(self, params):
         #
         # circle radius
-        if params.has_key('circle_size'):
+        if 'circle_size' in params:
             return params['circle_size']
         else:
             return 0.05

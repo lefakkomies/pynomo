@@ -22,6 +22,7 @@ import math
 import scipy
 import random
 import copy, re, pprint
+import six  # for python 2 and 3 compatibility
 
 
 class Nomo_Axis:
@@ -678,8 +679,8 @@ class Nomo_Axis:
             # make the ticks
             start_decade = start_decade + 1
             stop_decade = stop_decade + 1
-            print "start_decade value %f" % -10 ** start_decade
-            print "stop_decade value %f" % 10 ** stop_decade
+            print ("start_decade value %f" % -10 ** start_decade)
+            print ("stop_decade value %f" % 10 ** stop_decade)
             tick_0_list_n, tick_1_list_n, tick_2_list_n, tick_3_list_n, tick_4_list_n = \
                 find_log_ticks_negative_smart(start, -10 ** (start_decade) * 1.0001, f, g, turn=1, base_start=None,
                                               base_stop=None,
@@ -1175,7 +1176,7 @@ class Nomo_Axis:
         line = path.path(path.moveto(f(self.start), g(self.start)))
         thin_line = path.path(path.moveto(f(self.start), g(self.start)))
         main_line = path.path(path.moveto(f(self.start), g(self.start)))
-        for number, label_string in manual_axis_data.iteritems():
+        for number, label_string in six.iteritems(manual_axis_data):
             text_distance = 1.0 / 4
             text_size = self.axis_appear['text_size_manual']
             if self.side == 'left':
@@ -1284,7 +1285,7 @@ class Nomo_Axis:
             line.append(path.lineto(f(u), g(u)))
         # make lines and texts
         turn_original = turn
-        for number, label_def in manual_axis_data.iteritems():
+        for number, label_def in six.iteritems(manual_axis_data):
             turn = turn_original
             x_corr = 0.0  # shifts for labels
             y_corr = 0.0
@@ -1369,7 +1370,7 @@ class Nomo_Axis:
                                   g(number) + text_distance * dx_unit + y_corr, text_attr))
                 else:  # do manual text position
                     if type(manual_relative_text_pos) is not tuple:
-                        print "'manual_relative_text_pos' should be tuple (dx,dy)"
+                        print("'manual_relative_text_pos' should be tuple (dx,dy)")
                     dx_rel = manual_relative_text_pos[0]
                     dy_rel = manual_relative_text_pos[1]
                     texts.append((label_string,
@@ -1380,8 +1381,8 @@ class Nomo_Axis:
                     line.append(path.lineto(f(number) - grid_length * dy_unit, g(number) + grid_length * dx_unit))
                 else:  # manual line tick drawing
                     if type(manual_relative_line) is not list:
-                        print "'manual_relative_line' should be list [(x0,y0),(x1,y1),...]"
-                        print manual_relative_line
+                        print("'manual_relative_line' should be list [(x0,y0),(x1,y1),...]")
+                        print(manual_relative_line)
                     line.append(path.moveto(f(number), g(number)))
                     x_orig = f(number)
                     y_orig = g(number)
@@ -2253,9 +2254,9 @@ def core_tick_draw_func_basic(ticks, texts, level, f, g, dx_units, dy_units,
     """
     n_ticks = len(ticks)
     ti = tick_info
-    if len(dx_units) < n_ticks: print "too few dx_units !"
-    if len(dy_units) < n_ticks: print "too few dy_units !"
-    if len(angles) < n_ticks: print "too few angles !"
+    if len(dx_units) < n_ticks: print("too few dx_units !")
+    if len(dy_units) < n_ticks: print("too few dy_units !")
+    if len(angles) < n_ticks: print("too few angles !")
     for i, tick in enumerate(ticks):
         # draw actual tick
         x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
@@ -2290,9 +2291,9 @@ def example_tick_draw_func(ticks, texts, level, f, g, dx_units, dy_units,
     tick_info: general hook for axis dict
     """
     n_ticks = len(ticks)
-    if len(dx_units) < n_ticks: print "too few dx_units !"
-    if len(dy_units) < n_ticks: print "too few dy_units !"
-    if len(angles) < n_ticks: print "too few angles !"
+    if len(dx_units) < n_ticks: print("too few dx_units !")
+    if len(dy_units) < n_ticks: print("too few dy_units !")
+    if len(angles) < n_ticks: print("too few angles !")
     for i, tick in enumerate(ticks):
         # draw actual tick
         x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
@@ -2319,9 +2320,9 @@ def core_text_draw_func_basic(ticks, texts, level, f, g, dx_units, dy_units, ang
     """
     ti = tick_info  # for shorthand
     n_texts = len(texts)
-    if len(dx_units) < n_texts: print "too few dx_units !"
-    if len(dy_units) < n_texts: print "too few dy_units !"
-    if len(angles) < n_texts: print "too few angles !"
+    if len(dx_units) < n_texts: print("too few dx_units !")
+    if len(dy_units) < n_texts: print("too few dy_units !")
+    if len(angles) < n_texts: print("too few angles !")
     for i, text_value in enumerate(texts):
         # draw actual text
         x = f(text_value) + text_distance * dy_units[i]
@@ -2358,9 +2359,9 @@ def example_text_draw_func(ticks, texts, level, f, g, dx_units, dy_units, angles
     tick_info: general hook for axis dict
     """
     n_texts = len(texts)
-    if len(dx_units) < n_texts: print "too few dx_units !"
-    if len(dy_units) < n_texts: print "too few dy_units !"
-    if len(angles) < n_texts: print "too few angles !"
+    if len(dx_units) < n_texts: print("too few dx_units !")
+    if len(dy_units) < n_texts: print("too few dy_units !")
+    if len(angles) < n_texts: print("too few angles !")
     for i, text_value in enumerate(texts):
         # draw actual text
         x = f(text_value) + text_distance * dy_units[i]
@@ -2421,8 +2422,8 @@ def core_ticker(start, stop, f, g, tick_levels, text_levels, distance_limit_tick
                                                       distance_limit=tick_info['text_distance_smart'])
     texts = [te0, te1, te2, te3, te4]
     # suppress levels
-    print "tick_levels:%i" % tick_levels
-    print "text_levels:%i" % text_levels
+    print("tick_levels:%i" % tick_levels)
+    print("text_levels:%i" % text_levels)
     ticks = ticks[:tick_levels]
     texts = texts[:text_levels]
     # here we remove texts from list if there is no tick with same number
@@ -2477,9 +2478,9 @@ if __name__ == '__main__':
         tick_info: general hook for axis dict
         """
         n_texts = len(texts)
-        if len(dx_units) < n_texts: print "too few dx_units !"
-        if len(dy_units) < n_texts: print "too few dy_units !"
-        if len(angles) < n_texts: print "too few angles !"
+        if len(dx_units) < n_texts: print("too few dx_units !")
+        if len(dy_units) < n_texts: print("too few dy_units !")
+        if len(angles) < n_texts: print("too few angles !")
         for i, text_value in enumerate(texts):
             # draw actual text
             x = f(text_value) + text_distance * dy_units[i]
@@ -2521,9 +2522,9 @@ if __name__ == '__main__':
         tick_info: general hook for axis dict
         """
         n_ticks = len(ticks)
-        if len(dx_units) < n_ticks: print "too few dx_units !"
-        if len(dy_units) < n_ticks: print "too few dy_units !"
-        if len(angles) < n_ticks: print "too few angles !"
+        if len(dx_units) < n_ticks: print("too few dx_units !")
+        if len(dy_units) < n_ticks: print("too few dy_units !")
+        if len(angles) < n_ticks: print("too few angles !")
         for i, tick in enumerate(ticks):
             # draw actual tick
             x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
@@ -2631,9 +2632,9 @@ if __name__ == '__main__':
         tick_info: general hook for axis dict
         """
         n_ticks = len(ticks)
-        if len(dx_units) < n_ticks: print "too few dx_units !"
-        if len(dy_units) < n_ticks: print "too few dy_units !"
-        if len(angles) < n_ticks: print "too few angles !"
+        if len(dx_units) < n_ticks: print("too few dx_units !")
+        if len(dy_units) < n_ticks: print("too few dy_units !")
+        if len(angles) < n_ticks: print("too few angles !")
         for i, tick in enumerate(ticks):
             # draw actual tick
             x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)

@@ -461,7 +461,7 @@ class Axes_Wrapper:
         """
         x0 = [1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0]
         self._add_params_trafo_stack_(x0)
-        print "starts optimizing..."
+        print("starts optimizing...")
         fmin(self._calc_min_func_, x0, full_output=1, maxiter=2000)
         # self.alpha1=self.multiplier_x*self.alpha1
         # self.beta1=self.multiplier_x*self.beta1
@@ -613,7 +613,7 @@ class Axes_Wrapper:
         """
         x1, y1, x2, y2 = x_high, y_high, x_low, y_low
         x3, y3, x4, y4 = x_slope_high, y_slope_high, x_slope_low, y_slope_low
-        print x_high, y_high, x_low, y_low, x_slope_high, y_slope_high, x_slope_low, y_slope_low
+        #print x_high, y_high, x_low, y_low, x_slope_high, y_slope_high, x_slope_low, y_slope_low
         if (x1 - x3) * (x2 - x4) < 0:
             x1, y1, x3, y3 = x3, y3, x1, y1
         if x3 < x1:
