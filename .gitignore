@@ -2,5 +2,7 @@
 *.tex
 *.dvi
 *.pdf
+*.eps
 .idea
 __pycache__
+GENERATE_SINGLE.*
