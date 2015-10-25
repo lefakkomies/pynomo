@@ -276,7 +276,7 @@ class Nomo_Wrapper:
         if len(self.params['extra_texts']) > 0:
             for texts in self.params['extra_texts']:
                 for key in text_default:
-                    if not texts.has_key(key):
+                    if not key in texts:
                         texts[key] = text_default[key]
                 x = texts['x']
                 y = texts['y']
@@ -1523,11 +1523,11 @@ class Nomo_Block_Type_5(Nomo_Block):
                     if isinstance(self.grid_box.params['v_manual_axis_data'][self.params['v_values'][index]], list):
                         title_raw = self.grid_box.params['v_manual_axis_data'][self.params['v_values'][index]][0]
                         ex_params = self.grid_box.params['v_manual_axis_data'][self.params['v_values'][index]][1]
-                        if ex_params.has_key('x_corr'):
+                        if 'x_corr' in ex_params:
                             x_corr = ex_params['x_corr']
-                        if ex_params.has_key('y_corr'):
+                        if 'y_corr' in ex_params:
                             y_corr = ex_params['y_corr']
-                        if ex_params.has_key('draw_line'):
+                        if 'draw_line' in ex_params:
                             draw_line = ex_params['draw_line']
             else:
                 title_raw = self.params['v_values'][index]
@@ -2185,9 +2185,9 @@ class Nomo_Block_Type_8(Nomo_Block):
         """
         defines function F1
         """
-        if params.has_key('function_y'):
+        if 'function_y' in params:
             params['function'] = params['function_y']
-        if not params.has_key('function_x'):
+        if 'function_x' not in params:
             params['function_x'] = lambda u: 1.0
         params['F'] = lambda u: params['function_x'](u) * self.x_mirror
         params['G'] = lambda u: params['function'](u) * self.y_mirror
@@ -2774,7 +2774,7 @@ class Nomo_Atom:
         # let's make default values for extra params
         for idx, iter_params in enumerate(self.params['extra_params']):
             for key in self.params_default:
-                if not iter_params.has_key(key):
+                if not key in iter_params:
                     self.params['extra_params'][idx][key] = self.params_default[key]
         self.set_trafo()  # initialize
         self.f = self.params['F']  # x-coord func
@@ -3004,7 +3004,7 @@ class Nomo_Atom_Grid(Nomo_Atom):
         self.params['u_max'] = self.params['u_stop']
         for idx, iter_params in enumerate(self.params['extra_params']):
             for key in self.params_default:
-                if not iter_params.has_key(key):
+                if not key in iter_params:
                     self.params['extra_params'][idx][key] = self.params_default[key]
         self.set_trafo()  # initialize
         self.f = self.params['F_grid']

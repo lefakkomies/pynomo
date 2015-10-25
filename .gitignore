@@ -3,3 +3,4 @@
 *.dvi
 *.pdf
 .idea
+__pycache__

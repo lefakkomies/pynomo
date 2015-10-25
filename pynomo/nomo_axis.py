@@ -1218,7 +1218,8 @@ class Nomo_Axis:
         #            text_strings.append(label_string)
 
         keys = manual_axis_data.keys()
-        keys.sort()
+        #keys.sort()
+        keys = sorted(keys)  # to make work in python3
         for key in keys:
             tick_list.append(key)
             text_strings.append(manual_axis_data[key])
@@ -1302,23 +1303,23 @@ class Nomo_Axis:
             if type(label_def) is list:
                 title_raw = label_def[0]
                 ex_params = label_def[1]
-                if ex_params.has_key('manual_relative_text_pos'):  # (dx,dy)
+                if 'manual_relative_text_pos' in ex_params:  # (dx,dy)
                     manual_relative_text_pos = ex_params['manual_relative_text_pos']
-                if ex_params.has_key('manual_text_align'):  # e.g.[text.valign.middle,text.halign.right]
+                if 'manual_text_align' in ex_params:  # e.g.[text.valign.middle,text.halign.right]
                     manual_text_align = ex_params['manual_text_align']
-                if ex_params.has_key('manual_relative_line'):  # e.g. [(0,0),(1,2),(5,5)]
+                if 'manual_relative_line' in ex_params:  # e.g. [(0,0),(1,2),(5,5)]
                     manual_relative_line = ex_params['manual_relative_line']
-                if ex_params.has_key('x_corr'):
+                if 'x_corr' in ex_params:
                     x_corr = ex_params['x_corr']
-                if ex_params.has_key('y_corr'):
+                if 'y_corr' in ex_params:
                     y_corr = ex_params['y_corr']
-                if ex_params.has_key('draw_line'):
+                if 'draw_line' in ex_params:
                     draw_extra_line = ex_params['draw_line']
-                if ex_params.has_key('change_side'):
-                    if ex_params['change_side'] == True:  # change to opposite side
-                        turn = turn * (-1.0)
+                if 'change_side' in ex_params:
+                    if ex_params['change_side']:  # change to opposite side
+                        turn *= (-1.0)
                         range_side = 1.0
-                if ex_params.has_key('range_end'):
+                if 'range_end' in ex_params:
                     range_end = ex_params['range_end']
                     range_tick = True
                 label_string = title_raw
@@ -1562,7 +1563,7 @@ class Nomo_Axis:
         if len(self.axis_appear['extra_titles']) > 0:
             for texts in self.axis_appear['extra_titles']:
                 for key in text_default:
-                    if not texts.has_key(key):
+                    if key not in texts:
                         texts[key] = text_default[key]
                 dx = texts['dx']
                 dy = texts['dy']
