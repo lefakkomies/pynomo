@@ -47,7 +47,7 @@ for filename in filelist:
             exec(code)
         #execfile(filename)
         toc = time.time()
-        print('%3.1f s has elapsed for %s' % (toc - tic, filename))
+        print('Took %3.1f s for %s to execute.' % (toc - tic, filename))
         print("------------------------------------")
 toc_orig = time.time()
 print('%3.1f s has elapsed overall' % (toc_orig - tic_orig))

@@ -21,6 +21,8 @@ from pyx import *
 import copy, re
 from scipy.optimize import *
 from scipy import arange
+import warnings
+
 
 
 class Isopleth_Wrapper(object):
@@ -87,13 +89,13 @@ class Isopleth_Wrapper(object):
             block_para_start = copy.deepcopy(block_para)
             block_para_start['isopleth_values'] = []
             for idx, isopleth_values in enumerate(block_para['isopleth_values']):
-                block_para_start['isopleth_values'].append([block_para['isopleth_values'][idx][0], \
+                block_para_start['isopleth_values'].append([block_para['isopleth_values'][idx][0],
                                                             block_para['isopleth_values'][idx][1], 'x'])
             # stop
             block_para_stop = copy.deepcopy(block_para)
             block_para_stop['isopleth_values'] = []
             for idx, isopleth_values in enumerate(block_para['isopleth_values']):
-                block_para_stop['isopleth_values'].append(['x', block_para['isopleth_values'][idx][-2], \
+                block_para_stop['isopleth_values'].append(['x', block_para['isopleth_values'][idx][-2],
                                                            block_para['isopleth_values'][idx][-1]])
             # middle
             block_para_middles = []
@@ -121,12 +123,12 @@ class Isopleth_Wrapper(object):
             block_para_12 = copy.deepcopy(block_para)
             block_para_12['isopleth_values'] = []
             for idx, isopleth_values in enumerate(block_para['isopleth_values']):
-                block_para_12['isopleth_values'].append([block_para['isopleth_values'][idx][0], \
+                block_para_12['isopleth_values'].append([block_para['isopleth_values'][idx][0],
                                                          block_para['isopleth_values'][idx][1], 'x'])
             block_para_34 = copy.deepcopy(block_para)
             block_para_34['isopleth_values'] = []
             for idx, isopleth_values in enumerate(block_para['isopleth_values']):
-                block_para_34['isopleth_values'].append([block_para['isopleth_values'][idx][2], \
+                block_para_34['isopleth_values'].append([block_para['isopleth_values'][idx][2],
                                                          block_para['isopleth_values'][idx][3], 'x'])
             self.isopleth_list.append(Isopleth_Block_Type_1(atom_stack_12, block_para_12))
             self.isopleth_list.append(Isopleth_Block_Type_1(atom_stack_34, block_para_34))
@@ -161,7 +163,7 @@ class Isopleth_Wrapper(object):
             solutions_updated = False
             for idx, isopleth in enumerate(self.isopleth_list):
                 update = isopleth.update_solutions(self.solutions)
-                if update == True:
+                if update:
                     solutions_updated = True
         # check for error
         for idx, isopleth in enumerate(self.isopleth_list):
@@ -211,15 +213,16 @@ class Isopleth_Block(object):
         #            if self.params['points'].count(key)>0:
         #                idx=self.params['points'].index(key)
         #                self.params['points'][idx]=found_dict[key]
-
-    def _calc_distance_(self, x0, y0, x1, y1, x2, y2):
+    @staticmethod
+    def _calc_distance_(x0, y0, x1, y1, x2, y2):
         """
         Calculates distance of point (x0,y0) from line passing
         through points (x1,y1), (x2,y2)
         """
         return abs((x2 - x1) * (y1 - y0) - (x1 - x0) * (y2 - y1)) / math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
-    def _calc_distance_points_(self, x1, y1, x2, y2):
+    @staticmethod
+    def _calc_distance_points_(x1, y1, x2, y2):
         """
         calcs distance between two points
         """
@@ -279,7 +282,8 @@ class Isopleth_Block(object):
             interps.append((-10, -10))  # dummy point
         return interps[0][0], interps[0][1]
 
-    def _between_(self, x1s, y1s, x2s, y2s, x, y):
+    @staticmethod
+    def _between_(x1s, y1s, x2s, y2s, x, y):
         """
         checks if (x,y) in rectangle of (x1s,y1s)-(x2s,y2s)
         """
@@ -288,24 +292,24 @@ class Isopleth_Block(object):
         f3 = 1e-6
         xs_min = min(x1s, x2s)
         if xs_min > 0:
-            xs_min = xs_min * f1
+            xs_min *= f1
         else:
-            xs_min = xs_min * f2
+            xs_min *= f2
         xs_max = max(x1s, x2s)
         if xs_max > 0:
-            xs_max = xs_max * f2
+            xs_max *= f2
         else:
-            xs_max = xs_max * f1
+            xs_max *= f1
         ys_min = min(y1s, y2s)
         if ys_min > 0:
-            ys_min = ys_min * f1
+            ys_min *= f1
         else:
-            ys_min = ys_min * f2
+            ys_min *= f2
         ys_max = max(y1s, y2s)
         if ys_max > 0:
-            ys_max = ys_max * f2
+            ys_max *=  f2
         else:
-            ys_max = ys_max * f1
+            ys_max *= f1
         # trick to make little little over zero
         if xs_min == 0:
             xs_min = -xs_max * f3
@@ -336,7 +340,8 @@ class Isopleth_Block(object):
                     interps.append((x_inter, y_inter))
         return interps
 
-    def collinear(self, x1, y1, x2, y2, x3, y3):
+    @staticmethod
+    def collinear(x1, y1, x2, y2, x3, y3):
         determinant = x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)
         if abs(determinant) < 1e-3:
             return True
@@ -480,10 +485,21 @@ class Isopleth_Block(object):
         """
         intersection of lines (x1,y1)-(x2,y2) and (x3,y3)-(x4,y4)
         """
-        x = self._det_(self._det_(x1, y1, x2, y2), (x1 - x2), self._det_(x3, y3, x4, y4), (x3 - x4)) / \
-            self._det_(x1 - x2, y1 - y2, x3 - x4, y3 - y4)
-        y = self._det_(self._det_(x1, y1, x2, y2), (y1 - y2), self._det_(x3, y3, x4, y4), (y3 - y4)) / \
-            self._det_(x1 - x2, y1 - y2, x3 - x4, y3 - y4)
+        # here we catch divide-by-zero and set value to inf
+        with warnings.catch_warnings():
+            warnings.filterwarnings('error')
+            try:
+                x = self._det_(self._det_(x1, y1, x2, y2), (x1 - x2), self._det_(x3, y3, x4, y4), (x3 - x4)) / \
+                    self._det_(x1 - x2, y1 - y2, x3 - x4, y3 - y4)
+            except:
+                #print("ValueError on L488 %g" % (self._det_(x1 - x2, y1 - y2, x3 - x4, y3 - y4)))
+                x = float('Inf')
+            try:
+                y = self._det_(self._det_(x1, y1, x2, y2), (y1 - y2), self._det_(x3, y3, x4, y4), (y3 - y4)) / \
+                    self._det_(x1 - x2, y1 - y2, x3 - x4, y3 - y4)
+            except:
+                #print("ValueError on L499 %g" % (self._det_(x1 - x2, y1 - y2, x3 - x4, y3 - y4)))
+                y = float('Inf')
         return x, y
 
     def _det_(self, a, b, c, d):
@@ -530,13 +546,13 @@ class Isopleth_Block(object):
         """
         parses linestyle
         """
-        if not re.search("solid", line_style, re.IGNORECASE) == None:
+        if not re.search("solid", line_style, re.IGNORECASE) is None:
             return style.linestyle.solid
-        if not re.search("dashed", line_style, re.IGNORECASE) == None:
+        if not re.search("dashed", line_style, re.IGNORECASE) is None:
             return style.linestyle.dashed
-        if not re.search("dotted", line_style, re.IGNORECASE) == None:
+        if not re.search("dotted", line_style, re.IGNORECASE) is None:
             return style.linestyle.dotted
-        if not re.search("dashdotted", line_style, re.IGNORECASE) == None:
+        if not re.search("dashdotted", line_style, re.IGNORECASE) is None:
             return style.linestyle.dashdotted
         # no match return default
         print("unknown linestyle: %s" % line_style)
@@ -546,29 +562,29 @@ class Isopleth_Block(object):
         """
         parses linewidth
         """
-        if not re.search("THIN", line_width) == None:
+        if not re.search("THIN", line_width) is None:
             return style.linewidth.THIN
-        if not re.search("THIn", line_width) == None:
+        if not re.search("THIn", line_width) is None:
             return style.linewidth.THIn
-        if not re.search("THin", line_width) == None:
+        if not re.search("THin", line_width) is None:
             return style.linewidth.THin
-        if not re.search("Thin", line_width) == None:
+        if not re.search("Thin", line_width) is None:
             return style.linewidth.Thin
-        if not re.search("thin", line_width) == None:
+        if not re.search("thin", line_width) is None:
             return style.linewidth.thin
-        if not re.search("thick", line_width) == None:
+        if not re.search("thick", line_width) is None:
             return style.linewidth.thick
-        if not re.search("Thick", line_width) == None:
+        if not re.search("Thick", line_width) is None:
             return style.linewidth.Thick
-        if not re.search("THick", line_width) == None:
+        if not re.search("THick", line_width) is None:
             return style.linewidth.THick
-        if not re.search("THIck", line_width) == None:
+        if not re.search("THIck", line_width) is None:
             return style.linewidth.THIck
-        if not re.search("THICk", line_width) == None:
+        if not re.search("THICk", line_width) is None:
             return style.linewidth.THICk
-        if not re.search("THICK", line_width) == None:
+        if not re.search("THICK", line_width) is None:
             return style.linewidth.THICK
-        if not re.search("normal", line_width, re.IGNORECASE) == None:
+        if not re.search("normal", line_width, re.IGNORECASE) is None:
             return style.linewidth.normal
         # no match return default
         print("unknown linewidth: %s" % line_width)
@@ -792,7 +808,7 @@ class Isopleth_Block_Type_1(Isopleth_Block):
         given = 0
         for number in numbers:
             if isinstance(number, (int, float, tuple, list)):
-                given = given + 1
+                given += 1
         if given < 2:
             return False  # isopleth not solvable (right now)
         else:

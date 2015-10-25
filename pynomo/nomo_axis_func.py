@@ -80,7 +80,10 @@ class Axis_Wrapper:
                 dx = (f(u + du) - f(u))
                 dy = (g(u + du) - g(u))
                 dl = sqrt(dx ** 2 + dy ** 2)
-                delta_u = du * section_length / dl
+                if dl > 0:
+                    delta_u = du * section_length / dl
+                else:
+                    delta_u = du   # dummy constant?
                 # let's calculate actual length
                 # and iterate until length is in factor 2 from target
                 """

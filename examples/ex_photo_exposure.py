@@ -19,8 +19,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import sys
+
 sys.path.insert(0, "..")
 from pynomo.nomographer import *
+
 """
 functions for solartime taken from solareqns.pdf from
 http://www.srrb.noaa.gov/highlights/sunrise/solareqns.PDF
@@ -30,26 +32,29 @@ http://www.srrb.noaa.gov/highlights/sunrise/solareqns.PDF
 # fractional year
 def gamma(day):
     return 2 * pi / 365.0 * (day - 1 + 0.5)
+
+
 # equation of time
 
 
 def eq_time(day):
     gamma0 = gamma(day)
-    return 229.18 * (0.000075 + 0.001868 * cos(gamma0) - 0.032077 * sin(gamma0)\
-                   - 0.014615 * cos(2 * gamma0) - 0.040849 * sin(2 * gamma0))
+    return 229.18 * (0.000075 + 0.001868 * cos(gamma0) - 0.032077 * sin(gamma0) \
+                     - 0.014615 * cos(2 * gamma0) - 0.040849 * sin(2 * gamma0))
+
 
 # mean correction, with constant correction we make less than 17 minutes  error
 # in time axis
 temp_a = arange(0, 365.0, 0.1)
 temp_b = eq_time(temp_a)
-correction = mean(temp_b) # this is 0.0171885 minutes
+correction = mean(temp_b)  # this is 0.0171885 minutes
 
 
 # declination
 def eq_declination(day):
     g0 = gamma(day)
-    return 0.006918 - 0.399912 * cos(g0) + 0.070257 * sin(g0) - 0.006758 * cos(2 * g0)\
-            + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
+    return 0.006918 - 0.399912 * cos(g0) + 0.070257 * sin(g0) - 0.006758 * cos(2 * g0) \
+           + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
 
 
 def f1(dummy):
@@ -57,7 +62,7 @@ def f1(dummy):
 
 
 def g1(fii):
-    return cos(fii*pi/180.0)
+    return cos(fii * pi / 180.0)
 
 
 def f2(lat, day):
@@ -78,10 +83,11 @@ def g3(h):
     hr = (h * 60.0 + correction) / 4.0 - 180.0
     return -1.0 * cos(hr * pi / 180.0)
 
+
 days_in_month = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-times1=[]
+times1 = []
 for idx in range(0, 12):
-    times1.append(sum(days_in_month[0:idx])+1)
+    times1.append(sum(days_in_month[0:idx]) + 1)
 
 time_titles = ['January', 'February', 'March', 'April', 'May', 'June',
                'July', 'August', 'September', 'October', 'November', 'December']
@@ -109,7 +115,7 @@ time_params = {'u_min': 0.0,
                'u_max_trafo': 12.0,
                'f': f3,
                'g': g3,
-               'h':lambda u: 1.0,
+               'h': lambda u: 1.0,
                'title': r'Hour (h)',
                'title_x_shift': 0.0,
                'title_y_shift': 0.25,
@@ -168,12 +174,13 @@ def limit_x(x):
     x1 = x
     return x1
 
+
 const_A = 0.33766
 const_B = -13.656
 
 block_params_weather = {'block_type': 'type_5',
                         'u_func': lambda u: u,
-                        'v_func':lambda x, v: const_A + const_B * log10(limit_x(x)) + v,
+                        'v_func': lambda x, v: const_A + const_B * log10(x) + v,
                         'u_values': [1.0, 25.0],
                         'u_manual_axis_data': {1.0: '',
                                                25.0: ''},
@@ -199,9 +206,10 @@ block_params_weather = {'block_type': 'type_5',
                         'v_title': '',
                         'wd_title_opposite_tick': True,
                         'wd_title_distance_center': 2.5,
-                        'wd_align_func': lambda L: acos(limit_xx(10.0**((L - const_A) / const_B))) * 180.0 / pi,  # phi as L
-                        'wd_func': lambda L: 10.0**((L - const_A) / const_B),  # x as L
-                        'wd_func_inv': lambda x: const_A+const_B * log10(x),  # L as x
+                        'wd_align_func': lambda L: acos(limit_xx(10.0 ** ((L - const_A) / const_B))) * 180.0 / pi,
+                        # phi as L
+                        'wd_func': lambda L: 10.0 ** ((L - const_A) / const_B),  # x as L
+                        'wd_func_inv': lambda x: const_A + const_B * log10(x),  # L as x
                         'wd_tag': 'phi',
                         'mirror_y': True,
                         'mirror_x': False,
@@ -275,11 +283,11 @@ camera_params_2 = {'u_min': 10.0,
 camera_params_3 = {'u_min': 0.1,
                    'u_max': 10000.0,
                    'function': lambda t: -10 * log10((1.0 / t) / (1.0 / 10.0)) - 30,
-                   'manual_axis_data': {1/10.0: '10',
-                                        1/7.0: '7',
-                                        1/5.0: '5',
-                                        1/3.0: '3',
-                                        1/2.0: '2',
+                   'manual_axis_data': {1 / 10.0: '10',
+                                        1 / 7.0: '7',
+                                        1 / 5.0: '5',
+                                        1 / 3.0: '3',
+                                        1 / 2.0: '2',
                                         1.0: '1',
                                         2.0: '1/2',
                                         3.0: '1/3',
@@ -301,7 +309,7 @@ camera_params_3 = {'u_min': 0.1,
                                         5000.0: '1/5000',
                                         7000.0: '1/7000',
                                         10000.0: '1/10000',
-                             },
+                                        },
                    'scale_type': 'manual line',
                    'title': r't (s)',
                    'text_format': r"1/%3.0f s",
@@ -310,7 +318,7 @@ camera_params_3 = {'u_min': 0.1,
                    }
 camera_params_4 = {'u_min': 1.0,
                    'u_max': 22.0,
-                   'function': lambda N: 10 * log10((N / 3.2)**2) + 30,
+                   'function': lambda N: 10 * log10((N / 3.2) ** 2) + 30,
                    'manual_axis_data': {1.0: '$f$/1',
                                         1.2: '$f$/1.2',
                                         1.4: '$f$/1.4',
@@ -325,11 +333,11 @@ camera_params_4 = {'u_min': 1.0,
                                         6.7: '$f$/6.7',
                                         8.0: '$f$/8',
                                         9.5: '$f$/9.5',
-                                        11.0 :'$f$/11',
-                                        13.0 :'$f$/13',
-                                        16.0 :'$f$/16',
-                                        19.0 :'$f$/19',
-                                        22.0 :'$f$/22',
+                                        11.0: '$f$/11',
+                                        13.0: '$f$/13',
+                                        16.0: '$f$/16',
+                                        19.0: '$f$/19',
+                                        22.0: '$f$/22',
                                         },
                    'scale_type': 'manual line',
                    'title': r'Aperture',
@@ -347,6 +355,7 @@ block_params_camera = {'block_type': 'type_3',
 def old_EV(EV):  # C2(EV100) in wiki
     return (-EV + 13.654) / 0.3322
 
+
 EV_para = {'tag': 'EV',
            'u_min': 4.0,
            'u_max': 19.0,
@@ -363,32 +372,32 @@ EV_block = {'block_type': 'type_8',
             'isopleth_values': [['x']],
             }
 # maximum focal length
-FL_t_para={'u_min': 0.1,
-           'u_max': 10000.0,
-           'function': lambda t:-10 * log10((1.0 / t) / (1.0 / 10.0)) - 30,
-           'scale_type': 'linear',
-           'tick_levels': 0,
-           'tick_text_levels': 0,
-           'title': r't (s)',
-           'text_format': r"1/%3.0f s",
-           'tag': 'shutter',
-           }
-FL_factor_params_2 = {'u_min': 1.0/4.0,
-                      'u_max': 3.0/2.0,
+FL_t_para = {'u_min': 0.1,
+             'u_max': 10000.0,
+             'function': lambda t: -10 * log10((1.0 / t) / (1.0 / 10.0)) - 30,
+             'scale_type': 'linear',
+             'tick_levels': 0,
+             'tick_text_levels': 0,
+             'title': r't (s)',
+             'text_format': r"1/%3.0f s",
+             'tag': 'shutter',
+             }
+FL_factor_params_2 = {'u_min': 1.0 / 4.0,
+                      'u_max': 3.0 / 2.0,
                       'function': lambda factor: -10 * log10(factor / 10.0) + 0,
                       'title': r'Sensor, IS',
                       'scale_type': 'manual point',
-                      'manual_axis_data': {1.0/(2.0/3.0): 'DSLR',
-                                           1.0/(1.0): '35mm',
-                                           1.0/(8.0/3.0): 'DSLR IS',
-                                           1.0/(4.0): '35mm IS',
-                      },
-                      'tick_side':'left',
+                      'manual_axis_data': {1.0 / (2.0 / 3.0): 'DSLR',
+                                           1.0 / (1.0): '35mm',
+                                           1.0 / (8.0 / 3.0): 'DSLR IS',
+                                           1.0 / (4.0): '35mm IS',
+                                           },
+                      'tick_side': 'left',
                       'text_size_manual': text.size.footnotesize,  # pyx directive
                       }
 FL_fl_params = {'u_min': 20.0,
                 'u_max': 1000.0,
-                'function': lambda FL:-10 * log10(FL) + 30,
+                'function': lambda FL: -10 * log10(FL) + 30,
                 'title': r'Max focal length',
                 'tick_levels': 3,
                 'tick_text_levels': 2,
@@ -415,7 +424,7 @@ FL_block_params = {'block_type': 'type_1',
                    'f3_params': FL_fl_params,
                    'mirror_x': True,
                    'proportion': 0.5,
-                   'isopleth_values': [['x', 1.0/(8.0/3.0), 'x']],
+                   'isopleth_values': [['x', 1.0 / (8.0 / 3.0), 'x']],
                    }
 
 main_params = {'filename': ['ex_photo_exposure.pdf', 'ex_photo_exposure.eps'],
@@ -428,5 +437,5 @@ main_params = {'filename': ['ex_photo_exposure.pdf', 'ex_photo_exposure.eps'],
                'title_y': 34,
                'title_box_width': 10,
                'title_str': r'\LARGE Photography exposure (Setala 1940) \par \copyright Leif Roschier  2009 '
-              }
+               }
 Nomographer(main_params)
