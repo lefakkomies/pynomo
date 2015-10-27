@@ -175,7 +175,7 @@ class Nomo_Axis:
         ti = self.axis_appear  # ai = axis info
 
         # find ticks and texts
-        if ti['ticker_func'] == None:
+        if ti['ticker_func'] is None:
             ticker_func = core_ticker
         else:
             ticker_func = ti['ticker_func']
@@ -209,12 +209,12 @@ class Nomo_Axis:
 
         # make actual drawing
         # select tick draw functions
-        if ti['tick_draw_func'] == None:
+        if ti['tick_draw_func'] is None:
             tick_draw_func = core_tick_draw_func_basic  # use default
         else:
             tick_draw_func = ti['tick_draw_func']
         # select text draw functions
-        if ti['text_draw_func'] == None:
+        if ti['text_draw_func'] is None:
             text_draw_func = core_text_draw_func_basic  # use default
         else:
             text_draw_func = ti['text_draw_func']
@@ -250,7 +250,7 @@ class Nomo_Axis:
                            c=self.canvas, tick_info=ti)
         # main line
         main_line_coords = calc_main_line_coords(self.start, self.stop, self.func_f, self.func_g, sections=350.0)
-        if ti['make_default_main_line'] == True:
+        if ti['make_default_main_line'] is True:
             core_main_line_draw_func_basic(main_line_coords=main_line_coords,
                                            func_f=self.func_f, func_g=self.func_g,
                                            ticks=ticks,
@@ -1787,8 +1787,8 @@ def find_log_ticks_smart(start, stop, f, g, turn=1, base_start=None,
     tick_4_list_final = []
     # initial
     tick_0_list, tick_1_list, tick_2_list, tick_3_list, tick_4_list = \
-        find_linear_ticks_smart(min_value, min(10 ** (min_decade + 1), max_value), f, g, turn=1, base_start=None, \
-                                base_stop=None, scale_max_0=10 ** (min_decade + 1), \
+        find_linear_ticks_smart(min_value, min(10 ** (min_decade + 1), max_value), f, g, turn=1, base_start=None,
+                                base_stop=None, scale_max_0=10 ** (min_decade + 1),
                                 distance_limit=distance_limit)
     # added to include first min value if major decade
     if abs(10 ** min_decade - min_value) / min_value < 1e-6:
@@ -1804,8 +1804,8 @@ def find_log_ticks_smart(start, stop, f, g, turn=1, base_start=None,
         start = value
         stop = min(value * 10.0, max_value)
         tick_0_list, tick_1_list, tick_2_list, tick_3_list, tick_4_list = \
-            find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=base_start, \
-                                    base_stop=base_stop, scale_max_0=10 ** (decade + 1), \
+            find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=base_start,
+                                    base_stop=base_stop, scale_max_0=10 ** (decade + 1),
                                     distance_limit=distance_limit)
         if 10 ** (decade + 1) <= max_value:
             tick_0_list_final = tick_0_list_final + [10 ** (decade + 1)]
@@ -1889,9 +1889,9 @@ def find_tick_directions(list, f, g, side, start, stop, full_angle=False, extra_
                 angle = 0.0
             if scipy.sign(dx_unit) < 0.0 and scipy.sign(dy_unit) < 0.0:
                 angle = angle - 180.0
-            if scipy.sign(dy_unit) < 0.0 and scipy.sign(dx_unit) >= 0.0:
-                angle = angle + 180.0
-        angle = angle + extra_angle
+            if scipy.sign(dy_unit) < 0.0 <= scipy.sign(dx_unit):
+                angle += 180.0
+        angle += extra_angle
         dx_units.append(dx_unit)
         dy_units.append(dy_unit)
         angles.append(angle)
@@ -2101,25 +2101,25 @@ def remove_from_list_half(work_list, upper_list, f, g, distance_limit=0.5):
                 d = []
                 if len(upper_list) > (upper_idx + 1):
                     d.append(calc_distance(f, g, upper_list[upper_idx + 1], work_list[work_idx]))
-                if len(upper_list) > (upper_idx):
+                if len(upper_list) > upper_idx:
                     d.append(calc_distance(f, g, upper_list[upper_idx], work_list[work_idx]))
                 if len(d) > 0:
                     if min(d) < distance_limit:
                         worked_list.remove(work_list[work_idx])
-                upper_idx = upper_idx + 1
-                work_idx = work_idx + 1
+                upper_idx += 1
+                work_idx += 1
         if min(work_list) > min(upper_list):
-            while len(work_list) > (work_idx):
+            while len(work_list) > work_idx:
                 d = []
-                if len(upper_list) > (upper_idx):
+                if len(upper_list) > upper_idx:
                     d.append(calc_distance(f, g, upper_list[upper_idx], work_list[work_idx]))
                 if upper_idx > 0:
                     d.append(calc_distance(f, g, upper_list[upper_idx - 1], work_list[work_idx]))
                 if len(d) > 0:
                     if min(d) < distance_limit:
                         worked_list.remove(work_list[work_idx])
-                upper_idx = upper_idx + 1
-                work_idx = work_idx + 1
+                upper_idx += 1
+                work_idx += 1
     return worked_list
 
 
@@ -2321,21 +2321,24 @@ def core_text_draw_func_basic(ticks, texts, level, f, g, dx_units, dy_units, ang
     """
     ti = tick_info  # for shorthand
     n_texts = len(texts)
-    if len(dx_units) < n_texts: print("too few dx_units !")
-    if len(dy_units) < n_texts: print("too few dy_units !")
-    if len(angles) < n_texts: print("too few angles !")
+    if len(dx_units) < n_texts:
+        print("too few dx_units !")
+    if len(dy_units) < n_texts:
+        print("too few dy_units !")
+    if len(angles) < n_texts:
+        print("too few angles !")
     for i, text_value in enumerate(texts):
         # draw actual text
         x = f(text_value) + text_distance * dy_units[i]
         y = g(text_value) - text_distance * dx_units[i]
         # print "text_distance:%g"%text_distance
         text_color = ti['text_color']
-        if ti['text_colors'] != None:
+        if not ti['text_colors'] is None:
             text_color = ti['level_text_color'][level]
         text_size = ti['text_sizes'][level]
         # if ti['level_text_size']!=None:
         #    text_size=ti['level_text_size'][level]
-        if ti['text_format_func'] == None:
+        if ti['text_format_func'] is None:
             text = ti['text_format'] % text_value
         else:
             text = ti['text_format_func'](text_value)

@@ -516,7 +516,7 @@ class Isopleth_Block(object):
             distance_1 = self._calc_distance_points_(x1s, y1s, x, y)
             distance_2 = self._calc_distance_points_(x2s, y2s, x, y)
             distance = min(distance_1, distance_2)
-            if min_distance == None:
+            if min_distance is None:
                 min_distance = distance
                 closest_value = atom.section_values[idx][0]
             else:
