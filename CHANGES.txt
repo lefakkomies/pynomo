@@ -3,6 +3,8 @@ PyNomo
 0.3.0
 =====
 - double alignment
+- python3 compatibility
+- minor code style cleanup
 - main repo of code moved to github
 - documentation in github: pynomo-doc
 
