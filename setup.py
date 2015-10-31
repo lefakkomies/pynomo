@@ -52,5 +52,6 @@ setup(name='PyNomo',
           'Programming Language :: Python',
       ],
       keywords='nomograph nomogram graphics calculator visualization',
-      install_requires=['numpy', 'scipy', 'pyx', 'pip'],
+      # install numpy, scipy, pyx and latex manually :(
+      #install_requires=['numpy', 'scipy'],  # have to install pyx and tex/latex manually
       )
