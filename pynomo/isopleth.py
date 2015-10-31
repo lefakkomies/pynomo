@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 #
 #    This file is part of PyNomo -
 #    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
@@ -77,7 +78,7 @@ class Isopleth_Wrapper(object):
             # set ref axes
             for idx, ref_atom in enumerate(ref_atoms):
                 ref_atom.params['tag'] = 'ref' + repr(idx) + repr(self.ref_tag_number)
-            self.ref_tag_number = self.ref_tag_number + 1
+            self.ref_tag_number += 1
             atoms = block.atom_stack[:N]
             atom_stack_start = [atoms[0], atoms[1], ref_atoms[0]]
             atom_stack_stop = [ref_atoms[-1], atoms[-2], atoms[-1]]
@@ -118,7 +119,7 @@ class Isopleth_Wrapper(object):
             atom_stack_34 = [atoms[2], atoms[3], atoms[4]]
             # tag the reference line
             atoms[4].params['tag'] = 'ref_type4' + repr(self.ref_tag_number)
-            self.ref_tag_number = self.ref_tag_number + 1
+            self.ref_tag_number += 1
             # make blocks
             block_para_12 = copy.deepcopy(block_para)
             block_para_12['isopleth_values'] = []
@@ -248,7 +249,7 @@ class Isopleth_Block(object):
             idx2 = 1
         if smallest_idx == len(line):
             idx2 = len(line) - 1
-        if smallest_idx > 0 and smallest_idx < len(line):
+        if 0 < smallest_idx < len(line):
             if distances[smallest_idx - 1] < distances[smallest_idx + 1]:
                 idx2 = smallest_idx - 1
             else:
@@ -307,7 +308,7 @@ class Isopleth_Block(object):
             ys_min *= f2
         ys_max = max(y1s, y2s)
         if ys_max > 0:
-            ys_max *=  f2
+            ys_max *= f2
         else:
             ys_max *= f1
         # trick to make little little over zero
