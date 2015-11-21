@@ -1,5 +1,9 @@
 # ex_axes_8.py
 
+import sys
+sys.path.insert(0, "..")
+from pynomo.nomographer import *
+
 N_params = {'u_min': 0.0,
             'u_max': 300.0,
             'function_x': lambda u: 3 * sin(u / 180.0 * pi),
