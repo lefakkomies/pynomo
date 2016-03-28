@@ -245,12 +245,18 @@ class Nomo_Wrapper:
                 if not re.compile(".eps$").search(filename_this, 1) == None:
                     canvas.writeEPSfile(filename_this)
                 else:
-                    canvas.writePDFfile(filename_this)
+                    if not re.compile(".svg$").search(self.filename, 1) == None:
+                        canvas.writeSVGfile(filename_this)
+                    else:
+                        canvas.writePDFfile(filename_this)
         else:
             if not re.compile(".eps$").search(self.filename, 1) == None:
                 canvas.writeEPSfile(self.filename)
             else:
-                canvas.writePDFfile(self.filename)
+                if not re.compile(".svg$").search(self.filename, 1) == None:
+                    canvas.writeSVGfile(self.filename)
+                else:
+                    canvas.writePDFfile(self.filename)
 
     def _draw_title_(self, c):
         """
@@ -1661,7 +1667,7 @@ class Nomo_Block_Type_5(Nomo_Block):
                 yt2 = self._give_trafo_y_(self.grid_box.x_right, y)
                 line.append(path.moveto(xt1, yt1))
                 line.append(path.lineto(xt2, yt2))
-            canvas.stroke(line, [style.linewidth.normal, style.linestyle.dotted, \
+            canvas.stroke(line, [style.linewidth.normal, style.linestyle.dotted,
                                  p['u_axis_color']])
             self.ref_block_lines.append(line)
 
@@ -1680,7 +1686,7 @@ class Nomo_Block_Type_5(Nomo_Block):
                 yt2 = self._give_trafo_y_(x, self.grid_box.y_bottom)
                 line.append(path.moveto(xt1, yt1))
                 line.append(path.lineto(xt2, yt2))
-            canvas.stroke(line, [style.linewidth.normal, style.linestyle.dotted, \
+            canvas.stroke(line, [style.linewidth.normal, style.linestyle.dotted,
                                  p['wd_axis_color']])
             # take handle
             self.ref_block_lines.append(line)

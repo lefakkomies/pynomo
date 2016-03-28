@@ -67,3 +67,11 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# test
+test/
+kasvit/
+*.dot
+*.svg
+result.txt
+test_script.py

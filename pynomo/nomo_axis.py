@@ -116,7 +116,7 @@ class Nomo_Axis:
             # a function of format f(start, stop, f,g,tick_levels,distance_limit_tick, distance_limit_text, tick_info={}), see example function example_ticker implementation as template
             'tick_draw_func': None,  # see template core_tick_draw_func
             'text_draw_func': None,  # see template core_text_draw_func
-            'main_line_func': None,  # for custom main-line
+            'mainline_func': None,  # for custom main-line
             'make_default_main_line': True,  # to draw normal main_line
             # 'level_text_color':None, # list of text colors for each level
             'level_text_size': None,  # list of text sizes for each level
@@ -218,6 +218,11 @@ class Nomo_Axis:
             text_draw_func = core_text_draw_func_basic  # use default
         else:
             text_draw_func = ti['text_draw_func']
+        # select main line draw func
+        if ti['mainline_func'] is None:
+            mainline_draw_func = core_main_line_draw_func_basic  # use default
+        else:
+            mainline_draw_func = ti['mainline_func']
 
         # ticks
         for i, tick in enumerate(ticks):
@@ -251,7 +256,7 @@ class Nomo_Axis:
         # main line
         main_line_coords = calc_main_line_coords(self.start, self.stop, self.func_f, self.func_g, sections=350.0)
         if ti['make_default_main_line'] is True:
-            core_main_line_draw_func_basic(main_line_coords=main_line_coords,
+            mainline_draw_func(main_line_coords=main_line_coords,
                                            func_f=self.func_f, func_g=self.func_g,
                                            ticks=ticks,
                                            tick_directions=tick_directions,
