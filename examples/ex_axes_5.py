@@ -1,6 +1,7 @@
 # ex_axes_5.py
 
 import sys
+from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
 N_params = {'u_min': 1.0,

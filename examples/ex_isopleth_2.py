@@ -18,6 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import sys
+from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
 isopleth_value_list = []

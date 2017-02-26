@@ -1,6 +1,7 @@
 # ex_axes_1.py
 
 import sys
+from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
 # axis definitions

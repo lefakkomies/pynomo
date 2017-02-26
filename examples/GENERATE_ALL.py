@@ -24,8 +24,6 @@ import time
 import sys
 import glob
 
-from pynomo.nomo_wrapper import *
-
 tic_orig = time.time()
 for filename in glob.glob("ex_*.py"):
     tic = time.time()

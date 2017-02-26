@@ -21,6 +21,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import sys
+from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
 N_params_1={

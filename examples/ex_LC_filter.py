@@ -22,6 +22,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 from scipy.constants import *
 
