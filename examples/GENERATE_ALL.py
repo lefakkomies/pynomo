@@ -20,29 +20,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import os
-import re
 import time
 import sys
+import glob
 
 from pynomo.nomo_wrapper import *
 
-for root, dirs, files in os.walk('.'):
-    if root == '.':
-        filelist = files
-
-filelist.remove('GENERATE_ALL.py')
-
 tic_orig = time.time()
-for filename in filelist:
-    if re.compile(".py").search(filename, 1) is not None:
-        tic = time.time()
-        print("************************************")
-        print("executing %s" % filename)
-        with open(filename) as f:
-            code = compile(f.read(), filename, 'exec')
-            exec(code)
-        toc = time.time()
-        print('Took %3.1f s for %s to execute.' % (toc - tic, filename))
-        print("------------------------------------")
+for filename in glob.glob("ex_*.py"):
+    tic = time.time()
+    print("************************************")
+    print("executing %s" % filename)
+    with open(filename) as f:
+        code = compile(f.read(), filename, 'exec')
+        exec(code)
+    toc = time.time()
+    print('Took %3.1f s for %s to execute.' % (toc - tic, filename))
+    print("------------------------------------")
 toc_orig = time.time()
 print('%3.1f s has elapsed overall' % (toc_orig - tic_orig))
