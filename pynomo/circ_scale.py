@@ -327,10 +327,6 @@ class Circ_Block_Type_1(Circ_Block):
         self.offset_f3 = self._calculate_offset_(self.f3_params)
         self._calculate_funcs_()
 
-    #        print "offset f1 %f"%self.offset_f1
-    #        print "offset f2 %f"%self.offset_f2
-    #        print "offset f3 %f"%self.offset_f3
-
     def _check_initial_values_(self):
         """
         parameters for the block
@@ -456,8 +452,8 @@ class Circ_Block_Type_1(Circ_Block):
             self.f3_params['circ_sign'] * self.f3_params['function'](u) * self.scaling + self.offset_f3)
         self.arrow_F = lambda u: (self.f3_params['radius'] - 0.05) * math.cos(u + self.offset_f2 + self.offset_f3)
         self.arrow_G = lambda u: (self.f3_params['radius'] - 0.25) * math.sin(u + self.offset_f2 + self.offset_f3)
-        print "self.offset_f2 %g" % (self.offset_f2 * 180.0 / 3.1415)
-        print "self.offset_f3 %g" % (self.offset_f3 * 180.0 / 3.1415)
+        print("self.offset_f2 %g" % (self.offset_f2 * 180.0 / 3.1415))
+        print("self.offset_f3 %g" % (self.offset_f3 * 180.0 / 3.1415))
         self.arrow_angle = (self.offset_f2 + self.offset_f3) * 180.0 / math.pi
         self.arrow_radius = self.f3_params['radius'] - 0.05
 
