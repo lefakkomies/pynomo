@@ -1,7 +1,6 @@
 # ex_axes_1.py
 
 import sys
-sys.path.insert(0, "..")
 from pynomo.nomographer import *
 
 # axis definitions

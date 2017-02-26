@@ -4,6 +4,7 @@
     Photgraph exposure.
 
     Copyright (C) 2007-2008  Leif Roschier
+    Copyright (C) 2017       Jonas Stein
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,15 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import sys
-
-sys.path.insert(0, "..")
 from pynomo.nomographer import *
 
 """
 functions for solartime taken from solareqns.pdf from
 http://www.srrb.noaa.gov/highlights/sunrise/solareqns.PDF
 """
-
 
 # fractional year
 def gamma(day):
@@ -36,12 +34,10 @@ def gamma(day):
 
 # equation of time
 
-
 def eq_time(day):
     gamma0 = gamma(day)
     return 229.18 * (0.000075 + 0.001868 * cos(gamma0) - 0.032077 * sin(gamma0) \
                      - 0.014615 * cos(2 * gamma0) - 0.040849 * sin(2 * gamma0))
-
 
 # mean correction, with constant correction we make less than 17 minutes  error
 # in time axis
@@ -49,40 +45,32 @@ temp_a = arange(0, 365.0, 0.1)
 temp_b = eq_time(temp_a)
 correction = mean(temp_b)  # this is 0.0171885 minutes
 
-
 # declination
 def eq_declination(day):
     g0 = gamma(day)
     return 0.006918 - 0.399912 * cos(g0) + 0.070257 * sin(g0) - 0.006758 * cos(2 * g0) \
            + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
 
-
 def f1(dummy):
     return 0.0
 
-
 def g1(fii):
     return cos(fii * pi / 180.0)
-
 
 def f2(lat, day):
     dec = eq_declination(day)
     return (cos(lat * pi / 180.0) * cos(dec)) / (1.0 + (cos(lat * pi / 180.0) * cos(dec)))
 
-
 def g2(lat, day):
     dec = eq_declination(day)  # in radians
     return (sin(lat * pi / 180.0) * sin(dec)) / (1.0 + (cos(lat * pi / 180.0) * cos(dec)))
 
-
 def f3(dummy):
     return 1
-
 
 def g3(h):
     hr = (h * 60.0 + correction) / 4.0 - 180.0
     return -1.0 * cos(hr * pi / 180.0)
-
 
 days_in_month = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 times1 = []

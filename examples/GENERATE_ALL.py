@@ -24,10 +24,6 @@ import re
 import time
 import sys
 
-#sys.path.append('../pynomo')
-#sys.path.append('../pynomo/pynomo')
-
-
 from nomo_wrapper import *
 
 for root, dirs, files in os.walk('.'):
@@ -37,16 +33,14 @@ for root, dirs, files in os.walk('.'):
 filelist.remove('GENERATE_ALL.py')
 
 tic_orig = time.time()
-# print filelist
 for filename in filelist:
     if re.compile(".py").search(filename, 1) is not None:
         tic = time.time()
         print("************************************")
-        print ("executing %s" % filename)
+        print("executing %s" % filename)
         with open(filename) as f:
             code = compile(f.read(), filename, 'exec')
             exec(code)
-        #execfile(filename)
         toc = time.time()
         print('Took %3.1f s for %s to execute.' % (toc - tic, filename))
         print("------------------------------------")

@@ -4,6 +4,7 @@
     Compound nomograph: q = u**v+w
 
     Copyright (C) 2007-2009  Leif Roschier
+    Copyright (C) 2017       Jonas Stein
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,7 +21,6 @@
 """
 import sys
 
-sys.path.insert(0, "..")
 from pynomo.nomographer import *
 
 # N
