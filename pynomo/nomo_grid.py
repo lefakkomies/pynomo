@@ -2,7 +2,8 @@
 #    This file is part of PyNomo -
 #    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
 #
-#    Copyright (C) 2015  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2015       Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2017       Jonas Stein
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,7 +22,7 @@ from pyx import *
 from math import *
 from scipy import *
 from numpy import *
-from nomo_axis import *
+from pynomo.nomo_axis import *
 import random
 import sys
 

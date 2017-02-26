@@ -3,6 +3,7 @@
 #    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
 #
 #    Copyright (C) 2007-2008  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2017       Jonas Stein
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,16 +18,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from nomo_axis import *
-from nomo_axis_func import *
-from nomo_grid_box import *
-from nomo_grid import *
-from nomograph3 import *
-from math_utilities import *
+from pynomo.nomo_axis import *
+from pynomo.nomo_axis_func import *
+from pynomo.nomo_grid_box import *
+from pynomo.nomo_grid import *
+from pynomo.nomograph3 import *
+from pynomo.math_utilities import *
 from numpy import *
 import scipy
 from pyx import *
-# from copy import copy
 import copy, re, pprint, random
 
 

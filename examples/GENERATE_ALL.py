@@ -24,7 +24,7 @@ import re
 import time
 import sys
 
-from nomo_wrapper import *
+from pynomo.nomo_wrapper import *
 
 for root, dirs, files in os.walk('.'):
     if root == '.':

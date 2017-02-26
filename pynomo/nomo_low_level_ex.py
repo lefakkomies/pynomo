@@ -2,7 +2,9 @@
 #    This file is part of PyNomo -
 #    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
 #
-#    Copyright (C) 2007  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2007       Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2017       Jonas Stein
+#
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,11 +20,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 This is example how to use lower level functions to build a nomograph.
-Also Latex is used with oldstyle fonts that should be installed.
+Also LaTeX is used with oldstyle fonts that should be installed.
 """
 
-from nomo_axis import *
-from nomograph3 import *
+from pynomo.nomo_axis import *
+from pynomo.nomograph3 import *
 
 
 def f1(u):

@@ -38,7 +38,7 @@ block_params={
               'width':5.0,
               'height':10.0,
               'isopleth_values':[[5]]
-                     }
+              }
 
 main_params={
               'filename':'ex_type8_nomo_1.pdf',
