@@ -97,7 +97,7 @@ N_params_1 = {  # N
                 'scale_type': 'log smart',
                 'text_format': r"{%6.6g}",
                 'tick_side': 'right',
-                }
+}
 
 N_params_2 = {  # dummy align
                 'u_min': u_min_value,
@@ -108,7 +108,7 @@ N_params_2 = {  # dummy align
                 'tick_text_levels': 0,
                 'scale_type': 'linear',
                 'tag': 'AA',
-                }
+}
 
 N_params_3 = {  # L
                 'u_min': 0.01,
@@ -121,7 +121,7 @@ N_params_3 = {  # L
                 'tick_side': 'left',
                 'text_format': r"$%6.6g$ ",
                 'tag': 'L',
-                }
+}
 
 block_1_params = {  # inductance from N and contour
                     'block_type': 'type_1',
@@ -132,7 +132,7 @@ block_1_params = {  # inductance from N and contour
                     'f3_params': N_params_2,
                     'proportion': 0.5,
                     'isopleth_values': [['x', 'x', 'x']],
-                    }
+}
 
 # f(L,C)
 N_params_1a = {
@@ -197,7 +197,7 @@ N_params_1b = {  # L
                  'text_format': r"$%6.6g$ ",
                  'tag': 'L',
                  'dtag': 'L',
-                 }
+}
 
 N_params_2b = {  # R
                  'u_min': 10.0,
@@ -208,7 +208,7 @@ N_params_2b = {  # R
                  'tick_text_levels': 5,
                  'tick_side': 'right',
                  'scale_type': 'log smart',
-                 }
+}
 
 N_params_3b = {  # C
                  'u_min': 1.0,
@@ -220,7 +220,7 @@ N_params_3b = {  # C
                  'scale_type': 'log smart',
                  'text_format': r"$%6.6g$ ",
                  'tag': 'C',
-                 }
+}
 
 block_1_params_b = {
     'block_type': 'type_1',

@@ -20,10 +20,10 @@ block_params = {'block_type': 'type_8',
                 }
 
 main_params = {'filename': 'ex_axes_2.pdf',
-                'paper_height': 10.0,
-                'paper_width': 5.0,
-                'block_params': [block_params],
-                'transformations': [('scale paper',)]
+               'paper_height': 10.0,
+               'paper_width': 5.0,
+               'block_params': [block_params],
+               'transformations': [('scale paper',)]
                }
 
 Nomographer(main_params)

@@ -57,7 +57,7 @@ v_params = {
             'tick_levels': 4,
             'tick_text_levels': 2,
             'tick_side': 'right'
-        }
+    }
     ]
 }
 

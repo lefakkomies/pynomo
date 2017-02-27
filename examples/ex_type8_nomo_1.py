@@ -24,29 +24,29 @@ from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
 N_params_1={
-        'u_min':1.0,
-        'u_max':10.0,
-        'function':lambda u:u,
-        'title':'u',
-        'tick_levels':3,
-        'tick_text_levels':2,
-        'tick_side':'left',
-        }
+    'u_min':1.0,
+    'u_max':10.0,
+    'function':lambda u:u,
+    'title':'u',
+    'tick_levels':3,
+    'tick_text_levels':2,
+    'tick_side':'left',
+}
 
 block_params={
-              'block_type':'type_8',
-              'f_params':N_params_1,
-              'width':5.0,
-              'height':10.0,
-              'isopleth_values':[[5]]
-              }
+    'block_type':'type_8',
+    'f_params':N_params_1,
+    'width':5.0,
+    'height':10.0,
+    'isopleth_values':[[5]]
+}
 
 main_params={
-              'filename':'ex_type8_nomo_1.pdf',
-              'paper_height':10.0,
-              'paper_width':5.0,
-              'block_params':[block_params],
-              'transformations':[]
-              }
+    'filename':'ex_type8_nomo_1.pdf',
+    'paper_height':10.0,
+    'paper_width':5.0,
+    'block_params':[block_params],
+    'transformations':[]
+}
 
 Nomographer(main_params)

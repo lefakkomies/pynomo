@@ -20,11 +20,11 @@ block_params = {'block_type': 'type_8',
 
 # nomograph generation definitions
 main_params = {'filename': 'ex_axes_1.pdf',
-                'paper_height': 15.0,
-                'paper_width': 5.0,
-                'block_params': [block_params],
-                'transformations': [('scale paper',)]
-              }
+               'paper_height': 15.0,
+               'paper_width': 5.0,
+               'block_params': [block_params],
+               'transformations': [('scale paper',)]
+               }
 
 # actual code that builds the nomograph
 Nomographer(main_params)

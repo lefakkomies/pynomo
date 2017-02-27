@@ -28,25 +28,25 @@ N_params = {'u_min': 1.0,
                               'tick_text_levels': 2,
                               'axis_color': color.cmyk.Blue,
                               }
-                            ],
+                             ],
             'extra_titles': [{'dx': 1.0,                                          # <- 1st extra title
                               'dy': 1.0,                                          # <-
                               'text': 'extra title 1',                            # <-
                               'width': 5,                                         # <-
                               'pyx_extra_defs': [color.rgb.red, text.size.tiny]   # <-
                               },
-                            {'dx': 0.0,                                           # <- 2nd extra title
-                             'dy': 2.0,                                           # <-
-                             'text': 'extra title 2',                             # <-
-                             'width': 5,                                          # <-
-                             'pyx_extra_defs': [color.rgb.green]                  # <-
-                             },
-                            {'dx': -1.0,                                          # <- 3rd extra title
-                             'dy': 1.0,                                           # <-
-                             'text': r"extra  \par title 3",                      # <- \par = newline
-                             'width': 5,                                          # <-
-                             'pyx_extra_defs': [color.rgb.blue]                   # <-
-                             }]
+                             {'dx': 0.0,                                           # <- 2nd extra title
+                              'dy': 2.0,                                           # <-
+                              'text': 'extra title 2',                             # <-
+                              'width': 5,                                          # <-
+                              'pyx_extra_defs': [color.rgb.green]                  # <-
+                              },
+                             {'dx': -1.0,                                          # <- 3rd extra title
+                              'dy': 1.0,                                           # <-
+                              'text': r"extra  \par title 3",                      # <- \par = newline
+                              'width': 5,                                          # <-
+                              'pyx_extra_defs': [color.rgb.blue]                   # <-
+                              }]
             }
 block_params = {'block_type': 'type_8',
                 'f_params': N_params,

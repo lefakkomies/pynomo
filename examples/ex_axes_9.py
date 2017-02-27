@@ -20,5 +20,5 @@ main_params = {'filename': 'ex_axes_9.pdf',
                'paper_width': 5.0,
                'block_params': [block_params],
                'transformations': [('scale paper',)]
-              }
+               }
 Nomographer(main_params)

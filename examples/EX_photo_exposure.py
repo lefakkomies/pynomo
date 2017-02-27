@@ -50,7 +50,7 @@ correction = mean(temp_b)  # this is 0.0171885 minutes
 def eq_declination(day):
     g0 = gamma(day)
     return 0.006918 - 0.399912 * cos(g0) + 0.070257 * sin(g0) - 0.006758 * cos(2 * g0) \
-           + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
+        + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
 
 def f1(dummy):
     return 0.0
