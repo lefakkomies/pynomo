@@ -3,6 +3,7 @@
 #    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
 #
 #    Copyright (C) 2007-2015  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2017       Jonas Stein
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -553,8 +554,8 @@ class Axes_Wrapper:
 
     def give_trafo(self):
         return self.alpha1, self.beta1, self.gamma1, \
-               self.alpha2, self.beta2, self.gamma2, \
-               self.alpha3, self.beta3, self.gamma3
+            self.alpha2, self.beta2, self.gamma2, \
+            self.alpha3, self.beta3, self.gamma3
 
     def _make_row_(self, coordinate='x', x=1.0, y=1.0, coord_value=1.0):
         """ Utility to find transformation matrix. See eq.37,a
@@ -759,7 +760,7 @@ class Axes_Wrapper:
         into trafo_stack
         """
         alpha1, beta1, gamma1, alpha2, \
-        beta2, gamma2, alpha3, beta3, gamma3 = self._calc_rotation_trafo_(angle)
+            beta2, gamma2, alpha3, beta3, gamma3 = self._calc_rotation_trafo_(angle)
         self._add_transformation_(alpha1=alpha1, beta1=beta1, gamma1=gamma1,
                                   alpha2=alpha2, beta2=beta2, gamma2=gamma2,
                                   alpha3=alpha3, beta3=beta3, gamma3=gamma3)

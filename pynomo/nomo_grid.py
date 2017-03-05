@@ -294,7 +294,7 @@ if __name__ == '__main__':
     def eq_declination(day):
         g0 = gamma(day)
         return 0.006918 - 0.399912 * cos(g0) + 0.070257 * sin(g0) - 0.006758 * cos(2 * g0) \
-               + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
+            + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
 
 
     def tst(day, hour):
@@ -380,5 +380,5 @@ if __name__ == '__main__':
     test_ha = test_h * 60.0 / 4.0 - 180.0
     test_dec = eq_declination(test_day)
     test_cos_phi = sin(test_lat * pi / 180.0) * sin(test_dec) + \
-                   cos(test_lat * pi / 180.0) * cos(test_dec) * cos(test_ha * pi / 180.0)
+        cos(test_lat * pi / 180.0) * cos(test_dec) * cos(test_ha * pi / 180.0)
     # print acos(test_cos_phi)*180/pi

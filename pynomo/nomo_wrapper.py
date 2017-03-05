@@ -113,8 +113,8 @@ class Nomo_Wrapper:
         # self.axes_wrapper.fit_to_paper()
         # self.axes_wrapper._print_result_pdf_("dummy1.pdf")
         self.alpha1, self.beta1, self.gamma1, \
-        self.alpha2, self.beta2, self.gamma2, \
-        self.alpha3, self.beta3, self.gamma3 = self.axes_wrapper.give_trafo()
+            self.alpha2, self.beta2, self.gamma2, \
+            self.alpha3, self.beta3, self.gamma3 = self.axes_wrapper.give_trafo()
         # update last block trafos, note that trafo to align blocks should not be
         # changed
         for block in self.block_stack:
@@ -473,13 +473,13 @@ class Nomo_Wrapper:
             y2_atom_2 = atom2.give_y(u_stop)
 
             x1_atom_1 = atom1.give_x(atom2.params['align_func'](u_start)) \
-                        + atom2.params['align_x_offset']
+                + atom2.params['align_x_offset']
             y1_atom_1 = atom1.give_y(atom2.params['align_func'](u_start)) \
-                        + atom2.params['align_y_offset']
+                + atom2.params['align_y_offset']
             x2_atom_1 = atom1.give_x(atom2.params['align_func'](u_stop)) \
-                        + atom2.params['align_x_offset']
+                + atom2.params['align_x_offset']
             y2_atom_1 = atom1.give_y(atom2.params['align_func'](u_stop)) \
-                        + atom2.params['align_y_offset']
+                + atom2.params['align_y_offset']
             return x1_atom_1, y1_atom_1, x2_atom_1, y2_atom_1, x1_atom_2, y1_atom_2, x2_atom_2, y2_atom_2
 
         # end find coords
@@ -515,13 +515,13 @@ class Nomo_Wrapper:
             y2_atom_2 = atom2.give_y(u_stop)
 
             x1_atom_1 = atom1.give_x(atom2.params['align_func'](u_start)) \
-                        + atom2.params['align_x_offset']
+                + atom2.params['align_x_offset']
             y1_atom_1 = atom1.give_y(atom2.params['align_func'](u_start)) \
-                        + atom2.params['align_y_offset']
+                + atom2.params['align_y_offset']
             x2_atom_1 = atom1.give_x(atom2.params['align_func'](u_stop)) \
-                        + atom2.params['align_x_offset']
+                + atom2.params['align_x_offset']
             y2_atom_1 = atom1.give_y(atom2.params['align_func'](u_stop)) \
-                        + atom2.params['align_y_offset']
+                + atom2.params['align_y_offset']
             return x1_atom_1, y1_atom_1, x2_atom_1, y2_atom_1, x1_atom_2, y1_atom_2, x2_atom_2, y2_atom_2
 
         # end find coords
@@ -638,13 +638,13 @@ class Nomo_Wrapper:
         y2_atom_2 = atom2.give_y(u_stop)
 
         x1_atom_1 = atom1.give_x(atom2.params['align_func'](u_start)) \
-                    + atom2.params['align_x_offset']
+            + atom2.params['align_x_offset']
         y1_atom_1 = atom1.give_y(atom2.params['align_func'](u_start)) \
-                    + atom2.params['align_y_offset']
+            + atom2.params['align_y_offset']
         x2_atom_1 = atom1.give_x(atom2.params['align_func'](u_stop)) \
-                    + atom2.params['align_x_offset']
+            + atom2.params['align_x_offset']
         y2_atom_1 = atom1.give_y(atom2.params['align_func'](u_stop)) \
-                    + atom2.params['align_y_offset']
+            + atom2.params['align_y_offset']
 
         x3_atom_1 = x1_atom_1 + (y2_atom_1 - y1_atom_1) * 0.01
         y3_atom_1 = y1_atom_1 - (x2_atom_1 - x1_atom_1) * 0.01
@@ -841,8 +841,8 @@ class Nomo_Block(object):
         """
         self.axes_wrapper.fit_to_paper()
         alpha1, beta1, gamma1, \
-        alpha2, beta2, gamma2, \
-        alpha3, beta3, gamma3 = self.axes_wrapper.give_trafo()
+            alpha2, beta2, gamma2, \
+            alpha3, beta3, gamma3 = self.axes_wrapper.give_trafo()
         self.add_transformation(alpha1=alpha1, beta1=beta1, gamma1=gamma1,
                                 alpha2=alpha2, beta2=beta2, gamma2=gamma2,
                                 alpha3=alpha3, beta3=beta3, gamma3=gamma3)
@@ -1001,9 +1001,9 @@ class Nomo_Block_Type_2(Nomo_Block):
         self.width = width
         self.height = height
         length_f1_ini = max(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max'])) - \
-                        min(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max']))
+            min(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max']))
         length_f3_ini = max(self.F3(self.params_F3['u_min']), self.F3(self.params_F3['u_max'])) - \
-                        min(self.F3(self.params_F3['u_min']), self.F3(self.params_F3['u_max']))
+            min(self.F3(self.params_F3['u_min']), self.F3(self.params_F3['u_max']))
         K1 = width
         #    length_f1=length_f3
         m1 = height / length_f1_ini
@@ -1245,7 +1245,7 @@ class Nomo_Block_Type_3(Nomo_Block):
                           'function': lambda u: u,
                           'title': 'R',
                           'reference': True
-                          }
+        }
         for idx in range(1, N - 2):
             ref_para = copy.copy(ref_para_ini)
             ref_para['F'] = self._makeDoX_(r_table[idx])
@@ -1835,9 +1835,9 @@ class Nomo_Block_Type_6(Nomo_Block):
             ax2_empty = width * y_empty
             self.atom_F1.f = lambda u: (self.F1_axis_ini.f(u)) * self.x_mirror
             self.atom_F1.g = lambda u: ((self.F1_axis_ini.g(u) - f1_min) / f1_length * ax1_length + ax1_empty) \
-                                       * self.y_mirror
+                * self.y_mirror
             self.atom_F2.f = lambda u: ((self.F2_axis_ini.g(u) - f2_min) / f2_length * ax2_length + ax2_empty) \
-                                       * self.x_mirror
+                * self.x_mirror
             self.atom_F2.g = lambda u: (0.0) * self.y_mirror
 
         self.F1_axis = Axis_Wrapper(f=self.atom_F1.f, g=self.atom_F1.g,
@@ -2043,7 +2043,7 @@ class Nomo_Block_Type_6(Nomo_Block):
 
         # manual point or manual arrow
         if self.atom_F1.params['scale_type'] == 'manual point' or \
-                        self.atom_F1.params['scale_type'] == 'manual arrow':
+                self.atom_F1.params['scale_type'] == 'manual arrow':
             tick_0_list = self.atom_F1.params['manual_axis_data'].keys()
             tick_0_list.sort()
 
@@ -2687,9 +2687,9 @@ class Nomo_Block_Type_10(Nomo_Block):
         self.width = width
         self.height = height
         length_f1_ini = max(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max'])) - \
-                        min(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max']))
+            min(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max']))
         length_f2_ini = max(self.F2(self.params_F2['u_min']), self.F2(self.params_F2['u_max'])) - \
-                        min(self.F2(self.params_F2['u_min']), self.F2(self.params_F2['u_max']))
+            min(self.F2(self.params_F2['u_min']), self.F2(self.params_F2['u_max']))
         # c1=length_f2_ini/length_f1_ini
         # c2=c1
         # length_f1=max(c1*self.F1(self.params_F1['u_min']),c1*self.F1(self.params_F1['u_max']))

@@ -283,7 +283,7 @@ class Nomo_Grid_Box(object):
             'u_max': w_max,  # this is w_max
             'F': lambda w: self.x_right,  # x-coordinate
             'G': lambda w: self.y_bottom + (f2(w) - f2(w_min)) / (f2(w_max) - f2(w_min)) \
-                                           * self.params['height'] * y_factor,  # y-coordinate
+            * self.params['height'] * y_factor,  # y-coordinate
             'title': self.params['w_title'],
             'scale_type': self.params['scale_type_w'],
             'manual_axis_data': w_manual_axis_data,

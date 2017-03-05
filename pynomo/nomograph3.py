@@ -1,5 +1,7 @@
 #    PyNomo - nomographs with Python
 #    Copyright (C) 2007-2015  Leif Roschier
+#    Copyright (C) 2017       Jonas Stein
+#
 #    Otherwise obsolete but used  in nomo_wrapper.py
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -117,32 +119,32 @@ class Nomograph3:
     # following methods give the actual coordinates on canvas with a given function value
     def give_x1(self, u):
         value = (self.alpha1 * self.f1(u) + self.beta1 * self.g1(u) + self.gamma1 * self.h1(u)) / (
-        self.alpha3 * self.f1(u) + self.beta3 * self.g1(u) + self.gamma3 * self.h1(u))
+            self.alpha3 * self.f1(u) + self.beta3 * self.g1(u) + self.gamma3 * self.h1(u))
         return value[0]
 
     def give_y1(self, u):
         value = (self.alpha2 * self.f1(u) + self.beta2 * self.g1(u) + self.gamma2 * self.h1(u)) / (
-        self.alpha3 * self.f1(u) + self.beta3 * self.g1(u) + self.gamma3 * self.h1(u))
+            self.alpha3 * self.f1(u) + self.beta3 * self.g1(u) + self.gamma3 * self.h1(u))
         return value[0]
 
     def give_x2(self, v):
         value = (self.alpha1 * self.f2(v) + self.beta1 * self.g2(v) + self.gamma1 * self.h2(v)) / (
-        self.alpha3 * self.f2(v) + self.beta3 * self.g2(v) + self.gamma3 * self.h2(v))
+            self.alpha3 * self.f2(v) + self.beta3 * self.g2(v) + self.gamma3 * self.h2(v))
         return value[0]
 
     def give_y2(self, v):
         value = (self.alpha2 * self.f2(v) + self.beta2 * self.g2(v) + self.gamma2 * self.h2(v)) / (
-        self.alpha3 * self.f2(v) + self.beta3 * self.g2(v) + self.gamma3 * self.h2(v))
+            self.alpha3 * self.f2(v) + self.beta3 * self.g2(v) + self.gamma3 * self.h2(v))
         return value[0]
 
     def give_x3(self, w):
         value = (self.alpha1 * self.f3(w) + self.beta1 * self.g3(w) + self.gamma1 * self.h3(w)) / (
-        self.alpha3 * self.f3(w) + self.beta3 * self.g3(w) + self.gamma3 * self.h3(w))
+            self.alpha3 * self.f3(w) + self.beta3 * self.g3(w) + self.gamma3 * self.h3(w))
         return value[0]
 
     def give_y3(self, w):
         value = (self.alpha2 * self.f3(w) + self.beta2 * self.g3(w) + self.gamma2 * self.h3(w)) / (
-        self.alpha3 * self.f3(w) + self.beta3 * self.g3(w) + self.gamma3 * self.h3(w))
+            self.alpha3 * self.f3(w) + self.beta3 * self.g3(w) + self.gamma3 * self.h3(w))
         return value[0]
 
     def give_general_x_grid_fn(self, f, g, h):
@@ -207,6 +209,5 @@ if __name__ == '__main__':
         print(nomograph.give_x3(1.0))
         print(nomograph.give_y3(0.5))
         print(nomograph.give_y3(1.0))
-
 
     main()

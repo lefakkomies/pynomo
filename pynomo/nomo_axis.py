@@ -4,6 +4,8 @@
 #    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
 #
 #    Copyright (C) 2007-2013  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2017       Jonas Stein
+#
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -257,12 +259,12 @@ class Nomo_Axis:
         main_line_coords = calc_main_line_coords(self.start, self.stop, self.func_f, self.func_g, sections=350.0)
         if ti['make_default_main_line'] is True:
             mainline_draw_func(main_line_coords=main_line_coords,
-                                           func_f=self.func_f, func_g=self.func_g,
-                                           ticks=ticks,
-                                           tick_directions=tick_directions,
-                                           texts=texts,
-                                           text_directions=text_directions,
-                                           c=self.canvas, tick_info=ti)
+                               func_f=self.func_f, func_g=self.func_g,
+                               ticks=ticks,
+                               tick_directions=tick_directions,
+                               texts=texts,
+                               text_directions=text_directions,
+                               c=self.canvas, tick_info=ti)
 
     def _test_tick_(self, u, tick, scale_max):
         """ tests if it is time to put a tick
@@ -543,24 +545,24 @@ class Nomo_Axis:
         # let's find text angles
         dx_units_0_text, dy_units_0_text, angles_0_text = find_tick_directions(text_0_list, f, g, self.side, start,
                                                                                stop, full_angle=self.axis_appear[
-                'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
-                'turn_relative'])
+                                                                                   'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
+                                                                                   'turn_relative'])
         dx_units_1_text, dy_units_1_text, angles_1_text = find_tick_directions(text_1_list, f, g, self.side, start,
                                                                                stop, full_angle=self.axis_appear[
-                'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
-                'turn_relative'])
+                                                                                   'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
+                                                                                   'turn_relative'])
         dx_units_2_text, dy_units_2_text, angles_2_text = find_tick_directions(text_2_list, f, g, self.side, start,
                                                                                stop, full_angle=self.axis_appear[
-                'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
-                'turn_relative'])
+                                                                                   'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
+                                                                                   'turn_relative'])
         dx_units_3_text, dy_units_3_text, angles_3_text = find_tick_directions(text_3_list, f, g, self.side, start,
                                                                                stop, full_angle=self.axis_appear[
-                'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
-                'turn_relative'])
+                                                                                   'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
+                                                                                   'turn_relative'])
         dx_units_4_text, dy_units_4_text, angles_4_text = find_tick_directions(text_4_list, f, g, self.side, start,
                                                                                stop, full_angle=self.axis_appear[
-                'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
-                'turn_relative'])
+                                                                                   'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
+                                                                                   'turn_relative'])
 
         # tick level 0
         if self.tick_levels > 0:
@@ -776,24 +778,24 @@ class Nomo_Axis:
         # let's find text angles
         dx_units_0_text, dy_units_0_text, angles_0_text = find_tick_directions(text_0_list, f, g, self.side, start,
                                                                                stop, full_angle=self.axis_appear[
-                'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
-                'turn_relative'])
+                                                                                   'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
+                                                                                   'turn_relative'])
         dx_units_1_text, dy_units_1_text, angles_1_text = find_tick_directions(text_1_list, f, g, self.side, start,
                                                                                stop, full_angle=self.axis_appear[
-                'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
-                'turn_relative'])
+                                                                                   'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
+                                                                                   'turn_relative'])
         dx_units_2_text, dy_units_2_text, angles_2_text = find_tick_directions(text_2_list, f, g, self.side, start,
                                                                                stop, full_angle=self.axis_appear[
-                'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
-                'turn_relative'])
+                                                                                   'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
+                                                                                   'turn_relative'])
         dx_units_3_text, dy_units_3_text, angles_3_text = find_tick_directions(text_3_list, f, g, self.side, start,
                                                                                stop, full_angle=self.axis_appear[
-                'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
-                'turn_relative'])
+                                                                                   'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
+                                                                                   'turn_relative'])
         dx_units_4_text, dy_units_4_text, angles_4_text = find_tick_directions(text_4_list, f, g, self.side, start,
                                                                                stop, full_angle=self.axis_appear[
-                'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
-                'turn_relative'])
+                                                                                   'full_angle'], extra_angle=self.axis_appear['extra_angle'], turn_relative=self.axis_appear[
+                                                                                   'turn_relative'])
 
         # let's save them
         self.dx_units_0 = dx_units_0
@@ -1734,7 +1736,7 @@ def find_linear_ticks(start, stop, base_start=None, base_stop=None, scale_max_0=
                 #    print tick_3_list
                 #    print tick_4_list
     return tick_0_list, tick_1_list, tick_2_list, tick_3_list, tick_4_list, \
-           start_ax, stop_ax
+        start_ax, stop_ax
 
 
 def find_log_ticks(start, stop):
@@ -1828,7 +1830,7 @@ def find_log_ticks_smart(start, stop, f, g, turn=1, base_start=None,
     tick_3_list_final.sort()
     tick_4_list_final.sort()
     return tick_0_list_final, tick_1_list_final, tick_2_list_final, \
-           tick_3_list_final, tick_4_list_final,
+        tick_3_list_final, tick_4_list_final,
 
 
 def make_negative(work_list):
@@ -1843,9 +1845,9 @@ def find_log_ticks_negative_smart(start, stop, f, g, turn=1, base_start=None,
     finds tick values negative log
     """
     tick_0_list_final, tick_1_list_final, tick_2_list_final, \
-    tick_3_list_final, tick_4_list_final = find_log_ticks_smart(-stop, -start, lambda x: f(-x), lambda x: g(-x), turn=1,
-                                                                base_start=None,
-                                                                base_stop=None, distance_limit=distance_limit)
+        tick_3_list_final, tick_4_list_final = find_log_ticks_smart(-stop, -start, lambda x: f(-x), lambda x: g(-x), turn=1,
+                                                                    base_start=None,
+                                                                    base_stop=None, distance_limit=distance_limit)
     tick_0_list_final = make_negative(tick_0_list_final)
     tick_0_list_final.sort()
     tick_1_list_final = make_negative(tick_1_list_final)
@@ -1857,7 +1859,7 @@ def find_log_ticks_negative_smart(start, stop, f, g, turn=1, base_start=None,
     tick_4_list_final = make_negative(tick_4_list_final)
     tick_4_list_final.sort()
     return tick_0_list_final, tick_1_list_final, tick_2_list_final, \
-           tick_3_list_final, tick_4_list_final,
+        tick_3_list_final, tick_4_list_final,
 
 
 def find_tick_directions(list, f, g, side, start, stop, full_angle=False, extra_angle=0, turn_relative=False):
@@ -1924,11 +1926,11 @@ def find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=None,
     tick_4 = scale_max / 1000.0
     # let's find tick positions manually
     tick_0_list, tick_1_list, tick_2_list, tick_3_list, tick_4_list, \
-    start_ax, stop_ax = \
+        start_ax, stop_ax = \
         find_linear_ticks(start, stop, base_start, base_stop, scale_max_0)
     # let's save original lists
     tick_0_list0, tick_1_list0, tick_2_list0, tick_3_list0, tick_4_list0, \
-    start_ax0, stop_ax0 = \
+        start_ax0, stop_ax0 = \
         find_linear_ticks(start, stop, base_start, base_stop, scale_max_0)
     # let's find 0 level ticks
     distance_0 = {}

@@ -3,6 +3,7 @@
 #    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
 #
 #    Copyright (C) 2007-2015  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2017       Jonas Stein
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -106,8 +107,8 @@ class FourPoint(object):
         """
         mat = self.trafo
         return mat[0][0], mat[1][0], mat[2][0], \
-               mat[0][1], mat[1][1], mat[2][1], \
-               mat[0][2], mat[1][2], mat[2][2]
+            mat[0][1], mat[1][1], mat[2][1], \
+            mat[0][2], mat[1][2], mat[2][2]
 
     def find_trafo_to_unity_rectangle(self, x1, y1, x2, y2, x3, y3, x4, y4):
         """
@@ -189,8 +190,7 @@ class FourPoint(object):
             return a * d - c * b
 
         determinant = det(x1 - x2, y1 - y2, x3 - x4, y3 - y4)
-        # print "determinant"
-        # print determinant
+        # print("determinant " + determinant)
         if abs(determinant) < 1e-9:
             return True
         else:
@@ -271,8 +271,7 @@ class FourPoint(object):
         trafo_mat_inv = array([[p1, p2, p3],
                                [q1, q2, q3],
                                [o1, o2, o3]])
-        # print "trafo_mat_inv"
-        # print trafo_mat_inv
+        # print("trafo_mat_inv" + trafo_mat_inv)
         trafo_mat = linalg.inv(trafo_mat_inv)
         return trafo_mat
 
@@ -289,8 +288,8 @@ class FourPoint(object):
                    [x2d, y2d, 1.0],
                    [x3d, y3d, 1.0]])
         # transformation
-        t = dot(linalg.inv(p), d)
-        return t
+        transformation = dot(linalg.inv(p), d)
+        return transformation
 
 
 if __name__ == '__main__':

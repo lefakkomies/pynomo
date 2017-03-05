@@ -4,6 +4,7 @@
 #    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
 #
 #    Copyright (C) 2007-2015  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2017       Jonas Stein
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,7 +24,6 @@ import copy, re
 from scipy.optimize import *
 from scipy import arange
 import warnings
-
 
 
 class Isopleth_Wrapper(object):
@@ -490,7 +490,8 @@ class Isopleth_Block(object):
         with warnings.catch_warnings():
             warnings.filterwarnings('error')
             try:
-                x = self._det_(self._det_(x1, y1, x2, y2), (x1 - x2), self._det_(x3, y3, x4, y4), (x3 - x4)) / \
+                x = self._det_(self._det_(x1, y1, x2, y2), (x1 - x2), \ 
+                               self._det_(x3, y3, x4, y4), (x3 - x4)) / \
                     self._det_(x1 - x2, y1 - y2, x3 - x4, y3 - y4)
             except:
                 #print("ValueError on L488 %g" % (self._det_(x1 - x2, y1 - y2, x3 - x4, y3 - y4)))

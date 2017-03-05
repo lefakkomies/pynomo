@@ -259,9 +259,9 @@ class Nomographer:
                                                                       'axis_color': axis_color,
                                                                       'text_color': axis_color})
         tick_0_list_v, tick_1_list_v, tick_2_list_v, tick_3_list_v, tick_4_list_v, \
-        start_ax, stop_ax = find_linear_ticks(-axis_offset, params['paper_height'] + axis_offset)
+            start_ax, stop_ax = find_linear_ticks(-axis_offset, params['paper_height'] + axis_offset)
         tick_0_list_h, tick_1_list_h, tick_2_list_h, tick_3_list_h, tick_4_list_h, \
-        start_ax, stop_ax = find_linear_ticks(-axis_offset, params['paper_width'] + axis_offset)
+            start_ax, stop_ax = find_linear_ticks(-axis_offset, params['paper_width'] + axis_offset)
         grid_color_0 = color.cmyk.Brown
         grid_color_1 = color.cmyk.Gray
         grid_color_2 = color.cmyk.Tan
