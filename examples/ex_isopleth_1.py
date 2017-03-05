@@ -59,7 +59,8 @@ block_1_params = {
     'f2_params': N_params_2,
     'f3_params': N_params_3,
     'isopleth_values': [[1, 'x', 1], [2, 'x', 2], [3, 'x', 3], [3, 'x', 4], [4, 'z', 3],
-                        [4, 'unknown', 5], [5, 'x', 3], [5, 'x', 4], [6, 'cat', 4],
+                        [4, 'unknown', 5], [5, 'x', 3], [
+                            5, 'x', 4], [6, 'cat', 4],
                         [5, 'known?', 6], [3, 'x', 5], [6, 'x', 5], [4, 'dog', 6]],
 }
 

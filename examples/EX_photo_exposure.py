@@ -49,7 +49,8 @@ correction = mean(temp_b)  # this is 0.0171885 minutes
 def eq_declination(day):
     g0 = gamma(day)
     return 0.006918 - 0.399912 * cos(g0) + 0.070257 * sin(g0) - 0.006758 * cos(2 * g0) \
-        + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
+        + 0.000907 * sin(2 * g0) - 0.002697 * \
+                         cos(3 * g0) + 0.00148 * sin(3 * g0)
 
 def f1(dummy):
     return 0.0
@@ -152,7 +153,8 @@ block_params = {'block_type': 'type_9',
                 }
 
 
-# limiting functions are to avoid NaN in contour construction that uses optimization
+# limiting functions are to avoid NaN in contour construction that uses
+# optimization
 def limit_xx(x):
     x1 = x
     return x1
@@ -196,8 +198,10 @@ block_params_weather = {'block_type': 'type_5',
                         'wd_title_distance_center': 2.5,
                         'wd_align_func': lambda L: acos(limit_xx(10.0 ** ((L - const_A) / const_B))) * 180.0 / pi,
                         # phi as L
-                        'wd_func': lambda L: 10.0 ** ((L - const_A) / const_B),  # x as L
-                        'wd_func_inv': lambda x: const_A + const_B * log10(x),  # L as x
+                        # x as L
+                        'wd_func': lambda L: 10.0 ** ((L - const_A) / const_B),
+                        # L as x
+                        'wd_func_inv': lambda x: const_A + const_B * log10(x),
                         'wd_tag': 'phi',
                         'mirror_y': True,
                         'mirror_x': False,

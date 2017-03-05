@@ -39,19 +39,23 @@ d_q = 2.0 * (3.0 * R_sigma / Z_tr + Z_tr / Z_T) * sqrt(k_b * T_0 * Z_T) / \
 
 
 def f_dq(q):
-    return -log(q * 1e-6) - 14.0  # additional const for helping scale alignment
+    # additional const for helping scale alignment
+    return -log(q * 1e-6) - 14.0
 
 
 def f_t0(t0):
-    return 0.5 * log(k_b * t0 * Z_T) + 14.0  # additional const for helping scale alignment
+    # additional const for helping scale alignment
+    return 0.5 * log(k_b * t0 * Z_T) + 14.0
 
 
 def f_ec(ec):  # [K]
-    return -log(0.9 * (k_b * ec) ** 2.74) - 150.0  # additional const for helping scale alignment
+    # additional const for helping scale alignment
+    return -log(0.9 * (k_b * ec) ** 2.74) - 150.0
 
 
 def f_t(t):
-    return -log(0.41 * (k_b * t) ** -1.74 / e) + 150.0  # additional const for helping scale alignment
+    # additional const for helping scale alignment
+    return -log(0.41 * (k_b * t) ** -1.74 / e) + 150.0
 
 
 def f_rs(rs):
