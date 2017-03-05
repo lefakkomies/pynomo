@@ -59,7 +59,7 @@ N_params_3 = {
                       'u_max': 12.0,
                       'tick_text_levels': 4,
                       'tick_levels': 4
-                     }]
+                      }]
 }
 
 block_1_params = {
