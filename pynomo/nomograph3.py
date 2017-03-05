@@ -66,27 +66,27 @@ class Nomograph3:
         h3 = self.h3
         if variable == 'u' and coordinate == 'x':
             row = np.array([g1(vv), h1(vv), 0, 0, 0, -cv *
-                           f1(vv), -cv * g1(vv), -cv * h1(vv)])
+                            f1(vv), -cv * g1(vv), -cv * h1(vv)])
             value = np.array([f1(vv)])
         if variable == 'u' and coordinate == 'y':
             row = np.array([0, 0, f1(vv), g1(vv), h1(vv), -
-                           cv * f1(vv), -cv * g1(vv), -cv * h1(vv)])
+                            cv * f1(vv), -cv * g1(vv), -cv * h1(vv)])
             value = np.array([0])
         if variable == 'v' and coordinate == 'x':
             row = np.array([g2(vv), h2(vv), 0, 0, 0, -cv *
-                           f2(vv), -cv * g2(vv), -cv * h2(vv)])
+                            f2(vv), -cv * g2(vv), -cv * h2(vv)])
             value = np.array([f2(vv)])
         if variable == 'v' and coordinate == 'y':
             row = np.array([0, 0, f2(vv), g2(vv), h2(vv), -
-                           cv * f2(vv), -cv * g2(vv), -cv * h2(vv)])
+                            cv * f2(vv), -cv * g2(vv), -cv * h2(vv)])
             value = np.array([0])
         if variable == 'w' and coordinate == 'x':
             row = np.array([g3(vv), h3(vv), 0, 0, 0, -cv *
-                           f3(vv), -cv * g3(vv), -cv * h3(vv)])
+                            f3(vv), -cv * g3(vv), -cv * h3(vv)])
             value = np.array([f3(vv)])
         if variable == 'w' and coordinate == 'y':
             row = np.array([0, 0, f3(vv), g3(vv), h3(vv), -
-                           cv * f3(vv), -cv * g3(vv), -cv * h3(vv)])
+                            cv * f3(vv), -cv * g3(vv), -cv * h3(vv)])
             value = np.array([0])
         return row, value
 
@@ -110,7 +110,7 @@ class Nomograph3:
                                        coord_value=vk[7][3])
         matrix = np.array([row1, row2, row3, row4, row5, row6, row7, row8])
         b = np.array([const1, const2, const3, const4,
-                     const5, const6, const7, const8])
+                      const5, const6, const7, const8])
         coeff_vector = np.linalg.solve(matrix, b)
         self.alpha1 = -1
         self.beta1 = coeff_vector[0]

@@ -357,10 +357,10 @@ class Nomo_Axis:
                 grid_length = self.axis_appear['grid_length_0']
                 if dy <= 0:
                     text_attr = [text.valign.middle, text.halign.right,
-                        text.size.small, trafo.rotate(angle)]
+                                 text.size.small, trafo.rotate(angle)]
                 else:
                     text_attr = [text.valign.middle, text.halign.left,
-                        text.size.small, trafo.rotate(angle)]
+                                 text.size.small, trafo.rotate(angle)]
                 # texts.append((`u`,f(u)+text_distance*dy_unit,g(u)-text_distance*dx_unit,text_attr))
                 if self.tick_text_levels > 0:
                     texts.append(
@@ -368,41 +368,41 @@ class Nomo_Axis:
                 line.append(path.lineto(f(u), g(u)))
                 if self.tick_levels > 0:
                     line.append(path.lineto(f(u) + grid_length *
-                                dy_unit, g(u) - grid_length * dx_unit))
+                                            dy_unit, g(u) - grid_length * dx_unit))
                 line.append(path.moveto(f(u), g(u)))
             elif self._test_tick_(u, tick_1, scale_max):
                 text_distance = self.axis_appear['text_distance_1']
                 grid_length = self.axis_appear['grid_length_1']
                 if dy <= 0:
                     text_attr = [text.valign.middle, text.halign.right,
-                        text.size.scriptsize, trafo.rotate(angle)]
+                                 text.size.scriptsize, trafo.rotate(angle)]
                 else:
                     text_attr = [text.valign.middle, text.halign.left,
-                        text.size.scriptsize, trafo.rotate(angle)]
+                                 text.size.scriptsize, trafo.rotate(angle)]
                 if self.tick_text_levels > 1:
                     texts.append(
                         (self._put_text_(u), f(u) + text_distance * dy_unit, g(u) - text_distance * dx_unit, text_attr))
                 line.append(path.lineto(f(u), g(u)))
                 if self.tick_levels > 1:
                     line.append(path.lineto(f(u) + grid_length *
-                                dy_unit, g(u) - grid_length * dx_unit))
+                                            dy_unit, g(u) - grid_length * dx_unit))
                 line.append(path.moveto(f(u), g(u)))
             elif self._test_tick_(u, tick_2, scale_max):
                 text_distance = self.axis_appear['text_distance_2']
                 grid_length = self.axis_appear['grid_length_2']
                 if dy <= 0:
                     text_attr = [text.valign.middle, text.halign.right,
-                        text.size.tiny, trafo.rotate(angle)]
+                                 text.size.tiny, trafo.rotate(angle)]
                 else:
                     text_attr = [text.valign.middle, text.halign.left,
-                        text.size.tiny, trafo.rotate(angle)]
+                                 text.size.tiny, trafo.rotate(angle)]
                 if self.tick_text_levels > 2:
                     texts.append(
                         (self._put_text_(u), f(u) + text_distance * dy_unit, g(u) - text_distance * dx_unit, text_attr))
                 line.append(path.lineto(f(u), g(u)))
                 if self.tick_levels > 2:
                     line.append(path.lineto(f(u) + grid_length *
-                                dy_unit, g(u) - grid_length * dx_unit))
+                                            dy_unit, g(u) - grid_length * dx_unit))
                 line.append(path.moveto(f(u), g(u)))
             else:
                 grid_length = self.axis_appear['grid_length_3']
@@ -1017,20 +1017,20 @@ class Nomo_Axis:
         for idx, u in enumerate(tick_list):
             if dy_units[idx] < 0:
                 text_attr = [text.valign.middle, text.halign.right,
-                    text_size, trafo.rotate(angles[idx])]
+                             text_size, trafo.rotate(angles[idx])]
             else:
                 text_attr = [text.valign.middle, text.halign.left,
-                    text_size, trafo.rotate(angles[idx])]
+                             text_size, trafo.rotate(angles[idx])]
             if self.axis_appear['full_angle'] == True:
                 if self.axis_appear['angle_tick_direction'] == 'outer':
                     text_attr = [text.valign.middle, text.halign.left,
-                        text_size, trafo.rotate(angles[idx])]
+                                 text_size, trafo.rotate(angles[idx])]
                 else:  # 'inner'
                     text_attr = [text.valign.middle, text.halign.left,
-                        text_size, trafo.rotate(angles[idx])]
+                                 text_size, trafo.rotate(angles[idx])]
             if self.axis_appear['text_horizontal_align_center'] == True:
                 text_attr = [text.valign.top, text.halign.center,
-                    text_size, trafo.rotate(angles[idx])]
+                             text_size, trafo.rotate(angles[idx])]
             if len(manual_texts) > 0:
                 text_list.append((manual_texts[idx], f(u) + text_distance * dy_units[idx],
                                   g(u) - text_distance * dx_units[idx], text_attr))
@@ -1454,13 +1454,13 @@ class Nomo_Axis:
             else:  # do the default
                 if dy <= 0:
                     text_attr = [text.valign.middle, text.halign.left,
-                        text_size, trafo.rotate(angle)]
+                                 text_size, trafo.rotate(angle)]
                 else:
                     text_attr = [text.valign.middle, text.halign.right,
-                        text_size, trafo.rotate(angle)]
+                                 text_size, trafo.rotate(angle)]
                 if self.axis_appear['text_horizontal_align_center'] == True:
                     text_attr = [text.valign.middle, text.halign.center,
-                        text_size, trafo.rotate(angle)]
+                                 text_size, trafo.rotate(angle)]
             # normal case (not range)
             if range_tick == False:
                 if manual_relative_text_pos == None:  # do default text positioning
@@ -1473,12 +1473,12 @@ class Nomo_Axis:
                     dy_rel = manual_relative_text_pos[1]
                     texts.append((label_string,
                                   f(number) - (dy_rel * dy_unit) +
-                                    (dx_rel * dx_unit) + x_corr,
+                                  (dx_rel * dx_unit) + x_corr,
                                   g(number) + (dy_rel * dx_unit) + (dx_rel * dy_unit) + y_corr, text_attr))
                 if manual_relative_line == None:  # default line tick drawing
                     line.append(path.moveto(f(number), g(number)))
                     line.append(path.lineto(f(number) - grid_length *
-                                dy_unit, g(number) + grid_length * dx_unit))
+                                            dy_unit, g(number) + grid_length * dx_unit))
                 else:  # manual line tick drawing
                     if type(manual_relative_line) is not list:
                         print(
@@ -1511,7 +1511,7 @@ class Nomo_Axis:
                 # first tick
                 line.append(path.moveto(f(number), g(number)))
                 line.append(path.lineto(f(number) - grid_length *
-                            dy_units[0], g(number) + grid_length * dx_units[0]))
+                                        dy_units[0], g(number) + grid_length * dx_units[0]))
                 # second tick
                 line.append(path.moveto(f(range_end), g(range_end)))
                 line.append(
@@ -1549,9 +1549,9 @@ class Nomo_Axis:
         # c.stroke(self.thin_line, [style.linewidth.thin,axis_color])
         c.stroke(self.line, [linewidth_ticks, axis_color, style.linecap.butt])
         c.stroke(self.thin_line, [linewidth_ticks_thin,
-                 axis_color, style.linecap.butt])
+                                  axis_color, style.linecap.butt])
         c.stroke(self.main_line, [linewidth_main,
-                 axis_color, style.linecap.square])
+                                  axis_color, style.linecap.square])
         if self.arrows is not None:
             for arrow in self.arrows:
                 c.stroke(arrow,
@@ -1768,20 +1768,20 @@ def _find_text_attr(tick_list, dx_units, dy_units, angles, text_size, tick_info)
     for idx, u in enumerate(tick_list):
         if dy_units[idx] < 0:
             text_attr = [text.valign.middle, text.halign.right,
-                text_size, trafo.rotate(angles[idx])]
+                         text_size, trafo.rotate(angles[idx])]
         else:
             text_attr = [text.valign.middle, text.halign.left,
-                text_size, trafo.rotate(angles[idx])]
+                         text_size, trafo.rotate(angles[idx])]
         if tick_info['full_angle'] == True:
             if tick_info['angle_tick_direction'] == 'outer':
                 text_attr = [text.valign.middle, text.halign.left,
-                    text_size, trafo.rotate(angles[idx])]
+                             text_size, trafo.rotate(angles[idx])]
             else:  # 'inner'
                 text_attr = [text.valign.middle, text.halign.left,
-                    text_size, trafo.rotate(angles[idx])]
+                             text_size, trafo.rotate(angles[idx])]
         if tick_info['text_horizontal_align_center'] == True:
             text_attr = [text.valign.top, text.halign.center,
-                text_size, trafo.rotate(angles[idx])]
+                         text_size, trafo.rotate(angles[idx])]
         t_dict = {'valign': text_attr[0],
                   'halign': text_attr[1],
                   'size': text_attr[2],

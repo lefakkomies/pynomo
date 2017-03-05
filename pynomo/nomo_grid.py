@@ -256,19 +256,19 @@ class Nomo_Grid:
                 angle = angle + 180.0
             if dx_unit > 0.0:
                 text_attr = [text.valign.middle, text.halign.right,
-                    text.size.small, trafo.rotate(angle - 90)]
+                             text.size.small, trafo.rotate(angle - 90)]
             if dx_unit <= 0.0:
                 text_attr = [text.valign.middle, text.halign.left,
-                    text.size.small, trafo.rotate(angle - 90)]
+                             text.size.small, trafo.rotate(angle - 90)]
         else:
             if (angle + 90.0) >= 90.0:
                 angle = angle - 180.0
             if dx_unit > 0.0:
                 text_attr = [text.valign.middle, text.halign.right,
-                    text.size.small, trafo.rotate(angle + 90)]
+                             text.size.small, trafo.rotate(angle + 90)]
             if dx_unit <= 0.0:
                 text_attr = [text.valign.middle, text.halign.left,
-                    text.size.small, trafo.rotate(angle + 90)]
+                             text.size.small, trafo.rotate(angle + 90)]
         """
         copied from nomo_axis.py
         if dy_units[idx]<0:
@@ -308,7 +308,7 @@ if __name__ == '__main__':
         g0 = gamma(day)
         return 0.006918 - 0.399912 * cos(g0) + 0.070257 * sin(g0) - 0.006758 * cos(2 * g0) \
             + 0.000907 * sin(2 * g0) - 0.002697 * \
-                             cos(3 * g0) + 0.00148 * sin(3 * g0)
+        cos(3 * g0) + 0.00148 * sin(3 * g0)
 
     def tst(day, hour):
         return hour * 60.0 + eq_time(day)

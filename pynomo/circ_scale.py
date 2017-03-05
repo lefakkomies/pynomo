@@ -138,7 +138,7 @@ class Circ_Block(object):
         angle_min = params['angle_min']
         angle_max = params['angle_max']
         scaling = (angle_max - angle_min) / \
-                   (abs(func(u_max) - func(u_min))) * math.pi / 180.0
+        (abs(func(u_max) - func(u_min))) * math.pi / 180.0
         if func(u_min) < func(u_max):
             offset = -func(u_min) * scaling + angle_min * math.pi / 180.0
         else:

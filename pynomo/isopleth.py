@@ -477,9 +477,9 @@ class Isopleth_Block(object):
                         if isinstance(self.isopleth_values[idx][atom_idx], (int, float)):
                             value = self.isopleth_values[idx][atom_idx]
                             x = atom.give_x(value) - \
-                                            atom.params['align_x_offset']
+                            atom.params['align_x_offset']
                             y = atom.give_y(value) - \
-                                            atom.params['align_y_offset']
+                            atom.params['align_y_offset']
                             solutions[idx][atom.params['dtag']] = (x, y)
 
     def update_solutions(self, solutions):
@@ -563,7 +563,7 @@ class Isopleth_Block(object):
         distance_1 = self._calc_distance_points_(x1, y1, x3, y3)
         distance_2 = self._calc_distance_points_(x2, y2, x3, y3)
         value = value_1 + (value_2 - value_1) * \
-                           distance_1 / (distance_1 + distance_2)
+        distance_1 / (distance_1 + distance_2)
         return value
 
     def parse_linestyle(self, line_style):
@@ -1489,7 +1489,7 @@ class Isopleth_Block_Type_8(Isopleth_Block):
             y_offset = self.atom_stack[0].params['align_y_offset']
             if x_offset != 0 or y_offset != 0:
                 canvas.stroke(path.line(x1, y1, x1 - x_offset,
-                              y1 - y_offset), draw_params_list)
+                                        y1 - y_offset), draw_params_list)
             self._draw_circle_(canvas, x1, y1, circle_radius, color_param)
         for idx, line_points in enumerate(self.other_points):
             if len(draw_params) > idx:

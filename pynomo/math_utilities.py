@@ -310,5 +310,5 @@ if __name__ == '__main__':
     print("#### TEST 4######")
     FourPoint(1, 4, 1, 2, 2, 1, 2, 2, 1, 3, 2, 2, 4, 3, 2, 4)
     print(FourPoint(1, 4, 1, 2, 2, 1, 2, 2, 1, 3, 2, 2,
-          4, 3, 2, 4).calc_distance_points(1, 1, 2, 2))
+                    4, 3, 2, 4).calc_distance_points(1, 1, 2, 2))
     print(FourPoint.calc_distance_points(1, 1, 2, 2))

@@ -623,7 +623,7 @@ class Nomo_Wrapper:
         matrix = array([row1, row2, row3, row4, row5, row6, row7, row8])
         # print matrix
         b = array([const1, const2, const3, const4,
-                  const5, const6, const7, const8])
+                   const5, const6, const7, const8])
         coeff_vector = linalg.solve(matrix, b)
         alpha1 = -1.0  # fixed
         beta1 = coeff_vector[0][0]
@@ -2167,16 +2167,16 @@ class Nomo_Block_Type_6(Nomo_Block):
             factor = self.curve_const * path_length
             x1, y1 = f1(u), g1(u)
             x2, y2 = f1(u) - dy_units_1[idx] * \
-                        factor, g1(u) + dx_units_1[idx] * factor
+            factor, g1(u) + dx_units_1[idx] * factor
             x3, y3 = f2(u) - dy_units_2[idx] * \
-                        factor, g2(u) + dx_units_2[idx] * factor
+            factor, g2(u) + dx_units_2[idx] * factor
             x4, y4 = f2(u), g2(u)
             curves.append(path.curve(x1, y1, x2, y2, x3, y3, x4, y4))
         for curve in curves:
             canvas.stroke(curve, [style.linewidth.normal,
-                          line_style, self.ladder_color])
+                                  line_style, self.ladder_color])
         canvas.stroke(line, [style.linewidth.normal,
-                      line_style, self.ladder_color])
+                             line_style, self.ladder_color])
 
 
 class Nomo_Block_Type_7(Nomo_Block):

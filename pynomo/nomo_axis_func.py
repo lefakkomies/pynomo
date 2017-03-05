@@ -552,7 +552,7 @@ class Axes_Wrapper:
         matrix = array([row1, row2, row3, row4, row5, row6, row7, row8])
         # print matrix
         b = array([const1, const2, const3, const4,
-                  const5, const6, const7, const8])
+                   const5, const6, const7, const8])
         coeff_vector = linalg.solve(matrix, b)
         alpha1 = -1.0  # fixed
         beta1 = coeff_vector[0][0]

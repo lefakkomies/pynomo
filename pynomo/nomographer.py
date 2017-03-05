@@ -313,11 +313,11 @@ class Nomographer:
             # do lines and circles
             for line in line_defs['coords']:
                 c.stroke(path.line(line[0], line[1],
-                         line[2], line[3]), line_style)
+                                   line[2], line[3]), line_style)
                 c.fill(path.circle(line[0], line[1],
-                       circle_size), [circle_color])
+                                   circle_size), [circle_color])
                 c.fill(path.circle(line[2], line[3],
-                       circle_size), [circle_color])
+                                   circle_size), [circle_color])
 
     def _check_params_(self, params):
         """
