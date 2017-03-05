@@ -127,14 +127,14 @@ class Axis_Wrapper:
         """
         transformed x-coordinate
         """
-        return ((self.alpha1 * x + self.beta1 * y + self.gamma1) \
+        return ((self.alpha1 * x + self.beta1 * y + self.gamma1)
                 / (self.alpha3 * x + self.beta3 * y + self.gamma3))
 
     def give_trafo_y(self, x, y):
         """
         transformed y-coordinate
         """
-        return ((self.alpha2 * x + self.beta2 * y + self.gamma2) \
+        return ((self.alpha2 * x + self.beta2 * y + self.gamma2)
                 / (self.alpha3 * x + self.beta3 * y + self.gamma3))
 
     def set_transformation(self, alpha1=1.0, beta1=0.0, gamma1=0.0,

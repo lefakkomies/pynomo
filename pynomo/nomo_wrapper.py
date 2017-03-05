@@ -487,7 +487,7 @@ class Nomo_Wrapper:
         # x3,y3,x4,y4,x3d,y3d,x4d,y4d=find_coords(atom1b,atom2b)
         x4, y4, x3, y3, x4d, y4d, x3d, y3d = find_coords(atom2b, atom1b)
         alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
-            self._calc_trafo_(x1, y1, x2, y2, x3, y3, \
+            self._calc_trafo_(x1, y1, x2, y2, x3, y3,
                               x1d, y1d, x2d, y2d, x3d, y3d)
         # print (alpha1,beta1,gamma1,alpha2,beta2,gamma2,alpha3,beta3,gamma3)
         return alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3
@@ -555,7 +555,7 @@ class Nomo_Wrapper:
         #        self._calc_transformation_matrix_(x1,y1,x2,y2,x3,y3,x4,y4,\
         #                                                 x1d,y1d,x2d,y2d,x3d,y3d,x4d,y4d)
         alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
-            FourPoint(x1, y1, x2, y2, x3, y3, x4, y4, \
+            FourPoint(x1, y1, x2, y2, x3, y3, x4, y4,
                       x1d, y1d, x2d, y2d, x3d, y3d, x4d, y4d).give_trafo_mat()
         # print (alpha1,beta1,gamma1,alpha2,beta2,gamma2,alpha3,beta3,gamma3)
         return alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3
@@ -730,14 +730,14 @@ class Nomo_Block(object):
         """
         transformed x-coordinate
         """
-        return ((self.alpha1 * x + self.beta1 * y + self.gamma1) \
+        return ((self.alpha1 * x + self.beta1 * y + self.gamma1)
                 / (self.alpha3 * x + self.beta3 * y + self.gamma3))
 
     def _give_trafo_y_(self, x, y):
         """
         transformed y-coordinate
         """
-        return ((self.alpha2 * x + self.beta2 * y + self.gamma2) \
+        return ((self.alpha2 * x + self.beta2 * y + self.gamma2)
                 / (self.alpha3 * x + self.beta3 * y + self.gamma3))
 
     def _calculate_total_trafo_mat_(self):
@@ -1232,10 +1232,10 @@ class Nomo_Block_Type_3(Nomo_Block):
         self.x_func[1] = lambda x: fn2x_table[1] * 1.0 * self.x_mirror
         self.x_func[N] = lambda x: fn2x_table[N] * 1.0 * self.x_mirror
         # self.y_func[1]=lambda u:self.functions['f1'](u)
-        self.y_func[1] = lambda u: (self.F_stack[0]['function'](u) \
+        self.y_func[1] = lambda u: (self.F_stack[0]['function'](u)
                                     + self.shift_stack[0]) * self.y_mirror
         # self.y_func[N]=lambda u:(-1)**(N+1)*self.functions['f%i'%N](u)
-        self.y_func[N] = lambda u: (-1) ** (N + 1) * (self.F_stack[N - 1]['function'](u) \
+        self.y_func[N] = lambda u: (-1) ** (N + 1) * (self.F_stack[N - 1]['function'](u)
                                                       + self.shift_stack[N - 1]) * self.y_mirror
         # make reflection axes
         self.ref_params = []
@@ -1276,7 +1276,7 @@ class Nomo_Block_Type_3(Nomo_Block):
         (I could not figure out how to use lambda...)
         """
         # def ff(u): return (-1)**(idx+1)*0.5*self.functions['f%i'%idx](u)
-        def ff(u): return (-1) ** (idx + 1) * 0.5 * (self.F_stack[idx - 1]['function'](u) \
+        def ff(u): return (-1) ** (idx + 1) * 0.5 * (self.F_stack[idx - 1]['function'](u)
                                                      + self.shift_stack[idx - 1]) * self.y_mirror
 
         return ff
@@ -1593,22 +1593,22 @@ class Nomo_Block_Type_5(Nomo_Block):
             if (angle - 90.0) <= -90.0:
                 angle = angle + 180.0
             if dx_unit > 0.0:
-                text_attr = [text.valign.middle, text.halign.right, text.size.small, \
+                text_attr = [text.valign.middle, text.halign.right, text.size.small,
                              trafo.rotate(angle - 90), para_v['text_color']]
                 title_text = title_title + ' ' + title
             if dx_unit <= 0.0:
-                text_attr = [text.valign.middle, text.halign.left, text.size.small, \
+                text_attr = [text.valign.middle, text.halign.left, text.size.small,
                              trafo.rotate(angle - 90), para_v['text_color']]
                 title_text = title + ' ' + title_title
         else:
             if (angle + 90.0) >= 90.0:
                 angle = angle - 180.0
             if dx_unit > 0.0:
-                text_attr = [text.valign.middle, text.halign.right, text.size.small, \
+                text_attr = [text.valign.middle, text.halign.right, text.size.small,
                              trafo.rotate(angle + 90), para_v['text_color']]
                 title_text = title_title + ' ' + title
             if dx_unit <= 0.0:
-                text_attr = [text.valign.middle, text.halign.left, text.size.small, \
+                text_attr = [text.valign.middle, text.halign.left, text.size.small,
                              trafo.rotate(angle + 90), para_v['text_color']]
                 title_text = title + ' ' + title_title
         text_distance = self.grid_box.params['v_text_distance']

@@ -279,7 +279,7 @@ if __name__ == '__main__':
 
     def eq_time(day):
         gamma0 = gamma(day)
-        return 229.18 * (0.000075 + 0.001868 * cos(gamma0) - 0.032077 * sin(gamma0) \
+        return 229.18 * (0.000075 + 0.001868 * cos(gamma0) - 0.032077 * sin(gamma0)
                          - 0.014615 * cos(2 * gamma0) - 0.040849 * sin(2 * gamma0))
 
     # mean correction, with constant correction we make less than 1.5 minutes error

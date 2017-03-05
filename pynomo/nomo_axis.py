@@ -960,7 +960,7 @@ class Nomo_Axis:
             if self.axis_appear['text_horizontal_align_center'] == True:
                 text_attr = [text.valign.top, text.halign.center, text_size, trafo.rotate(angles[idx])]
             if len(manual_texts) > 0:
-                text_list.append((manual_texts[idx], f(u) + text_distance * dy_units[idx], \
+                text_list.append((manual_texts[idx], f(u) + text_distance * dy_units[idx],
                                   g(u) - text_distance * dx_units[idx], text_attr))
             else:  # make a number
                 text_list.append((self._put_text_(u), f(u) + text_distance * dy_units[idx],
