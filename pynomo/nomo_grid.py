@@ -277,12 +277,10 @@ if __name__ == '__main__':
     def gamma(day):
         return 2 * pi / 365.0 * (day - 1 + 0.5)
 
-
     def eq_time(day):
         gamma0 = gamma(day)
         return 229.18 * (0.000075 + 0.001868 * cos(gamma0) - 0.032077 * sin(gamma0) \
                          - 0.014615 * cos(2 * gamma0) - 0.040849 * sin(2 * gamma0))
-
 
     # mean correction, with constant correction we make less than 1.5 minutes error
     # in time axis
@@ -290,57 +288,45 @@ if __name__ == '__main__':
     temp_b = eq_time(temp_a)
     correction = mean(temp_b)  # this is about four minutes
 
-
     def eq_declination(day):
         g0 = gamma(day)
         return 0.006918 - 0.399912 * cos(g0) + 0.070257 * sin(g0) - 0.006758 * cos(2 * g0) \
             + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
 
-
     def tst(day, hour):
         return hour * 60.0 + eq_time(day)
-
 
     def ha(day, hour):
         return tst(day, hour) / 4.0 - 180.0
 
-
     multiplier_x = 20.0
     multiplier_y = 10.0
-
 
     def f(lat, day):
         dec = eq_declination(day)
         return multiplier_x * (cos(lat * pi / 180.0) * cos(dec)) / (1.0 + (cos(lat * pi / 180.0) * cos(dec)))
 
-
     def g(lat, day):
         dec = eq_declination(day)  # in radians
         return multiplier_y * (sin(lat * pi / 180.0) * sin(dec)) / (1.0 + (cos(lat * pi / 180.0) * cos(dec)))
 
-
     def f1(dummy):
         return 0.0
-
 
     def g1(fii):
         return multiplier_y * cos(fii * pi / 180.0)
 
-
     def f3(dummy):
         return multiplier_x
-
 
     def g3(h):
         hr = (h * 60.0 + correction) / 4.0 - 180.0
         return -multiplier_y * cos(hr * pi / 180.0)
 
-
     days_in_month = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
     times1 = []
     for idx in range(0, 12):
         times1.append(sum(days_in_month[0:idx]) + 1)
-
 
     # times=linspace(0,350,10)
     times = arange(0.0, 360.0, 10.0, dtype=double).tolist()

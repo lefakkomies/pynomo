@@ -619,7 +619,6 @@ if __name__ == '__main__':
     def f1(x, u):
         return log(x / (x - u / 100.0)) / log(1 + u / 100.0)
 
-
     params = {'width': 10.0,
               'height': 10.0,
               'u_func': lambda u: u,

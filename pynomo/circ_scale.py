@@ -153,7 +153,6 @@ class Circ_Block(object):
         offset = -func(u_value) * scaling + angle_offset * math.pi / 180.0
         # offset=params['circ_sign']*(func(u_value)*scaling+angle_offset*math.pi/180.0)
 
-
         #        u_min=params['u_min']
         #        u_max=params['u_max']
         #        angle_min=params['angle_min']

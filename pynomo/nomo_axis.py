@@ -296,7 +296,6 @@ class Nomo_Axis:
     #            error=math.fabs(tick_number-number)
     #        return tick_number
 
-
     def _make_linear_axis_old_(self, start, stop, f, g, turn=1):
         """
         OBSOLETE, use _make_linear_axis_
@@ -2446,7 +2445,6 @@ def core_ticker(start, stop, f, g, tick_levels, text_levels, distance_limit_tick
     return ticks, texts
 
 
-
 ## Testing
 if __name__ == '__main__':
     #######
@@ -2454,10 +2452,8 @@ if __name__ == '__main__':
     def fgen_test(angle):
         return math.sin(angle / 180 * math.pi) * 3 + 17
 
-
     def ggen_test(angle):
         return math.cos(angle / 180 * math.pi) * 3 + 5
-
 
     """"
     c = canvas.canvas()
@@ -2470,7 +2466,6 @@ if __name__ == '__main__':
     #
     # same with custom drawing
     c2 = canvas.canvas()
-
 
     def test_text_draw_func(ticks, texts, level, f, g, dx_units, dy_units, angles,
                             tick_lenght, text_distance, text_attrs, c, tick_info):
@@ -2516,7 +2511,6 @@ if __name__ == '__main__':
                     trafo.rotate(angles[i])  # rotation
                     ])
 
-
     def test_tick_draw_func(ticks, texts, level, f, g, dx_units, dy_units,
                             angles, tick_length, text_distance, text_attr, c, tick_info):
         """
@@ -2546,7 +2540,6 @@ if __name__ == '__main__':
             linewidth_ticks = tick_info['tick_linewidths'][level]
             c.stroke(path.line(x1, y1, x2, y2), [linewidth_ticks, tick_color, style.linecap.butt])
 
-
     gr2_axis_appear = {'text_draw_func': test_text_draw_func,
                        'tick_draw_func': test_tick_draw_func,
                        'text_colors': [color.rgb.black, color.rgb.red,
@@ -2557,19 +2550,15 @@ if __name__ == '__main__':
                     axis_appear=gr2_axis_appear)
     c2.writePDFfile("test_nomo_axis_2013a")
 
-
     # end
     # example 3
     def fgen_test3(angle):
         return math.cos(angle / 180 * math.pi) * 20
 
-
     def ggen_test3(angle):
         return math.sin(angle / 180 * math.pi) * 20
 
-
     c3 = canvas.canvas()
-
 
     def draw_balls(num, x1, y1, x2, y2, angle, size, c):
         """
@@ -2626,7 +2615,6 @@ if __name__ == '__main__':
         c.stroke(path.line(0, 0, 0.4, 0), trans + [tick_color, tick_width])
         # print "stroking"
 
-
     def test_tick_draw_func_balls(ticks, texts, level, f, g, dx_units, dy_units,
                                   angles, tick_length, text_distance, text_attr, c, tick_info):
         """
@@ -2660,7 +2648,6 @@ if __name__ == '__main__':
                 draw_balls(tick, x1, y1, x2, y2, angles[i], 0.02, c)
                 # print "draw_balls"
 
-
     gr3_axis_appear = {'text_draw_func': test_text_draw_func,
                        'tick_draw_func': test_tick_draw_func_balls,
                        'text_colors': [color.rgb.black, color.rgb.red,
@@ -2676,46 +2663,35 @@ if 0:
     # find_log_ticks(-33,52)
     find_log_ticks(0.12, 10.0)
 
-
     def f1(L):
         return 2 * (L * L - 8 * L - 5) / (3 * L * L + 2 * L + 7)
-
 
     def g1(L):
         return 10 * (8 * L * L + 12 * L - 8) / (3 * L * L + 2 * L + 7)
 
-
     def f1a(L):
         return 5
-
 
     def g1a(L):
         return 3 * math.log10(L)
 
-
     def f1b(L):
         return 1.5
-
 
     def g1b(L):
         return L * 1.3
 
-
     def f1c(L):
         return 10 + L / 10.0
-
 
     def g1c(L):
         return L
 
-
     def f1d(angle):
         return math.sin(angle / 180 * math.pi) * 3 + 17
 
-
     def g1d(angle):
         return math.cos(angle / 180 * math.pi) * 5 + 5
-
 
     manual_axis_data = {1.0: 'first',
                         2.0: 'second',

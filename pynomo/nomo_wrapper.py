@@ -3606,7 +3606,6 @@ if __name__ == '__main__':
             # return log(log(x/(x-u/100.0))/log(1+u/100.0))
             return log(log(x / (x - u / (100.0 * 12.0))) / log(1 + u / (100.0 * 12.0)))
 
-
         params = {'width': 10.0,
                   'height': 10.0,
                   # 'u_func':lambda u:log(u),

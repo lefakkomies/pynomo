@@ -772,46 +772,35 @@ if __name__ == '__main__':
     testing
     """
 
-
     def f1(L):
         return (2 * (L * L - 8 * L - 5) / (3 * L * L + 2 * L + 7))
-
 
     def g1(L):
         return 10 * (8 * L * L + 12 * L - 8) / (3 * L * L + 2 * L + 7)
 
-
     def f2(L):
         return log10(L)
-
 
     def g2(L):
         return 10 ** (L)
 
-
     def f3(L):
         return -L
-
 
     def g3(L):
         return L - 1.0
 
-
     def f4(L):
         return 3.0
-
 
     def g4(L):
         return L
 
-
     def f5(L):
         return 6.0
 
-
     def g5(L):
         return L
-
 
     test1_ax = Axis_Wrapper(f1, g1, 0.5, 1.0)
     test2_ax = Axis_Wrapper(f2, g2, 0.5, 1.0)

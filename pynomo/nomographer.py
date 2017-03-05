@@ -691,11 +691,9 @@ if __name__ == '__main__':
 
         Nomographer(test4_params)
 
-
         def f1(x, u):
             # return log(log(x/(x-u/100.0))/log(1+u/100.0))
             return log(log(x / (x - u / (100.0 * 12.0))) / log(1 + u / (100.0 * 12.0)))
-
 
         test5_block5_params = {
             'block_type': 'type_5',
@@ -734,10 +732,8 @@ if __name__ == '__main__':
     C_start = -40.0
     C_stop = 30.0
 
-
     def celcius(fahrenheit):
         return (fahrenheit - 32.0) / 1.8
-
 
     test8_f1_para = {
         'tag': 'A',
