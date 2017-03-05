@@ -1284,7 +1284,7 @@ class Nomo_Block_Type_3(Nomo_Block):
         # def ff(u): return (-1)**(idx+1)*0.5*self.functions['f%i'%idx](u)
         def ff(u):
             return (-1) ** (idx + 1) * 0.5 * (self.F_stack[idx - 1]['function'](u)
-                                                     + self.shift_stack[idx - 1]) * self.y_mirror
+                                              + self.shift_stack[idx - 1]) * self.y_mirror
 
         return ff
 
