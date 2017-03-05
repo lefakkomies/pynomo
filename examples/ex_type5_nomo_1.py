@@ -25,7 +25,6 @@ from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
 
-
 block_params = {
     'block_type': 'type_5',
     'u_func': lambda u: u,
