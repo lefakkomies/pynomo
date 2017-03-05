@@ -54,11 +54,11 @@ N_params_3 = {
     'title_draw_center': True,
     'title_opposite_tick': False,
     'extra_params': [{'tick_side': 'left',
-                     'scale_type': 'linear smart',
-                     'u_min': 0.1,
-                     'u_max': 12.0,
-                     'tick_text_levels': 4,
-                     'tick_levels': 4
+                      'scale_type': 'linear smart',
+                      'u_min': 0.1,
+                      'u_max': 12.0,
+                      'tick_text_levels': 4,
+                      'tick_levels': 4
                      }]
 }
 

@@ -79,7 +79,7 @@ block_1_params = {
     'width': 10.0,
     'height': 10.0,
     'f_params': [N_params_1, N_params_2, N_params_3,
-                N_params_4, N_params_5, N_params_6],
+                 N_params_4, N_params_5, N_params_6],
     'isopleth_values': [[3, 2, 1, 0, 3, 'x']],
 }
 
