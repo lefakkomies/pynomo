@@ -23,40 +23,40 @@ from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
 N_params_1={
-    'u_min':1.0,
-    'u_max':10.0,
-    'function':lambda u:u**0.5,
-    'title':'u',
-    'tick_levels':3,
-    'tick_text_levels':2,
-    'tick_side':'left',
+    'u_min': 1.0,
+    'u_max': 10.0,
+    'function': lambda u: u**0.5,
+    'title': 'u',
+    'tick_levels': 3,
+    'tick_text_levels': 2,
+    'tick_side': 'left',
 }
 
 N_params_2={
-    'u_min':1.0,
-    'u_max':10.0,
-    'function':lambda u:log(u),
-    'title':'u',
-    'tick_levels':3,
-    'tick_text_levels':2,
+    'u_min': 1.0,
+    'u_max': 10.0,
+    'function': lambda u: log(u),
+    'title': 'u',
+    'tick_levels': 3,
+    'tick_text_levels': 2,
 }
 
 block_params={
-    'block_type':'type_6',
-    'f1_params':N_params_1,
-    'f2_params':N_params_2,
-    'width':5.0,
-    'height':10.0,
-    'isopleth_values':[[2.2,'x']],
+    'block_type': 'type_6',
+    'f1_params': N_params_1,
+    'f2_params': N_params_2,
+    'width': 5.0,
+    'height': 10.0,
+    'isopleth_values': [[2.2, 'x']],
     #'curve_const':0.01
 }
 
 main_params={
-    'filename':'ex_type6_nomo_1.pdf',
-    'paper_height':10.0,
-    'paper_width':5.0,
-    'block_params':[block_params],
-    'transformations':[('rotate',0.01),('scale paper',)]
+    'filename': 'ex_type6_nomo_1.pdf',
+    'paper_height': 10.0,
+    'paper_width': 5.0,
+    'block_params': [block_params],
+    'transformations': [('rotate', 0.01), ('scale paper',)]
 }
 
 Nomographer(main_params)

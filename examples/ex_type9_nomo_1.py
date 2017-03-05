@@ -23,61 +23,61 @@ from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
 N_params_1={
-    'u_min':3.0,
-    'u_max':10.0,
-    'f':lambda u:0,
-    'g':lambda u:u,
-    'h':lambda u:1.0,
-    'title':r'$u_1$',
-            'scale_type':'linear',
-            'tick_levels':3,
-            'tick_text_levels':2,
-            'grid':False}
+    'u_min': 3.0,
+    'u_max': 10.0,
+    'f': lambda u: 0,
+    'g': lambda u: u,
+    'h': lambda u: 1.0,
+    'title': r'$u_1$',
+            'scale_type': 'linear',
+            'tick_levels': 3,
+            'tick_text_levels': 2,
+            'grid': False}
 
 N_params_2={
-    'u_min':0.0, # for alignment
-    'u_max':1.0,  # for alignment
-    'f_grid':lambda u,v:u+2.0,
-    'g_grid':lambda u,v:2*v+5.0,
-    'h_grid':lambda u,v:1.0,
-    'u_start':0.0,
-    'u_stop':1.0,
-    'v_start':0.0,
-    'v_stop':1.0,
-    'u_values':[0.0,0.25,0.5,0.75,1.0],
-    'v_values':[0.0,0.25,0.5,0.75,1.0],
-    'grid':True,
-    'text_prefix_u':r'$u_2$=',
-    'text_prefix_v':r'$v_2$=',
+    'u_min': 0.0, # for alignment
+    'u_max': 1.0,  # for alignment
+    'f_grid': lambda u, v: u+2.0,
+    'g_grid': lambda u, v: 2*v+5.0,
+    'h_grid': lambda u, v: 1.0,
+    'u_start': 0.0,
+    'u_stop': 1.0,
+    'v_start': 0.0,
+    'v_stop': 1.0,
+    'u_values': [0.0, 0.25, 0.5, 0.75, 1.0],
+    'v_values': [0.0, 0.25, 0.5, 0.75, 1.0],
+    'grid': True,
+    'text_prefix_u': r'$u_2$=',
+    'text_prefix_v': r'$v_2$=',
 }
 
 N_params_3={
-    'u_min':3.0,
-    'u_max':10.0,
-    'f':lambda u:4.0,
-    'g':lambda u:u,
-    'h':lambda u:1.0,
-    'title':r'$u_3$',
-            'scale_type':'linear',
-            'tick_levels':3,
-            'tick_text_levels':2,
-            'grid':False
+    'u_min': 3.0,
+    'u_max': 10.0,
+    'f': lambda u: 4.0,
+    'g': lambda u: u,
+    'h': lambda u: 1.0,
+    'title': r'$u_3$',
+            'scale_type': 'linear',
+            'tick_levels': 3,
+            'tick_text_levels': 2,
+            'grid': False
 }
 
 block_params={
-    'block_type':'type_9',
-    'f1_params':N_params_1,
-    'f2_params':N_params_2,
-    'f3_params':N_params_3,
-    'transform_ini':False,
-    'isopleth_values':[[7,[0.75,0.5],'x']]
+    'block_type': 'type_9',
+    'f1_params': N_params_1,
+    'f2_params': N_params_2,
+    'f3_params': N_params_3,
+    'transform_ini': False,
+    'isopleth_values': [[7, [0.75, 0.5], 'x']]
 }
 
 main_params={
-    'filename':'ex_type9_nomo_1.pdf',
-    'paper_height':10.0,
-    'paper_width':10.0,
-    'block_params':[block_params],
-    'transformations':[('rotate',0.01),('scale paper',)]
+    'filename': 'ex_type9_nomo_1.pdf',
+    'paper_height': 10.0,
+    'paper_width': 10.0,
+    'block_params': [block_params],
+    'transformations': [('rotate', 0.01), ('scale paper',)]
 }
 Nomographer(main_params)
