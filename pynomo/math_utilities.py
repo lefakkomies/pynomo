@@ -169,7 +169,7 @@ class FourPoint(object):
         angle_2 = angle(v42, -v34)
         angle_3 = angle(v34, -v13)
         angle_4 = angle(v13, -v21)
-        #print (angle_1 + angle_2 + angle_3 + angle_4)
+        # print (angle_1 + angle_2 + angle_3 + angle_4)
         if abs((angle_1 + angle_2 + angle_3 + angle_4) - 2 * math.pi) < 1e-9:
             return x1, y1, x2, y2, x3, y3, x4, y4
         else:

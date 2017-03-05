@@ -263,16 +263,13 @@ class Isopleth_Block(object):
             else:
                 idx2 = smallest_idx + 1
 
-            #        sum_distance=distances[smallest_idx]+distances[idx2]
-            #        middle_x=distances[smallest_idx]/sum_distance*line[smallest_idx][0]+\
-            #                 distances[idx2]/sum_distance*line[idx2][0]
-            #        middle_y=distances[smallest_idx]/sum_distance*line[smallest_idx][1]+\
-            #                 distances[idx2]/sum_distance*line[idx2][1]
-        # a better
-        middle_x, middle_y = self._two_line_intersection_(line[smallest_idx][0], line[smallest_idx][1],
-                                                          line[idx2][0], line[
-                                                              idx2][1],
-                                                          x1, y1, x2, y2)
+        middle_x, middle_y = self._two_line_intersection_(
+                line[smallest_idx][0], 
+                line[smallest_idx][1],                                                          
+                line[idx2][0], 
+                line[idx2][1],
+                x1, y1, x2, y2)
+
         return middle_x, middle_y
 
     def _find_closest_point_(self, sections, x1, y1, x2, y2):
