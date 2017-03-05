@@ -687,8 +687,8 @@ class Nomo_Axis:
             # make the ticks
             start_decade = start_decade + 1
             stop_decade = stop_decade + 1
-            print ("start_decade value %f" % -10 ** start_decade)
-            print ("stop_decade value %f" % 10 ** stop_decade)
+            print("start_decade value %f" % -10 ** start_decade)
+            print("stop_decade value %f" % 10 ** stop_decade)
             tick_0_list_n, tick_1_list_n, tick_2_list_n, tick_3_list_n, tick_4_list_n = \
                 find_log_ticks_negative_smart(start, -10 ** (start_decade) * 1.0001, f, g, turn=1, base_start=None,
                                               base_stop=None,
