@@ -312,7 +312,7 @@ class Nomo_Axis:
                                 stop=self.stop, side=self.side)
         # turn=self.turn
         # which number to divide. how many decades there are
-        ##scale_max=10.0**math.ceil(math.log10(math.fabs(start-stop)))
+        # scale_max=10.0**math.ceil(math.log10(math.fabs(start-stop)))
         scale_max = 10.0 ** round(math.log10(math.fabs(start - stop)))
         tick_min = scale_max / (500.0)
         tick_max = scale_max / 10.0
@@ -1224,7 +1224,7 @@ class Nomo_Axis:
         #            text_strings.append(label_string)
 
         keys = manual_axis_data.keys()
-        #keys.sort()
+        # keys.sort()
         keys = sorted(keys)  # to make work in python3
         for key in keys:
             tick_list.append(key)
@@ -2445,7 +2445,7 @@ def core_ticker(start, stop, f, g, tick_levels, text_levels, distance_limit_tick
     return ticks, texts
 
 
-## Testing
+# Testing
 if __name__ == '__main__':
     #######
     # basic test

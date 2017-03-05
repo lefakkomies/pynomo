@@ -147,7 +147,7 @@ class Nomo_Grid_Box(object):
         self._calc_bound_box_ini_()
         self._build_u_lines_(self.u_func)
         # debug by looking pdf
-        ##self._draw_debug_ini_()
+        # self._draw_debug_ini_()
         # build scaled versions
         self._scale_and_mirror_()
         # self._draw_debug_ini_('after.pdf')
@@ -630,7 +630,7 @@ if __name__ == '__main__':
     tic = time.time()
     test = Nomo_Grid_Box(params=params)
     toc = time.time()
-    #print toc - tic, ' has elapsed'
+    # print toc - tic, ' has elapsed'
 
     manual_axis_data = {1.0: 'first',
                         2.0: 'second',

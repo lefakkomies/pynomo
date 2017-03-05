@@ -164,7 +164,7 @@ class Nomograph3:
                             (self.alpha3[0] * f(u, v) + self.beta3[0] * g(u, v) + self.gamma3[0] * h(u, v))
 
 
-## Testing
+# Testing
 if __name__ == '__main__':
     def main():
         def f1(u):
@@ -196,11 +196,11 @@ if __name__ == '__main__':
 
         nomograph = Nomograph3(f1=f1, f2=f2, f3=f3, g1=g1, g2=g2, g3=g3, h1=h1, h2=h2, h3=h3)
         # aa,bb= nomograph._make_row_(variable='u',variable_value=0.5,coordinate='x',coord_value=-1)
-        ##    print 'aa'+`aa`
-        ##    print 'bb'+`bb`
-        ##    cc=np.array([bb,bb,bb])
-        ##    print 'cc'+`cc`
-        ##    print 5*nomograph._make_transformation_matrix_()
+        # print 'aa'+`aa`
+        # print 'bb'+`bb`
+        # cc=np.array([bb,bb,bb])
+        # print 'cc'+`cc`
+        # print 5*nomograph._make_transformation_matrix_()
         print(nomograph.give_x1(0.5))
         print(nomograph.give_x1(1.0))
         print(nomograph.give_y1(0.5))

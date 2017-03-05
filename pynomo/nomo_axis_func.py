@@ -475,7 +475,7 @@ class Axes_Wrapper:
         # self.gamma2=self.multiplier_y*self.gamma2
         self._set_transformation_to_all_axis_()
         # self._calc_bounding_box_()
-        ##self._trafo_to_paper_()
+        # self._trafo_to_paper_()
 
     def fit_to_paper(self):
         """
@@ -617,7 +617,7 @@ class Axes_Wrapper:
         """
         x1, y1, x2, y2 = x_high, y_high, x_low, y_low
         x3, y3, x4, y4 = x_slope_high, y_slope_high, x_slope_low, y_slope_low
-        #print x_high, y_high, x_low, y_low, x_slope_high, y_slope_high, x_slope_low, y_slope_low
+        # print x_high, y_high, x_low, y_low, x_slope_high, y_slope_high, x_slope_low, y_slope_low
         if (x1 - x3) * (x2 - x4) < 0:
             x1, y1, x3, y3 = x3, y3, x1, y1
         if x3 < x1:

@@ -327,8 +327,8 @@ class Nomo_Wrapper:
                                             #                                                                      alpha2,beta2,gamma2,
                                             #                                                                      alpha3,beta3,gamma3)
                                             # double alignment
-                                            ##print "double aligning with tags %s %s" % (
-                                            ##atom1.params['tag'], atom1d.params['dtag'])
+                                            # print "double aligning with tags %s %s" % (
+                                            # atom1.params['tag'], atom1d.params['dtag'])
                                             #                                            alpha1,beta1,gamma1,alpha2,beta2,gamma2,alpha3,beta3,gamma3=\
                                             #                                            self._find_trafo_4_atoms_3_points_(atom1,atom1d,atom2,atom2d)
                                             #                                            block2.add_transformation(alpha1,beta1,gamma1,
@@ -357,7 +357,7 @@ class Nomo_Wrapper:
                                 # print idx2
                                 # print idx2
                                 if not double_aligned:
-                                    #print "Aligning with tag %s" % atom1.params['tag']
+                                    # print "Aligning with tag %s" % atom1.params['tag']
                                     alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
                                         self._find_trafo_2_atoms_(atom1, atom2)
                                     block2.add_transformation(alpha1, beta1, gamma1,
@@ -409,8 +409,8 @@ class Nomo_Wrapper:
                                                 #                                                                      alpha2,beta2,gamma2,
                                                 #                                                                      alpha3,beta3,gamma3)
                                                 # double alignment
-                                                ##print "Double aligning with tags %s %s" % (
-                                                ##atom1.params['tag'], atom3d.params['dtag'])
+                                                # print "Double aligning with tags %s %s" % (
+                                                # atom1.params['tag'], atom3d.params['dtag'])
                                                 #                                            alpha1,beta1,gamma1,alpha2,beta2,gamma2,alpha3,beta3,gamma3=\
                                                 #                                            self._find_trafo_4_atoms_3_points_(atom1,atom1d,atom2,atom2d)
                                                 #                                            block2.add_transformation(alpha1,beta1,gamma1,
@@ -440,7 +440,7 @@ class Nomo_Wrapper:
                                                 # print idx2
                                                 # print idx2
                                 if not double_aligned:
-                                    #print "Aligning with tag %s" % atom1.params['tag']
+                                    # print "Aligning with tag %s" % atom1.params['tag']
                                     alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
                                         self._find_trafo_2_atoms_(atom1, atom2)
                                     block2.add_transformation(alpha1, beta1, gamma1,
@@ -530,8 +530,8 @@ class Nomo_Wrapper:
         x3, y3, x4, y4, x3d, y3d, x4d, y4d = find_coords(atom2b, atom1b)
         # DEBUG
         if False:
-            #print "x1: %f y1: %f x2: %f y2: %f x1d: %f y1d: %f x2d: %f y2d: %f" % (x1, y1, x2, y2, x1d, y1d, x2d, y2d)
-            #print "x3: %f y3: %f x4: %f y4: %f x3d: %f y3d: %f x4d: %f y4d: %f" % (x3, y3, x4, y4, x3d, y3d, x4d, y4d)
+            # print "x1: %f y1: %f x2: %f y2: %f x1d: %f y1d: %f x2d: %f y2d: %f" % (x1, y1, x2, y2, x1d, y1d, x2d, y2d)
+            # print "x3: %f y3: %f x4: %f y4: %f x3d: %f y3d: %f x4d: %f y4d: %f" % (x3, y3, x4, y4, x3d, y3d, x4d, y4d)
             c = canvas.canvas()
             c.fill(path.circle(x1, y1, 0.02))
             c.text(x1, y1, '1')
