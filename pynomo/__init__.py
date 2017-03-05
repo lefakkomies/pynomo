@@ -1,5 +1,6 @@
 #    PyNomo - nomographs with Python
 #    Copyright (C) 2007-2015  Leif Roschier
+#    Copyright (C) 2017       Jonas Stein
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,6 +22,5 @@ using Python interpreter. A nomograph (nomogram) is a graphical
 solution to an equation.
 """
 
-__all__ = [ "nomo_axis", "nomo_axis_func",
-           "nomo_grid_box", "nomo_grid", "nomo_wrapper", "nomographer",
-           "isopleth", "nomograph3"]
+__all__ = ["nomo_axis", "nomo_axis_func", "nomo_grid_box", "nomo_grid",
+           "nomo_wrapper", "nomographer", "isopleth", "nomograph3"]
