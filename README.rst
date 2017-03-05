@@ -1,7 +1,5 @@
 Python nomographs (nomograms).
 ==============================
 
-Under construction
-------------------
-
-Use http://sourceforge.net/projects/pynomo/ until ready.
+The old project can still be found here:
+http://sourceforge.net/projects/pynomo/ 
