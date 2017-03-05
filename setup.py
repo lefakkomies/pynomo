@@ -2,6 +2,7 @@
 #
 #    PyNomo - nomographs with Python
 #    Copyright (C) 2007- 2015  Leif Roschier
+#    Copyright (C) 2017        Jonas Stein
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -53,5 +54,6 @@ setup(name='PyNomo',
       ],
       keywords='nomograph nomogram graphics calculator visualization',
       # install numpy, scipy, pyx and latex manually :(
-      #install_requires=['numpy', 'scipy'],  # have to install pyx and tex/latex manually
+      # install_requires=['numpy', 'scipy'],
+      # have to install pyx and tex/latex manually
       )
