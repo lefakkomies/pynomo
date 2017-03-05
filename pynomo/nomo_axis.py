@@ -1401,7 +1401,7 @@ class Nomo_Axis:
                         # coord transforms
                         x_coord = x_orig + x_curr * dx_unit - y_curr * dy_unit
                         y_coord = y_orig + y_curr * dx_unit + x_curr * dy_unit
-                        # print "coords:%g,%g"%(x_coord,y_coord)                        
+                        # print "coords:%g,%g"%(x_coord,y_coord)
                         line.append(path.lineto(x_coord, y_coord))
             else:  # range_tick == True
                 tick_list = [number, range_end]
