@@ -367,7 +367,7 @@ class Nomo_Axis:
                         (self._put_text_(u), f(u) + text_distance * dy_unit, g(u) - text_distance * dx_unit, text_attr))
                 line.append(path.lineto(f(u), g(u)))
                 if self.tick_levels > 0:
-                    line.append(path.lineto(f(u) + grid_length * \
+                    line.append(path.lineto(f(u) + grid_length *
                                 dy_unit, g(u) - grid_length * dx_unit))
                 line.append(path.moveto(f(u), g(u)))
             elif self._test_tick_(u, tick_1, scale_max):
@@ -384,7 +384,7 @@ class Nomo_Axis:
                         (self._put_text_(u), f(u) + text_distance * dy_unit, g(u) - text_distance * dx_unit, text_attr))
                 line.append(path.lineto(f(u), g(u)))
                 if self.tick_levels > 1:
-                    line.append(path.lineto(f(u) + grid_length * \
+                    line.append(path.lineto(f(u) + grid_length *
                                 dy_unit, g(u) - grid_length * dx_unit))
                 line.append(path.moveto(f(u), g(u)))
             elif self._test_tick_(u, tick_2, scale_max):
@@ -401,7 +401,7 @@ class Nomo_Axis:
                         (self._put_text_(u), f(u) + text_distance * dy_unit, g(u) - text_distance * dx_unit, text_attr))
                 line.append(path.lineto(f(u), g(u)))
                 if self.tick_levels > 2:
-                    line.append(path.lineto(f(u) + grid_length * \
+                    line.append(path.lineto(f(u) + grid_length *
                                 dy_unit, g(u) - grid_length * dx_unit))
                 line.append(path.moveto(f(u), g(u)))
             else:
@@ -1073,7 +1073,7 @@ class Nomo_Axis:
         for dummy in range(100):  # for case if start = stop
             first = random.uniform(start, stop)
             second = random.uniform(start, stop)
-            temp = math.sqrt((f(first) - f(second)) ** 2 + \
+            temp = math.sqrt((f(first) - f(second)) ** 2 +
                              (g(first) - g(second)) ** 2)
             if temp > line_length_straigth:
                 line_length_straigth = temp
@@ -1116,7 +1116,7 @@ class Nomo_Axis:
         for dummy in range(100):  # for case if start = stop
             first = random.uniform(start, stop)
             second = random.uniform(start, stop)
-            temp = math.sqrt((f(first) - f(second)) ** 2 + \
+            temp = math.sqrt((f(first) - f(second)) ** 2 +
                              (g(first) - g(second)) ** 2)
             if temp > line_length_straigth:
                 line_length_straigth = temp
@@ -1472,12 +1472,12 @@ class Nomo_Axis:
                     dx_rel = manual_relative_text_pos[0]
                     dy_rel = manual_relative_text_pos[1]
                     texts.append((label_string,
-                                  f(number) - (dy_rel * dy_unit) + \
+                                  f(number) - (dy_rel * dy_unit) +
                                     (dx_rel * dx_unit) + x_corr,
                                   g(number) + (dy_rel * dx_unit) + (dx_rel * dy_unit) + y_corr, text_attr))
                 if manual_relative_line == None:  # default line tick drawing
                     line.append(path.moveto(f(number), g(number)))
-                    line.append(path.lineto(f(number) - grid_length * \
+                    line.append(path.lineto(f(number) - grid_length *
                                 dy_unit, g(number) + grid_length * dx_unit))
                 else:  # manual line tick drawing
                     if type(manual_relative_line) is not list:
@@ -1510,7 +1510,7 @@ class Nomo_Axis:
                     dy_units[0], range_side * dy_units[1]
                 # first tick
                 line.append(path.moveto(f(number), g(number)))
-                line.append(path.lineto(f(number) - grid_length * \
+                line.append(path.lineto(f(number) - grid_length *
                             dy_units[0], g(number) + grid_length * dx_units[0]))
                 # second tick
                 line.append(path.moveto(f(range_end), g(range_end)))
@@ -1523,7 +1523,7 @@ class Nomo_Axis:
                 dx_unit = (dx_units[0] + dx_units[1]) / 2.0
                 dy_unit = (dy_units[0] + dy_units[1]) / 2.0
                 texts.append((
-                    label_string, x0 - text_distance * dy_unit + \
+                    label_string, x0 - text_distance * dy_unit +
                         x_corr, y0 + text_distance * dx_unit + y_corr,
                     text_attr))
                 self._make_main_line_(
@@ -2306,7 +2306,7 @@ def calc_main_line_coords(start, stop, f, g, sections=350.0):
     for dummy in range(100):  # for case if start = stop
         first = random.uniform(start, stop)
         second = random.uniform(start, stop)
-        temp = math.sqrt((f(first) - f(second)) ** 2 + \
+        temp = math.sqrt((f(first) - f(second)) ** 2 +
                          (g(first) - g(second)) ** 2)
         if temp > line_length_straigth:
             line_length_straigth = temp

@@ -65,27 +65,27 @@ class Nomograph3:
         h2 = self.h2
         h3 = self.h3
         if variable == 'u' and coordinate == 'x':
-            row = np.array([g1(vv), h1(vv), 0, 0, 0, -cv * \
+            row = np.array([g1(vv), h1(vv), 0, 0, 0, -cv *
                            f1(vv), -cv * g1(vv), -cv * h1(vv)])
             value = np.array([f1(vv)])
         if variable == 'u' and coordinate == 'y':
-            row = np.array([0, 0, f1(vv), g1(vv), h1(vv), - \
+            row = np.array([0, 0, f1(vv), g1(vv), h1(vv), -
                            cv * f1(vv), -cv * g1(vv), -cv * h1(vv)])
             value = np.array([0])
         if variable == 'v' and coordinate == 'x':
-            row = np.array([g2(vv), h2(vv), 0, 0, 0, -cv * \
+            row = np.array([g2(vv), h2(vv), 0, 0, 0, -cv *
                            f2(vv), -cv * g2(vv), -cv * h2(vv)])
             value = np.array([f2(vv)])
         if variable == 'v' and coordinate == 'y':
-            row = np.array([0, 0, f2(vv), g2(vv), h2(vv), - \
+            row = np.array([0, 0, f2(vv), g2(vv), h2(vv), -
                            cv * f2(vv), -cv * g2(vv), -cv * h2(vv)])
             value = np.array([0])
         if variable == 'w' and coordinate == 'x':
-            row = np.array([g3(vv), h3(vv), 0, 0, 0, -cv * \
+            row = np.array([g3(vv), h3(vv), 0, 0, 0, -cv *
                            f3(vv), -cv * g3(vv), -cv * h3(vv)])
             value = np.array([f3(vv)])
         if variable == 'w' and coordinate == 'y':
-            row = np.array([0, 0, f3(vv), g3(vv), h3(vv), - \
+            row = np.array([0, 0, f3(vv), g3(vv), h3(vv), -
                            cv * f3(vv), -cv * g3(vv), -cv * h3(vv)])
             value = np.array([0])
         return row, value

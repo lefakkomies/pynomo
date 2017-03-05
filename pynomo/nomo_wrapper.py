@@ -2949,7 +2949,7 @@ class Nomo_Atom:
         for dummy in range(100):  # for case if start = stop
             first = random.uniform(start, stop)
             second = random.uniform(start, stop)
-            temp = math.sqrt((f(first) - f(second)) ** 2 + \
+            temp = math.sqrt((f(first) - f(second)) ** 2 +
                              (g(first) - g(second)) ** 2)
             if temp > line_length_straigth:
                 line_length_straigth = temp
@@ -3033,7 +3033,7 @@ class Nomo_Atom:
         x-function for reflection axis
         """
         value = (self.alpha1 * self.f_ref(u) + self.beta1 * self.g_ref(u) + self.gamma1) / \
-                (self.alpha3 * self.f_ref(u) + \
+                (self.alpha3 * self.f_ref(u) +
                  self.beta3 * self.g_ref(u) + self.gamma3)
         return value
 
@@ -3042,7 +3042,7 @@ class Nomo_Atom:
         y-function for reflection axis
         """
         value = (self.alpha2 * self.f_ref(u) + self.beta2 * self.g_ref(u) + self.gamma2) / \
-                (self.alpha3 * self.f_ref(u) + \
+                (self.alpha3 * self.f_ref(u) +
                  self.beta3 * self.g_ref(u) + self.gamma3)
         return value
 
@@ -3175,7 +3175,7 @@ class Nomo_Atom_Grid(Nomo_Atom):
         """
         v0 = self.params['v_start']  # value for reference line
         value = (self.alpha1 * self.f(u, v0) + self.beta1 * self.g(u, v0) + self.gamma1) / \
-                (self.alpha3 * self.f(u, v0) + \
+                (self.alpha3 * self.f(u, v0) +
                  self.beta3 * self.g(u, v0) + self.gamma3)
         return value
 
@@ -3186,7 +3186,7 @@ class Nomo_Atom_Grid(Nomo_Atom):
         """
         v0 = self.params['v_start']  # value for reference line
         value = (self.alpha2 * self.f(u, v0) + self.beta2 * self.g(u, v0) + self.gamma2) / \
-                (self.alpha3 * self.f(u, v0) + \
+                (self.alpha3 * self.f(u, v0) +
                  self.beta3 * self.g(u, v0) + self.gamma3)
         return value
 
@@ -3195,7 +3195,7 @@ class Nomo_Atom_Grid(Nomo_Atom):
         gives x of grid.
         """
         value = (self.alpha1 * self.f(u, v) + self.beta1 * self.g(u, v) + self.gamma1) / \
-                (self.alpha3 * self.f(u, v) + \
+                (self.alpha3 * self.f(u, v) +
                  self.beta3 * self.g(u, v) + self.gamma3)
         return value
 
@@ -3204,7 +3204,7 @@ class Nomo_Atom_Grid(Nomo_Atom):
         gives y of grid.
         """
         value = (self.alpha2 * self.f(u, v) + self.beta2 * self.g(u, v) + self.gamma2) / \
-                (self.alpha3 * self.f(u, v) + \
+                (self.alpha3 * self.f(u, v) +
                  self.beta3 * self.g(u, v) + self.gamma3)
         return value
 

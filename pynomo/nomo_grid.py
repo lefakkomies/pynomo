@@ -160,7 +160,7 @@ class Nomo_Grid:
         for dummy in range(100):
             first = random.uniform(start, stop)
             second = random.uniform(start, stop)
-            temp = sqrt((f(first) - f(second)) ** 2 + \
+            temp = sqrt((f(first) - f(second)) ** 2 +
                         (g(first) - g(second)) ** 2)
             if temp > line_length_straigth:
                 line_length_straigth = temp
