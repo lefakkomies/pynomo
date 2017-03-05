@@ -1,6 +1,5 @@
 #    PyNomo - nomographs with Python
 #    Copyright (C) 2007-2015  Leif Roschier
-#    Copyright (C) 2017       Jonas Stein
 #
 #    Otherwise obsolete but used  in nomo_wrapper.py
 #

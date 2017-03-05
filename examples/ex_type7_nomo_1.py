@@ -4,7 +4,6 @@
     Simple nomogram of type 7: 1/F1+1/F2=1/F3
 
     Copyright (C) 2007-2009  Leif Roschier
-    Copyright (C) 2017       Jonas Stein
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
