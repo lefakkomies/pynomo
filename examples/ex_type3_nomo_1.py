@@ -24,7 +24,7 @@ import sys
 from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
-N_params_1={
+N_params_1 = {
     'u_min': 0.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -32,7 +32,7 @@ N_params_1={
     'tick_levels': 2,
     'tick_text_levels': 1,
 }
-N_params_2={
+N_params_2 = {
     'u_min': 0.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -40,7 +40,7 @@ N_params_2={
     'tick_levels': 2,
     'tick_text_levels': 1,
 }
-N_params_3={
+N_params_3 = {
     'u_min': 0.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -48,7 +48,7 @@ N_params_3={
     'tick_levels': 2,
     'tick_text_levels': 1,
 }
-N_params_4={
+N_params_4 = {
     'u_min': 0.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -56,7 +56,7 @@ N_params_4={
     'tick_levels': 2,
     'tick_text_levels': 1,
 }
-N_params_5={
+N_params_5 = {
     'u_min': 0.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -64,7 +64,7 @@ N_params_5={
     'tick_levels': 2,
     'tick_text_levels': 1,
 }
-N_params_6={
+N_params_6 = {
     'u_min': -20.0,
     'u_max': 0.0,
     'function': lambda u: u,
@@ -74,7 +74,7 @@ N_params_6={
     'tick_side': 'right',
 }
 
-block_1_params={
+block_1_params = {
     'block_type': 'type_3',
     'width': 10.0,
     'height': 10.0,
@@ -83,7 +83,7 @@ block_1_params={
     'isopleth_values': [[3, 2, 1, 0, 3, 'x']],
 }
 
-main_params={
+main_params = {
     'filename': 'ex_type3_nomo_1.pdf',
     'paper_height': 20.0,
     'paper_width': 20.0,

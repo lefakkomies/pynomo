@@ -22,7 +22,7 @@ import sys
 from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
-N_params_1={
+N_params_1 = {
     'u_min': 1.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -31,7 +31,7 @@ N_params_1={
     'tick_text_levels': 1,
     'tick_side': 'left',
 }
-N_params_2={
+N_params_2 = {
     'u_min': 1.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -40,7 +40,7 @@ N_params_2={
     'tick_text_levels': 1,
     'tick_side': 'right',
 }
-N_params_3={
+N_params_3 = {
     'u_min': 1.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -51,7 +51,7 @@ N_params_3={
     'title_draw_center': True,
     'title_opposite_tick': False,
 }
-N_params_4={
+N_params_4 = {
     'u_min': 1.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -63,7 +63,7 @@ N_params_4={
     'title_opposite_tick': False,
 }
 
-block_1_params={
+block_1_params = {
     'block_type': 'type_4',
     'f1_params': N_params_1,
     'f2_params': N_params_2,
@@ -72,7 +72,7 @@ block_1_params={
     'isopleth_values': [[7, 6, 2, 'x']],
 }
 
-main_params={
+main_params = {
     'filename': 'ex_type4_nomo_1.pdf',
     'paper_height': 10.0,
     'paper_width': 10.0,

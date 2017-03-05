@@ -22,7 +22,7 @@ import sys
 from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
-N_params_1={
+N_params_1 = {
     'u_min': 1.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -32,7 +32,7 @@ N_params_1={
     'tick_side': 'left',
 }
 
-block_params={
+block_params = {
     'block_type': 'type_8',
     'f_params': N_params_1,
     'width': 5.0,
@@ -40,7 +40,7 @@ block_params={
     'isopleth_values': [[5]]
 }
 
-main_params={
+main_params = {
     'filename': 'ex_type8_nomo_1.pdf',
     'paper_height': 10.0,
     'paper_width': 5.0,

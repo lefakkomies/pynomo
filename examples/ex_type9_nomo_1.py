@@ -22,7 +22,7 @@ import sys
 from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
-N_params_1={
+N_params_1 = {
     'u_min': 3.0,
     'u_max': 10.0,
     'f': lambda u: 0,
@@ -34,7 +34,7 @@ N_params_1={
             'tick_text_levels': 2,
             'grid': False}
 
-N_params_2={
+N_params_2 = {
     'u_min': 0.0, # for alignment
     'u_max': 1.0,  # for alignment
     'f_grid': lambda u, v: u+2.0,
@@ -51,7 +51,7 @@ N_params_2={
     'text_prefix_v': r'$v_2$=',
 }
 
-N_params_3={
+N_params_3 = {
     'u_min': 3.0,
     'u_max': 10.0,
     'f': lambda u: 4.0,
@@ -64,7 +64,7 @@ N_params_3={
             'grid': False
 }
 
-block_params={
+block_params = {
     'block_type': 'type_9',
     'f1_params': N_params_1,
     'f2_params': N_params_2,
@@ -73,7 +73,7 @@ block_params={
     'isopleth_values': [[7, [0.75, 0.5], 'x']]
 }
 
-main_params={
+main_params = {
     'filename': 'ex_type9_nomo_1.pdf',
     'paper_height': 10.0,
     'paper_width': 10.0,

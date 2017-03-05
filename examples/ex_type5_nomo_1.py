@@ -26,7 +26,7 @@ from pynomo.nomographer import *
 
 
 
-block_params={
+block_params = {
     'block_type': 'type_5',
     'u_func': lambda u: u,
     'v_func': lambda x, v: x+v,
@@ -44,7 +44,7 @@ block_params={
 }
 
 
-main_params={
+main_params = {
     'filename': 'ex_type5_nomo_1.pdf',
     'paper_height': 10.0,
     'paper_width': 10.0,

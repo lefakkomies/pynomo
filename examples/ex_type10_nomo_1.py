@@ -23,7 +23,7 @@ import sys
 from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
-N_params_1={
+N_params_1 = {
     'u_min': -10.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -32,7 +32,7 @@ N_params_1={
     'tick_text_levels': 2,
 }
 
-N_params_2={
+N_params_2 = {
     'u_min': -10.0,
     'u_max': 10.0,
     'function': lambda u: u,
@@ -42,7 +42,7 @@ N_params_2={
     'tick_side': 'left',
 }
 
-N_params_3={
+N_params_3 = {
     'u_min': 0.3,
     'u_max': 4.0,
     'function_3': lambda u: u,
@@ -54,7 +54,7 @@ N_params_3={
     'title_draw_center': True,
 }
 
-block_1_params={
+block_1_params = {
     'block_type': 'type_10',
     'width': 10.0,
     'height': 10.0,
@@ -64,7 +64,7 @@ block_1_params={
     'isopleth_values': [[6, -4, 'x']]
 }
 
-main_params={
+main_params = {
     'filename': 'ex_type10_nomo_1.pdf',
     'paper_height': 10.0,
     'paper_width': 10.0,

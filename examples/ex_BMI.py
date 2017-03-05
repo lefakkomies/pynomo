@@ -22,7 +22,7 @@ import sys
 from pynomo.nomo_wrapper import *
 from pynomo.nomographer import *
 
-N_params_1={
+N_params_1 = {
     'u_min': 1.40,
     'u_max': 2.2,
     'function': lambda u: u**2,
@@ -33,7 +33,7 @@ N_params_1={
     #'title_x_shift':0.8,
 }
 
-N_params_2={
+N_params_2 = {
     'u_min': 15.0,
     'u_max': 55.0,
     'function': lambda u: 1.0/u,
@@ -45,7 +45,7 @@ N_params_2={
     'title_opposite_tick': False,
 }
 
-N_params_3={
+N_params_3 = {
     'u_min': 30.0,
     'u_max': 200.0,
     'function': lambda u: u,
@@ -56,7 +56,7 @@ N_params_3={
     #'title_x_shift':0.8,
 }
 
-block_1_params={
+block_1_params = {
     'block_type': 'type_2',
     'width': 10.0,
     'height': 10.0,
@@ -66,7 +66,7 @@ block_1_params={
     'isopleth_values': [[1.84, 'x', 85]]
 }
 
-weight_params_lbs={
+weight_params_lbs = {
     'tag': 'mass',
     'u_min': 30.0*2.2,
     'u_max': 200.0*2.2,
@@ -80,13 +80,13 @@ weight_params_lbs={
     'title_x_shift': -0.8,
 }
 
-block_2_params={
+block_2_params = {
     'block_type': 'type_8',
                  'f_params': weight_params_lbs,
                  'isopleth_values': [['x']]
 }
 
-height_params_inch={
+height_params_inch = {
     'tag': 'height',
     'u_min': 140.0/(2.54*12),
     'u_max': 220.0/(2.54*12),
@@ -101,13 +101,13 @@ height_params_inch={
     'tick_side': 'left',
 }
 
-block_3_params={
+block_3_params = {
     'block_type': 'type_8',
                  'f_params': height_params_inch,
                  'isopleth_values': [['x']]
 }
 
-main_params={
+main_params = {
     'filename': 'ex_BMI.pdf',
     'paper_height': 12.0,
     'paper_width': 8.0,
