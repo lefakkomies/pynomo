@@ -20,7 +20,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import math
 from pyx import *
-import copy, re
+import copy
+import re
 from scipy.optimize import *
 from scipy import arange
 import warnings

@@ -23,7 +23,9 @@ from pyx import *
 import math
 import scipy
 import random
-import copy, re, pprint
+import copy
+import re
+import pprint
 import six  # for python 2 and 3 compatibility
 
 

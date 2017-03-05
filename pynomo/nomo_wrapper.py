@@ -27,7 +27,10 @@ from pynomo.math_utilities import *
 from numpy import *
 import scipy
 from pyx import *
-import copy, re, pprint, random
+import copy
+import re
+import pprint
+import random
 
 
 class Nomo_Wrapper:
