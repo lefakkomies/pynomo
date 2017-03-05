@@ -2167,9 +2167,9 @@ class Nomo_Block_Type_6(Nomo_Block):
             factor = self.curve_const * path_length
             x1, y1 = f1(u), g1(u)
             x2, y2 = f1(u) - dy_units_1[idx] * \
-            factor, g1(u) + dx_units_1[idx] * factor
+                factor, g1(u) + dx_units_1[idx] * factor
             x3, y3 = f2(u) - dy_units_2[idx] * \
-            factor, g2(u) + dx_units_2[idx] * factor
+                factor, g2(u) + dx_units_2[idx] * factor
             x4, y4 = f2(u), g2(u)
             curves.append(path.curve(x1, y1, x2, y2, x3, y3, x4, y4))
         for curve in curves:
