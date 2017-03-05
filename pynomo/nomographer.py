@@ -17,6 +17,7 @@
 from pynomo.nomo_wrapper import *
 from pynomo.isopleth import *
 
+
 class Nomographer:
     """
     Top-level class to build nomographs
