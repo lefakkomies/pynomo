@@ -121,9 +121,11 @@ class Nomo_Grid:
         (I could not figure out how to use lambda...)
         """
 
-        def f(u): return self.f(u, v_value)
+        def f(u):
+            return self.f(u, v_value)
 
-        def g(u): return self.g(u, v_value)
+        def g(u):
+            return self.g(u, v_value)
 
         return f, g
 
@@ -133,9 +135,11 @@ class Nomo_Grid:
         (I could not figure out how to use lambda...)
         """
 
-        def f(v): return self.f(u_value, v)
+        def f(v):
+            return self.f(u_value, v)
 
-        def g(v): return self.g(u_value, v)
+        def g(v):
+            return self.g(u_value, v)
 
         return f, g
 

@@ -2263,9 +2263,12 @@ def core_tick_draw_func_basic(ticks, texts, level, f, g, dx_units, dy_units,
     """
     n_ticks = len(ticks)
     ti = tick_info
-    if len(dx_units) < n_ticks: print("too few dx_units !")
-    if len(dy_units) < n_ticks: print("too few dy_units !")
-    if len(angles) < n_ticks: print("too few angles !")
+    if len(dx_units) < n_ticks:
+        print("too few dx_units !")
+    if len(dy_units) < n_ticks:
+        print("too few dy_units !")
+    if len(angles) < n_ticks:
+        print("too few angles !")
     for i, tick in enumerate(ticks):
         # draw actual tick
         x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
@@ -2300,9 +2303,12 @@ def example_tick_draw_func(ticks, texts, level, f, g, dx_units, dy_units,
     tick_info: general hook for axis dict
     """
     n_ticks = len(ticks)
-    if len(dx_units) < n_ticks: print("too few dx_units !")
-    if len(dy_units) < n_ticks: print("too few dy_units !")
-    if len(angles) < n_ticks: print("too few angles !")
+    if len(dx_units) < n_ticks:
+        print("too few dx_units !")
+    if len(dy_units) < n_ticks:
+        print("too few dy_units !")
+    if len(angles) < n_ticks:
+        print("too few angles !")
     for i, tick in enumerate(ticks):
         # draw actual tick
         x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
@@ -2371,9 +2377,12 @@ def example_text_draw_func(ticks, texts, level, f, g, dx_units, dy_units, angles
     tick_info: general hook for axis dict
     """
     n_texts = len(texts)
-    if len(dx_units) < n_texts: print("too few dx_units !")
-    if len(dy_units) < n_texts: print("too few dy_units !")
-    if len(angles) < n_texts: print("too few angles !")
+    if len(dx_units) < n_texts:
+        print("too few dx_units !")
+    if len(dy_units) < n_texts:
+        print("too few dy_units !")
+    if len(angles) < n_texts:
+        print("too few angles !")
     for i, text_value in enumerate(texts):
         # draw actual text
         x = f(text_value) + text_distance * dy_units[i]
@@ -2486,9 +2495,12 @@ if __name__ == '__main__':
         tick_info: general hook for axis dict
         """
         n_texts = len(texts)
-        if len(dx_units) < n_texts: print("too few dx_units !")
-        if len(dy_units) < n_texts: print("too few dy_units !")
-        if len(angles) < n_texts: print("too few angles !")
+        if len(dx_units) < n_texts:
+            print("too few dx_units !")
+        if len(dy_units) < n_texts:
+            print("too few dy_units !")
+        if len(angles) < n_texts:
+            print("too few angles !")
         for i, text_value in enumerate(texts):
             # draw actual text
             x = f(text_value) + text_distance * dy_units[i]
@@ -2529,9 +2541,12 @@ if __name__ == '__main__':
         tick_info: general hook for axis dict
         """
         n_ticks = len(ticks)
-        if len(dx_units) < n_ticks: print("too few dx_units !")
-        if len(dy_units) < n_ticks: print("too few dy_units !")
-        if len(angles) < n_ticks: print("too few angles !")
+        if len(dx_units) < n_ticks:
+            print("too few dx_units !")
+        if len(dy_units) < n_ticks:
+            print("too few dy_units !")
+        if len(angles) < n_ticks:
+            print("too few angles !")
         for i, tick in enumerate(ticks):
             # draw actual tick
             x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
@@ -2572,47 +2587,67 @@ if __name__ == '__main__':
         tick_width = style.linewidth.normal
         # c.fill(path.circle(0,0,size),trans+[tick_color,tick_width])
         while True:  # unities
-            if num % 10 == 0: break
+            if num % 10 == 0:
+                break
             c.fill(path.circle(-0.4, 0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 1: break
+            if num % 10 == 1:
+                break
             c.fill(path.circle(-0.5, 0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 2: break
+            if num % 10 == 2:
+                break
             c.fill(path.circle(-0.6, 0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 3: break
+            if num % 10 == 3:
+                break
             c.fill(path.circle(-0.7, 0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 4: break
+            if num % 10 == 4:
+                break
             c.fill(path.circle(-0.4, -0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 5: break
+            if num % 10 == 5:
+                break
             c.fill(path.circle(-0.5, -0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 6: break
+            if num % 10 == 6:
+                break
             c.fill(path.circle(-0.6, -0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 7: break
+            if num % 10 == 7:
+                break
             c.fill(path.circle(-0.7, -0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 8: break
+            if num % 10 == 8:
+                break
             c.fill(path.circle(-0.8, 0.0, size), trans + [tick_color, tick_width])
-            if num % 10 == 9: break
+            if num % 10 == 9:
+                break
             break
         while True:  # tens
             num = int(num / 10)
-            if num % 10 == 0: break
+            if num % 10 == 0:
+                break
             c.stroke(path.circle(0.4 - 0.3, 0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 1: break
+            if num % 10 == 1:
+                break
             c.stroke(path.circle(0.5 - 0.3, 0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 2: break
+            if num % 10 == 2:
+                break
             c.stroke(path.circle(0.6 - 0.3, 0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 3: break
+            if num % 10 == 3:
+                break
             c.stroke(path.circle(0.7 - 0.3, 0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 4: break
+            if num % 10 == 4:
+                break
             c.stroke(path.circle(0.4 - 0.3, -0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 5: break
+            if num % 10 == 5:
+                break
             c.stroke(path.circle(0.5 - 0.3, -0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 6: break
+            if num % 10 == 6:
+                break
             c.stroke(path.circle(0.6 - 0.3, -0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 7: break
+            if num % 10 == 7:
+                break
             c.stroke(path.circle(0.7 - 0.3, -0.04, size), trans + [tick_color, tick_width])
-            if num % 10 == 8: break
+            if num % 10 == 8:
+                break
             c.stroke(path.circle(0.8 - 0.3, 0.0, size), trans + [tick_color, tick_width])
-            if num % 10 == 9: break
+            if num % 10 == 9:
+                break
             break
         c.stroke(path.line(0, 0, 0.4, 0), trans + [tick_color, tick_width])
         # print "stroking"
@@ -2633,9 +2668,12 @@ if __name__ == '__main__':
         tick_info: general hook for axis dict
         """
         n_ticks = len(ticks)
-        if len(dx_units) < n_ticks: print("too few dx_units !")
-        if len(dy_units) < n_ticks: print("too few dy_units !")
-        if len(angles) < n_ticks: print("too few angles !")
+        if len(dx_units) < n_ticks:
+            print("too few dx_units !")
+        if len(dy_units) < n_ticks:
+            print("too few dy_units !")
+        if len(angles) < n_ticks:
+            print("too few angles !")
         for i, tick in enumerate(ticks):
             # draw actual tick
             x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
