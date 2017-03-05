@@ -36,8 +36,10 @@ class FourPoint(object):
                |  polygon  |      ---->      |   polygon  |
             (x2,y2)     (x4,y4)          (x2d,y2d)      (x4d,y4d)
         """
-        trafo_1 = self.find_trafo_to_unity_rectangle(x1, y1, x2, y2, x3, y3, x4, y4)
-        trafo_2 = self.find_trafo_to_unity_rectangle(x1d, y1d, x2d, y2d, x3d, y3d, x4d, y4d)
+        trafo_1 = self.find_trafo_to_unity_rectangle(
+            x1, y1, x2, y2, x3, y3, x4, y4)
+        trafo_2 = self.find_trafo_to_unity_rectangle(
+            x1d, y1d, x2d, y2d, x3d, y3d, x4d, y4d)
         #        test1=array([[x1,y1,1.0],
         #                     [x2,y2,1.0],
         #                     [x3,y3,1.0]])
@@ -119,10 +121,13 @@ class FourPoint(object):
         point 4 -> (1,1)
         """
         # permute if quadilateral not in correct order
-        x1p, y1p, x2p, y2p, x3p, y3p, x4p, y4p = self.check_order(x1, y1, x2, y2, x3, y3, x4, y4)
+        x1p, y1p, x2p, y2p, x3p, y3p, x4p, y4p = self.check_order(
+            x1, y1, x2, y2, x3, y3, x4, y4)
         # find 3 points out of 4 points to transform
-        o1, o2, o3, p1, p2, p3, q1, q2, q3 = self.find_three_points_to_transform(x1p, y1p, x2p, y2p, x3p, y3p, x4p, y4p)
-        transformation_1 = self.find_transformation_points_to_rectangle(o1, o2, o3, p1, p2, p3, q1, q2, q3)
+        o1, o2, o3, p1, p2, p3, q1, q2, q3 = self.find_three_points_to_transform(
+            x1p, y1p, x2p, y2p, x3p, y3p, x4p, y4p)
+        transformation_1 = self.find_transformation_points_to_rectangle(
+            o1, o2, o3, p1, p2, p3, q1, q2, q3)
         # three points to make correct order with affine transformation
         initial = array([[x1, y1, 1.0],
                          [x2, y2, 1.0],
@@ -304,5 +309,6 @@ if __name__ == '__main__':
     FourPoint(1, 4, 1, 2, 2, 2, 2, 1, 1, 3, 2, 2, 4, 3, 2, 4)
     print("#### TEST 4######")
     FourPoint(1, 4, 1, 2, 2, 1, 2, 2, 1, 3, 2, 2, 4, 3, 2, 4)
-    print(FourPoint(1, 4, 1, 2, 2, 1, 2, 2, 1, 3, 2, 2, 4, 3, 2, 4).calc_distance_points(1, 1, 2, 2))
+    print(FourPoint(1, 4, 1, 2, 2, 1, 2, 2, 1, 3, 2, 2,
+          4, 3, 2, 4).calc_distance_points(1, 1, 2, 2))
     print(FourPoint.calc_distance_points(1, 1, 2, 2))

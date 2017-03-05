@@ -151,28 +151,35 @@ class Nomo_Wrapper:
                         u1 = atom.params['u_stop']
                         # first line of grid
                         self.axes_wrapper.add_axis(Axis_Wrapper(lambda u: atom.give_x_grid(u, v0),
-                                                                lambda u: atom.give_y_grid(u, v0),
+                                                                lambda u: atom.give_y_grid(
+                                                                    u, v0),
                                                                 u0, u1))
                         # second line of grid
                         self.axes_wrapper.add_axis(Axis_Wrapper(lambda u: atom.give_x_grid(u, v1),
-                                                                lambda u: atom.give_y_grid(u, v1),
+                                                                lambda u: atom.give_y_grid(
+                                                                    u, v1),
                                                                 u0, u1))
                         # third line of grid
                         self.axes_wrapper.add_axis(Axis_Wrapper(lambda v: atom.give_x_grid(u0, v),
-                                                                lambda v: atom.give_y_grid(u0, v),
+                                                                lambda v: atom.give_y_grid(
+                                                                    u0, v),
                                                                 v0, v1))
                         # fourth line of grid
                         self.axes_wrapper.add_axis(Axis_Wrapper(lambda v: atom.give_x_grid(u1, v),
-                                                                lambda v: atom.give_y_grid(u1, v),
+                                                                lambda v: atom.give_y_grid(
+                                                                    u1, v),
                                                                 v0, v1))
                     else:
                         self.axes_wrapper.add_axis(Axis_Wrapper(atom.give_x, atom.give_y,
-                                                                atom.params['u_min'],
+                                                                atom.params[
+                                                                    'u_min'],
                                                                 atom.params['u_max']))
-                        # add extra axes to the list to find correct transformation
+                        # add extra axes to the list to find correct
+                        # transformation
                         for extra_axis in atom.params['extra_params']:
                             self.axes_wrapper.add_axis(Axis_Wrapper(atom.give_x, atom.give_y,
-                                                                    extra_axis['u_min'],
+                                                                    extra_axis[
+                                                                        'u_min'],
                                                                     extra_axis['u_max']))
 
                 else:  # this atom is reference axis
@@ -336,9 +343,10 @@ class Nomo_Wrapper:
                                             #                                            self._find_trafo_4_atoms_3_points_(atom1,atom1d,atom2,atom2d)
                                             #                                            block2.add_transformation(alpha1,beta1,gamma1,
                                             #                                                                      alpha2,beta2,gamma2,
-                                            #                                                                      alpha3,beta3,gamma3)
+                                            # alpha3,beta3,gamma3)
                                             alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
-                                                self._find_trafo_4_atoms_(atom1, atom1d, atom2, atom2d)
+                                                self._find_trafo_4_atoms_(
+                                                    atom1, atom1d, atom2, atom2d)
                                             block2.add_transformation(alpha1, beta1, gamma1,
                                                                       alpha2, beta2, gamma2,
                                                                       alpha3, beta3, gamma3)
@@ -360,13 +368,15 @@ class Nomo_Wrapper:
                                 # print idx2
                                 # print idx2
                                 if not double_aligned:
-                                    # print "Aligning with tag %s" % atom1.params['tag']
+                                    # print "Aligning with tag %s" %
+                                    # atom1.params['tag']
                                     alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
                                         self._find_trafo_2_atoms_(atom1, atom2)
                                     block2.add_transformation(alpha1, beta1, gamma1,
                                                               alpha2, beta2, gamma2,
                                                               alpha3, beta3, gamma3)
-                                atom2.params['aligned'] = True  # align only once
+                                # align only once
+                                atom2.params['aligned'] = True
         # let's make identity matrix that will be changed when optimized
         for block in self.block_stack:
             block.add_transformation()
@@ -418,9 +428,10 @@ class Nomo_Wrapper:
                                                 #                                            self._find_trafo_4_atoms_3_points_(atom1,atom1d,atom2,atom2d)
                                                 #                                            block2.add_transformation(alpha1,beta1,gamma1,
                                                 #                                                                      alpha2,beta2,gamma2,
-                                                #                                                                      alpha3,beta3,gamma3)
+                                                # alpha3,beta3,gamma3)
                                                 alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
-                                                    self._find_trafo_4_atoms_(atom1, atom3d, atom2, atom2d)
+                                                    self._find_trafo_4_atoms_(
+                                                        atom1, atom3d, atom2, atom2d)
                                                 block2.add_transformation(alpha1, beta1, gamma1,
                                                                           alpha2, beta2, gamma2,
                                                                           alpha3, beta3, gamma3)
@@ -443,13 +454,15 @@ class Nomo_Wrapper:
                                                 # print idx2
                                                 # print idx2
                                 if not double_aligned:
-                                    # print "Aligning with tag %s" % atom1.params['tag']
+                                    # print "Aligning with tag %s" %
+                                    # atom1.params['tag']
                                     alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
                                         self._find_trafo_2_atoms_(atom1, atom2)
                                     block2.add_transformation(alpha1, beta1, gamma1,
                                                               alpha2, beta2, gamma2,
                                                               alpha3, beta3, gamma3)
-                                # atom2.params['aligned']=True # align only once
+                                # atom2.params['aligned']=True # align only
+                                # once
                                 block2.aligned = True  # align only once
         # let's make identity matrix that will be changed when optimized
         for block in self.block_stack:
@@ -534,7 +547,8 @@ class Nomo_Wrapper:
         # DEBUG
         if False:
             # print "x1: %f y1: %f x2: %f y2: %f x1d: %f y1d: %f x2d: %f y2d: %f" % (x1, y1, x2, y2, x1d, y1d, x2d, y2d)
-            # print "x3: %f y3: %f x4: %f y4: %f x3d: %f y3d: %f x4d: %f y4d: %f" % (x3, y3, x4, y4, x3d, y3d, x4d, y4d)
+            # print "x3: %f y3: %f x4: %f y4: %f x3d: %f y3d: %f x4d: %f y4d:
+            # %f" % (x3, y3, x4, y4, x3d, y3d, x4d, y4d)
             c = canvas.canvas()
             c.fill(path.circle(x1, y1, 0.02))
             c.text(x1, y1, '1')
@@ -608,7 +622,8 @@ class Nomo_Wrapper:
 
         matrix = array([row1, row2, row3, row4, row5, row6, row7, row8])
         # print matrix
-        b = array([const1, const2, const3, const4, const5, const6, const7, const8])
+        b = array([const1, const2, const3, const4,
+                  const5, const6, const7, const8])
         coeff_vector = linalg.solve(matrix, b)
         alpha1 = -1.0  # fixed
         beta1 = coeff_vector[0][0]
@@ -857,7 +872,8 @@ class Nomo_Block_Type_1(Nomo_Block):
     """
 
     def __init__(self, mirror_x=False, mirror_y=False):
-        super(Nomo_Block_Type_1, self).__init__(mirror_x=mirror_x, mirror_y=mirror_y)
+        super(Nomo_Block_Type_1, self).__init__(
+            mirror_x=mirror_x, mirror_y=mirror_y)
 
     def define_F1(self, params):
         """
@@ -924,8 +940,10 @@ class Nomo_Block_Type_1(Nomo_Block):
             diff_1 = f1_mean - f2_mean
             diff_3 = f3_mean - f2_mean
             corr = diff_1 + diff_3
-            self.F1_axis_ini.g = lambda u: self.atom_F1.params['G'](u) - diff_1 + corr / 2.0
-            self.F3_axis_ini.g = lambda u: self.atom_F3.params['G'](u) - diff_3 + corr / 2.0
+            self.F1_axis_ini.g = lambda u: self.atom_F1.params[
+                'G'](u) - diff_1 + corr / 2.0
+            self.F3_axis_ini.g = lambda u: self.atom_F3.params[
+                'G'](u) - diff_3 + corr / 2.0
             # print "diff_1: %g"%diff_1
             # print "diff_3: %g"%diff_3
             # print "corr: %g"%corr
@@ -947,7 +965,8 @@ class Nomo_Block_Type_1(Nomo_Block):
         self.atom_F1.f = lambda u: self.F1_axis_ini.f(u) * delta_1
         self.atom_F1.g = lambda u: self.F1_axis_ini.g(u) * mu_1
         self.atom_F2.f = lambda u: self.F2_axis_ini.f(u)
-        self.atom_F2.g = lambda u: self.F2_axis_ini.g(u) * 2 * (mu_1 * mu_3) / (mu_1 + mu_3)
+        self.atom_F2.g = lambda u: self.F2_axis_ini.g(
+            u) * 2 * (mu_1 * mu_3) / (mu_1 + mu_3)
         self.atom_F3.f = lambda u: self.F3_axis_ini.f(u) * delta_3
         self.atom_F3.g = lambda u: self.F3_axis_ini.g(u) * mu_3
 
@@ -973,7 +992,8 @@ class Nomo_Block_Type_2(Nomo_Block):
     """
 
     def __init__(self, mirror_x=False, mirror_y=False):
-        super(Nomo_Block_Type_2, self).__init__(mirror_x=mirror_x, mirror_y=mirror_y)
+        super(Nomo_Block_Type_2, self).__init__(
+            mirror_x=mirror_x, mirror_y=mirror_y)
 
     def define_F1(self, params):
         """
@@ -1004,15 +1024,21 @@ class Nomo_Block_Type_2(Nomo_Block):
         self.width = width
         self.height = height
         length_f1_ini = max(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max'])) - \
-            min(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max']))
+            min(self.F1(self.params_F1['u_min']),
+                self.F1(self.params_F1['u_max']))
         length_f3_ini = max(self.F3(self.params_F3['u_min']), self.F3(self.params_F3['u_max'])) - \
-            min(self.F3(self.params_F3['u_min']), self.F3(self.params_F3['u_max']))
+            min(self.F3(self.params_F3['u_min']),
+                self.F3(self.params_F3['u_max']))
         K1 = width
         #    length_f1=length_f3
         m1 = height / length_f1_ini
         m3 = height / length_f3_ini
-        f1_min = m1 * min(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max']))
-        f3_max = m3 * max(self.F3(self.params_F3['u_min']), self.F3(self.params_F3['u_max']))
+        f1_min = m1 * \
+            min(self.F1(self.params_F1['u_min']),
+                self.F1(self.params_F1['u_max']))
+        f3_max = m3 * \
+            max(self.F3(self.params_F3['u_min']),
+                self.F3(self.params_F3['u_max']))
         y_offset_1_3 = f1_min - (height - f3_max)
 
         K = sqrt(height ** 2 + width ** 2)
@@ -1020,14 +1046,17 @@ class Nomo_Block_Type_2(Nomo_Block):
         self.params_F1['G'] = lambda u: ((self.F1(u)) * m1) * self.y_mirror
         self.atom_F1 = Nomo_Atom(self.params_F1)
         self.add_atom(self.atom_F1)
-        x_func = lambda u: (width - K * m3 / (m1 * self.F2(u) + m3) * width / K)
-        self.params_F2['F'] = lambda u: (width - K * m3 / (m1 * self.F2(u) + m3) * width / K) * self.x_mirror
+        x_func = lambda u: (
+            width - K * m3 / (m1 * self.F2(u) + m3) * width / K)
+        self.params_F2['F'] = lambda u: (
+            width - K * m3 / (m1 * self.F2(u) + m3) * width / K) * self.x_mirror
         self.params_F2['G'] = lambda u: (height - K * m3 / (m1 * self.F2(u) + m3) * height / K + x_func(
             u) / width * y_offset_1_3) * self.y_mirror
         self.atom_F2 = Nomo_Atom(self.params_F2)
         self.add_atom(self.atom_F2)
         self.params_F3['F'] = lambda u: (width) * self.x_mirror
-        self.params_F3['G'] = lambda u: ((height - (self.F3(u)) * m3) + y_offset_1_3) * self.y_mirror
+        self.params_F3['G'] = lambda u: (
+            (height - (self.F3(u)) * m3) + y_offset_1_3) * self.y_mirror
         self.atom_F3 = Nomo_Atom(self.params_F3)
         self.add_atom(self.atom_F3)
 
@@ -1051,12 +1080,16 @@ class Nomo_Block_Type_2(Nomo_Block):
         """
         self.width = width
         self.height = height
-        length_f1_ini = max(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max']))
-        length_f3_ini = max(self.F3(self.params_F3['u_min']), self.F3(self.params_F3['u_max']))
+        length_f1_ini = max(
+            self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max']))
+        length_f3_ini = max(
+            self.F3(self.params_F3['u_min']), self.F3(self.params_F3['u_max']))
         c1 = length_f3_ini / length_f1_ini
         c2 = c1
-        length_f1 = max(c1 * self.F1(self.params_F1['u_min']), c1 * self.F1(self.params_F1['u_max']))
-        length_f3 = max(self.F3(self.params_F3['u_min']), self.F3(self.params_F3['u_max']))
+        length_f1 = max(
+            c1 * self.F1(self.params_F1['u_min']), c1 * self.F1(self.params_F1['u_max']))
+        length_f3 = max(self.F3(self.params_F3['u_min']), self.F3(
+            self.params_F3['u_max']))
         #    length_f1=length_f3
         m1 = height / length_f1
         m3 = height / length_f3
@@ -1065,12 +1098,15 @@ class Nomo_Block_Type_2(Nomo_Block):
         self.params_F1['G'] = lambda u: (c1 * self.F1(u) * m1) * self.y_mirror
         self.atom_F1 = Nomo_Atom(self.params_F1)
         self.add_atom(self.atom_F1)
-        self.params_F2['F'] = lambda u: (width - K * m3 / (m1 * c2 * self.F2(u) + m3) * width / K) * self.x_mirror
-        self.params_F2['G'] = lambda u: (height - K * m3 / (m1 * c2 * self.F2(u) + m3) * height / K) * self.y_mirror
+        self.params_F2['F'] = lambda u: (
+            width - K * m3 / (m1 * c2 * self.F2(u) + m3) * width / K) * self.x_mirror
+        self.params_F2['G'] = lambda u: (
+            height - K * m3 / (m1 * c2 * self.F2(u) + m3) * height / K) * self.y_mirror
         self.atom_F2 = Nomo_Atom(self.params_F2)
         self.add_atom(self.atom_F2)
         self.params_F3['F'] = lambda u: (width) * self.x_mirror
-        self.params_F3['G'] = lambda u: (height - self.F3(u) * m1) * self.y_mirror
+        self.params_F3['G'] = lambda u: (
+            height - self.F3(u) * m1) * self.y_mirror
         self.atom_F3 = Nomo_Atom(self.params_F3)
         self.add_atom(self.atom_F3)
 
@@ -1094,7 +1130,8 @@ class Nomo_Block_Type_3(Nomo_Block):
     """
 
     def __init__(self, mirror_x=False, mirror_y=False):
-        super(Nomo_Block_Type_3, self).__init__(mirror_x=mirror_x, mirror_y=mirror_y)
+        super(Nomo_Block_Type_3, self).__init__(
+            mirror_x=mirror_x, mirror_y=mirror_y)
         self.F_stack = []  # stack of function definitions
         self.shift_stack = []
         self.N = 0  # number of lines
@@ -1199,7 +1236,8 @@ class Nomo_Block_Type_3(Nomo_Block):
         for idx in range(1, self.N + 1, 1):
             self.shift_stack[idx - 1] = -(self.shifts[idx - 1] - correction)
         self.shift_stack[0] = -(self.shifts[0] - correction / 2)
-        self.shift_stack[self.N - 1] = -(self.shifts[self.N - 1] - correction / 2)
+        self.shift_stack[self.N - 1] = - \
+            (self.shifts[self.N - 1] - correction / 2)
 
     def _make_definitions_(self):
         """
@@ -1212,13 +1250,15 @@ class Nomo_Block_Type_3(Nomo_Block):
         self.yR_func = {}
         fn2x_table = {}  # mapping from function fn to x-coord
         r_table = {}
-        x_max = (N - 4) + N  # how many x values are needed including turning axes
+        # how many x values are needed including turning axes
+        x_max = (N - 4) + N
         self.x_scaling = self.width / x_max  # to make correct width
         fn2x_table[1] = 0.0
         fn2x_table[2] = 1.0
         fn2x_table[N] = x_max * 1.0
         fn2x_table[N - 1] = x_max - 1.0
-        f_mid = range(3, (N - 1), 1)  # function numbers between reflection axes
+        # function numbers between reflection axes
+        f_mid = range(3, (N - 1), 1)
         x_mid = [(f - 3) * 2.0 + 3.0 for f in f_mid]
         for idx, x in enumerate(x_mid):
             fn2x_table[f_mid[idx]] = x * 1.0
@@ -1303,7 +1343,8 @@ class Nomo_Block_Type_4(Nomo_Block):
     """
 
     def __init__(self, mirror_x=False, mirror_y=False):
-        super(Nomo_Block_Type_4, self).__init__(mirror_x=mirror_x, mirror_y=mirror_y)
+        super(Nomo_Block_Type_4, self).__init__(
+            mirror_x=mirror_x, mirror_y=mirror_y)
 
     def define_F1(self, params):
         """
@@ -1383,21 +1424,25 @@ class Nomo_Block_Type_4(Nomo_Block):
                 m4 = m2 / m1 * m3
 
         self.params_F1['F'] = lambda u: 0.0 * self.x_mirror
-        self.params_F1['G'] = lambda u: m1 * self.params_F1['function'](u) * self.y_mirror
+        self.params_F1['G'] = lambda u: m1 * \
+            self.params_F1['function'](u) * self.y_mirror
         self.atom_F1 = Nomo_Atom(self.params_F1)
         self.add_atom(self.atom_F1)
 
         self.params_F2['F'] = lambda u: width * self.x_mirror
-        self.params_F2['G'] = lambda u: (height - m2 * self.params_F2['function'](u)) * self.y_mirror
+        self.params_F2['G'] = lambda u: (
+            height - m2 * self.params_F2['function'](u)) * self.y_mirror
         self.atom_F2 = Nomo_Atom(self.params_F2)
         self.add_atom(self.atom_F2)
 
-        self.params_F3['F'] = lambda u: m3 * self.params_F3['function'](u) * self.x_mirror
+        self.params_F3['F'] = lambda u: m3 * \
+            self.params_F3['function'](u) * self.x_mirror
         self.params_F3['G'] = lambda u: 0.0 * self.y_mirror
         self.atom_F3 = Nomo_Atom(self.params_F3)
         self.add_atom(self.atom_F3)
 
-        self.params_F4['F'] = lambda u: (width - m4 * self.params_F4['function'](u)) * self.x_mirror
+        self.params_F4['F'] = lambda u: (
+            width - m4 * self.params_F4['function'](u)) * self.x_mirror
         self.params_F4['G'] = lambda u: height * self.y_mirror
         self.atom_F4 = Nomo_Atom(self.params_F4)
         self.add_atom(self.atom_F4)
@@ -1453,7 +1498,8 @@ class Nomo_Block_Type_5(Nomo_Block):
     """
 
     def __init__(self, mirror_x=False, mirror_y=False):
-        super(Nomo_Block_Type_5, self).__init__(mirror_x=mirror_x, mirror_y=mirror_y)
+        super(Nomo_Block_Type_5, self).__init__(
+            mirror_x=mirror_x, mirror_y=mirror_y)
 
     def define_block(self, params):
         """
@@ -1469,7 +1515,8 @@ class Nomo_Block_Type_5(Nomo_Block):
         self._build_u_axis_()
         self._build_w_axis_()
         self._build_wd_axis_()
-        # build additional v-scale. Put isopleths off in main params, otherwise error
+        # build additional v-scale. Put isopleths off in main params, otherwise
+        # error
         if self.grid_box.params['allow_additional_v_scale']:
             self._build_v_axis_()
         self.set_reference_axes()
@@ -1530,12 +1577,16 @@ class Nomo_Block_Type_5(Nomo_Block):
             # if manual axis data given
             if self.grid_box.params['v_manual_axis_data'] != None:
                 if isinstance(self.grid_box.params['v_manual_axis_data'][self.params['v_values'][index]], str):
-                    title_raw = self.grid_box.params['v_manual_axis_data'][self.params['v_values'][index]]
+                    title_raw = self.grid_box.params['v_manual_axis_data'][
+                        self.params['v_values'][index]]
                 else:
-                    dummy = len(self.grid_box.params['v_manual_axis_data'][self.params['v_values'][index]])
+                    dummy = len(self.grid_box.params['v_manual_axis_data'][
+                                self.params['v_values'][index]])
                     if isinstance(self.grid_box.params['v_manual_axis_data'][self.params['v_values'][index]], list):
-                        title_raw = self.grid_box.params['v_manual_axis_data'][self.params['v_values'][index]][0]
-                        ex_params = self.grid_box.params['v_manual_axis_data'][self.params['v_values'][index]][1]
+                        title_raw = self.grid_box.params['v_manual_axis_data'][
+                            self.params['v_values'][index]][0]
+                        ex_params = self.grid_box.params['v_manual_axis_data'][
+                            self.params['v_values'][index]][1]
                         if 'x_corr' in ex_params:
                             x_corr = ex_params['x_corr']
                         if 'y_corr' in ex_params:
@@ -1568,9 +1619,12 @@ class Nomo_Block_Type_5(Nomo_Block):
             dx = xt_1 - xt
             dy = yt_1 - yt
             if self.grid_box.params['allow_additional_v_scale'] == False:
-                self._draw_v_text_(xt, yt, dx, dy, canvas, title, title_title, x_corr, y_corr, draw_line)
-        canvas.stroke(u_line_list, [style.linewidth.normal, self.grid_box.params['u_axis_color']])
-        canvas.stroke(v_line_list, [style.linewidth.normal, self.grid_box.params['v_axis_color']])
+                self._draw_v_text_(xt, yt, dx, dy, canvas, title,
+                                   title_title, x_corr, y_corr, draw_line)
+        canvas.stroke(
+            u_line_list, [style.linewidth.normal, self.grid_box.params['u_axis_color']])
+        canvas.stroke(
+            v_line_list, [style.linewidth.normal, self.grid_box.params['v_axis_color']])
         # take handle
         self.ref_block_lines.append(u_line_list)
         self.ref_block_lines.append(v_line_list)
@@ -1633,7 +1687,8 @@ class Nomo_Block_Type_5(Nomo_Block):
         # take handle
         line_handle = path.path()
         line_handle.append(path.moveto(x, y))
-        line_handle.append(path.lineto(x - text_distance * dx_unit + x_corr, y - text_distance * dy_unit + y_corr))
+        line_handle.append(path.lineto(
+            x - text_distance * dx_unit + x_corr, y - text_distance * dy_unit + y_corr))
         self.ref_block_lines.append(line_handle)
 
     def _draw_box_around_(self, canvas):
@@ -1646,8 +1701,10 @@ class Nomo_Block_Type_5(Nomo_Block):
         yt2 = self._give_trafo_y_(self.grid_box.x_right, self.grid_box.y_top)
         xt3 = self._give_trafo_x_(self.grid_box.x_left, self.grid_box.y_bottom)
         yt3 = self._give_trafo_y_(self.grid_box.x_left, self.grid_box.y_bottom)
-        xt4 = self._give_trafo_x_(self.grid_box.x_right, self.grid_box.y_bottom)
-        yt4 = self._give_trafo_y_(self.grid_box.x_right, self.grid_box.y_bottom)
+        xt4 = self._give_trafo_x_(
+            self.grid_box.x_right, self.grid_box.y_bottom)
+        yt4 = self._give_trafo_y_(
+            self.grid_box.x_right, self.grid_box.y_bottom)
         line = path.path()
         line.append(path.moveto(xt1, yt1))
         line.append(path.lineto(xt2, yt2))
@@ -1780,7 +1837,8 @@ class Nomo_Block_Type_6(Nomo_Block):
     """
 
     def __init__(self, mirror_x=False, mirror_y=False):
-        super(Nomo_Block_Type_6, self).__init__(mirror_x=mirror_x, mirror_y=mirror_y)
+        super(Nomo_Block_Type_6, self).__init__(
+            mirror_x=mirror_x, mirror_y=mirror_y)
 
     def define(self, params1, params2):
         """
@@ -1830,9 +1888,12 @@ class Nomo_Block_Type_6(Nomo_Block):
         if type == 'parallel':
             # redefine scaled functions to be width x height
             self.atom_F1.f = lambda u: (self.F1_axis_ini.f(u)) * self.x_mirror
-            self.atom_F1.g = lambda u: ((self.F1_axis_ini.g(u) - f1_min) / f1_length * height) * self.y_mirror
-            self.atom_F2.f = lambda u: (self.F2_axis_ini.f(u) * width) * self.x_mirror
-            self.atom_F2.g = lambda u: ((self.F2_axis_ini.g(u) - f2_min) / f2_length * height) * self.y_mirror
+            self.atom_F1.g = lambda u: (
+                (self.F1_axis_ini.g(u) - f1_min) / f1_length * height) * self.y_mirror
+            self.atom_F2.f = lambda u: (
+                self.F2_axis_ini.f(u) * width) * self.x_mirror
+            self.atom_F2.g = lambda u: (
+                (self.F2_axis_ini.g(u) - f2_min) / f2_length * height) * self.y_mirror
 
         if type == 'orthogonal':
             # redefine scaled functions to be orthogonal width x height
@@ -1910,16 +1971,20 @@ class Nomo_Block_Type_6(Nomo_Block):
         if self.atom_F1.params['scale_type'] == 'linear smart':
             tick_0_list, tick_1_list, tick_2_list, tick_3_list, tick_4_list = \
                 find_linear_ticks_smart(start, stop, f1, g1, turn=1,
-                                        base_start=self.atom_F1.params['base_start'],
-                                        base_stop=self.atom_F1.params['base_stop'],
-                                        scale_max_0=self.atom_F1.params['scale_max'],
+                                        base_start=self.atom_F1.params[
+                                            'base_start'],
+                                        base_stop=self.atom_F1.params[
+                                            'base_stop'],
+                                        scale_max_0=self.atom_F1.params[
+                                            'scale_max'],
                                         distance_limit=self.atom_F1.params['tick_distance_smart'])
 
             #            tick_0_list,tick_1_list,tick_2_list,tick_3_list,tick_4_list,start_ax,stop_ax=\
             #            find_linear_ticks(start,stop)
 
             dx_units_0_1, dy_units_0_1, angles_0_1 = find_tick_directions(tick_0_list, f1, g1, side1, start, stop,
-                                                                          full_angle=self.atom_F1.params['full_angle'],
+                                                                          full_angle=self.atom_F1.params[
+                                                                              'full_angle'],
                                                                           extra_angle=self.atom_F1.params[
                                                                               'extra_angle'],
                                                                           turn_relative=self.atom_F1.params[
@@ -1928,7 +1993,8 @@ class Nomo_Block_Type_6(Nomo_Block):
             #            find_tick_directions(tick_0_list,f1,g1,side1,start,stop)
 
             dx_units_0_2, dy_units_0_2, angles_0_2 = find_tick_directions(tick_0_list, f2, g2, side2, start, stop,
-                                                                          full_angle=self.atom_F2.params['full_angle'],
+                                                                          full_angle=self.atom_F2.params[
+                                                                              'full_angle'],
                                                                           extra_angle=self.atom_F2.params[
                                                                               'extra_angle'],
                                                                           turn_relative=self.atom_F2.params[
@@ -1937,7 +2003,8 @@ class Nomo_Block_Type_6(Nomo_Block):
             #            find_tick_directions(tick_0_list,f2,g2,side2,start,stop)
             #
             dx_units_1_1, dy_units_1_1, angles_1_1 = find_tick_directions(tick_1_list, f1, g1, side1, start, stop,
-                                                                          full_angle=self.atom_F1.params['full_angle'],
+                                                                          full_angle=self.atom_F1.params[
+                                                                              'full_angle'],
                                                                           extra_angle=self.atom_F1.params[
                                                                               'extra_angle'],
                                                                           turn_relative=self.atom_F1.params[
@@ -1947,7 +2014,8 @@ class Nomo_Block_Type_6(Nomo_Block):
             #            find_tick_directions(tick_1_list,f1,g1,side1,start,stop)
             #
             dx_units_1_2, dy_units_1_2, angles_1_2 = find_tick_directions(tick_1_list, f2, g2, side2, start, stop,
-                                                                          full_angle=self.atom_F2.params['full_angle'],
+                                                                          full_angle=self.atom_F2.params[
+                                                                              'full_angle'],
                                                                           extra_angle=self.atom_F2.params[
                                                                               'extra_angle'],
                                                                           turn_relative=self.atom_F2.params[
@@ -1968,8 +2036,10 @@ class Nomo_Block_Type_6(Nomo_Block):
                                    tick_levels=4, tick_text_levels=3,
                                    text_color=color.rgb.black, axis_color=color.rgb.black,
                                    manual_axis_data={},
-                                   axis_appear=self.atom_F1.params, side=self.atom_F1.params['tick_side'],
-                                   base_start=self.atom_F1.params['base_start'],
+                                   axis_appear=self.atom_F1.params, side=self.atom_F1.params[
+                                       'tick_side'],
+                                   base_start=self.atom_F1.params[
+                                       'base_start'],
                                    base_stop=self.atom_F1.params['base_stop'])
             tick_0_list = dummy_axis.tick_0_list
             tick_1_list = dummy_axis.tick_1_list
@@ -1977,16 +2047,19 @@ class Nomo_Block_Type_6(Nomo_Block):
             tick_3_list = dummy_axis.tick_3_list
             tick_4_list = dummy_axis.tick_4_list
             find_linear_ticks_smart(start, stop, f1, g1, turn=1,
-                                    base_start=self.atom_F1.params['base_start'],
+                                    base_start=self.atom_F1.params[
+                                        'base_start'],
                                     base_stop=self.atom_F1.params['base_stop'],
-                                    scale_max_0=self.atom_F1.params['scale_max'],
+                                    scale_max_0=self.atom_F1.params[
+                                        'scale_max'],
                                     distance_limit=self.atom_F1.params['tick_distance_smart'])
 
             #            tick_0_list,tick_1_list,tick_2_list,tick_3_list,tick_4_list,start_ax,stop_ax=\
             #            find_linear_ticks(start,stop)
 
             dx_units_0_1, dy_units_0_1, angles_0_1 = find_tick_directions(tick_0_list, f1, g1, side1, start, stop,
-                                                                          full_angle=self.atom_F1.params['full_angle'],
+                                                                          full_angle=self.atom_F1.params[
+                                                                              'full_angle'],
                                                                           extra_angle=self.atom_F1.params[
                                                                               'extra_angle'],
                                                                           turn_relative=self.atom_F1.params[
@@ -1995,7 +2068,8 @@ class Nomo_Block_Type_6(Nomo_Block):
             #            find_tick_directions(tick_0_list,f1,g1,side1,start,stop)
 
             dx_units_0_2, dy_units_0_2, angles_0_2 = find_tick_directions(tick_0_list, f2, g2, side2, start, stop,
-                                                                          full_angle=self.atom_F2.params['full_angle'],
+                                                                          full_angle=self.atom_F2.params[
+                                                                              'full_angle'],
                                                                           extra_angle=self.atom_F2.params[
                                                                               'extra_angle'],
                                                                           turn_relative=self.atom_F2.params[
@@ -2004,7 +2078,8 @@ class Nomo_Block_Type_6(Nomo_Block):
             #            find_tick_directions(tick_0_list,f2,g2,side2,start,stop)
             #
             dx_units_1_1, dy_units_1_1, angles_1_1 = find_tick_directions(tick_1_list, f1, g1, side1, start, stop,
-                                                                          full_angle=self.atom_F1.params['full_angle'],
+                                                                          full_angle=self.atom_F1.params[
+                                                                              'full_angle'],
                                                                           extra_angle=self.atom_F1.params[
                                                                               'extra_angle'],
                                                                           turn_relative=self.atom_F1.params[
@@ -2014,7 +2089,8 @@ class Nomo_Block_Type_6(Nomo_Block):
             #            find_tick_directions(tick_1_list,f1,g1,side1,start,stop)
             #
             dx_units_1_2, dy_units_1_2, angles_1_2 = find_tick_directions(tick_1_list, f2, g2, side2, start, stop,
-                                                                          full_angle=self.atom_F2.params['full_angle'],
+                                                                          full_angle=self.atom_F2.params[
+                                                                              'full_angle'],
                                                                           extra_angle=self.atom_F2.params[
                                                                               'extra_angle'],
                                                                           turn_relative=self.atom_F2.params[
@@ -2090,13 +2166,17 @@ class Nomo_Block_Type_6(Nomo_Block):
             path_length = sqrt((f1(u) - f2(u)) ** 2 + (g1(u) - g2(u)) ** 2)
             factor = self.curve_const * path_length
             x1, y1 = f1(u), g1(u)
-            x2, y2 = f1(u) - dy_units_1[idx] * factor, g1(u) + dx_units_1[idx] * factor
-            x3, y3 = f2(u) - dy_units_2[idx] * factor, g2(u) + dx_units_2[idx] * factor
+            x2, y2 = f1(u) - dy_units_1[idx] * \
+                        factor, g1(u) + dx_units_1[idx] * factor
+            x3, y3 = f2(u) - dy_units_2[idx] * \
+                        factor, g2(u) + dx_units_2[idx] * factor
             x4, y4 = f2(u), g2(u)
             curves.append(path.curve(x1, y1, x2, y2, x3, y3, x4, y4))
         for curve in curves:
-            canvas.stroke(curve, [style.linewidth.normal, line_style, self.ladder_color])
-        canvas.stroke(line, [style.linewidth.normal, line_style, self.ladder_color])
+            canvas.stroke(curve, [style.linewidth.normal,
+                          line_style, self.ladder_color])
+        canvas.stroke(line, [style.linewidth.normal,
+                      line_style, self.ladder_color])
 
 
 class Nomo_Block_Type_7(Nomo_Block):
@@ -2105,7 +2185,8 @@ class Nomo_Block_Type_7(Nomo_Block):
     """
 
     def __init__(self, mirror_x=False, mirror_y=False):
-        super(Nomo_Block_Type_7, self).__init__(mirror_x=mirror_x, mirror_y=mirror_y)
+        super(Nomo_Block_Type_7, self).__init__(
+            mirror_x=mirror_x, mirror_y=mirror_y)
 
     def define_F1(self, params):
         """
@@ -2163,12 +2244,16 @@ class Nomo_Block_Type_7(Nomo_Block):
         self.params_F1['G'] = lambda u: 0.0
         self.atom_F1 = Nomo_Atom(self.params_F1)
         self.add_atom(self.atom_F1)
-        self.params_F2['F'] = lambda u: factor_2_x * (k2 * self.F2(u)) * self.x_mirror
-        self.params_F2['G'] = lambda u: factor_2_y * (k2 * self.F2(u)) * self.y_mirror
+        self.params_F2['F'] = lambda u: factor_2_x * \
+            (k2 * self.F2(u)) * self.x_mirror
+        self.params_F2['G'] = lambda u: factor_2_y * \
+            (k2 * self.F2(u)) * self.y_mirror
         self.atom_F2 = Nomo_Atom(self.params_F2)
         self.add_atom(self.atom_F2)
-        self.params_F3['F'] = lambda u: factor_3_x * (k3 * self.F3(u)) * self.x_mirror
-        self.params_F3['G'] = lambda u: factor_3_y * (k3 * self.F3(u)) * self.y_mirror
+        self.params_F3['F'] = lambda u: factor_3_x * \
+            (k3 * self.F3(u)) * self.x_mirror
+        self.params_F3['G'] = lambda u: factor_3_y * \
+            (k3 * self.F3(u)) * self.y_mirror
         self.atom_F3 = Nomo_Atom(self.params_F3)
         self.add_atom(self.atom_F3)
 
@@ -2192,7 +2277,8 @@ class Nomo_Block_Type_8(Nomo_Block):
     """
 
     def __init__(self, mirror_x=False, mirror_y=False):
-        super(Nomo_Block_Type_8, self).__init__(mirror_x=mirror_x, mirror_y=mirror_y)
+        super(Nomo_Block_Type_8, self).__init__(
+            mirror_x=mirror_x, mirror_y=mirror_y)
 
     def define_F(self, params):
         """
@@ -2228,7 +2314,8 @@ class Nomo_Block_Type_9_old(Nomo_Block):
     """
 
     def __init__(self, mirror_x=False, mirror_y=False):
-        super(Nomo_Block_Type_9_old, self).__init__(mirror_x=mirror_x, mirror_y=mirror_y)
+        super(Nomo_Block_Type_9_old, self).__init__(
+            mirror_x=mirror_x, mirror_y=mirror_y)
 
     def define_determinant(self, params1, params2, params3, transform_ini=False):
         """
@@ -2383,7 +2470,8 @@ class Nomo_Block_Type_9(Nomo_Block):
     """
 
     def __init__(self, mirror_x=False, mirror_y=False):
-        super(Nomo_Block_Type_9, self).__init__(mirror_x=mirror_x, mirror_y=mirror_y)
+        super(Nomo_Block_Type_9, self).__init__(
+            mirror_x=mirror_x, mirror_y=mirror_y)
 
     def define_determinant(self, params1, params2, params3, transform_ini=False):
         """
@@ -2464,25 +2552,37 @@ class Nomo_Block_Type_9(Nomo_Block):
         else:  # no initial transformation
             # F1
             if p1['grid']:
-                params1['F_grid'] = lambda u, v: p1['f_grid'](u, v) / p1['h_grid'](u, v) * self.x_mirror
-                params1['G_grid'] = lambda u, v: p1['g_grid'](u, v) / p1['h_grid'](u, v) * self.y_mirror
+                params1['F_grid'] = lambda u, v: p1['f_grid'](
+                    u, v) / p1['h_grid'](u, v) * self.x_mirror
+                params1['G_grid'] = lambda u, v: p1['g_grid'](
+                    u, v) / p1['h_grid'](u, v) * self.y_mirror
             else:
-                params1['F'] = lambda u: p1['f'](u) / p1['h'](u) * self.x_mirror
-                params1['G'] = lambda u: p1['g'](u) / p1['h'](u) * self.y_mirror
+                params1['F'] = lambda u: p1['f'](
+                    u) / p1['h'](u) * self.x_mirror
+                params1['G'] = lambda u: p1['g'](
+                    u) / p1['h'](u) * self.y_mirror
             # F2
             if p2['grid']:
-                params2['F_grid'] = lambda u, v: p2['f_grid'](u, v) / p2['h_grid'](u, v) * self.x_mirror
-                params2['G_grid'] = lambda u, v: p2['g_grid'](u, v) / p2['h_grid'](u, v) * self.y_mirror
+                params2['F_grid'] = lambda u, v: p2['f_grid'](
+                    u, v) / p2['h_grid'](u, v) * self.x_mirror
+                params2['G_grid'] = lambda u, v: p2['g_grid'](
+                    u, v) / p2['h_grid'](u, v) * self.y_mirror
             else:
-                params2['F'] = lambda u: p2['f'](u) / p2['h'](u) * self.x_mirror
-                params2['G'] = lambda u: p2['g'](u) / p2['h'](u) * self.y_mirror
+                params2['F'] = lambda u: p2['f'](
+                    u) / p2['h'](u) * self.x_mirror
+                params2['G'] = lambda u: p2['g'](
+                    u) / p2['h'](u) * self.y_mirror
             # F3
             if p3['grid']:
-                params3['F_grid'] = lambda u, v: p3['f_grid'](u, v) / p3['h_grid'](u, v) * self.x_mirror
-                params3['G_grid'] = lambda u, v: p3['g_grid'](u, v) / p3['h_grid'](u, v) * self.y_mirror
+                params3['F_grid'] = lambda u, v: p3['f_grid'](
+                    u, v) / p3['h_grid'](u, v) * self.x_mirror
+                params3['G_grid'] = lambda u, v: p3['g_grid'](
+                    u, v) / p3['h_grid'](u, v) * self.y_mirror
             else:
-                params3['F'] = lambda u: p3['f'](u) / p3['h'](u) * self.x_mirror
-                params3['G'] = lambda u: p3['g'](u) / p3['h'](u) * self.y_mirror
+                params3['F'] = lambda u: p3['f'](
+                    u) / p3['h'](u) * self.x_mirror
+                params3['G'] = lambda u: p3['g'](
+                    u) / p3['h'](u) * self.y_mirror
         # build atoms
         # F1
         if p1['grid']:
@@ -2516,19 +2616,23 @@ class Nomo_Block_Type_9(Nomo_Block):
             u1 = p1['u_stop']
             # first line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda u: params1['F_grid'](u, v0),
-                                                    lambda u: params1['G_grid'](u, v0),
+                                                    lambda u: params1[
+                                                        'G_grid'](u, v0),
                                                     u0, u1))
             # second line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda u: params1['F_grid'](u, v1),
-                                                    lambda u: params1['G_grid'](u, v1),
+                                                    lambda u: params1[
+                                                        'G_grid'](u, v1),
                                                     u0, u1))
             # third line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda v: params1['F_grid'](u0, v),
-                                                    lambda v: params1['G_grid'](u0, v),
+                                                    lambda v: params1[
+                                                        'G_grid'](u0, v),
                                                     v0, v1))
             # fourth line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda v: params1['F_grid'](u1, v),
-                                                    lambda v: params1['G_grid'](u1, v),
+                                                    lambda v: params1[
+                                                        'G_grid'](u1, v),
                                                     v0, v1))
         else:
             self.axis_ini_stack.append(Axis_Wrapper(f=params1['F'], g=params1['G'],
@@ -2541,19 +2645,23 @@ class Nomo_Block_Type_9(Nomo_Block):
             u1 = p2['u_stop']
             # first line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda u: params2['F_grid'](u, v0),
-                                                    lambda u: params2['G_grid'](u, v0),
+                                                    lambda u: params2[
+                                                        'G_grid'](u, v0),
                                                     u0, u1))
             # second line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda u: params2['F_grid'](u, v1),
-                                                    lambda u: params2['G_grid'](u, v1),
+                                                    lambda u: params2[
+                                                        'G_grid'](u, v1),
                                                     u0, u1))
             # third line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda v: params2['F_grid'](u0, v),
-                                                    lambda v: params2['G_grid'](u0, v),
+                                                    lambda v: params2[
+                                                        'G_grid'](u0, v),
                                                     v0, v1))
             # fourth line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda v: params2['F_grid'](u1, v),
-                                                    lambda v: params2['G_grid'](u1, v),
+                                                    lambda v: params2[
+                                                        'G_grid'](u1, v),
                                                     v0, v1))
         else:
             self.axis_ini_stack.append(Axis_Wrapper(f=params2['F'], g=params2['G'],
@@ -2566,19 +2674,23 @@ class Nomo_Block_Type_9(Nomo_Block):
             u1 = p3['u_stop']
             # first line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda u: params3['F_grid'](u, v0),
-                                                    lambda u: params3['G_grid'](u, v0),
+                                                    lambda u: params3[
+                                                        'G_grid'](u, v0),
                                                     u0, u1))
             # second line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda u: params3['F_grid'](u, v1),
-                                                    lambda u: params3['G_grid'](u, v1),
+                                                    lambda u: params3[
+                                                        'G_grid'](u, v1),
                                                     u0, u1))
             # third line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda v: params3['F_grid'](u0, v),
-                                                    lambda v: params3['G_grid'](u0, v),
+                                                    lambda v: params3[
+                                                        'G_grid'](u0, v),
                                                     v0, v1))
             # fourth line of grid
             self.axis_ini_stack.append(Axis_Wrapper(lambda v: params3['F_grid'](u1, v),
-                                                    lambda v: params3['G_grid'](u1, v),
+                                                    lambda v: params3[
+                                                        'G_grid'](u1, v),
                                                     v0, v1))
         else:
             self.axis_ini_stack.append(Axis_Wrapper(f=params3['F'], g=params3['G'],
@@ -2616,22 +2728,28 @@ class Nomo_Block_Type_9(Nomo_Block):
         # redefine scaled functions
         # F1
         if self.params1['grid']:
-            self.atom_F1.f = lambda u, v: self.params1['F_grid'](u, v) * x_factor
-            self.atom_F1.g = lambda u, v: self.params1['G_grid'](u, v) * y_factor
+            self.atom_F1.f = lambda u, v: self.params1[
+                'F_grid'](u, v) * x_factor
+            self.atom_F1.g = lambda u, v: self.params1[
+                'G_grid'](u, v) * y_factor
         else:
             self.atom_F1.f = lambda u: self.params1['F'](u) * x_factor
             self.atom_F1.g = lambda u: self.params1['G'](u) * y_factor
         # F2
         if self.params2['grid']:
-            self.atom_F2.f = lambda u, v: self.params2['F_grid'](u, v) * x_factor
-            self.atom_F2.g = lambda u, v: self.params2['G_grid'](u, v) * y_factor
+            self.atom_F2.f = lambda u, v: self.params2[
+                'F_grid'](u, v) * x_factor
+            self.atom_F2.g = lambda u, v: self.params2[
+                'G_grid'](u, v) * y_factor
         else:
             self.atom_F2.f = lambda u: self.params2['F'](u) * x_factor
             self.atom_F2.g = lambda u: self.params2['G'](u) * y_factor
         # F3
         if self.params3['grid']:
-            self.atom_F3.f = lambda u, v: self.params3['F_grid'](u, v) * x_factor
-            self.atom_F3.g = lambda u, v: self.params3['G_grid'](u, v) * y_factor
+            self.atom_F3.f = lambda u, v: self.params3[
+                'F_grid'](u, v) * x_factor
+            self.atom_F3.g = lambda u, v: self.params3[
+                'G_grid'](u, v) * y_factor
         else:
             self.atom_F3.f = lambda u: self.params3['F'](u) * x_factor
             self.atom_F3.g = lambda u: self.params3['G'](u) * y_factor
@@ -2662,7 +2780,8 @@ class Nomo_Block_Type_10(Nomo_Block):
     """
 
     def __init__(self, mirror_x=False, mirror_y=False):
-        super(Nomo_Block_Type_10, self).__init__(mirror_x=mirror_x, mirror_y=mirror_y)
+        super(Nomo_Block_Type_10, self).__init__(
+            mirror_x=mirror_x, mirror_y=mirror_y)
 
     def define_F1(self, params):
         """
@@ -2694,9 +2813,11 @@ class Nomo_Block_Type_10(Nomo_Block):
         self.width = width
         self.height = height
         length_f1_ini = max(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max'])) - \
-            min(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max']))
+            min(self.F1(self.params_F1['u_min']),
+                self.F1(self.params_F1['u_max']))
         length_f2_ini = max(self.F2(self.params_F2['u_min']), self.F2(self.params_F2['u_max'])) - \
-            min(self.F2(self.params_F2['u_min']), self.F2(self.params_F2['u_max']))
+            min(self.F2(self.params_F2['u_min']),
+                self.F2(self.params_F2['u_max']))
         # c1=length_f2_ini/length_f1_ini
         # c2=c1
         # length_f1=max(c1*self.F1(self.params_F1['u_min']),c1*self.F1(self.params_F1['u_max']))
@@ -2706,8 +2827,12 @@ class Nomo_Block_Type_10(Nomo_Block):
         m2 = height / length_f2_ini
         K = width
         # 1
-        y_offset_1 = m1 * min(self.F1(self.params_F1['u_min']), self.F1(self.params_F1['u_max']))
-        y_offset_2 = m2 * min(self.F2(self.params_F2['u_min']), self.F2(self.params_F2['u_max']))
+        y_offset_1 = m1 * \
+            min(self.F1(self.params_F1['u_min']),
+                self.F1(self.params_F1['u_max']))
+        y_offset_2 = m2 * \
+            min(self.F2(self.params_F2['u_min']),
+                self.F2(self.params_F2['u_max']))
         offset_2_1 = y_offset_2 - y_offset_1
         self.params_F1['F'] = lambda u: 0.0
         self.params_F1['G'] = lambda u: (self.F1(u) * m1) * self.y_mirror
@@ -2715,12 +2840,14 @@ class Nomo_Block_Type_10(Nomo_Block):
         self.add_atom(self.atom_F1)
         # 2
         self.params_F2['F'] = lambda u: (width) * self.x_mirror
-        self.params_F2['G'] = lambda u: (self.F2(u) * m2 - offset_2_1) * self.y_mirror
+        self.params_F2['G'] = lambda u: (
+            self.F2(u) * m2 - offset_2_1) * self.y_mirror
         self.atom_F2 = Nomo_Atom(self.params_F2)
         self.add_atom(self.atom_F2)
         # 3
         x_func = lambda u: (K * m1 * self.F3_3(u) / (m1 * self.F3_3(u) + m2))
-        self.params_F3['F'] = lambda u: (K * m1 * self.F3_3(u) / (m1 * self.F3_3(u) + m2)) * self.x_mirror
+        self.params_F3['F'] = lambda u: (
+            K * m1 * self.F3_3(u) / (m1 * self.F3_3(u) + m2)) * self.x_mirror
         self.params_F3['G'] = lambda u: (-m1 * m2 * self.F3_4(u) / (m1 * self.F3_3(u) + m2) - x_func(
             u) / width * offset_2_1) * self.y_mirror
         self.atom_F3 = Nomo_Atom(self.params_F3)
@@ -2788,7 +2915,8 @@ class Nomo_Atom:
         for idx, iter_params in enumerate(self.params['extra_params']):
             for key in self.params_default:
                 if not key in iter_params:
-                    self.params['extra_params'][idx][key] = self.params_default[key]
+                    self.params['extra_params'][idx][
+                        key] = self.params_default[key]
         self.set_trafo()  # initialize
         self.f = self.params['F']  # x-coord func
         self.g = self.params['G']  # y-coord func
@@ -2815,12 +2943,14 @@ class Nomo_Atom:
             start, stop = stop, start
         du = math.fabs(stop - start) * 1e-6
         # approximate line length is found
-        line_length_straigth = math.sqrt((f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
+        line_length_straigth = math.sqrt(
+            (f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
         random.seed(0.0)  # so that mistakes always the same
         for dummy in range(100):  # for case if start = stop
             first = random.uniform(start, stop)
             second = random.uniform(start, stop)
-            temp = math.sqrt((f(first) - f(second)) ** 2 + (g(first) - g(second)) ** 2)
+            temp = math.sqrt((f(first) - f(second)) ** 2 + \
+                             (g(first) - g(second)) ** 2)
             if temp > line_length_straigth:
                 line_length_straigth = temp
                 # print "length: %f"%line_length_straigth
@@ -2903,7 +3033,8 @@ class Nomo_Atom:
         x-function for reflection axis
         """
         value = (self.alpha1 * self.f_ref(u) + self.beta1 * self.g_ref(u) + self.gamma1) / \
-                (self.alpha3 * self.f_ref(u) + self.beta3 * self.g_ref(u) + self.gamma3)
+                (self.alpha3 * self.f_ref(u) + \
+                 self.beta3 * self.g_ref(u) + self.gamma3)
         return value
 
     def give_y_ref(self, u):
@@ -2911,7 +3042,8 @@ class Nomo_Atom:
         y-function for reflection axis
         """
         value = (self.alpha2 * self.f_ref(u) + self.beta2 * self.g_ref(u) + self.gamma2) / \
-                (self.alpha3 * self.f_ref(u) + self.beta3 * self.g_ref(u) + self.gamma3)
+                (self.alpha3 * self.f_ref(u) + \
+                 self.beta3 * self.g_ref(u) + self.gamma3)
         return value
 
     def draw(self, canvas):
@@ -2937,9 +3069,12 @@ class Nomo_Atom:
             self.nomo_axis_ref = Nomo_Axis(func_f=self.give_x, func_g=self.give_y,
                                            start=p['u_min'], stop=p['u_max'],
                                            turn=-1, title=p['title'], canvas=canvas, type=p['scale_type'],
-                                           tick_levels=p['tick_levels'], tick_text_levels=p['tick_text_levels'],
-                                           side=p['tick_side'], manual_axis_data=p['manual_axis_data'],
-                                           title_x_shift=p['title_x_shift'], title_y_shift=p['title_y_shift'],
+                                           tick_levels=p['tick_levels'], tick_text_levels=p[
+                                               'tick_text_levels'],
+                                           side=p['tick_side'], manual_axis_data=p[
+                                               'manual_axis_data'],
+                                           title_x_shift=p['title_x_shift'], title_y_shift=p[
+                                               'title_y_shift'],
                                            axis_appear=p, base_start=base_start, base_stop=base_stop)
             for pp in p['extra_params']:
                 if pp['base_start'] is None:
@@ -2953,9 +3088,12 @@ class Nomo_Atom:
                 Nomo_Axis(func_f=self.give_x, func_g=self.give_y,
                           start=pp['u_min'], stop=pp['u_max'],
                           turn=-1, title='', canvas=canvas, type=pp['scale_type'],
-                          tick_levels=pp['tick_levels'], tick_text_levels=pp['tick_text_levels'],
-                          side=pp['tick_side'], manual_axis_data=pp['manual_axis_data'],
-                          title_x_shift=pp['title_x_shift'], title_y_shift=pp['title_y_shift'],
+                          tick_levels=pp['tick_levels'], tick_text_levels=pp[
+                              'tick_text_levels'],
+                          side=pp['tick_side'], manual_axis_data=pp[
+                              'manual_axis_data'],
+                          title_x_shift=pp['title_x_shift'], title_y_shift=pp[
+                              'title_y_shift'],
                           axis_appear=pp, base_start=base_start_pp, base_stop=base_stop_pp)
         else:  # reference axis
             # print "u_min_ref"
@@ -3018,7 +3156,8 @@ class Nomo_Atom_Grid(Nomo_Atom):
         for idx, iter_params in enumerate(self.params['extra_params']):
             for key in self.params_default:
                 if not key in iter_params:
-                    self.params['extra_params'][idx][key] = self.params_default[key]
+                    self.params['extra_params'][idx][
+                        key] = self.params_default[key]
         self.set_trafo()  # initialize
         self.f = self.params['F_grid']
         self.g = self.params['G_grid']
@@ -3036,7 +3175,8 @@ class Nomo_Atom_Grid(Nomo_Atom):
         """
         v0 = self.params['v_start']  # value for reference line
         value = (self.alpha1 * self.f(u, v0) + self.beta1 * self.g(u, v0) + self.gamma1) / \
-                (self.alpha3 * self.f(u, v0) + self.beta3 * self.g(u, v0) + self.gamma3)
+                (self.alpha3 * self.f(u, v0) + \
+                 self.beta3 * self.g(u, v0) + self.gamma3)
         return value
 
     def give_y(self, u):
@@ -3046,7 +3186,8 @@ class Nomo_Atom_Grid(Nomo_Atom):
         """
         v0 = self.params['v_start']  # value for reference line
         value = (self.alpha2 * self.f(u, v0) + self.beta2 * self.g(u, v0) + self.gamma2) / \
-                (self.alpha3 * self.f(u, v0) + self.beta3 * self.g(u, v0) + self.gamma3)
+                (self.alpha3 * self.f(u, v0) + \
+                 self.beta3 * self.g(u, v0) + self.gamma3)
         return value
 
     def give_x_grid(self, u, v):
@@ -3054,7 +3195,8 @@ class Nomo_Atom_Grid(Nomo_Atom):
         gives x of grid.
         """
         value = (self.alpha1 * self.f(u, v) + self.beta1 * self.g(u, v) + self.gamma1) / \
-                (self.alpha3 * self.f(u, v) + self.beta3 * self.g(u, v) + self.gamma3)
+                (self.alpha3 * self.f(u, v) + \
+                 self.beta3 * self.g(u, v) + self.gamma3)
         return value
 
     def give_y_grid(self, u, v):
@@ -3062,7 +3204,8 @@ class Nomo_Atom_Grid(Nomo_Atom):
         gives y of grid.
         """
         value = (self.alpha2 * self.f(u, v) + self.beta2 * self.g(u, v) + self.gamma2) / \
-                (self.alpha3 * self.f(u, v) + self.beta3 * self.g(u, v) + self.gamma3)
+                (self.alpha3 * self.f(u, v) + \
+                 self.beta3 * self.g(u, v) + self.gamma3)
         return value
 
     def draw(self, canvas):
@@ -3591,7 +3734,8 @@ if __name__ == '__main__':
         block10.set_block(width=10.0, height=10.0)
         # block10.set_reference_axes()
 
-        wrapper1 = Nomo_Wrapper(paper_width=20.0, paper_height=20.0, filename='type4.pdf')
+        wrapper1 = Nomo_Wrapper(
+            paper_width=20.0, paper_height=20.0, filename='type4.pdf')
         wrapper1.add_block(block8)
         wrapper1.add_block(block9)
         wrapper1.add_block(block10)
@@ -3766,7 +3910,8 @@ if __name__ == '__main__':
         block20.add_F(block20_f4_para)
         block20.add_F(block20_f5_para)
         block20.set_block(width=10.0, height=10.0)
-        wrapper4 = Nomo_Wrapper(paper_width=20.0, paper_height=20.0, filename='type3a.pdf')
+        wrapper4 = Nomo_Wrapper(
+            paper_width=20.0, paper_height=20.0, filename='type3a.pdf')
         wrapper4.add_block(block20)
         wrapper4.align_blocks()
         wrapper4.build_axes_wrapper()  # build structure for optimization
@@ -3825,7 +3970,8 @@ if __name__ == '__main__':
         block30 = Nomo_Block_Type_6(mirror_x=False, mirror_y=False)
         block30.define(params1=block30_f1_para, params2=block30_f2_para)
         block30.set_block(width=5.0, height=25.0, type='orthogonal')
-        wrapper5 = Nomo_Wrapper(paper_width=20.0, paper_height=20.0, filename='type6.pdf')
+        wrapper5 = Nomo_Wrapper(
+            paper_width=20.0, paper_height=20.0, filename='type6.pdf')
         wrapper5.add_block(block30)
         wrapper5.align_blocks()
         wrapper5.build_axes_wrapper()  # build structure for optimization
@@ -3880,7 +4026,8 @@ if __name__ == '__main__':
         block60.define_F2(block60_f2_para)
         block60.define_F3(block60_f3_para)
         block60.set_block(width_1=10.0, angle_u=20.0, angle_v=60.0)
-        wrapper60 = Nomo_Wrapper(paper_width=20.0, paper_height=20.0, filename='type7.pdf')
+        wrapper60 = Nomo_Wrapper(
+            paper_width=20.0, paper_height=20.0, filename='type7.pdf')
         wrapper60.add_block(block60)
         wrapper60.align_blocks()
         wrapper60.build_axes_wrapper()  # build structure for optimization
@@ -3923,7 +4070,8 @@ if __name__ == '__main__':
         block71 = Nomo_Block_Type_8(mirror_x=False)
         block71.define_F(block71_f_para)
         block71.set_block(length=12)
-        wrapper70 = Nomo_Wrapper(paper_width=20.0, paper_height=20.0, filename='type8.pdf')
+        wrapper70 = Nomo_Wrapper(
+            paper_width=20.0, paper_height=20.0, filename='type8.pdf')
         wrapper70.add_block(block70)
         wrapper70.add_block(block71)
         wrapper70.align_blocks()
@@ -3986,7 +4134,8 @@ if __name__ == '__main__':
                                    block80_f3_para, transform_ini=True)
         block80.set_block(width=12.0, height=15.0)
 
-        wrapper80 = Nomo_Wrapper(paper_width=10.0, paper_height=10.0, filename='type9.pdf')
+        wrapper80 = Nomo_Wrapper(
+            paper_width=10.0, paper_height=10.0, filename='type9.pdf')
         wrapper80.add_block(block80)
         wrapper80.align_blocks()
         wrapper80.build_axes_wrapper()  # build structure for optimization
@@ -4140,10 +4289,12 @@ if __name__ == '__main__':
         }
         # more abstract way
         block_1_9a = Nomo_Block_Type_9()
-        block_1_9a.define_determinant(block_atom1_para_9a, block_atom2_para_9a, block_atom3_para_9a)
+        block_1_9a.define_determinant(
+            block_atom1_para_9a, block_atom2_para_9a, block_atom3_para_9a)
         block_1_9a.set_block()
 
-        wrapper80a = Nomo_Wrapper(paper_width=10.0, paper_height=10.0, filename='typegrid_a.pdf')
+        wrapper80a = Nomo_Wrapper(
+            paper_width=10.0, paper_height=10.0, filename='typegrid_a.pdf')
         wrapper80a.add_block(block_1_9a)
         wrapper80a.align_blocks()
         wrapper80a.build_axes_wrapper()  # build structure for optimization
@@ -4197,7 +4348,8 @@ if __name__ == '__main__':
         block_1_10.define_F3(block_atom_10_3)
         block_1_10.set_block()
 
-        wrapper10 = Nomo_Wrapper(paper_width=10.0, paper_height=10.0, filename='type_10.pdf')
+        wrapper10 = Nomo_Wrapper(
+            paper_width=10.0, paper_height=10.0, filename='type_10.pdf')
         wrapper10.add_block(block_1_10)
         wrapper10.align_blocks()
         wrapper10.build_axes_wrapper()  # build structure for optimization

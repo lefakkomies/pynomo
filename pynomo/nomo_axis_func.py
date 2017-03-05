@@ -61,12 +61,14 @@ class Axis_Wrapper:
         # du=fabs(start-stop)*1e-8
         du = fabs(start - stop) * 1e-12
         # approximate line length is found
-        line_length_straigth = sqrt((f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
+        line_length_straigth = sqrt(
+            (f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
         random.seed(0.1)  # so that mistakes always the same
         for dummy in range(100):
             first = random.uniform(start, stop)
             second = random.uniform(start, stop)
-            temp = sqrt((f(first) - f(second)) ** 2 + (g(first) - g(second)) ** 2)
+            temp = sqrt((f(first) - f(second)) ** 2 + \
+                        (g(first) - g(second)) ** 2)
             if temp > line_length_straigth:
                 line_length_straigth = temp
                 # print "length: %f"%line_length_straigth
@@ -446,7 +448,8 @@ class Axes_Wrapper:
         """
         # print params
         # print "."
-        self._change_params_to_last_trafo_mat_(params)  # sets tranformation parameters
+        self._change_params_to_last_trafo_mat_(
+            params)  # sets tranformation parameters
         self._set_transformation_to_all_axis_()  # applies trafo to every axis
         bb = self._calc_bounding_box_()
         self._calc_paper_area_()
@@ -489,7 +492,8 @@ class Axes_Wrapper:
         """
         gm = given_matrix
         self._add_transformation_(alpha1=gm[0][0], beta1=gm[0][1], gamma1=gm[0][2],
-                                  alpha2=gm[1][0], beta2=gm[1][1], gamma2=gm[1][2],
+                                  alpha2=gm[1][0], beta2=gm[
+                                      1][1], gamma2=gm[1][2],
                                   alpha3=gm[2][0], beta3=gm[2][1], gamma3=gm[2][2])
         self._set_transformation_to_all_axis_()
 
@@ -528,18 +532,27 @@ class Axes_Wrapper:
         x1d,y1d,x2d,y2d=d['x1'],d['y1'],d['x2'],d['y2']
         x3d,y3d,x4d,y4d=d['x3'],d['y3'],d['x4'],d['y4']
         """
-        row1, const1 = self._make_row_(coordinate='x', coord_value=x2d, x=x2, y=y2)
-        row2, const2 = self._make_row_(coordinate='y', coord_value=y2d, x=x2, y=y2)
-        row3, const3 = self._make_row_(coordinate='x', coord_value=x1d, x=x1, y=y1)
-        row4, const4 = self._make_row_(coordinate='y', coord_value=y1d, x=x1, y=y1)
-        row5, const5 = self._make_row_(coordinate='x', coord_value=x4d, x=x4, y=y4)
-        row6, const6 = self._make_row_(coordinate='y', coord_value=y4d, x=x4, y=y4)
-        row7, const7 = self._make_row_(coordinate='x', coord_value=x3d, x=x3, y=y3)
-        row8, const8 = self._make_row_(coordinate='y', coord_value=y3d, x=x3, y=y3)
+        row1, const1 = self._make_row_(
+            coordinate='x', coord_value=x2d, x=x2, y=y2)
+        row2, const2 = self._make_row_(
+            coordinate='y', coord_value=y2d, x=x2, y=y2)
+        row3, const3 = self._make_row_(
+            coordinate='x', coord_value=x1d, x=x1, y=y1)
+        row4, const4 = self._make_row_(
+            coordinate='y', coord_value=y1d, x=x1, y=y1)
+        row5, const5 = self._make_row_(
+            coordinate='x', coord_value=x4d, x=x4, y=y4)
+        row6, const6 = self._make_row_(
+            coordinate='y', coord_value=y4d, x=x4, y=y4)
+        row7, const7 = self._make_row_(
+            coordinate='x', coord_value=x3d, x=x3, y=y3)
+        row8, const8 = self._make_row_(
+            coordinate='y', coord_value=y3d, x=x3, y=y3)
 
         matrix = array([row1, row2, row3, row4, row5, row6, row7, row8])
         # print matrix
-        b = array([const1, const2, const3, const4, const5, const6, const7, const8])
+        b = array([const1, const2, const3, const4,
+                  const5, const6, const7, const8])
         coeff_vector = linalg.solve(matrix, b)
         alpha1 = -1.0  # fixed
         beta1 = coeff_vector[0][0]
@@ -617,7 +630,8 @@ class Axes_Wrapper:
         """
         x1, y1, x2, y2 = x_high, y_high, x_low, y_low
         x3, y3, x4, y4 = x_slope_high, y_slope_high, x_slope_low, y_slope_low
-        # print x_high, y_high, x_low, y_low, x_slope_high, y_slope_high, x_slope_low, y_slope_low
+        # print x_high, y_high, x_low, y_low, x_slope_high, y_slope_high,
+        # x_slope_low, y_slope_low
         if (x1 - x3) * (x2 - x4) < 0:
             x1, y1, x3, y3 = x3, y3, x1, y1
         if x3 < x1:
@@ -760,7 +774,8 @@ class Axes_Wrapper:
         into trafo_stack
         """
         alpha1, beta1, gamma1, alpha2, \
-            beta2, gamma2, alpha3, beta3, gamma3 = self._calc_rotation_trafo_(angle)
+            beta2, gamma2, alpha3, beta3, gamma3 = self._calc_rotation_trafo_(
+                angle)
         self._add_transformation_(alpha1=alpha1, beta1=beta1, gamma1=gamma1,
                                   alpha2=alpha2, beta2=beta2, gamma2=gamma2,
                                   alpha3=alpha3, beta3=beta3, gamma3=gamma3)
@@ -811,7 +826,8 @@ if __name__ == '__main__':
     test4a_ax = Axis_Wrapper(f4, g4, 0.0, 2.0)
     test5a_ax = Axis_Wrapper(f5, g5, 0.0, 3.0)
     test_wrap = Axes_Wrapper()
-    # print test_wrap._calc_transformation_matrix_(1, 1, 1, 2, 1, 3, 1, 4, 3, 3, 3, 4, 3, 5, 3, 6)
+    # print test_wrap._calc_transformation_matrix_(1, 1, 1, 2, 1, 3, 1, 4, 3,
+    # 3, 3, 4, 3, 5, 3, 6)
     test_wrap.add_axis(test3_ax)
     test_wrap.add_axis(test4_ax)
     test_wrap.add_axis(test5_ax)

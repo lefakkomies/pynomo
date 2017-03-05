@@ -82,7 +82,8 @@ class Nomo_Grid:
             if 'v_texts' not in self.grid_data:
                 # print self.grid_data['text_prefix_v']
                 self._draw_line_(f_here, g_here, start, stop,
-                                 r"%s%s" % (self.grid_data['text_prefix_v'], self.grid_data['text_format_v']) % v,
+                                 r"%s%s" % (self.grid_data['text_prefix_v'], self.grid_data[
+                                            'text_format_v']) % v,
                                  line_color,
                                  start_texts, stop_texts, self.grid_data['v_text_color'], line_width)
             else:
@@ -106,7 +107,8 @@ class Nomo_Grid:
             f_here, g_here = self._make_v_funcs_(u)
             if 'u_texts' not in self.grid_data:
                 self._draw_line_(f_here, g_here, start, stop,
-                                 r"%s%s" % (self.grid_data['text_prefix_u'], self.grid_data['text_format_u']) % u,
+                                 r"%s%s" % (self.grid_data['text_prefix_u'], self.grid_data[
+                                            'text_format_u']) % u,
                                  line_color,
                                  start_texts, stop_texts, self.grid_data['u_text_color'], line_width)
             else:
@@ -152,12 +154,14 @@ class Nomo_Grid:
         else:
             du = fabs(start - stop) * 1e-5
         # approximate line length is found
-        line_length_straigth = sqrt((f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
+        line_length_straigth = sqrt(
+            (f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
         random.seed(0.0)  # so that mistakes always the same
         for dummy in range(100):
             first = random.uniform(start, stop)
             second = random.uniform(start, stop)
-            temp = sqrt((f(first) - f(second)) ** 2 + (g(first) - g(second)) ** 2)
+            temp = sqrt((f(first) - f(second)) ** 2 + \
+                        (g(first) - g(second)) ** 2)
             if temp > line_length_straigth:
                 line_length_straigth = temp
                 # print "length: %f"%line_length_straigth
@@ -179,7 +183,8 @@ class Nomo_Grid:
                 # let's calculate actual length
                 # and iterate until length is in factor 2 from target
                 while True:
-                    # u_delta_step = min(stop,u+delta_u) # in order to avoid going over range
+                    # u_delta_step = min(stop,u+delta_u) # in order to avoid
+                    # going over range
                     if (u + delta_u) >= stop:  # stop if out of range
                         break
                     delta_x = f(u + delta_u) - f(u)
@@ -210,11 +215,14 @@ class Nomo_Grid:
         self.canvas.stroke(line, [line_width, axis_color])
         # start number
         if start_texts:  # set texts to to start
-            self._set_text_to_grid_(f, g, start, du, title, axis_color, text_color)
+            self._set_text_to_grid_(
+                f, g, start, du, title, axis_color, text_color)
         if stop_texts:  # set texts to stop
-            self._set_text_to_grid_(f, g, stop, -du, title, axis_color, text_color)
+            self._set_text_to_grid_(
+                f, g, stop, -du, title, axis_color, text_color)
         if self.grid_data['circles']:
-            self.canvas.fill(path.circle(f(start), g(start), 0.03), [axis_color])
+            self.canvas.fill(path.circle(
+                f(start), g(start), 0.03), [axis_color])
             self.canvas.fill(path.circle(f(stop), g(stop), 0.03), [axis_color])
             # print "line drawn"
 
@@ -247,16 +255,20 @@ class Nomo_Grid:
             if (angle - 90.0) <= -90.0:
                 angle = angle + 180.0
             if dx_unit > 0.0:
-                text_attr = [text.valign.middle, text.halign.right, text.size.small, trafo.rotate(angle - 90)]
+                text_attr = [text.valign.middle, text.halign.right,
+                    text.size.small, trafo.rotate(angle - 90)]
             if dx_unit <= 0.0:
-                text_attr = [text.valign.middle, text.halign.left, text.size.small, trafo.rotate(angle - 90)]
+                text_attr = [text.valign.middle, text.halign.left,
+                    text.size.small, trafo.rotate(angle - 90)]
         else:
             if (angle + 90.0) >= 90.0:
                 angle = angle - 180.0
             if dx_unit > 0.0:
-                text_attr = [text.valign.middle, text.halign.right, text.size.small, trafo.rotate(angle + 90)]
+                text_attr = [text.valign.middle, text.halign.right,
+                    text.size.small, trafo.rotate(angle + 90)]
             if dx_unit <= 0.0:
-                text_attr = [text.valign.middle, text.halign.left, text.size.small, trafo.rotate(angle + 90)]
+                text_attr = [text.valign.middle, text.halign.left,
+                    text.size.small, trafo.rotate(angle + 90)]
         """
         copied from nomo_axis.py
         if dy_units[idx]<0:
@@ -295,7 +307,8 @@ if __name__ == '__main__':
     def eq_declination(day):
         g0 = gamma(day)
         return 0.006918 - 0.399912 * cos(g0) + 0.070257 * sin(g0) - 0.006758 * cos(2 * g0) \
-            + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
+            + 0.000907 * sin(2 * g0) - 0.002697 * \
+                             cos(3 * g0) + 0.00148 * sin(3 * g0)
 
     def tst(day, hour):
         return hour * 60.0 + eq_time(day)

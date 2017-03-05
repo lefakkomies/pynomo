@@ -76,8 +76,10 @@ class Nomographer:
                     blocks[-1].add_F(axis_params)
                 blocks[-1].set_block(width=block_para['width'],
                                      height=block_para['height'],
-                                     reference_padding=block_para['reference_padding'],
-                                     reference_titles=block_para['reference_titles'],
+                                     reference_padding=block_para[
+                                         'reference_padding'],
+                                     reference_titles=block_para[
+                                         'reference_titles'],
                                      reference_color=block_para['reference_color'])
                 wrapper.add_block(blocks[-1])
                 isopleths.add_isopleth_block(blocks[-1], block_para)
@@ -239,7 +241,8 @@ class Nomographer:
                                                                       'axis_color': axis_color,
                                                                       'text_color': axis_color})
         Nomo_Axis(func_f=lambda u: u,
-                  func_g=lambda u: params['paper_height'] + axis_offset + u * 1e-5,
+                  func_g=lambda u: params[
+                      'paper_height'] + axis_offset + u * 1e-5,
                   start=-axis_offset, stop=params['paper_width'] + axis_offset, turn=-1, title='',
                   tick_levels=3, tick_text_levels=2,
                   canvas=c, type='linear', side='left', axis_appear={'turn_relative': True,
@@ -260,9 +263,11 @@ class Nomographer:
                                                                       'axis_color': axis_color,
                                                                       'text_color': axis_color})
         tick_0_list_v, tick_1_list_v, tick_2_list_v, tick_3_list_v, tick_4_list_v, \
-            start_ax, stop_ax = find_linear_ticks(-axis_offset, params['paper_height'] + axis_offset)
+            start_ax, stop_ax = find_linear_ticks(
+                -axis_offset, params['paper_height'] + axis_offset)
         tick_0_list_h, tick_1_list_h, tick_2_list_h, tick_3_list_h, tick_4_list_h, \
-            start_ax, stop_ax = find_linear_ticks(-axis_offset, params['paper_width'] + axis_offset)
+            start_ax, stop_ax = find_linear_ticks(
+                -axis_offset, params['paper_width'] + axis_offset)
         grid_color_0 = color.cmyk.Brown
         grid_color_1 = color.cmyk.Gray
         grid_color_2 = color.cmyk.Tan
@@ -307,9 +312,12 @@ class Nomographer:
                 circle_color = self.line_defs_default['circle_color']
             # do lines and circles
             for line in line_defs['coords']:
-                c.stroke(path.line(line[0], line[1], line[2], line[3]), line_style)
-                c.fill(path.circle(line[0], line[1], circle_size), [circle_color])
-                c.fill(path.circle(line[2], line[3], circle_size), [circle_color])
+                c.stroke(path.line(line[0], line[1],
+                         line[2], line[3]), line_style)
+                c.fill(path.circle(line[0], line[1],
+                       circle_size), [circle_color])
+                c.fill(path.circle(line[2], line[3],
+                       circle_size), [circle_color])
 
     def _check_params_(self, params):
         """

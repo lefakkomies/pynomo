@@ -78,14 +78,16 @@ class Isopleth_Wrapper(object):
             ref_atoms = block.atom_stack[N:(N + ref_N)]
             # set ref axes
             for idx, ref_atom in enumerate(ref_atoms):
-                ref_atom.params['tag'] = 'ref' + repr(idx) + repr(self.ref_tag_number)
+                ref_atom.params['tag'] = 'ref' + \
+                    repr(idx) + repr(self.ref_tag_number)
             self.ref_tag_number += 1
             atoms = block.atom_stack[:N]
             atom_stack_start = [atoms[0], atoms[1], ref_atoms[0]]
             atom_stack_stop = [ref_atoms[-1], atoms[-2], atoms[-1]]
             center_atom_stack = []
             for idx in range(2, N - 2):
-                center_atom_stack.append([ref_atoms[idx - 2], atoms[idx], ref_atoms[idx - 1]])
+                center_atom_stack.append(
+                    [ref_atoms[idx - 2], atoms[idx], ref_atoms[idx - 1]])
             # make block params
             # start
             block_para_start = copy.deepcopy(block_para)
@@ -108,10 +110,13 @@ class Isopleth_Wrapper(object):
                     block_para_middles[-1]['isopleth_values'].append(
                         ['x', block_para['isopleth_values'][idx1][idx - 1], 'x'])
             # do the list
-            self.isopleth_list.append(Isopleth_Block_Type_1(atom_stack_start, block_para_start))
+            self.isopleth_list.append(Isopleth_Block_Type_1(
+                atom_stack_start, block_para_start))
             for idx, atom_stack in enumerate(center_atom_stack):
-                self.isopleth_list.append(Isopleth_Block_Type_1(atom_stack, block_para_middles[idx]))
-            self.isopleth_list.append(Isopleth_Block_Type_1(atom_stack_stop, block_para_stop))
+                self.isopleth_list.append(Isopleth_Block_Type_1(
+                    atom_stack, block_para_middles[idx]))
+            self.isopleth_list.append(Isopleth_Block_Type_1(
+                atom_stack_stop, block_para_stop))
 
         # type 4
         if block_para['block_type'] == 'type_4':
@@ -132,12 +137,15 @@ class Isopleth_Wrapper(object):
             for idx, isopleth_values in enumerate(block_para['isopleth_values']):
                 block_para_34['isopleth_values'].append([block_para['isopleth_values'][idx][2],
                                                          block_para['isopleth_values'][idx][3], 'x'])
-            self.isopleth_list.append(Isopleth_Block_Type_1(atom_stack_12, block_para_12))
-            self.isopleth_list.append(Isopleth_Block_Type_1(atom_stack_34, block_para_34))
+            self.isopleth_list.append(
+                Isopleth_Block_Type_1(atom_stack_12, block_para_12))
+            self.isopleth_list.append(
+                Isopleth_Block_Type_1(atom_stack_34, block_para_34))
 
         # type 5 (contour)
         if block_para['block_type'] == 'type_5':
-            iso_block = Isopleth_Block_Type_5(block.atom_stack, block_para, block)
+            iso_block = Isopleth_Block_Type_5(
+                block.atom_stack, block_para, block)
             self.isopleth_list.append(iso_block)
 
     def draw(self, canvas):
@@ -263,7 +271,8 @@ class Isopleth_Block(object):
             #                 distances[idx2]/sum_distance*line[idx2][1]
         # a better
         middle_x, middle_y = self._two_line_intersection_(line[smallest_idx][0], line[smallest_idx][1],
-                                                          line[idx2][0], line[idx2][1],
+                                                          line[idx2][0], line[
+                                                              idx2][1],
                                                           x1, y1, x2, y2)
         return middle_x, middle_y
 
@@ -275,9 +284,11 @@ class Isopleth_Block(object):
         f2 = 1.0 + 1e-12
         interps = []
         for idx, (x1s, y1s, x2s, y2s) in enumerate(sections):
-            x_inter, y_inter = self._two_line_intersection_(x1s, y1s, x2s, y2s, x1, y1, x2, y2)
+            x_inter, y_inter = self._two_line_intersection_(
+                x1s, y1s, x2s, y2s, x1, y1, x2, y2)
             # check if instersection
-            # if (f1*min(x1s,x2s)<=x_inter<=f2*max(x1s,x2s)) and (f1*min(y1s,y2s)<=y_inter<=f2*max(y1s,y2s)):
+            # if (f1*min(x1s,x2s)<=x_inter<=f2*max(x1s,x2s)) and
+            # (f1*min(y1s,y2s)<=y_inter<=f2*max(y1s,y2s)):
             if self._between_(x1s, y1s, x2s, y2s, x_inter, y_inter):
                 interps.append((x_inter, y_inter))
         if len(interps) < 1:
@@ -334,7 +345,8 @@ class Isopleth_Block(object):
         f = 1 - 1e-12  # factor to reduce double hits
         interps = []
         for idx, (x1s, y1s, x2s, y2s) in enumerate(sections):
-            x_inter, y_inter = self._two_line_intersection_(x1s, y1s, x2s * f, y2s * f, x1, y1, x2, y2)
+            x_inter, y_inter = self._two_line_intersection_(
+                x1s, y1s, x2s * f, y2s * f, x1, y1, x2, y2)
             # check if instersection
             if (min(x1s, x2s * f) <= x_inter <= max(x1s, x2 * f)) and (
                     min(y1s, y2s * f) <= y_inter <= max(y1s, y2s * f)):
@@ -357,7 +369,8 @@ class Isopleth_Block(object):
         xf1, yf1, xf2, yf2 = self.find_farthest_pair(x1, y1, x2, y2, x3, y3)
         for points in self.other_points[idx]:
             for (x, y) in points:
-                xf1, yf1, xf2, yf2 = self.find_farthest_pair(xf1, yf1, xf2, yf2, x, y)
+                xf1, yf1, xf2, yf2 = self.find_farthest_pair(
+                    xf1, yf1, xf2, yf2, x, y)
         return xf1, yf1, xf2, yf2
 
     def find_farthest_pair(self, x1, y1, x2, y2, x3, y3):
@@ -379,7 +392,8 @@ class Isopleth_Block(object):
         draws the isopleth
         """
         for idx, (x1, y1, x2, y2, x3, y3) in enumerate(self.draw_coordinates):
-            xx1, yy1, xx2, yy2 = self.find_farthest_pair_extra(x1, y1, x2, y2, x3, y3, idx)
+            xx1, yy1, xx2, yy2 = self.find_farthest_pair_extra(
+                x1, y1, x2, y2, x3, y3, idx)
             # print xx1,yy1,xx2,yy2
             # check for collinearity
             #            if not self.collinear(x1, y1, x2, y2, x3, y3):
@@ -408,7 +422,8 @@ class Isopleth_Block(object):
             color_param = draw_params_list[0]
             for points in line_points:
                 for (x, y) in points:
-                    self._draw_circle_(canvas, x, y, circle_radius, color_param)
+                    self._draw_circle_(
+                        canvas, x, y, circle_radius, color_param)
 
     def _draw_circle_(self, canvas, x, y, r, circle_color=color.cmyk.Black):
         """
@@ -445,7 +460,8 @@ class Isopleth_Block(object):
                 for idx, dummy in enumerate(solutions):
                     # store only true (x,y) tuples
                     if isinstance(self.isopleth_values[idx][atom_idx], (tuple)):
-                        solutions[idx][atom.params['tag']] = self.isopleth_values[idx][atom_idx]
+                        solutions[idx][atom.params['tag']
+                            ] = self.isopleth_values[idx][atom_idx]
                     if isinstance(self.isopleth_values[idx][atom_idx], (int, float)):
                         value = self.isopleth_values[idx][atom_idx]
                         x = atom.give_x(value) - atom.params['align_x_offset']
@@ -456,11 +472,14 @@ class Isopleth_Block(object):
                     for idx, dummy in enumerate(solutions):
                         # store only true (x,y) tuples
                         if isinstance(self.isopleth_values[idx][atom_idx], (tuple)):
-                            solutions[idx][atom.params['dtag']] = self.isopleth_values[idx][atom_idx]
+                            solutions[idx][atom.params['dtag']
+                                ] = self.isopleth_values[idx][atom_idx]
                         if isinstance(self.isopleth_values[idx][atom_idx], (int, float)):
                             value = self.isopleth_values[idx][atom_idx]
-                            x = atom.give_x(value) - atom.params['align_x_offset']
-                            y = atom.give_y(value) - atom.params['align_y_offset']
+                            x = atom.give_x(value) - \
+                                            atom.params['align_x_offset']
+                            y = atom.give_y(value) - \
+                                            atom.params['align_y_offset']
                             solutions[idx][atom.params['dtag']] = (x, y)
 
     def update_solutions(self, solutions):
@@ -527,7 +546,8 @@ class Isopleth_Block(object):
                     min_distance = distance
                     value_0 = atom.section_values[idx][0]
                     value_1 = atom.section_values[idx][1]
-                    closest_value = self.interpolate(x1s, y1s, x2s, y2s, x, y, value_0, value_1)
+                    closest_value = self.interpolate(
+                        x1s, y1s, x2s, y2s, x, y, value_0, value_1)
                     closest_value_0 = value_0
                     closest_value_1 = value_1
         # print closest_value,closest_value_0,closest_value_1
@@ -542,7 +562,8 @@ class Isopleth_Block(object):
         """
         distance_1 = self._calc_distance_points_(x1, y1, x3, y3)
         distance_2 = self._calc_distance_points_(x2, y2, x3, y3)
-        value = value_1 + (value_2 - value_1) * distance_1 / (distance_1 + distance_2)
+        value = value_1 + (value_2 - value_1) * \
+                           distance_1 / (distance_1 + distance_2)
         return value
 
     def parse_linestyle(self, line_style):
@@ -767,7 +788,8 @@ class Isopleth_Block(object):
         # transparent
         transparent = False
         if 'transparency' in params:
-            color_param_transparency = color.transparency(params['transparency'])
+            color_param_transparency = color.transparency(
+                params['transparency'])
             transparent = True
         # linestyle
         if 'linestyle' in params:
@@ -855,8 +877,10 @@ class Isopleth_Block_Type_1(Isopleth_Block):
             y0 = isopleth_values[0][1]
             f1_known = True
         if isinstance(isopleth_values[0], list):  # = this is grid
-            x0 = atom_stack[0].give_x_grid(isopleth_values[0][0], isopleth_values[0][1])
-            y0 = atom_stack[0].give_y_grid(isopleth_values[0][0], isopleth_values[0][1])
+            x0 = atom_stack[0].give_x_grid(
+                isopleth_values[0][0], isopleth_values[0][1])
+            y0 = atom_stack[0].give_y_grid(
+                isopleth_values[0][0], isopleth_values[0][1])
             f1_known = True
         # f2 known
         if isinstance(isopleth_values[1], (int, float)):
@@ -868,8 +892,10 @@ class Isopleth_Block_Type_1(Isopleth_Block):
             y1 = isopleth_values[1][1]
             f2_known = True
         if isinstance(isopleth_values[1], list):  # = this is grid
-            x1 = atom_stack[1].give_x_grid(isopleth_values[1][0], isopleth_values[1][1])
-            y1 = atom_stack[1].give_y_grid(isopleth_values[1][0], isopleth_values[1][1])
+            x1 = atom_stack[1].give_x_grid(
+                isopleth_values[1][0], isopleth_values[1][1])
+            y1 = atom_stack[1].give_y_grid(
+                isopleth_values[1][0], isopleth_values[1][1])
             f2_known = True
         # f3 known
         if isinstance(isopleth_values[2], (int, float)):
@@ -881,13 +907,17 @@ class Isopleth_Block_Type_1(Isopleth_Block):
             y2 = isopleth_values[2][1]
             f3_known = True
         if isinstance(isopleth_values[2], list):  # = this is grid
-            x2 = atom_stack[2].give_x_grid(isopleth_values[2][0], isopleth_values[2][1])
-            y2 = atom_stack[2].give_y_grid(isopleth_values[2][0], isopleth_values[2][1])
+            x2 = atom_stack[2].give_x_grid(
+                isopleth_values[2][0], isopleth_values[2][1])
+            y2 = atom_stack[2].give_y_grid(
+                isopleth_values[2][0], isopleth_values[2][1])
             f3_known = True
         if not f1_known:
             # line=self.atom_stack[0].line
-            x0, y0 = self._find_closest_point_(self.atom_stack[0].sections, x1, y1, x2, y2)
-            other_points = self._find_closest_other_points_(self.atom_stack[0].sections, x1, y1, x2, y2, x0, y0)
+            x0, y0 = self._find_closest_point_(
+                self.atom_stack[0].sections, x1, y1, x2, y2)
+            other_points = self._find_closest_other_points_(
+                self.atom_stack[0].sections, x1, y1, x2, y2, x0, y0)
             # solution[isopleth_values[0]]=(x0,y0)
             if not self.atom_stack[0].params['tag'] == 'none':
                 solution[self.atom_stack[0].params['tag']] = (x0, y0)
@@ -895,8 +925,10 @@ class Isopleth_Block_Type_1(Isopleth_Block):
             self.other_points[idx].append(other_points)
         if not f2_known:
             # line=self.atom_stack[1].line
-            x1, y1 = self._find_closest_point_(self.atom_stack[1].sections, x0, y0, x2, y2)
-            other_points = self._find_closest_other_points_(self.atom_stack[1].sections, x0, y0, x2, y2, x1, y1)
+            x1, y1 = self._find_closest_point_(
+                self.atom_stack[1].sections, x0, y0, x2, y2)
+            other_points = self._find_closest_other_points_(
+                self.atom_stack[1].sections, x0, y0, x2, y2, x1, y1)
             # solution[isopleth_values[1]]=(x1,y1)
             if not self.atom_stack[1].params['tag'] == 'none':
                 solution[self.atom_stack[1].params['tag']] = (x1, y1)
@@ -904,8 +936,10 @@ class Isopleth_Block_Type_1(Isopleth_Block):
             self.other_points[idx].append(other_points)
         if not f3_known:
             # line=self.atom_stack[2].line
-            x2, y2 = self._find_closest_point_(self.atom_stack[2].sections, x0, y0, x1, y1)
-            other_points = self._find_closest_other_points_(self.atom_stack[2].sections, x0, y0, x1, y1, x2, y2)
+            x2, y2 = self._find_closest_point_(
+                self.atom_stack[2].sections, x0, y0, x1, y1)
+            other_points = self._find_closest_other_points_(
+                self.atom_stack[2].sections, x0, y0, x1, y1, x2, y2)
             # solution[isopleth_values[2]]=(x2,y2)
             if not self.atom_stack[2].params['tag'] == 'none':
                 solution[self.atom_stack[2].params['tag']] = (x2, y2)
@@ -1016,7 +1050,8 @@ class Isopleth_Block_Type_5(Isopleth_Block):
             u_known = True
         # u known as tuple
         if isinstance(isopleth_values[0], tuple):
-            u_value = self.u_x_y_interp(isopleth_values[0][0], isopleth_values[0][1])
+            u_value = self.u_x_y_interp(
+                isopleth_values[0][0], isopleth_values[0][1])
             x_u, x_u_ini, y_u_ini = self.x_u(u_value)
             y_u, x_u_ini, y_u_ini = self.y_u(u_value)
             u_known = True
@@ -1027,7 +1062,8 @@ class Isopleth_Block_Type_5(Isopleth_Block):
             wd_known = True
         # wd known as tuple
         if isinstance(isopleth_values[2], tuple):
-            wd_value = self.wd_x_y_interp(isopleth_values[2][0], isopleth_values[2][1])
+            wd_value = self.wd_x_y_interp(
+                isopleth_values[2][0], isopleth_values[2][1])
             x_wd, x_wd_ini, y_wd_ini = self.x_wd(wd_value)
             y_wd, x_wd_ini, y_wd_ini = self.y_wd(wd_value)
             wd_known = True
@@ -1038,21 +1074,27 @@ class Isopleth_Block_Type_5(Isopleth_Block):
             v_known = True
         # v and wd known as values
         if isinstance(isopleth_values[1], (int, float)) and isinstance(isopleth_values[2], (int, float)):
-            x_v, x_v_ini, y_v_ini = self.x_v_wd(isopleth_values[1], isopleth_values[2])
-            y_v, x_v_ini, y_v_ini = self.y_v_wd(isopleth_values[1], isopleth_values[2])
+            x_v, x_v_ini, y_v_ini = self.x_v_wd(
+                isopleth_values[1], isopleth_values[2])
+            y_v, x_v_ini, y_v_ini = self.y_v_wd(
+                isopleth_values[1], isopleth_values[2])
             v_known = True
         # v known as value and wd known as tuple (x,y)
         if isinstance(isopleth_values[1], (int, float)) and isinstance(isopleth_values[2], (tuple)):
-            x_v, x_v_ini, y_v_ini = self.x_v_wd_tuple(isopleth_values[1], isopleth_values[2])
-            y_v, x_v_ini, y_v_ini = self.y_v_wd_tuple(isopleth_values[1], isopleth_values[2])
+            x_v, x_v_ini, y_v_ini = self.x_v_wd_tuple(
+                isopleth_values[1], isopleth_values[2])
+            y_v, x_v_ini, y_v_ini = self.y_v_wd_tuple(
+                isopleth_values[1], isopleth_values[2])
             v_known = True
         # v and u known as values
         if isinstance(isopleth_values[1], (int, float)) and isinstance(isopleth_values[0], (int, float)):
-            x_v, y_v, x_v_ini, y_v_ini = self.xy_v_u(isopleth_values[1], isopleth_values[0])
+            x_v, y_v, x_v_ini, y_v_ini = self.xy_v_u(
+                isopleth_values[1], isopleth_values[0])
             v_known = True
         # v known as value and u known as tuple (x,y)
         if isinstance(isopleth_values[1], (int, float)) and isinstance(isopleth_values[0], (tuple)):
-            x_v, y_v, x_v_ini, y_v_ini = self.xy_v_u_tuple(isopleth_values[1], isopleth_values[0])
+            x_v, y_v, x_v_ini, y_v_ini = self.xy_v_u_tuple(
+                isopleth_values[1], isopleth_values[0])
             v_known = True
         # now, all needed coordinates known
         if not u_known and v_known and wd_known:
@@ -1075,7 +1117,8 @@ class Isopleth_Block_Type_5(Isopleth_Block):
             x_wd = self.nomo_block._give_trafo_x_(x_wd_ini, y_wd_ini)
             y_wd = self.nomo_block._give_trafo_y_(x_wd_ini, y_wd_ini)
             if not self.nomo_block.grid_box.params_wd['tag'] == 'none':
-                solution[self.nomo_block.grid_box.params_wd['tag']] = (x_wd, y_wd)
+                solution[self.nomo_block.grid_box.params_wd[
+                    'tag']] = (x_wd, y_wd)
         return x_u, y_u, x_v, y_v, x_wd, y_wd
 
     def x_u(self, u):
@@ -1144,7 +1187,8 @@ class Isopleth_Block_Type_5(Isopleth_Block):
         #        print "x_stop %g"%x_stop
         #        print "x_init %g"%x_init
         # find x point where u meets v = optimization
-        x_opt = fmin(func_opt, [x_init], disp=0, maxiter=1e5, maxfun=1e5, ftol=1e-8, xtol=1e-8)[0]
+        x_opt = fmin(func_opt, [x_init], disp=0, maxiter=1e5,
+                     maxfun=1e5, ftol=1e-8, xtol=1e-8)[0]
         x_transformed = self.nomo_block._give_trafo_x_(x_opt, u_value)
         y_transformed = self.nomo_block._give_trafo_y_(x_opt, u_value)
         return x_transformed, y_transformed, x_opt, u_value
@@ -1202,7 +1246,8 @@ class Isopleth_Block_Type_5(Isopleth_Block):
                     min_distance = distance
                     value_0 = self.nomo_block.atom_wd.section_values[idx][0]
                     value_1 = self.nomo_block.atom_wd.section_values[idx][1]
-                    closest_value = self.interpolate(x1s, y1s, x2s, y2s, x, y, value_0, value_1)
+                    closest_value = self.interpolate(
+                        x1s, y1s, x2s, y2s, x, y, value_0, value_1)
                     closest_value_0 = value_0
                     closest_value_1 = value_1
         # print closest_value,closest_value_0,closest_value_1
@@ -1227,7 +1272,8 @@ class Isopleth_Block_Type_5(Isopleth_Block):
                     min_distance = distance
                     value_0 = self.nomo_block.atom_u.section_values[idx][0]
                     value_1 = self.nomo_block.atom_u.section_values[idx][1]
-                    closest_value = self.interpolate(x1s, y1s, x2s, y2s, x, y, value_0, value_1)
+                    closest_value = self.interpolate(
+                        x1s, y1s, x2s, y2s, x, y, value_0, value_1)
                     closest_value_0 = value_0
                     closest_value_1 = value_1
         # print closest_value,closest_value_0,closest_value_1
@@ -1271,7 +1317,8 @@ class Isopleth_Block_Type_6(Isopleth_Block):
             if len(self.other_points) < (idx + 1):
                 self.other_points.append([])
             if self._check_if_enough_params_(idx):
-                x1, y1, x2, y2 = self.solve_single(solutions[idx], isopleth_values_single, idx)
+                x1, y1, x2, y2 = self.solve_single(
+                    solutions[idx], isopleth_values_single, idx)
                 self.draw_coordinates[idx] = [x1, y1, x2, y2]
 
     def solve_single(self, solution, isopleth_values, idx):
@@ -1351,7 +1398,8 @@ class Isopleth_Block_Type_6(Isopleth_Block):
             circle_radius = self.parse_circle_size(p)
             for points in line_points:
                 for (x, y) in points:
-                    self._draw_circle_(canvas, x, y, circle_radius, color_param)
+                    self._draw_circle_(
+                        canvas, x, y, circle_radius, color_param)
 
 
 class Isopleth_Block_Type_7(Isopleth_Block_Type_1):
@@ -1402,7 +1450,8 @@ class Isopleth_Block_Type_8(Isopleth_Block):
             if len(self.other_points) < (idx + 1):
                 self.other_points.append([])
             if self._check_if_enough_params_(idx):
-                x0, y0 = self.solve_single(solutions[idx], isopleth_values_single, idx)
+                x0, y0 = self.solve_single(
+                    solutions[idx], isopleth_values_single, idx)
                 self.draw_coordinates[idx] = [x0, y0]
 
     def solve_single(self, solution, isopleth_values, idx):
@@ -1439,7 +1488,8 @@ class Isopleth_Block_Type_8(Isopleth_Block):
             x_offset = self.atom_stack[0].params['align_x_offset']
             y_offset = self.atom_stack[0].params['align_y_offset']
             if x_offset != 0 or y_offset != 0:
-                canvas.stroke(path.line(x1, y1, x1 - x_offset, y1 - y_offset), draw_params_list)
+                canvas.stroke(path.line(x1, y1, x1 - x_offset,
+                              y1 - y_offset), draw_params_list)
             self._draw_circle_(canvas, x1, y1, circle_radius, color_param)
         for idx, line_points in enumerate(self.other_points):
             if len(draw_params) > idx:
@@ -1451,7 +1501,8 @@ class Isopleth_Block_Type_8(Isopleth_Block):
             circle_radius = self.parse_circle_size(p)
             for points in line_points:
                 for (x, y) in points:
-                    self._draw_circle_(canvas, x, y, circle_radius, color_param)
+                    self._draw_circle_(
+                        canvas, x, y, circle_radius, color_param)
 
 
 class Isopleth_Block_Type_9(Isopleth_Block_Type_1):

@@ -84,7 +84,8 @@ class Nomo_Axis:
             'title_relative_offset': (0, 0),  # relative (dx,dy)
             'title_absolute_offset': (0, 0),  # absolute (dx,dy)
             'text_format': "$%4.4g$",
-            'text_format_func': None,  # can be used to define f(u) that gives out str
+            # can be used to define f(u) that gives out str
+            'text_format_func': None,
             'full_angle': False,
             'extra_angle': 0.0,
             'text_horizontal_align_center': False,
@@ -115,9 +116,13 @@ class Nomo_Axis:
                                 style.linewidth.thin,
                                 style.linewidth.thin],
             'text_formatter': None,
-            # a function of format put_ddmmss_text(u,level,tick_info), see example function put_ddmmss_text implementation as template
+            # a function of format put_ddmmss_text(u,level,tick_info), see
+            # example function put_ddmmss_text implementation as template
             'ticker_func': None,
-            # a function of format f(start, stop, f,g,tick_levels,distance_limit_tick, distance_limit_text, tick_info={}), see example function example_ticker implementation as template
+            # a function of format f(start, stop,
+            # f,g,tick_levels,distance_limit_tick, distance_limit_text,
+            # tick_info={}), see example function example_ticker implementation
+            # as template
             'tick_draw_func': None,  # see template core_tick_draw_func
             'text_draw_func': None,  # see template core_text_draw_func
             'mainline_func': None,  # for custom main-line
@@ -140,7 +145,8 @@ class Nomo_Axis:
             base_stop_1 = base_stop
 
         if type == 'log':
-            self._make_log_axis_(start=start, stop=stop, f=func_f, g=func_g, turn=turn)
+            self._make_log_axis_(start=start, stop=stop,
+                                 f=func_f, g=func_g, turn=turn)
             self.draw_axis(canvas)
         if type == 'linear':
             self._make_linear_axis_(start=start, stop=stop, f=func_f, g=func_g, turn=turn,
@@ -185,7 +191,8 @@ class Nomo_Axis:
             ticker_func = ti['ticker_func']
         ticks, texts = ticker_func(start=self.start, stop=self.stop, f=self.func_f, g=self.func_g,
                                    tick_levels=self.tick_levels, text_levels=self.tick_text_levels,
-                                   distance_limit_tick=ti['tick_distance_smart'],
+                                   distance_limit_tick=ti[
+                                       'tick_distance_smart'],
                                    distance_limit_text=ti['text_distance_smart'], tick_info=ti)
         # import pprint
         # pprint.pprint(ticks)
@@ -195,16 +202,20 @@ class Nomo_Axis:
         for tick in ticks:
             dx_units, dy_units, angles = find_tick_directions(tick, self.func_f, self.func_g, self.side,
                                                               start=self.start, stop=self.stop,
-                                                              full_angle=ti['full_angle'],
-                                                              extra_angle=ti['extra_angle'],
+                                                              full_angle=ti[
+                                                                  'full_angle'],
+                                                              extra_angle=ti[
+                                                                  'extra_angle'],
                                                               turn_relative=ti['turn_relative'])
             tick_directions.append((dx_units, dy_units, angles))
         text_directions = []  # (dx_units[],dy_units[],angle[])
         for text in texts:
             dx_units, dy_units, angles = find_tick_directions(text, self.func_f, self.func_g, self.side,
                                                               start=self.start, stop=self.stop,
-                                                              full_angle=ti['full_angle'],
-                                                              extra_angle=ti['extra_angle'],
+                                                              full_angle=ti[
+                                                                  'full_angle'],
+                                                              extra_angle=ti[
+                                                                  'extra_angle'],
                                                               turn_relative=ti['turn_relative'])
             text_directions.append((dx_units, dy_units, angles))
         # import pprint
@@ -258,7 +269,8 @@ class Nomo_Axis:
                            text_attrs=text_attrs,
                            c=self.canvas, tick_info=ti)
         # main line
-        main_line_coords = calc_main_line_coords(self.start, self.stop, self.func_f, self.func_g, sections=350.0)
+        main_line_coords = calc_main_line_coords(
+            self.start, self.stop, self.func_f, self.func_g, sections=350.0)
         if ti['make_default_main_line'] is True:
             mainline_draw_func(main_line_coords=main_line_coords,
                                func_f=self.func_f, func_g=self.func_g,
@@ -281,7 +293,8 @@ class Nomo_Axis:
         if math.fabs(u - closest_number) < (scale_max * 1e-6):
             result = True
         return result
-        # return math.fabs(math.modf(u/tick)[0]) < (scale_max*1e-5) or math.fabs((math.modf(u/tick)[0]-1)) < (scale_max*1e-8)
+        # return math.fabs(math.modf(u/tick)[0]) < (scale_max*1e-5) or
+        # math.fabs((math.modf(u/tick)[0]-1)) < (scale_max*1e-8)
 
     #    def _find_closest_tick_number_(self,number,tick_divisor):
     #        """
@@ -337,55 +350,66 @@ class Nomo_Axis:
                 angle = -math.atan(dx_unit / dy_unit) * 180 / math.pi
             else:
                 angle = 0
-            # floating arithmetic makes life difficult, that's why _test_tick_ function
+            # floating arithmetic makes life difficult, that's why _test_tick_
+            # function
             if self._test_tick_(u, tick_max, scale_max):
                 text_distance = self.axis_appear['text_distance_0']
                 grid_length = self.axis_appear['grid_length_0']
                 if dy <= 0:
-                    text_attr = [text.valign.middle, text.halign.right, text.size.small, trafo.rotate(angle)]
+                    text_attr = [text.valign.middle, text.halign.right,
+                        text.size.small, trafo.rotate(angle)]
                 else:
-                    text_attr = [text.valign.middle, text.halign.left, text.size.small, trafo.rotate(angle)]
+                    text_attr = [text.valign.middle, text.halign.left,
+                        text.size.small, trafo.rotate(angle)]
                 # texts.append((`u`,f(u)+text_distance*dy_unit,g(u)-text_distance*dx_unit,text_attr))
                 if self.tick_text_levels > 0:
                     texts.append(
                         (self._put_text_(u), f(u) + text_distance * dy_unit, g(u) - text_distance * dx_unit, text_attr))
                 line.append(path.lineto(f(u), g(u)))
                 if self.tick_levels > 0:
-                    line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                    line.append(path.lineto(f(u) + grid_length * \
+                                dy_unit, g(u) - grid_length * dx_unit))
                 line.append(path.moveto(f(u), g(u)))
             elif self._test_tick_(u, tick_1, scale_max):
                 text_distance = self.axis_appear['text_distance_1']
                 grid_length = self.axis_appear['grid_length_1']
                 if dy <= 0:
-                    text_attr = [text.valign.middle, text.halign.right, text.size.scriptsize, trafo.rotate(angle)]
+                    text_attr = [text.valign.middle, text.halign.right,
+                        text.size.scriptsize, trafo.rotate(angle)]
                 else:
-                    text_attr = [text.valign.middle, text.halign.left, text.size.scriptsize, trafo.rotate(angle)]
+                    text_attr = [text.valign.middle, text.halign.left,
+                        text.size.scriptsize, trafo.rotate(angle)]
                 if self.tick_text_levels > 1:
                     texts.append(
                         (self._put_text_(u), f(u) + text_distance * dy_unit, g(u) - text_distance * dx_unit, text_attr))
                 line.append(path.lineto(f(u), g(u)))
                 if self.tick_levels > 1:
-                    line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                    line.append(path.lineto(f(u) + grid_length * \
+                                dy_unit, g(u) - grid_length * dx_unit))
                 line.append(path.moveto(f(u), g(u)))
             elif self._test_tick_(u, tick_2, scale_max):
                 text_distance = self.axis_appear['text_distance_2']
                 grid_length = self.axis_appear['grid_length_2']
                 if dy <= 0:
-                    text_attr = [text.valign.middle, text.halign.right, text.size.tiny, trafo.rotate(angle)]
+                    text_attr = [text.valign.middle, text.halign.right,
+                        text.size.tiny, trafo.rotate(angle)]
                 else:
-                    text_attr = [text.valign.middle, text.halign.left, text.size.tiny, trafo.rotate(angle)]
+                    text_attr = [text.valign.middle, text.halign.left,
+                        text.size.tiny, trafo.rotate(angle)]
                 if self.tick_text_levels > 2:
                     texts.append(
                         (self._put_text_(u), f(u) + text_distance * dy_unit, g(u) - text_distance * dx_unit, text_attr))
                 line.append(path.lineto(f(u), g(u)))
                 if self.tick_levels > 2:
-                    line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                    line.append(path.lineto(f(u) + grid_length * \
+                                dy_unit, g(u) - grid_length * dx_unit))
                 line.append(path.moveto(f(u), g(u)))
             else:
                 grid_length = self.axis_appear['grid_length_3']
                 thin_line.append(path.moveto(f(u), g(u)))
                 if self.tick_levels > 3:
-                    thin_line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                    thin_line.append(path.lineto(
+                        f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
                 thin_line.append(path.moveto(f(u), g(u)))
                 line.append(path.lineto(f(u), g(u)))
         self.line = line
@@ -405,27 +429,38 @@ class Nomo_Axis:
         texts = []
         # let's find tick positions
         tick_0_list, tick_1_list, tick_2_list, tick_3_list, tick_4_list, start_ax, stop_ax = \
-            find_linear_ticks(start, stop, base_start, base_stop, self.axis_appear['scale_max'])
+            find_linear_ticks(start, stop, base_start,
+                              base_stop, self.axis_appear['scale_max'])
         # let's find tick angles
         dx_units_0, dy_units_0, angles_0 = find_tick_directions(tick_0_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_1, dy_units_1, angles_1 = find_tick_directions(tick_1_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_2, dy_units_2, angles_2 = find_tick_directions(tick_2_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_3, dy_units_3, angles_3 = find_tick_directions(tick_3_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_4, dy_units_4, angles_4 = find_tick_directions(tick_4_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
 
         # tick level 0
@@ -508,11 +543,13 @@ class Nomo_Axis:
         #        find_linear_ticks(start,stop,base_start,base_stop,self.axis_appear['scale_max'])
         tick_0_list, tick_1_list, tick_2_list, tick_3_list, tick_4_list = \
             find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=base_start,
-                                    base_stop=base_stop, scale_max_0=self.axis_appear['scale_max'],
+                                    base_stop=base_stop, scale_max_0=self.axis_appear[
+                                        'scale_max'],
                                     distance_limit=self.axis_appear['tick_distance_smart'])
         text_0_list, text_1_list, text_2_list, text_3_list, text_4_list = \
             find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=base_start,
-                                    base_stop=base_stop, scale_max_0=self.axis_appear['scale_max'],
+                                    base_stop=base_stop, scale_max_0=self.axis_appear[
+                                        'scale_max'],
                                     distance_limit=self.axis_appear['text_distance_smart'])
         remove_text_if_not_tick(tick_0_list, text_0_list)
         remove_text_if_not_tick(tick_1_list, text_1_list)
@@ -524,24 +561,34 @@ class Nomo_Axis:
         #        pprint.pprint("tick_list %s"%tick_0_list)
         # let's find tick angles
         dx_units_0, dy_units_0, angles_0 = find_tick_directions(tick_0_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_1, dy_units_1, angles_1 = find_tick_directions(tick_1_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_2, dy_units_2, angles_2 = find_tick_directions(tick_2_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_3, dy_units_3, angles_3 = find_tick_directions(tick_3_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_4, dy_units_4, angles_4 = find_tick_directions(tick_4_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         # let's find text angles
         dx_units_0_text, dy_units_0_text, angles_0_text = find_tick_directions(text_0_list, f, g, self.side, start,
@@ -673,7 +720,8 @@ class Nomo_Axis:
             distance = 2 * self.axis_appear['text_distance_smart']
             while distance > self.axis_appear['text_distance_smart']:
                 start_decade = start_decade - 1
-                distance = calc_distance(f, g, -10 ** (start_decade), -10 ** (start_decade - 1))
+                distance = calc_distance(
+                    f, g, -10 ** (start_decade), -10 ** (start_decade - 1))
 
             # positive side
             stop_decade = math.floor(math.log10(stop))
@@ -683,7 +731,8 @@ class Nomo_Axis:
             distance = 2 * self.axis_appear['text_distance_smart']
             while distance > self.axis_appear['text_distance_smart']:
                 stop_decade = stop_decade - 1
-                distance = calc_distance(f, g, 10 ** (stop_decade), 10 ** (stop_decade - 1))
+                distance = calc_distance(
+                    f, g, 10 ** (stop_decade), 10 ** (stop_decade - 1))
             # make the ticks
             start_decade = start_decade + 1
             stop_decade = stop_decade + 1
@@ -757,24 +806,34 @@ class Nomo_Axis:
         ##pprint.pprint("tick_list %s"%tick_0_list)
         # let's find tick angles
         dx_units_0, dy_units_0, angles_0 = find_tick_directions(tick_0_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_1, dy_units_1, angles_1 = find_tick_directions(tick_1_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_2, dy_units_2, angles_2 = find_tick_directions(tick_2_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_3, dy_units_3, angles_3 = find_tick_directions(tick_3_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_4, dy_units_4, angles_4 = find_tick_directions(tick_4_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         # let's find text angles
         dx_units_0_text, dy_units_0_text, angles_0_text = find_tick_directions(text_0_list, f, g, self.side, start,
@@ -885,16 +944,22 @@ class Nomo_Axis:
             find_log_ticks(start, stop)
         # let's find tick angles
         dx_units_0, dy_units_0, angles_0 = find_tick_directions(tick_0_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_1, dy_units_1, angles_1 = find_tick_directions(tick_1_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
         dx_units_2, dy_units_2, angles_2 = find_tick_directions(tick_2_list, f, g, self.side, start, stop,
-                                                                full_angle=self.axis_appear['full_angle'],
-                                                                extra_angle=self.axis_appear['extra_angle'],
+                                                                full_angle=self.axis_appear[
+                                                                    'full_angle'],
+                                                                extra_angle=self.axis_appear[
+                                                                    'extra_angle'],
                                                                 turn_relative=self.axis_appear['turn_relative'])
 
         # tick level 0
@@ -951,16 +1016,21 @@ class Nomo_Axis:
         """
         for idx, u in enumerate(tick_list):
             if dy_units[idx] < 0:
-                text_attr = [text.valign.middle, text.halign.right, text_size, trafo.rotate(angles[idx])]
+                text_attr = [text.valign.middle, text.halign.right,
+                    text_size, trafo.rotate(angles[idx])]
             else:
-                text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+                text_attr = [text.valign.middle, text.halign.left,
+                    text_size, trafo.rotate(angles[idx])]
             if self.axis_appear['full_angle'] == True:
                 if self.axis_appear['angle_tick_direction'] == 'outer':
-                    text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+                    text_attr = [text.valign.middle, text.halign.left,
+                        text_size, trafo.rotate(angles[idx])]
                 else:  # 'inner'
-                    text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+                    text_attr = [text.valign.middle, text.halign.left,
+                        text_size, trafo.rotate(angles[idx])]
             if self.axis_appear['text_horizontal_align_center'] == True:
-                text_attr = [text.valign.top, text.halign.center, text_size, trafo.rotate(angles[idx])]
+                text_attr = [text.valign.top, text.halign.center,
+                    text_size, trafo.rotate(angles[idx])]
             if len(manual_texts) > 0:
                 text_list.append((manual_texts[idx], f(u) + text_distance * dy_units[idx],
                                   g(u) - text_distance * dx_units[idx], text_attr))
@@ -997,12 +1067,14 @@ class Nomo_Axis:
             start, stop = stop, start
         du = math.fabs(stop - start) * 1e-12
         # approximate line length is found
-        line_length_straigth = math.sqrt((f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
+        line_length_straigth = math.sqrt(
+            (f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
         random.seed(0.0)  # so that mistakes always the same
         for dummy in range(100):  # for case if start = stop
             first = random.uniform(start, stop)
             second = random.uniform(start, stop)
-            temp = math.sqrt((f(first) - f(second)) ** 2 + (g(first) - g(second)) ** 2)
+            temp = math.sqrt((f(first) - f(second)) ** 2 + \
+                             (g(first) - g(second)) ** 2)
             if temp > line_length_straigth:
                 line_length_straigth = temp
                 # print "length: %f"%line_length_straigth
@@ -1038,12 +1110,14 @@ class Nomo_Axis:
             start, stop = stop, start
         du = math.fabs(stop - start) * 1e-12
         # approximate line length is found
-        line_length_straigth = math.sqrt((f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
+        line_length_straigth = math.sqrt(
+            (f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
         random.seed(0.0)  # so that mistakes always the same
         for dummy in range(100):  # for case if start = stop
             first = random.uniform(start, stop)
             second = random.uniform(start, stop)
-            temp = math.sqrt((f(first) - f(second)) ** 2 + (g(first) - g(second)) ** 2)
+            temp = math.sqrt((f(first) - f(second)) ** 2 + \
+                             (g(first) - g(second)) ** 2)
             if temp > line_length_straigth:
                 line_length_straigth = temp
                 # print "length: %f"%line_length_straigth
@@ -1132,15 +1206,18 @@ class Nomo_Axis:
                         text_distance = self.axis_appear['text_distance_0']
                         grid_length = self.axis_appear['grid_length_0']
                         if dy <= 0:
-                            text_attr = [text.valign.middle, text.halign.right, text.size.small, trafo.rotate(angle)]
+                            text_attr = [
+                                text.valign.middle, text.halign.right, text.size.small, trafo.rotate(angle)]
                         else:
-                            text_attr = [text.valign.middle, text.halign.left, text.size.small, trafo.rotate(angle)]
+                            text_attr = [
+                                text.valign.middle, text.halign.left, text.size.small, trafo.rotate(angle)]
                         if self.tick_text_levels > 0:
                             texts.append((self._put_text_(u), f(u) + text_distance * dy_unit,
                                           g(u) - text_distance * dx_unit, text_attr))
                         # line.append(path.lineto(f(u), g(u)))
                         if self.tick_levels > 0:
-                            line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                            line.append(path.lineto(
+                                f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
                         line.append(path.moveto(f(u), g(u)))
                     else:
                         if number in [2, 3, 4, 5, 6, 7, 8, 9]:
@@ -1150,9 +1227,11 @@ class Nomo_Axis:
                             text_distance = self.axis_appear['text_distance_2']
                             grid_length = self.axis_appear['grid_length_2']
                         if dy <= 0:
-                            text_attr = [text.valign.middle, text.halign.right, text.size.tiny, trafo.rotate(angle)]
+                            text_attr = [
+                                text.valign.middle, text.halign.right, text.size.tiny, trafo.rotate(angle)]
                         else:
-                            text_attr = [text.valign.middle, text.halign.left, text.size.tiny, trafo.rotate(angle)]
+                            text_attr = [
+                                text.valign.middle, text.halign.left, text.size.tiny, trafo.rotate(angle)]
                         if self.tick_text_levels > 1:
                             texts.append((self._put_text_(u), f(u) + text_distance * dy_unit,
                                           g(u) - text_distance * dx_unit, text_attr))
@@ -1160,7 +1239,8 @@ class Nomo_Axis:
                         if self.tick_levels > 1:
                             if number in [2, 3, 4, 5, 6, 7, 8, 9]:
                                 line.append(path.moveto(f(u), g(u)))
-                                line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                                line.append(path.lineto(
+                                    f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
                             else:
                                 thin_line.append(path.moveto(f(u), g(u)))
                                 thin_line.append(
@@ -1234,8 +1314,10 @@ class Nomo_Axis:
 
         # let's find tick angles
         dx_units, dy_units, angles = find_tick_directions(tick_list, f, g, self.side, start, stop,
-                                                          full_angle=self.axis_appear['full_angle'],
-                                                          extra_angle=self.axis_appear['extra_angle'],
+                                                          full_angle=self.axis_appear[
+                                                              'full_angle'],
+                                                          extra_angle=self.axis_appear[
+                                                              'extra_angle'],
                                                           turn_relative=self.axis_appear['turn_relative'])
 
         # ticks = arrows
@@ -1278,7 +1360,8 @@ class Nomo_Axis:
             min = self.stop
             max = self.start
         # lets make the line
-        line_length_straigth = math.sqrt((f(max) - f(min)) ** 2 + (g(max) - g(min)) ** 2)
+        line_length_straigth = math.sqrt(
+            (f(max) - f(min)) ** 2 + (g(max) - g(min)) ** 2)
         sections = 300.0  # about number of sections
         section_length = line_length_straigth / sections
         line = path.path(path.moveto(f(self.start), g(self.start)))
@@ -1312,10 +1395,13 @@ class Nomo_Axis:
                 title_raw = label_def[0]
                 ex_params = label_def[1]
                 if 'manual_relative_text_pos' in ex_params:  # (dx,dy)
-                    manual_relative_text_pos = ex_params['manual_relative_text_pos']
-                if 'manual_text_align' in ex_params:  # e.g.[text.valign.middle,text.halign.right]
+                    manual_relative_text_pos = ex_params[
+                        'manual_relative_text_pos']
+                # e.g.[text.valign.middle,text.halign.right]
+                if 'manual_text_align' in ex_params:
                     manual_text_align = ex_params['manual_text_align']
-                if 'manual_relative_line' in ex_params:  # e.g. [(0,0),(1,2),(5,5)]
+                # e.g. [(0,0),(1,2),(5,5)]
+                if 'manual_relative_line' in ex_params:
                     manual_relative_line = ex_params['manual_relative_line']
                 if 'x_corr' in ex_params:
                     x_corr = ex_params['x_corr']
@@ -1367,11 +1453,14 @@ class Nomo_Axis:
                 text_attr.extend(manual_text_align)
             else:  # do the default
                 if dy <= 0:
-                    text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angle)]
+                    text_attr = [text.valign.middle, text.halign.left,
+                        text_size, trafo.rotate(angle)]
                 else:
-                    text_attr = [text.valign.middle, text.halign.right, text_size, trafo.rotate(angle)]
+                    text_attr = [text.valign.middle, text.halign.right,
+                        text_size, trafo.rotate(angle)]
                 if self.axis_appear['text_horizontal_align_center'] == True:
-                    text_attr = [text.valign.middle, text.halign.center, text_size, trafo.rotate(angle)]
+                    text_attr = [text.valign.middle, text.halign.center,
+                        text_size, trafo.rotate(angle)]
             # normal case (not range)
             if range_tick == False:
                 if manual_relative_text_pos == None:  # do default text positioning
@@ -1383,14 +1472,17 @@ class Nomo_Axis:
                     dx_rel = manual_relative_text_pos[0]
                     dy_rel = manual_relative_text_pos[1]
                     texts.append((label_string,
-                                  f(number) - (dy_rel * dy_unit) + (dx_rel * dx_unit) + x_corr,
+                                  f(number) - (dy_rel * dy_unit) + \
+                                    (dx_rel * dx_unit) + x_corr,
                                   g(number) + (dy_rel * dx_unit) + (dx_rel * dy_unit) + y_corr, text_attr))
                 if manual_relative_line == None:  # default line tick drawing
                     line.append(path.moveto(f(number), g(number)))
-                    line.append(path.lineto(f(number) - grid_length * dy_unit, g(number) + grid_length * dx_unit))
+                    line.append(path.lineto(f(number) - grid_length * \
+                                dy_unit, g(number) + grid_length * dx_unit))
                 else:  # manual line tick drawing
                     if type(manual_relative_line) is not list:
-                        print("'manual_relative_line' should be list [(x0,y0),(x1,y1),...]")
+                        print(
+                            "'manual_relative_line' should be list [(x0,y0),(x1,y1),...]")
                         print(manual_relative_line)
                     line.append(path.moveto(f(number), g(number)))
                     x_orig = f(number)
@@ -1406,15 +1498,20 @@ class Nomo_Axis:
             else:  # range_tick == True
                 tick_list = [number, range_end]
                 dx_units, dy_units, angles = find_tick_directions(tick_list, f, g, self.side, number, range_end,
-                                                                  full_angle=self.axis_appear['full_angle'],
-                                                                  extra_angle=self.axis_appear['extra_angle'],
+                                                                  full_angle=self.axis_appear[
+                                                                      'full_angle'],
+                                                                  extra_angle=self.axis_appear[
+                                                                      'extra_angle'],
                                                                   turn_relative=self.axis_appear['turn_relative'])
                 # correction needed for some reason
-                dx_units[0], dx_units[1] = range_side * dx_units[0], range_side * dx_units[1]
-                dy_units[0], dy_units[1] = range_side * dy_units[0], range_side * dy_units[1]
+                dx_units[0], dx_units[1] = range_side * \
+                    dx_units[0], range_side * dx_units[1]
+                dy_units[0], dy_units[1] = range_side * \
+                    dy_units[0], range_side * dy_units[1]
                 # first tick
                 line.append(path.moveto(f(number), g(number)))
-                line.append(path.lineto(f(number) - grid_length * dy_units[0], g(number) + grid_length * dx_units[0]))
+                line.append(path.lineto(f(number) - grid_length * \
+                            dy_units[0], g(number) + grid_length * dx_units[0]))
                 # second tick
                 line.append(path.moveto(f(range_end), g(range_end)))
                 line.append(
@@ -1422,12 +1519,15 @@ class Nomo_Axis:
                 # text
                 x0 = (f(number) + f(range_end)) / 2.0
                 y0 = (g(number) + g(range_end)) / 2.0
-                dx_unit = (dx_units[0] + dx_units[1]) / 2.0  # tick directions is average of range end directions
+                # tick directions is average of range end directions
+                dx_unit = (dx_units[0] + dx_units[1]) / 2.0
                 dy_unit = (dy_units[0] + dy_units[1]) / 2.0
                 texts.append((
-                    label_string, x0 - text_distance * dy_unit + x_corr, y0 + text_distance * dx_unit + y_corr,
+                    label_string, x0 - text_distance * dy_unit + \
+                        x_corr, y0 + text_distance * dx_unit + y_corr,
                     text_attr))
-                self._make_main_line_(number, range_end, main_line, f, g, sections=35.0)
+                self._make_main_line_(
+                    number, range_end, main_line, f, g, sections=35.0)
             if draw_extra_line:
                 line.append(
                     path.lineto(f(number) - grid_length * dy_unit + x_corr, g(number) + grid_length * dx_unit + y_corr))
@@ -1448,8 +1548,10 @@ class Nomo_Axis:
         # c.stroke(self.line, [style.linewidth.normal,axis_color])
         # c.stroke(self.thin_line, [style.linewidth.thin,axis_color])
         c.stroke(self.line, [linewidth_ticks, axis_color, style.linecap.butt])
-        c.stroke(self.thin_line, [linewidth_ticks_thin, axis_color, style.linecap.butt])
-        c.stroke(self.main_line, [linewidth_main, axis_color, style.linecap.square])
+        c.stroke(self.thin_line, [linewidth_ticks_thin,
+                 axis_color, style.linecap.butt])
+        c.stroke(self.main_line, [linewidth_main,
+                 axis_color, style.linecap.square])
         if self.arrows is not None:
             for arrow in self.arrows:
                 c.stroke(arrow,
@@ -1469,7 +1571,8 @@ class Nomo_Axis:
             y_max = self.func_g(self.stop)
             best_u = self.stop
         for dummy in range(500):
-            number = random.uniform(min(self.start, self.stop), max(self.start, self.stop))
+            number = random.uniform(
+                min(self.start, self.stop), max(self.start, self.stop))
             y_value = self.func_g(number)
             if y_value > y_max:
                 y_max = y_value
@@ -1553,7 +1656,8 @@ class Nomo_Axis:
             y_max = self.func_g(self.stop)
             best_u = self.stop
         for dummy in range(500):
-            number = random.uniform(min(self.start, self.stop), max(self.start, self.stop))
+            number = random.uniform(
+                min(self.start, self.stop), max(self.start, self.stop))
             y_value = self.func_g(number)
             if y_value > y_max:
                 y_max = y_value
@@ -1663,16 +1767,21 @@ def _find_text_attr(tick_list, dx_units, dy_units, angles, text_size, tick_info)
     text_attrs = []
     for idx, u in enumerate(tick_list):
         if dy_units[idx] < 0:
-            text_attr = [text.valign.middle, text.halign.right, text_size, trafo.rotate(angles[idx])]
+            text_attr = [text.valign.middle, text.halign.right,
+                text_size, trafo.rotate(angles[idx])]
         else:
-            text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+            text_attr = [text.valign.middle, text.halign.left,
+                text_size, trafo.rotate(angles[idx])]
         if tick_info['full_angle'] == True:
             if tick_info['angle_tick_direction'] == 'outer':
-                text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+                text_attr = [text.valign.middle, text.halign.left,
+                    text_size, trafo.rotate(angles[idx])]
             else:  # 'inner'
-                text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+                text_attr = [text.valign.middle, text.halign.left,
+                    text_size, trafo.rotate(angles[idx])]
         if tick_info['text_horizontal_align_center'] == True:
-            text_attr = [text.valign.top, text.halign.center, text_size, trafo.rotate(angles[idx])]
+            text_attr = [text.valign.top, text.halign.center,
+                text_size, trafo.rotate(angles[idx])]
         t_dict = {'valign': text_attr[0],
                   'halign': text_attr[1],
                   'size': text_attr[2],
@@ -1689,9 +1798,11 @@ def find_linear_ticks(start, stop, base_start=None, base_stop=None, scale_max_0=
     if start > stop:
         start, stop = stop, start
     if (base_start != None) and (base_stop != None):
-        scale_max = 10.0 ** math.ceil(math.log10(math.fabs(base_start - base_stop)) - 0.5)
+        scale_max = 10.0 ** math.ceil(math.log10(
+            math.fabs(base_start - base_stop)) - 0.5)
     else:
-        scale_max = 10.0 ** math.ceil(math.log10(math.fabs(start - stop)) - 0.5)
+        scale_max = 10.0 ** math.ceil(
+            math.log10(math.fabs(start - stop)) - 0.5)
     if scale_max_0 != None:
         scale_max = scale_max_0  # set range manually
     tick_0 = scale_max / 10.0
@@ -1717,7 +1828,8 @@ def find_linear_ticks(start, stop, base_start=None, base_stop=None, scale_max_0=
     # print "steps %i"%steps
     for step in range(0, int(steps)):  # used to be 9001
         number = start_major + step * tick_4
-        if number >= start and number <= (stop * (1 + 1e-6)):  # stupid numerical correction
+        # stupid numerical correction
+        if number >= start and number <= (stop * (1 + 1e-6)):
             if start_ax == None:
                 start_ax = number
             stop_ax = number
@@ -1757,7 +1869,8 @@ def find_log_ticks(start, stop):
     start_ax = None
     stop_ax = None
     for decade in scipy.arange(min_decade, max_decade + 1, 1):
-        # for number in scipy.concatenate((scipy.arange(1,2,0.2),scipy.arange(2,3,0.5),scipy.arange(3,10,1))):
+        # for number in
+        # scipy.concatenate((scipy.arange(1,2,0.2),scipy.arange(2,3,0.5),scipy.arange(3,10,1))):
         for number in [1, 1.2, 1.4, 1.6, 1.8, 2.0, 2.5, 3, 4, 5, 6, 7, 8, 9]:
             u = number * 10.0 ** decade
             if u >= min and u <= max:
@@ -1813,7 +1926,8 @@ def find_log_ticks_smart(start, stop, f, g, turn=1, base_start=None,
         stop = min(value * 10.0, max_value)
         tick_0_list, tick_1_list, tick_2_list, tick_3_list, tick_4_list = \
             find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=base_start,
-                                    base_stop=base_stop, scale_max_0=10 ** (decade + 1),
+                                    base_stop=base_stop, scale_max_0=10 ** (
+                                        decade + 1),
                                     distance_limit=distance_limit)
         if 10 ** (decade + 1) <= max_value:
             tick_0_list_final = tick_0_list_final + [10 ** (decade + 1)]
@@ -1871,7 +1985,8 @@ def find_tick_directions(list, f, g, side, start, stop, full_angle=False, extra_
     # following two values make unit vector
     dx_units = []
     dy_units = []
-    turn = _determine_turn_(f=f, g=g, start=start, stop=stop, side=side, turn_relative=turn_relative)
+    turn = _determine_turn_(f=f, g=g, start=start,
+                            stop=stop, side=side, turn_relative=turn_relative)
     for idx, u in enumerate(list):
         if u != list[-1]:
             du = (list[idx + 1] - list[idx]) * 1e-6
@@ -1915,9 +2030,11 @@ def find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=None,
     if start > stop:
         start, stop = stop, start
     if (base_start != None) and (base_stop != None):
-        scale_max = 10.0 ** math.ceil(math.log10(math.fabs(base_start - base_stop)) - 0.5)
+        scale_max = 10.0 ** math.ceil(math.log10(
+            math.fabs(base_start - base_stop)) - 0.5)
     else:
-        scale_max = 10.0 ** math.ceil(math.log10(math.fabs(start - stop)) - 0.5)
+        scale_max = 10.0 ** math.ceil(
+            math.log10(math.fabs(start - stop)) - 0.5)
     if scale_max_0 != None:
         scale_max = scale_max_0  # set range manually
     tick_0 = scale_max / 10.0
@@ -1943,13 +2060,17 @@ def find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=None,
             #            number1=tick_0_list[idx-1]
             #            number2=tick_0_list[idx]
             #            number3=tick_0_list[idx+1]
-            distance1 = calc_distance(f, g, tick_0_list[idx], tick_0_list[idx - 1])
-            distance2 = calc_distance(f, g, tick_0_list[idx], tick_0_list[idx + 1])
+            distance1 = calc_distance(
+                f, g, tick_0_list[idx], tick_0_list[idx - 1])
+            distance2 = calc_distance(
+                f, g, tick_0_list[idx], tick_0_list[idx + 1])
             # check if going round edge of scale
             diff_1a = tick_0_list[idx] - tick_0_list[idx - 1]
-            distance1a = calc_distance(f, g, tick_0_list[idx], tick_0_list[idx - 1] + 0.01 * diff_1a)
+            distance1a = calc_distance(f, g, tick_0_list[idx], tick_0_list[
+                                       idx - 1] + 0.01 * diff_1a)
             diff_2a = tick_0_list[idx] - tick_0_list[idx + 1]
-            distance2a = calc_distance(f, g, tick_0_list[idx], tick_0_list[idx + 1] + 0.01 * diff_2a)
+            distance2a = calc_distance(f, g, tick_0_list[idx], tick_0_list[
+                                       idx + 1] + 0.01 * diff_2a)
             value1 = 0
             value2 = 0
             if distance1 > distance1a:
@@ -1995,8 +2116,10 @@ def find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=None,
                     distance = calc_distance(f, g, value, tick_0_list[idx])
                     # let's see if turned between
                     diff = (value - tick_0_list[idx]) * 1e-3
-                    distance_bigger = calc_distance(f, g, value + diff, tick_0_list[idx] - diff)
-                    distance_smaller = calc_distance(f, g, value - diff, tick_0_list[idx] + diff)
+                    distance_bigger = calc_distance(
+                        f, g, value + diff, tick_0_list[idx] - diff)
+                    distance_smaller = calc_distance(
+                        f, g, value - diff, tick_0_list[idx] + diff)
                     if distance_smaller < distance_bigger:  # see if not turned
                         if no_distance:  # first round
                             min_distance = distance
@@ -2016,7 +2139,8 @@ def find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=None,
 
     tick_0_list.sort()
 
-    tick_1_list_worked = remove_from_list_half(tick_1_list0, tick_0_list0, f, g, distance_limit=distance_limit)
+    tick_1_list_worked = remove_from_list_half(
+        tick_1_list0, tick_0_list0, f, g, distance_limit=distance_limit)
     tick_2_list_worked = remove_from_list_in_four(tick_2_list0, tick_0_list0 + tick_1_list0, f, g,
                                                   distance_limit=distance_limit)
     tick_3_list_worked = remove_from_list_half(tick_3_list0, tick_0_list0 + tick_1_list0 + tick_2_list0, f, g,
@@ -2076,15 +2200,20 @@ def remove_from_list_in_four(work_list, upper_list, f, g, distance_limit=0.5):
             work_idx = work_idx + 1
         d = []
         if len(worked_list_0) > (work_idx) and len(upper_list) > (upper_idx):
-            d.append(calc_distance(f, g, upper_list[upper_idx], worked_list_0[work_idx]))
+            d.append(calc_distance(f, g, upper_list[
+                     upper_idx], worked_list_0[work_idx]))
         if len(worked_list_0) > (work_idx + 1):
-            d.append(calc_distance(f, g, worked_list_0[work_idx], worked_list_0[work_idx + 1]))
+            d.append(calc_distance(f, g, worked_list_0[
+                     work_idx], worked_list_0[work_idx + 1]))
         if len(worked_list_0) > (work_idx + 2):
-            d.append(calc_distance(f, g, worked_list_0[work_idx + 1], worked_list_0[work_idx + 2]))
+            d.append(calc_distance(f, g, worked_list_0[
+                     work_idx + 1], worked_list_0[work_idx + 2]))
         if len(worked_list_0) > (work_idx + 3):
-            d.append(calc_distance(f, g, worked_list_0[work_idx + 2], worked_list_0[work_idx + 3]))
+            d.append(calc_distance(f, g, worked_list_0[
+                     work_idx + 2], worked_list_0[work_idx + 3]))
         if len(worked_list_0) > (work_idx + 3) and len(upper_list) > (upper_idx + 1):
-            d.append(calc_distance(f, g, worked_list_0[work_idx + 3], upper_list[upper_idx + 1]))
+            d.append(calc_distance(f, g, worked_list_0[
+                     work_idx + 3], upper_list[upper_idx + 1]))
         if len(d) > 0:
             if min(d) < distance_limit:
                 for idx in range(work_idx, work_idx + 4):
@@ -2108,9 +2237,11 @@ def remove_from_list_half(work_list, upper_list, f, g, distance_limit=0.5):
             while len(work_list) > (work_idx):
                 d = []
                 if len(upper_list) > (upper_idx + 1):
-                    d.append(calc_distance(f, g, upper_list[upper_idx + 1], work_list[work_idx]))
+                    d.append(calc_distance(f, g, upper_list[
+                             upper_idx + 1], work_list[work_idx]))
                 if len(upper_list) > upper_idx:
-                    d.append(calc_distance(f, g, upper_list[upper_idx], work_list[work_idx]))
+                    d.append(calc_distance(f, g, upper_list[
+                             upper_idx], work_list[work_idx]))
                 if len(d) > 0:
                     if min(d) < distance_limit:
                         worked_list.remove(work_list[work_idx])
@@ -2120,9 +2251,11 @@ def remove_from_list_half(work_list, upper_list, f, g, distance_limit=0.5):
             while len(work_list) > work_idx:
                 d = []
                 if len(upper_list) > upper_idx:
-                    d.append(calc_distance(f, g, upper_list[upper_idx], work_list[work_idx]))
+                    d.append(calc_distance(f, g, upper_list[
+                             upper_idx], work_list[work_idx]))
                 if upper_idx > 0:
-                    d.append(calc_distance(f, g, upper_list[upper_idx - 1], work_list[work_idx]))
+                    d.append(calc_distance(f, g, upper_list[
+                             upper_idx - 1], work_list[work_idx]))
                 if len(d) > 0:
                     if min(d) < distance_limit:
                         worked_list.remove(work_list[work_idx])
@@ -2167,12 +2300,14 @@ def calc_main_line_coords(start, stop, f, g, sections=350.0):
         start, stop = stop, start
     du = math.fabs(stop - start) * 1e-12
     # approximate line length is found
-    line_length_straigth = math.sqrt((f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
+    line_length_straigth = math.sqrt(
+        (f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
     random.seed(0.0)  # so that mistakes always the same
     for dummy in range(100):  # for case if start = stop
         first = random.uniform(start, stop)
         second = random.uniform(start, stop)
-        temp = math.sqrt((f(first) - f(second)) ** 2 + (g(first) - g(second)) ** 2)
+        temp = math.sqrt((f(first) - f(second)) ** 2 + \
+                         (g(first) - g(second)) ** 2)
         if temp > line_length_straigth:
             line_length_straigth = temp
             # print "length: %f"%line_length_straigth
@@ -2240,7 +2375,8 @@ def core_main_line_draw_func_basic(main_line_coords, func_f, func_g, ticks, tick
     linewidth_main = tick_info['linewidth_main']
     # c.stroke(self.line, [style.linewidth.normal,axis_color])
     # c.stroke(self.thin_line, [style.linewidth.thin,axis_color])
-    main_line = path.path(path.moveto(main_line_coords[0][0], main_line_coords[0][1]))
+    main_line = path.path(path.moveto(
+        main_line_coords[0][0], main_line_coords[0][1]))
     for x, y in main_line_coords:
         main_line.append(path.lineto(x, y))
     c.stroke(main_line, [linewidth_main, axis_color, style.linecap.square])
@@ -2271,7 +2407,8 @@ def core_tick_draw_func_basic(ticks, texts, level, f, g, dx_units, dy_units,
         print("too few angles !")
     for i, tick in enumerate(ticks):
         # draw actual tick
-        x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
+        x1, y1, x2, y2 = calc_tick_coords(
+            tick, f, g, dx_units[i], dy_units[i], tick_length)
         # color
         tick_color = ti['tick_color']
         if ti['tick_colors'] != None:
@@ -2284,7 +2421,8 @@ def core_tick_draw_func_basic(ticks, texts, level, f, g, dx_units, dy_units,
         if ti['tick_linewidths'] != None:
             linewidth_tick = ti['tick_linewidths'][level]
         # draw the tick
-        c.stroke(path.line(x1, y1, x2, y2), [linewidth_tick, tick_color, style.linecap.butt])
+        c.stroke(path.line(x1, y1, x2, y2), [
+                 linewidth_tick, tick_color, style.linecap.butt])
 
 
 def example_tick_draw_func(ticks, texts, level, f, g, dx_units, dy_units,
@@ -2311,10 +2449,12 @@ def example_tick_draw_func(ticks, texts, level, f, g, dx_units, dy_units,
         print("too few angles !")
     for i, tick in enumerate(ticks):
         # draw actual tick
-        x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
+        x1, y1, x2, y2 = calc_tick_coords(
+            tick, f, g, dx_units[i], dy_units[i], tick_length)
         tick_color = tick_info['tick_colors'][level]
         linewidth_ticks = tick_info['tick_linewidths'][level]
-        c.stroke(path.line(x1, y1, x2, y2), [linewidth_ticks, tick_color, style.linecap.butt])
+        c.stroke(path.line(x1, y1, x2, y2), [
+                 linewidth_ticks, tick_color, style.linecap.butt])
 
 
 def core_text_draw_func_basic(ticks, texts, level, f, g, dx_units, dy_units, angles,
@@ -2408,10 +2548,12 @@ def example_ticker(start, stop, f, g, tick_levels, text_levels, distance_limit_t
 
     # ticks = [tick_0_list,...,tick_N-1_list]
     # tick_M_list = values of ticks to appear in level M
-    ticks = find_mmss_ticks(start, stop, f, g, tick_levels, distance_limit_tick, tick_info)
+    ticks = find_mmss_ticks(start, stop, f, g, tick_levels,
+                            distance_limit_tick, tick_info)
     # texts = [text_0_list,...,text_N-1,list]
     # text_M_list = numbers of texts to appear in level M
-    texts = find_mmss_ticks(start, stop, f, g, text_levels, distance_limit_text, tick_info)
+    texts = find_mmss_ticks(start, stop, f, g, text_levels,
+                            distance_limit_text, tick_info)
 
     # here we remove texts from list if there is no tick with same number
     for i, text_list_i in enumerate(texts):
@@ -2433,13 +2575,16 @@ def core_ticker(start, stop, f, g, tick_levels, text_levels, distance_limit_tick
 
     # ticks = [tick_0_list,...,tick_N-1_list]
     t0, t1, t2, t3, t4 = find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=tick_info['base_start'],
-                                                 base_stop=tick_info['base_stop'], scale_max_0=tick_info['scale_max'],
+                                                 base_stop=tick_info[
+                                                     'base_stop'], scale_max_0=tick_info['scale_max'],
                                                  distance_limit=tick_info['tick_distance_smart'])
     ticks = [t0, t1, t2, t3, t4]
     # texts
     te0, te1, te2, te3, te4 = find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=tick_info['base_start'],
-                                                      base_stop=tick_info['base_stop'],
-                                                      scale_max_0=tick_info['scale_max'],
+                                                      base_stop=tick_info[
+                                                          'base_stop'],
+                                                      scale_max_0=tick_info[
+                                                          'scale_max'],
                                                       distance_limit=tick_info['text_distance_smart'])
     texts = [te0, te1, te2, te3, te4]
     # suppress levels
@@ -2549,13 +2694,15 @@ if __name__ == '__main__':
             print("too few angles !")
         for i, tick in enumerate(ticks):
             # draw actual tick
-            x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
+            x1, y1, x2, y2 = calc_tick_coords(
+                tick, f, g, dx_units[i], dy_units[i], tick_length)
             if level == 0:
                 tick_color = tick_info['tick_color']
             else:
                 tick_color = color.rgb.blue
             linewidth_ticks = tick_info['tick_linewidths'][level]
-            c.stroke(path.line(x1, y1, x2, y2), [linewidth_ticks, tick_color, style.linecap.butt])
+            c.stroke(path.line(x1, y1, x2, y2), [
+                     linewidth_ticks, tick_color, style.linecap.butt])
 
     gr2_axis_appear = {'text_draw_func': test_text_draw_func,
                        'tick_draw_func': test_tick_draw_func,
@@ -2589,31 +2736,40 @@ if __name__ == '__main__':
         while True:  # unities
             if num % 10 == 0:
                 break
-            c.fill(path.circle(-0.4, 0.04, size), trans + [tick_color, tick_width])
+            c.fill(path.circle(-0.4, 0.04, size),
+                   trans + [tick_color, tick_width])
             if num % 10 == 1:
                 break
-            c.fill(path.circle(-0.5, 0.04, size), trans + [tick_color, tick_width])
+            c.fill(path.circle(-0.5, 0.04, size),
+                   trans + [tick_color, tick_width])
             if num % 10 == 2:
                 break
-            c.fill(path.circle(-0.6, 0.04, size), trans + [tick_color, tick_width])
+            c.fill(path.circle(-0.6, 0.04, size),
+                   trans + [tick_color, tick_width])
             if num % 10 == 3:
                 break
-            c.fill(path.circle(-0.7, 0.04, size), trans + [tick_color, tick_width])
+            c.fill(path.circle(-0.7, 0.04, size),
+                   trans + [tick_color, tick_width])
             if num % 10 == 4:
                 break
-            c.fill(path.circle(-0.4, -0.04, size), trans + [tick_color, tick_width])
+            c.fill(path.circle(-0.4, -0.04, size),
+                   trans + [tick_color, tick_width])
             if num % 10 == 5:
                 break
-            c.fill(path.circle(-0.5, -0.04, size), trans + [tick_color, tick_width])
+            c.fill(path.circle(-0.5, -0.04, size),
+                   trans + [tick_color, tick_width])
             if num % 10 == 6:
                 break
-            c.fill(path.circle(-0.6, -0.04, size), trans + [tick_color, tick_width])
+            c.fill(path.circle(-0.6, -0.04, size),
+                   trans + [tick_color, tick_width])
             if num % 10 == 7:
                 break
-            c.fill(path.circle(-0.7, -0.04, size), trans + [tick_color, tick_width])
+            c.fill(path.circle(-0.7, -0.04, size),
+                   trans + [tick_color, tick_width])
             if num % 10 == 8:
                 break
-            c.fill(path.circle(-0.8, 0.0, size), trans + [tick_color, tick_width])
+            c.fill(path.circle(-0.8, 0.0, size),
+                   trans + [tick_color, tick_width])
             if num % 10 == 9:
                 break
             break
@@ -2621,31 +2777,40 @@ if __name__ == '__main__':
             num = int(num / 10)
             if num % 10 == 0:
                 break
-            c.stroke(path.circle(0.4 - 0.3, 0.04, size), trans + [tick_color, tick_width])
+            c.stroke(path.circle(0.4 - 0.3, 0.04, size),
+                     trans + [tick_color, tick_width])
             if num % 10 == 1:
                 break
-            c.stroke(path.circle(0.5 - 0.3, 0.04, size), trans + [tick_color, tick_width])
+            c.stroke(path.circle(0.5 - 0.3, 0.04, size),
+                     trans + [tick_color, tick_width])
             if num % 10 == 2:
                 break
-            c.stroke(path.circle(0.6 - 0.3, 0.04, size), trans + [tick_color, tick_width])
+            c.stroke(path.circle(0.6 - 0.3, 0.04, size),
+                     trans + [tick_color, tick_width])
             if num % 10 == 3:
                 break
-            c.stroke(path.circle(0.7 - 0.3, 0.04, size), trans + [tick_color, tick_width])
+            c.stroke(path.circle(0.7 - 0.3, 0.04, size),
+                     trans + [tick_color, tick_width])
             if num % 10 == 4:
                 break
-            c.stroke(path.circle(0.4 - 0.3, -0.04, size), trans + [tick_color, tick_width])
+            c.stroke(path.circle(0.4 - 0.3, -0.04, size),
+                     trans + [tick_color, tick_width])
             if num % 10 == 5:
                 break
-            c.stroke(path.circle(0.5 - 0.3, -0.04, size), trans + [tick_color, tick_width])
+            c.stroke(path.circle(0.5 - 0.3, -0.04, size),
+                     trans + [tick_color, tick_width])
             if num % 10 == 6:
                 break
-            c.stroke(path.circle(0.6 - 0.3, -0.04, size), trans + [tick_color, tick_width])
+            c.stroke(path.circle(0.6 - 0.3, -0.04, size),
+                     trans + [tick_color, tick_width])
             if num % 10 == 7:
                 break
-            c.stroke(path.circle(0.7 - 0.3, -0.04, size), trans + [tick_color, tick_width])
+            c.stroke(path.circle(0.7 - 0.3, -0.04, size),
+                     trans + [tick_color, tick_width])
             if num % 10 == 8:
                 break
-            c.stroke(path.circle(0.8 - 0.3, 0.0, size), trans + [tick_color, tick_width])
+            c.stroke(path.circle(0.8 - 0.3, 0.0, size),
+                     trans + [tick_color, tick_width])
             if num % 10 == 9:
                 break
             break
@@ -2676,13 +2841,15 @@ if __name__ == '__main__':
             print("too few angles !")
         for i, tick in enumerate(ticks):
             # draw actual tick
-            x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
+            x1, y1, x2, y2 = calc_tick_coords(
+                tick, f, g, dx_units[i], dy_units[i], tick_length)
             if level == 0:
                 tick_color = tick_info['tick_color']
             else:
                 tick_color = color.rgb.blue
             linewidth_ticks = tick_info['tick_linewidths'][level]
-            c.stroke(path.line(x1, y1, x2, y2), [linewidth_ticks, tick_color, style.linecap.butt])
+            c.stroke(path.line(x1, y1, x2, y2), [
+                     linewidth_ticks, tick_color, style.linecap.butt])
             # if 1:
             if level == 0:
                 draw_balls(tick, x1, y1, x2, y2, angles[i], 0.02, c)

@@ -65,22 +65,28 @@ class Nomograph3:
         h2 = self.h2
         h3 = self.h3
         if variable == 'u' and coordinate == 'x':
-            row = np.array([g1(vv), h1(vv), 0, 0, 0, -cv * f1(vv), -cv * g1(vv), -cv * h1(vv)])
+            row = np.array([g1(vv), h1(vv), 0, 0, 0, -cv * \
+                           f1(vv), -cv * g1(vv), -cv * h1(vv)])
             value = np.array([f1(vv)])
         if variable == 'u' and coordinate == 'y':
-            row = np.array([0, 0, f1(vv), g1(vv), h1(vv), -cv * f1(vv), -cv * g1(vv), -cv * h1(vv)])
+            row = np.array([0, 0, f1(vv), g1(vv), h1(vv), - \
+                           cv * f1(vv), -cv * g1(vv), -cv * h1(vv)])
             value = np.array([0])
         if variable == 'v' and coordinate == 'x':
-            row = np.array([g2(vv), h2(vv), 0, 0, 0, -cv * f2(vv), -cv * g2(vv), -cv * h2(vv)])
+            row = np.array([g2(vv), h2(vv), 0, 0, 0, -cv * \
+                           f2(vv), -cv * g2(vv), -cv * h2(vv)])
             value = np.array([f2(vv)])
         if variable == 'v' and coordinate == 'y':
-            row = np.array([0, 0, f2(vv), g2(vv), h2(vv), -cv * f2(vv), -cv * g2(vv), -cv * h2(vv)])
+            row = np.array([0, 0, f2(vv), g2(vv), h2(vv), - \
+                           cv * f2(vv), -cv * g2(vv), -cv * h2(vv)])
             value = np.array([0])
         if variable == 'w' and coordinate == 'x':
-            row = np.array([g3(vv), h3(vv), 0, 0, 0, -cv * f3(vv), -cv * g3(vv), -cv * h3(vv)])
+            row = np.array([g3(vv), h3(vv), 0, 0, 0, -cv * \
+                           f3(vv), -cv * g3(vv), -cv * h3(vv)])
             value = np.array([f3(vv)])
         if variable == 'w' and coordinate == 'y':
-            row = np.array([0, 0, f3(vv), g3(vv), h3(vv), -cv * f3(vv), -cv * g3(vv), -cv * h3(vv)])
+            row = np.array([0, 0, f3(vv), g3(vv), h3(vv), - \
+                           cv * f3(vv), -cv * g3(vv), -cv * h3(vv)])
             value = np.array([0])
         return row, value
 
@@ -103,7 +109,8 @@ class Nomograph3:
         row8, const8 = self._make_row_(variable=vk[7][0], variable_value=vk[7][1], coordinate=vk[7][2],
                                        coord_value=vk[7][3])
         matrix = np.array([row1, row2, row3, row4, row5, row6, row7, row8])
-        b = np.array([const1, const2, const3, const4, const5, const6, const7, const8])
+        b = np.array([const1, const2, const3, const4,
+                     const5, const6, const7, const8])
         coeff_vector = np.linalg.solve(matrix, b)
         self.alpha1 = -1
         self.beta1 = coeff_vector[0]
@@ -116,7 +123,8 @@ class Nomograph3:
         self.gamma3 = coeff_vector[7]
         return coeff_vector
 
-    # following methods give the actual coordinates on canvas with a given function value
+    # following methods give the actual coordinates on canvas with a given
+    # function value
     def give_x1(self, u):
         value = (self.alpha1 * self.f1(u) + self.beta1 * self.g1(u) + self.gamma1 * self.h1(u)) / (
             self.alpha3 * self.f1(u) + self.beta3 * self.g1(u) + self.gamma3 * self.h1(u))
@@ -153,7 +161,8 @@ class Nomograph3:
         f(u,v), g(u,v), h(u,v)
         """
         return lambda u, v: (self.alpha1 * f(u, v) + self.beta1[0] * g(u, v) + self.gamma1[0] * h(u, v)) / \
-                            (self.alpha3[0] * f(u, v) + self.beta3[0] * g(u, v) + self.gamma3[0] * h(u, v))
+                            (self.alpha3[0] * f(u, v) + self.beta3[0]
+                             * g(u, v) + self.gamma3[0] * h(u, v))
 
     def give_general_y_grid_fn(self, f, g, h):
         """
@@ -161,7 +170,8 @@ class Nomograph3:
         f(u,v), g(u,v), h(u,v)
         """
         return lambda u, v: (self.alpha2[0] * f(u, v) + self.beta2[0] * g(u, v) + self.gamma2[0] * h(u, v)) / \
-                            (self.alpha3[0] * f(u, v) + self.beta3[0] * g(u, v) + self.gamma3[0] * h(u, v))
+                            (self.alpha3[0] * f(u, v) + self.beta3[0]
+                             * g(u, v) + self.gamma3[0] * h(u, v))
 
 
 # Testing
@@ -194,7 +204,8 @@ if __name__ == '__main__':
         def h3(w):
             return -w * w
 
-        nomograph = Nomograph3(f1=f1, f2=f2, f3=f3, g1=g1, g2=g2, g3=g3, h1=h1, h2=h2, h3=h3)
+        nomograph = Nomograph3(f1=f1, f2=f2, f3=f3, g1=g1,
+                               g2=g2, g3=g3, h1=h1, h2=h2, h3=h3)
         # aa,bb= nomograph._make_row_(variable='u',variable_value=0.5,coordinate='x',coord_value=-1)
         # print 'aa'+`aa`
         # print 'bb'+`bb`
