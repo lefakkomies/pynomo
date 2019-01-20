@@ -1,8 +1,10 @@
 # ex_axes_7_1.py
 
 import sys
+
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
+import pyx
 
 N_params = {'u_min': 1.0,
             'u_max': 10.0,
@@ -32,12 +34,12 @@ N_params = {'u_min': 1.0,
                               'extra_angle': 90.0,
                               'text_horizontal_align_center': True,
                               'text_format': r"$%2.1f$"},
-                             {'scale_type': 'manual arrow',           # <-
+                             {'scale_type': 'manual arrow',  # <-
                               'manual_axis_data': {6.2830: r'$2\pi$',
                                                    9.4245: r'$3\pi$'},
-                              'arrow_color': color.cmyk.Sepia,
+                              'arrow_color': pyx.color.cmyk.Sepia,
                               'arrow_length': 2.0,
-                              'text_color': color.cmyk.Sepia,
+                              'text_color': pyx.color.cmyk.Sepia,
                               }]
             }
 block_params = {'block_type': 'type_8',

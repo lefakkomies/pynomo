@@ -3,7 +3,7 @@
 
     Star navigation.
 
-    Equation: cos(a) = (sin(d)-sin(b)sin(h))/(cos(b)cos(h))
+    Equation: cos(a) = (sin(d) - sin(b) sin(h)) / (cos(b) cos(h))
 
     Copyright (C) 2007-2015  Leif Roschier
 
@@ -21,14 +21,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import sys
+import numpy as np
+import pyx
 
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
 # for testing
-d = 40.0 * pi / 180.0
-h = 30.0 * pi / 180.0
-b = 60.0 * pi / 180.0
+d = 40.0 * np.pi / 180.0
+h = 30.0 * np.pi / 180.0
+b = 60.0 * np.pi / 180.0
 # print acos((sin(d)-sin(b)*sin(h))/(cos(b)*cos(h)))*180.0/pi
 # print arange(0.0,40.0,1.0,dtype=double).tolist()
 
@@ -36,7 +38,7 @@ a_params = {
     'u_min': 0.0,
     'u_max': 90.0,
     'f': lambda u: 1,
-    'g': lambda u: -cos(u * pi / 180.0),
+    'g': lambda u: -np.cos(u * np.pi / 180.0),
     'h': lambda u: -1.0,
     'title': 'a',
     'title_x_shift': 0.0,
@@ -53,7 +55,7 @@ d_params = {
     'u_min': 0.0,
     'u_max': 90.0,
     'f': lambda u: 0.0,
-    'g': lambda u: -sin(u * pi / 180.0),
+    'g': lambda u: -np.sin(u * np.pi / 180.0),
     'h': lambda u: 1.0,
     'title': 'd',
     'title_x_shift': 0.0,
@@ -76,9 +78,9 @@ bh_params = {
     'title_opposite_tick': True,
     'u_min': 0.0,  # for alignment
     'u_max': 1.0,  # for alignment
-    'f_grid': lambda u, v: -cos(u * pi / 180.0) * cos(v * pi / 180.0),
-    'g_grid': lambda u, v: -sin(u * pi / 180.0) * sin(v * pi / 180.0),
-    'h_grid': lambda u, v: 1.0 + cos(u * pi / 180.0) * cos(v * pi / 180.0),
+    'f_grid': lambda u, v: -np.cos(u * np.pi / 180.0) * np.cos(v * np.pi / 180.0),
+    'g_grid': lambda u, v: -np.sin(u * np.pi / 180.0) * np.sin(v * np.pi / 180.0),
+    'h_grid': lambda u, v: 1.0 + np.cos(u * np.pi / 180.0) * np.cos(v * np.pi / 180.0),
     'u_start': 0.0,
     'u_stop': 90.0,
     'v_start': 0.0,
@@ -98,14 +100,14 @@ bh_params = {
         'u_stop': 40.0,
         'v_start': 60.0,
         'v_stop': 89.9,
-        'u_values': arange(0.0, 41.0, 1.0, dtype=double).tolist(),
-        'v_values': arange(60.0, 91.0, 1.0, dtype=double).tolist(),
+        'u_values': np.arange(0.0, 41.0, 1.0, dtype=np.double).tolist(),
+        'v_values': np.arange(60.0, 91.0, 1.0, dtype=np.double).tolist(),
         'v_texts_u_start': False,
         'v_texts_u_stop': False,
         'u_texts_v_start': False,
         'u_texts_v_stop': False,
-        'u_line_color': color.cmyk.Sepia,
-        'v_line_color': color.cmyk.Sepia,
+        'u_line_color': pyx.color.cmyk.Sepia,
+        'v_line_color': pyx.color.cmyk.Sepia,
     }
     ]
 }

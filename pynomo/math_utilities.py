@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 #
 #    This file is part of PyNomo -
-#    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
+#    a program to create nomographs with Python (https://github.com/lefakkomies/pynomo)
 #
-#    Copyright (C) 2007-2015  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2007-2019  Leif Roschier  <lefakkomies@users.sourceforge.net>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,10 +18,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from math import *
-from numpy import *
+import math
+import numpy as np
 from scipy import linalg
-import scipy
+#import scipy
 
 
 class FourPoint(object):
@@ -37,42 +38,42 @@ class FourPoint(object):
         """
         trafo_1 = self.find_trafo_to_unity_rectangle(x1, y1, x2, y2, x3, y3, x4, y4)
         trafo_2 = self.find_trafo_to_unity_rectangle(x1d, y1d, x2d, y2d, x3d, y3d, x4d, y4d)
-        #        test1=array([[x1,y1,1.0],
+        #        test1=np.array([[x1,y1,1.0],
         #                     [x2,y2,1.0],
         #                     [x3,y3,1.0]])
-        #        test2=array([[x1,y1,1.0],
+        #        test2=np.array([[x1,y1,1.0],
         #                     [x2,y2,1.0],
         #                     [x4,y4,1.0]])
-        #        test1d=array([[x1d,y1d,1.0],
+        #        test1d=np.array([[x1d,y1d,1.0],
         #                     [x2d,y2d,1.0],
         #                     [x3d,y3d,1.0]])
-        #        test2d=array([[x1d,y1d,1.0],
+        #        test2d=np.array([[x1d,y1d,1.0],
         #                     [x2d,y2d,1.0],
         #                     [x4d,y4d,1.0]])
-        #        test1f=scipy.dot(test1,trafo_1)
-        #        test2f=scipy.dot(test2,trafo_1)
-        #        test1fd=scipy.dot(test1d,trafo_2)
-        #        test2fd=scipy.dot(test2d,trafo_2)
+        #        test1f=np.dot(test1,trafo_1)
+        #        test2f=np.dot(test2,trafo_1)
+        #        test1fd=np.dot(test1d,trafo_2)
+        #        test2fd=np.dot(test2d,trafo_2)
         #        print test1f
         #        print test2f
         #        print test1fd
         #        print test2fd
         #        print "goal"
         #        print x1d,y1d,x2d,y2d,x3d,y3d,x4d,y4d
-        self.trafo = scipy.dot(trafo_1, linalg.inv(trafo_2))
+        self.trafo = np.dot(trafo_1, linalg.inv(trafo_2))
         #        print "result"
-        #        print scipy.dot(test1,self.trafo)
-        #        print scipy.dot(test2,self.trafo)
+        #        print np.dot(test1,self.trafo)
+        #        print np.dot(test2,self.trafo)
         """
         o1,o2,o3,p1,p2,p3,q1,q2,q3=self.find_three_points_to_transform(x1,y1,x2,y2,x3,y3,x4,y4)
         self.transformation=self.find_transformation_points_to_rectangle(o1,o2,o3,p1,p2,p3,q1,q2,q3)
-        initial=array([[x1,y1,1.0],
+        initial=np.array([[x1,y1,1.0],
                        [x2,y2,1.0],
                        [x3,y3,1.0]])
-        initial2=array([[x1,y1,1.0],
+        initial2=np.array([[x1,y1,1.0],
                        [x2,y2,1.0],
                        [x4,y4,1.0]])
-        inter=scipy.dot(initial,self.transformation)
+        inter=np.dot(initial,self.transformation)
         xi1=inter[0][0]/inter[0][2]
         yi1=inter[0][1]/inter[0][2]
         xi2=inter[1][0]/inter[1][2]
@@ -83,11 +84,11 @@ class FourPoint(object):
 
         self.transformation1=self.affine_trafo_3_points(xi1,yi1,xi2,yi2,xi3,yi3,
                                                         0.0,0.0,0.0,1.0,1.0,0.0)
-        self.total_trafo=scipy.dot(self.transformation,self.transformation1)
-        final2=scipy.dot(initial2,self.transformation)
-        final1a=scipy.dot(initial,self.total_trafo)
-        print scipy.dot(array([2,2,1]),self.transformation)
-        print scipy.dot(array([2,4,1]),self.transformation)
+        self.total_trafo=np.dot(self.transformation,self.transformation1)
+        final2=np.dot(initial2,self.transformation)
+        final1a=np.dot(initial,self.total_trafo)
+        print np.dot(np.array([2,2,1]),self.transformation)
+        print np.dot(np.array([2,4,1]),self.transformation)
         print "initial"
         print initial
         print "inter"
@@ -123,11 +124,11 @@ class FourPoint(object):
         o1, o2, o3, p1, p2, p3, q1, q2, q3 = self.find_three_points_to_transform(x1p, y1p, x2p, y2p, x3p, y3p, x4p, y4p)
         transformation_1 = self.find_transformation_points_to_rectangle(o1, o2, o3, p1, p2, p3, q1, q2, q3)
         # three points to make correct order with affine transformation
-        initial = array([[x1, y1, 1.0],
+        initial = np.array([[x1, y1, 1.0],
                          [x2, y2, 1.0],
                          [x3, y3, 1.0]])
         # intermediate points
-        inter = scipy.dot(initial, transformation_1)
+        inter = np.dot(initial, transformation_1)
         xi1 = inter[0][0] / inter[0][2]
         yi1 = inter[0][1] / inter[0][2]
         xi2 = inter[1][0] / inter[1][2]
@@ -136,14 +137,14 @@ class FourPoint(object):
         yi3 = inter[2][1] / inter[2][2]
         transformation_2 = self.affine_trafo_3_points(xi1, yi1, xi2, yi2, xi3, yi3,
                                                       0.0, 0.0, 0.0, 1.0, 1.0, 0.0)
-        total_trafo = scipy.dot(transformation_1, transformation_2)
+        total_trafo = np.dot(transformation_1, transformation_2)
         return total_trafo
 
     def calc_distance_points(self, x1, y1, x2, y2):
         """
         calcs distance between two points
         """
-        return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+        return np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 
     def check_order(self, x1, y1, x2, y2, x3, y3, x4, y4):
         """
@@ -152,14 +153,14 @@ class FourPoint(object):
         """
 
         def angle(v1, v2):
-            v1_l = sqrt(v1[0] ** 2 + v1[1] ** 2)
-            v2_l = sqrt(v2[0] ** 2 + v2[1] ** 2)
-            return acos(dot(v1, v2) / (v1_l * v2_l))
+            v1_l = np.sqrt(v1[0] ** 2 + v1[1] ** 2)
+            v2_l = np.sqrt(v2[0] ** 2 + v2[1] ** 2)
+            return math.acos(np.dot(v1, v2) / (v1_l * v2_l))
 
-        v21 = array([x2 - x1, y2 - y1])
-        v42 = array([x4 - x2, y4 - y2])
-        v34 = array([x3 - x4, y3 - y4])
-        v13 = array([x1 - x3, y1 - y3])
+        v21 = np.array([x2 - x1, y2 - y1])
+        v42 = np.array([x4 - x2, y4 - y2])
+        v34 = np.array([x3 - x4, y3 - y4])
+        v13 = np.array([x1 - x3, y1 - y3])
         angle_1 = angle(v21, -v42)
         angle_2 = angle(v42, -v34)
         angle_3 = angle(v34, -v13)
@@ -268,7 +269,7 @@ class FourPoint(object):
         finds transformation that transforms points o,p,q to
         orthogonal rectangle. See Otto: p.40
         """
-        trafo_mat_inv = array([[p1, p2, p3],
+        trafo_mat_inv = np.array([[p1, p2, p3],
                                [q1, q2, q3],
                                [o1, o2, o3]])
         # print "trafo_mat_inv"
@@ -281,15 +282,15 @@ class FourPoint(object):
         transforms three points to three points via affine transformation
         """
         # points to be transformed
-        p = array([[x1, y1, 1.0],
+        p = np.array([[x1, y1, 1.0],
                    [x2, y2, 1.0],
                    [x3, y3, 1.0]])
         # destination
-        d = array([[x1d, y1d, 1.0],
+        d = np.array([[x1d, y1d, 1.0],
                    [x2d, y2d, 1.0],
                    [x3d, y3d, 1.0]])
         # transformation
-        t = dot(linalg.inv(p), d)
+        t = np.dot(linalg.inv(p), d)
         return t
 
 
@@ -306,4 +307,4 @@ if __name__ == '__main__':
     print("#### TEST 4######")
     FourPoint(1, 4, 1, 2, 2, 1, 2, 2, 1, 3, 2, 2, 4, 3, 2, 4)
     print(FourPoint(1, 4, 1, 2, 2, 1, 2, 2, 1, 3, 2, 2, 4, 3, 2, 4).calc_distance_points(1, 1, 2, 2))
-    print(FourPoint.calc_distance_points(1, 1, 2, 2))
+    #print(FourPoint.calc_distance_points(1, 1, 2, 2))

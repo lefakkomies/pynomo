@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 #
 #    This file is part of PyNomo -
-#    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
+#    a program to create nomographs with Python (https://github.com/lefakkomies/pynomo)
 #
-#    Copyright (C) 2007-2015  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2007-2019  Leif Roschier  <lefakkomies@users.sourceforge.net>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,17 +18,11 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from math import *
-from scipy import *
 
-"""
-for some reason previous does not always load optimize library, so let's load
-optimize explicitely
-"""
-from scipy.optimize import *
-from numpy import *
+import math
+import pyx
+import numpy as np
 import random
-from pyx import *
 from copy import copy
 
 
@@ -57,15 +52,15 @@ class Axis_Wrapper:
         g = self.g
         start = self.start
         stop = self.stop
-        # du=fabs(start-stop)*1e-8
-        du = fabs(start - stop) * 1e-12
+        # du=math.fabs(start-stop)*1e-8
+        du = math.fabs(start - stop) * 1e-12
         # approximate line length is found
-        line_length_straigth = sqrt((f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
+        line_length_straigth = math.sqrt((f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
         random.seed(0.1)  # so that mistakes always the same
         for dummy in range(100):
             first = random.uniform(start, stop)
             second = random.uniform(start, stop)
-            temp = sqrt((f(first) - f(second)) ** 2 + (g(first) - g(second)) ** 2)
+            temp = math.sqrt((f(first) - f(second)) ** 2 + (g(first) - g(second)) ** 2)
             if temp > line_length_straigth:
                 line_length_straigth = temp
                 # print "length: %f"%line_length_straigth
@@ -79,22 +74,22 @@ class Axis_Wrapper:
             if u < stop:
                 dx = (f(u + du) - f(u))
                 dy = (g(u + du) - g(u))
-                dl = sqrt(dx ** 2 + dy ** 2)
+                dl = math.sqrt(dx ** 2 + dy ** 2)
                 if dl > 0:
                     delta_u = du * section_length / dl
                 else:
-                    delta_u = du   # dummy constant?
+                    delta_u = du  # dummy constant?
                 # let's calculate actual length
                 # and iterate until length is in factor 2 from target
                 """
                 while True:
                     delta_x=f(u+delta_u)-f(u)
                     delta_y=g(u+delta_u)-g(u)
-                    delta_l=sqrt(delta_x**2+delta_y**2)
+                    delta_l=math.sqrt(delta_x**2+delta_y**2)
 
                     if delta_l>2.0*section_length:
                         delta_u=delta_u*0.999
-                        #print "delta_u pienenee:%f"%delta_u
+                        #print "delta_u math.pienenee:%f"%delta_u
                     else:
                         if delta_l<section_length/2.0:
                             delta_u=delta_u*1.001
@@ -163,7 +158,7 @@ class Axis_Wrapper:
             y1t = self.give_trafo_y(x1, y1)
             x2t = self.give_trafo_x(x2, y2)
             y2t = self.give_trafo_y(x2, y2)
-            section = sqrt((x1t - x2t) ** 2 + (y1t - y2t) ** 2)
+            section = math.sqrt((x1t - x2t) ** 2 + (y1t - y2t) ** 2)
             length = length + section
         # print length
         self.length = length
@@ -171,18 +166,18 @@ class Axis_Wrapper:
 
     def plot_axis(self, c):
         """
-        plots axis to canvas
+        plots axis to pyx.canvas
         """
         x00, y00 = self.line[0]
         x0 = self.give_trafo_x(x00, y00)
         y0 = self.give_trafo_y(x00, y00)
         # print x0,y0
-        line = path.path(path.moveto(x0, y0))
+        line = pyx.path.path(pyx.path.moveto(x0, y0))
         for x, y in self.line:
             xt = self.give_trafo_x(x, y)
             yt = self.give_trafo_y(x, y)
-            line.append(path.lineto(xt, yt))
-        c.stroke(line, [style.linewidth.normal])
+            line.append(pyx.path.lineto(xt, yt))
+        c.stroke(line, [pyx.style.linewidth.normal])
 
     def calc_bound_box(self):
         """
@@ -207,7 +202,7 @@ class Axis_Wrapper:
                 y_top = y_trafo
         # print x_left,x_right,y_bottom,y_top
         # in case there is no area inside box, let's make
-        # small in order to avoid singularities. These are
+        # small in order to avoid math.singularities. These are
         # specifically for dual-axis stationary scales
         if x_left == x_right:
             x_left = x_right - 1e-2 * abs(y_top - y_bottom)
@@ -503,7 +498,7 @@ class Axes_Wrapper:
         """
         prints result pdf for debugging purposes
         """
-        c = canvas.canvas()
+        c = pyx.canvas.canvas()
         self._plot_axes_(c)
         c.writePDFfile(filename)
         # print original
@@ -536,10 +531,10 @@ class Axes_Wrapper:
         row7, const7 = self._make_row_(coordinate='x', coord_value=x3d, x=x3, y=y3)
         row8, const8 = self._make_row_(coordinate='y', coord_value=y3d, x=x3, y=y3)
 
-        matrix = array([row1, row2, row3, row4, row5, row6, row7, row8])
+        matrix = np.array([row1, row2, row3, row4, row5, row6, row7, row8])
         # print matrix
-        b = array([const1, const2, const3, const4, const5, const6, const7, const8])
-        coeff_vector = linalg.solve(matrix, b)
+        b = np.array([const1, const2, const3, const4, const5, const6, const7, const8])
+        coeff_vector = np.linalg.solve(matrix, b)
         alpha1 = -1.0  # fixed
         beta1 = coeff_vector[0][0]
         gamma1 = coeff_vector[1][0]
@@ -563,16 +558,16 @@ class Axes_Wrapper:
         # to make expressions shorter
         cv = coord_value
         if coordinate == 'x':
-            row = array([y, 1, 0, 0, 0, -cv * x, -cv * y, -cv * 1])
-            value = array([x])
+            row = np.array([y, 1, 0, 0, 0, -cv * x, -cv * y, -cv * 1])
+            value = np.array([x])
         if coordinate == 'y':
-            row = array([0, 0, x, y, 1, -cv * x, -cv * y, -cv * 1])
-            value = array([0])
+            row = np.array([0, 0, x, y, 1, -cv * x, -cv * y, -cv * 1])
+            value = np.array([0])
         return row, value
 
     def _find_polygon_horizontal_(self):
         """
-        finds intersection of horizontal line "dropping" until it
+        finds intersection of horizontal line "dropmath.ping" until it
         hit the highest point (1) of axes. Then line tilts to minimum angle
         by another point (2).
         Same for bottom points (3) and (4) with vice versa.
@@ -616,7 +611,7 @@ class Axes_Wrapper:
         """
         x1, y1, x2, y2 = x_high, y_high, x_low, y_low
         x3, y3, x4, y4 = x_slope_high, y_slope_high, x_slope_low, y_slope_low
-        #print x_high, y_high, x_low, y_low, x_slope_high, y_slope_high, x_slope_low, y_slope_low
+        # print x_high, y_high, x_low, y_low, x_slope_high, y_slope_high, x_slope_low, y_slope_low
         if (x1 - x3) * (x2 - x4) < 0:
             x1, y1, x3, y3 = x3, y3, x1, y1
         if x3 < x1:
@@ -627,7 +622,7 @@ class Axes_Wrapper:
         """
         transforms polygon according to:
 
-        finds intersection of horizontal line "dropping" until it
+        finds intersection of horizontal line "dropmath.ping" until it
         hit the highest point (1) of axes. Then line tilts to minimum angle
         by another point (2).
         Same for bottom points (3) and (4) with vice versa. This polygon will
@@ -645,15 +640,15 @@ class Axes_Wrapper:
         x3d, y3d = x3, self.paper_height
         x4d, y4d = x4, 0.0
 
-        c = canvas.canvas()
+        c = pyx.canvas.canvas()
         self._plot_axes_(c)
-        c.fill(path.circle(x1, y1, 0.02))
+        c.fill(pyx.path.circle(x1, y1, 0.02))
         c.text(x1 + 1, y1, '1')
-        c.fill(path.circle(x2, y2, 0.03))
+        c.fill(pyx.path.circle(x2, y2, 0.03))
         c.text(x2 + 1, y2, '2')
-        c.fill(path.circle(x3, y3, 0.04))
+        c.fill(pyx.path.circle(x3, y3, 0.04))
         c.text(x3 + 1, y3, '3')
-        c.fill(path.circle(x4, y4, 0.05))
+        c.fill(pyx.path.circle(x4, y4, 0.05))
         c.text(x4 + 1, y4, '4')
         # c.writePDFfile('poly_debug.pdf')
         # print "polygon coords:"
@@ -675,9 +670,9 @@ class Axes_Wrapper:
         adds transformation to be applied as a basis.
         all transformation matrices are multiplied together
         """
-        trafo_mat = array([[alpha1, beta1, gamma1],
-                           [alpha2, beta2, gamma2],
-                           [alpha3, beta3, gamma3]])
+        trafo_mat = np.array([[alpha1, beta1, gamma1],
+                              [alpha2, beta2, gamma2],
+                              [alpha3, beta3, gamma3]])
         self.trafo_stack.append(trafo_mat)
         self._calculate_total_trafo_mat_()  # update coeffs
 
@@ -690,7 +685,7 @@ class Axes_Wrapper:
         stack_copy.reverse()
         trafo_mat = stack_copy.pop()
         for matrix in stack_copy:
-            trafo_mat = dot(trafo_mat, matrix)  # matrix multiplication
+            trafo_mat = np.dot(trafo_mat, matrix)  # matrix multiplication
         self.alpha1 = trafo_mat[0][0]
         self.beta1 = trafo_mat[0][1]
         self.gamma1 = trafo_mat[0][2]
@@ -741,12 +736,12 @@ class Axes_Wrapper:
         """
         returns rotation transformation. angle in degrees.
         """
-        angle_r = angle / 180.0 * pi  # angle in radians
-        alpha1 = cos(angle_r)
-        beta1 = -sin(angle_r)
+        angle_r = angle / 180.0 * math.pi  # angle in radians
+        alpha1 = math.cos(angle_r)
+        beta1 = -math.sin(angle_r)
         gamma1 = 0.0
-        alpha2 = sin(angle_r)
-        beta2 = cos(angle_r)
+        alpha2 = math.sin(angle_r)
+        beta2 = math.cos(angle_r)
         gamma2 = 0.0
         alpha3 = 0.0
         beta3 = 0.0
@@ -755,7 +750,7 @@ class Axes_Wrapper:
 
     def rotate_canvas(self, angle):
         """
-        rotates canvas by angle degrees by adding a rotation matrix
+        rotates pyx.canvas by angle degrees by adding a rotation matrix
         into trafo_stack
         """
         alpha1, beta1, gamma1, alpha2, \
@@ -781,7 +776,7 @@ if __name__ == '__main__':
 
 
     def f2(L):
-        return log10(L)
+        return math.log10(L)
 
 
     def g2(L):

@@ -1,13 +1,15 @@
 # ex_axes_8.py
 
 import sys
+
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
+import numpy as np
 
 N_params = {'u_min': 0.0,
             'u_max': 300.0,
-            'function_x': lambda u: 3 * sin(u / 180.0 * pi),
-            'function_y': lambda u: 3 * cos(u / 180.0 * pi),
+            'function_x': lambda u: 3 * np.sin(u / 180.0 * np.pi),
+            'function_y': lambda u: 3 * np.cos(u / 180.0 * np.pi),
             'title': 'u',
             'tick_levels': 3,
             'tick_text_levels': 1,

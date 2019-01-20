@@ -19,21 +19,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import sys
+import numpy as np
 
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
+from pynomo.nomo_wrapper import Nomo_Block_Type_5
 
 
 # Type 5 contour
 def f1(x, u):
-    return log(log(x / (x - u / (100.0 * 12.0))) / log(1 + u / (100.0 * 12.0)))
+    return np.log(np.log(x / (x - u / (100.0 * 12.0))) / np.log(1 + u / (100.0 * 12.0)))
 
 
 block_1_params = {
     'width': 10.0,
     'height': 5.0,
     'block_type': 'type_5',
-    'u_func': lambda u: log(u * 12.0),
+    'u_func': lambda u: np.log(u * 12.0),
     'v_func': f1,
     'u_values': [10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 20.0, 25.0, 30.0, 40.0, 50.0, 60.0],
     'v_values': [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],

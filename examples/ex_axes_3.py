@@ -1,8 +1,9 @@
 # ex_axes_3.py
 
 import sys
+
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
 N_params = {'u_min': 1.0,
             'u_max': 10.0,
@@ -11,8 +12,8 @@ N_params = {'u_min': 1.0,
             'tick_levels': 3,
             'tick_text_levels': 2,
             'tick_side': 'left',
-            'title_x_shift': -1.0,   # <-
-            'title_y_shift': 0.5     # <-
+            'title_x_shift': -1.0,  # <-
+            'title_y_shift': 0.5  # <-
             }
 
 block_params = {'block_type': 'type_8',

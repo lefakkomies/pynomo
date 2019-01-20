@@ -21,7 +21,9 @@
 import sys
 
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
+from pynomo.nomo_wrapper import Nomo_Block_Type_5
+import numpy as np
 
 # for testing
 R_sigma = 60e3
@@ -34,7 +36,7 @@ E_C = 2.0 * k_b
 e = 1.3806504e-19
 T = t * E_C / k_b
 
-d_q = 2.0 * (3.0 * R_sigma / Z_tr + Z_tr / Z_T) * sqrt(k_b * T_0 * Z_T) / \
+d_q = 2.0 * (3.0 * R_sigma / Z_tr + Z_tr / Z_T) * np.sqrt(k_b * T_0 * Z_T) / \
       (2.0 * 0.41 * t ** (-1.74) * 0.9 * E_C / e ** 2) / e
 
 
@@ -42,19 +44,19 @@ d_q = 2.0 * (3.0 * R_sigma / Z_tr + Z_tr / Z_T) * sqrt(k_b * T_0 * Z_T) / \
 
 
 def f_dq(q):
-    return -log(q * 1e-6) - 14.0  # additional const for helping scale alignment
+    return -np.log(q * 1e-6) - 14.0  # additional const for helping scale alignment
 
 
 def f_t0(t0):
-    return 0.5 * log(k_b * t0 * Z_T) + 14.0  # additional const for helping scale alignment
+    return 0.5 * np.log(k_b * t0 * Z_T) + 14.0  # additional const for helping scale alignment
 
 
 def f_ec(ec):  # [K]
-    return -log(0.9 * (k_b * ec) ** 2.74) - 150.0  # additional const for helping scale alignment
+    return -np.log(0.9 * (k_b * ec) ** 2.74) - 150.0  # additional const for helping scale alignment
 
 
 def f_t(t):
-    return -log(0.41 * (k_b * t) ** -1.74 / e) + 150.0  # additional const for helping scale alignment
+    return -np.log(0.41 * (k_b * t) ** -1.74 / e) + 150.0  # additional const for helping scale alignment
 
 
 def f_rs(rs):
@@ -62,7 +64,7 @@ def f_rs(rs):
 
 
 def f_ztr(x, ztr):
-    return (exp(x) - ztr / Z_T) * ztr / 3.0
+    return (np.exp(x) - ztr / Z_T) * ztr / 3.0
 
 
 block_contour_params = {

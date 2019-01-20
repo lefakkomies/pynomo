@@ -1,5 +1,8 @@
-#    PyNomo - nomographs with Python
-#    Copyright (C) 2007-2015  Leif Roschier
+# -*- coding: utf-8 -*-
+#    This file is part of PyNomo -
+#    a program to create nomographs with Python (https://github.com/lefakkomies/pynomo)
+#
+#    Copyright (C) 2007-2019  Leif Roschier  <lefakkomies@users.sourceforge.net>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -13,8 +16,22 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from nomo_wrapper import *
-from isopleth import *
+
+from .isopleth import Isopleth_Wrapper
+from .nomo_wrapper import Nomo_Wrapper
+from .nomo_wrapper import Nomo_Block_Type_1
+from .nomo_wrapper import Nomo_Block_Type_2
+from .nomo_wrapper import Nomo_Block_Type_3
+from .nomo_wrapper import Nomo_Block_Type_4
+from .nomo_wrapper import Nomo_Block_Type_5
+from .nomo_wrapper import Nomo_Block_Type_6
+from .nomo_wrapper import Nomo_Block_Type_7
+from .nomo_wrapper import Nomo_Block_Type_8
+from .nomo_wrapper import Nomo_Block_Type_9
+from .nomo_wrapper import Nomo_Block_Type_10
+
+import pyx
+import numpy as np
 
 
 class Nomographer:
@@ -26,7 +43,7 @@ class Nomographer:
         """
         params hold all information to build the nomograph
         """
-        self._check_params_(params)  # sets default values for missing keys
+        self._check_params_(params)  # sets default values for misnp.sing keys
         wrapper = Nomo_Wrapper(params=params,
                                paper_width=params['paper_width'],
                                paper_height=params['paper_height'],
@@ -195,7 +212,7 @@ class Nomographer:
             else:
                 wrapper.do_transformation(method=trafo[0])
         # transformations done
-        c = canvas.canvas()
+        c = pyx.canvas.canvas()
         if params['make_grid']:
             self._make_grid_(params, c)
         if params['pre_func'] is not None:
@@ -216,7 +233,7 @@ class Nomographer:
         self.blocks = blocks  # save for debugging
         for block in params['block_params']:
             if block['debug']:
-                print("##### SINGLE BLOCK PARAMS #######")
+                print("##### np.sinGLE BLOCK PARAMS #######")
                 pprint.pprint(block)
         if params['debug']:
             print("##### MAIN PARAMS #######")
@@ -229,7 +246,7 @@ class Nomographer:
         makes a grid to help position titles, etc.
         """
         axis_offset = 3.0  # how much scales are aside
-        axis_color = color.cmyk.Brown
+        axis_color = pyx.color.cmyk.Brown
         Nomo_Axis(func_f=lambda u: u,
                   func_g=lambda u: 0.0 - axis_offset + u * 1e-5,
                   start=-axis_offset, stop=params['paper_width'] + axis_offset, turn=-1, title='',
@@ -262,27 +279,27 @@ class Nomographer:
         start_ax, stop_ax = find_linear_ticks(-axis_offset, params['paper_height'] + axis_offset)
         tick_0_list_h, tick_1_list_h, tick_2_list_h, tick_3_list_h, tick_4_list_h, \
         start_ax, stop_ax = find_linear_ticks(-axis_offset, params['paper_width'] + axis_offset)
-        grid_color_0 = color.cmyk.Brown
-        grid_color_1 = color.cmyk.Gray
-        grid_color_2 = color.cmyk.Tan
+        grid_color_0 = pyx.color.cmyk.Brown
+        grid_color_1 = pyx.color.cmyk.Gray
+        grid_color_2 = pyx.color.cmyk.Tan
         for tick in tick_0_list_v:
             c.stroke(path.line(-axis_offset, tick, params['paper_width'] + axis_offset, tick),
-                     [grid_color_0, style.linewidth.THin])
+                     [grid_color_0, pyx.style.linewidth.THin])
         for tick in tick_1_list_v:
             c.stroke(path.line(-axis_offset, tick, params['paper_width'] + axis_offset, tick),
-                     [grid_color_1, style.linewidth.THIN])
+                     [grid_color_1, pyx.style.linewidth.THIN])
         for tick in tick_2_list_v:
             c.stroke(path.line(-axis_offset, tick, params['paper_width'] + axis_offset, tick),
-                     [grid_color_2, style.linewidth.THIN])
+                     [grid_color_2, pyx.style.linewidth.THIN])
         for tick in tick_0_list_h:
             c.stroke(path.line(tick, -axis_offset, tick, params['paper_height'] + axis_offset),
-                     [grid_color_0, style.linewidth.THin])
+                     [grid_color_0, pyx.style.linewidth.THin])
         for tick in tick_1_list_h:
             c.stroke(path.line(tick, -axis_offset, tick, params['paper_height'] + axis_offset),
-                     [grid_color_1, style.linewidth.THIN])
+                     [grid_color_1, pyx.style.linewidth.THIN])
         for tick in tick_2_list_h:
             c.stroke(path.line(tick, -axis_offset, tick, params['paper_height'] + axis_offset),
-                     [grid_color_2, style.linewidth.THIN])
+                     [grid_color_2, pyx.style.linewidth.THIN])
 
     def _draw_lines_(self, params, c):
         """
@@ -315,11 +332,11 @@ class Nomographer:
         checks if main params ok and adds default values
         """
         self.line_defs_default = {'coords': [[0, 0, 1, 1], [2, 2, 3, 3]],
-                                  'line_style': [color.cmyk.Black,
-                                                 style.linewidth.thick,
-                                                 style.linestyle.dashed],
+                                  'line_style': [pyx.color.cmyk.Black,
+                                                 pyx.style.linewidth.thick,
+                                                 pyx.style.linestyle.dashed],
                                   'circle_size': 0.0005,
-                                  'circle_color': color.cmyk.Black,
+                                  'circle_color': pyx.color.cmyk.Black,
                                   }
         params_default = {
             'filename': 'pynomo_default.pdf',
@@ -327,12 +344,12 @@ class Nomographer:
             'paper_width': 20.0,
             # 'block_params':[test1_block1_params,test1_block2_params],
             'transformations': [('rotate', 0.01), ('scale paper',)],
-            'title_color': color.rgb.black,
+            'title_color': pyx.color.rgb.black,
             'make_grid': False,
             'draw_lines': False,  # to draw manual lines
             'line_params': [self.line_defs_default],
-            'pre_func': None,  # function(canvas) to draw first
-            'post_func': None,  # function(canvas) to draw last
+            'pre_func': None,  # function(pyx.canvas) to draw first
+            'post_func': None,  # function(pyx.canvas) to draw last
             'debug': False,
             'draw_isopleths': True,  # draws isopleths
             'isopleth_params': [{'color': 'Black',
@@ -388,7 +405,7 @@ class Nomographer:
             'height': 10.0,
             'reference_padding': 0.2,
             'reference_titles': [],
-            'reference_color': color.rgb.black,
+            'reference_color': pyx.color.rgb.black,
             'debug': False,
             'isopleth_values': [],
         }
@@ -407,7 +424,7 @@ class Nomographer:
             'height': 10.0,
             'float_axis': 'F1 or F2',
             'padding': 0.9,
-            'reference_color': color.rgb.black,
+            'reference_color': pyx.color.rgb.black,
             'debug': False,
             'isopleth_values': [],
         }
@@ -461,7 +478,7 @@ class Nomographer:
             'x_empty': 0.2,
             'y_empty': 0.2,
             'curve_const': 0.0,
-            'ladder_color': color.rgb.black,
+            'ladder_color': pyx.color.rgb.black,
             'debug': False,
             'isopleth_values': [],
         }
@@ -802,6 +819,8 @@ if __name__ == '__main__':
     test9_f1_para = {
         'u_min': 0.5,
         'u_max': 1.0,
+        'u_min_trafo': 0.5,
+        'u_max_trafo': 1.0,
         'f': lambda u: 2 * (u * u - 1.0),
         'g': lambda u: 3 * u * (u + 1.0),
         'h': lambda u: (-u * (u - 1.0)),
@@ -813,6 +832,8 @@ if __name__ == '__main__':
     test9_f2_para = {
         'u_min': 1.0,
         'u_max': 0.75,
+        'u_min_trafo': 1.0,
+        'u_max_trafo': 0.75,
         'f': lambda v: v,
         'g': lambda v: 1.0,
         'h': lambda v: (-v * v),
@@ -824,6 +845,8 @@ if __name__ == '__main__':
     test9_f3_para = {
         'u_min': 1.0,
         'u_max': 0.5,
+        'u_min_trafo': 1.0,
+        'u_max_trafo': 0.75,
         'f': lambda w: 2.0 * (2.0 * w + 1.0),
         'g': lambda w: 3.0 * (w + 1.0),
         'h': lambda w: (-(w + 1.0) * (2.0 * w + 1.0)),
@@ -963,8 +986,9 @@ if __name__ == '__main__':
         'title_opposite_tick': True,
         'u_min': 0.0,  # for alignment
         'u_max': 1.0,  # for alignment
-        'f_grid': lambda u, v: 100 * cos(u * pi / 180.0) / (1.0 + cos(u * pi / 180.0)),
-        'g_grid': lambda u, v: (v * sin(u * pi / 180.0) + 100.0 * cos(u * pi / 180.0)) / (1.0 + cos(u * pi / 180.0)),
+        'f_grid': lambda u, v: 100 * np.cos(u * np.pi / 180.0) / (1.0 + np.cos(u * np.pi / 180.0)),
+        'g_grid': lambda u, v: (v * np.sin(u * np.pi / 180.0) + 100.0 * np.cos(u * np.pi / 180.0)) / (
+                    1.0 + np.cos(u * np.pi / 180.0)),
         'h_grid': lambda u, v: 1.0,
         'u_start': 15.0,
         'u_stop': 75.0,

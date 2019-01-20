@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 #
 #    This file is part of PyNomo -
-#    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
+#    a program to create nomographs with Python (https://github.com/lefakkomies/pynomo)
 #
-#    Copyright (C) 2007-2009  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2007-2019  Leif Roschier  <lefakkomies@users.sourceforge.net>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,17 +18,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pyx import *
-from math import *
-from scipy import *
-
-"""
-for some reason previous does not always load optimize library, so let's load
-optimize explicitely
-"""
-from scipy.optimize import *
-from numpy import *
-from nomo_axis import *
+from scipy import optimize
+import numpy as np
+import pyx
+import math
 import time
 
 
@@ -63,8 +57,10 @@ class Nomo_Grid_Box(object):
                                  'x_min': 0.1,
                                  'x_max': 1.0,
                                  'manual_x_scale': False,  # if inital x_scale is set manually, use two values above
-                                 'u_values': [0.0, 0.25 * pi / 2, 0.5 * pi / 2, 0.75 * pi / 2, 1.0 * pi / 2],
-                                 'v_values': [0.0, 0.25 * pi / 2, 0.5 * pi / 2, 0.75 * pi / 2, 1.0 * pi / 2],
+                                 'u_values': [0.0, 0.25 * math.pi / 2, 0.5 * math.pi / 2, 0.75 * math.pi / 2,
+                                              1.0 * math.pi / 2],
+                                 'v_values': [0.0, 0.25 * math.pi / 2, 0.5 * math.pi / 2, 0.75 * math.pi / 2,
+                                              1.0 * math.pi / 2],
                                  'wd_values': [],
                                  'w_values': [],
                                  'u_tag': 'none',  # manual labels
@@ -123,15 +119,15 @@ class Nomo_Grid_Box(object):
                                  'wd_align_x_offset': 0.0,
                                  'u_align_y_offset': 0.0,
                                  'wd_align_y_offset': 0.0,
-                                 'u_axis_color': color.rgb.black,
-                                 'u_text_color': color.rgb.black,
-                                 'u_title_color': color.rgb.black,
-                                 'v_axis_color': color.rgb.black,
-                                 'v_text_color': color.rgb.black,
-                                 'v_title_color': color.rgb.black,
-                                 'wd_axis_color': color.rgb.black,
-                                 'wd_text_color': color.rgb.black,
-                                 'wd_title_color': color.rgb.black,
+                                 'u_axis_color': pyx.color.rgb.black,
+                                 'u_text_color': pyx.color.rgb.black,
+                                 'u_title_color': pyx.color.rgb.black,
+                                 'v_axis_color': pyx.color.rgb.black,
+                                 'v_text_color': pyx.color.rgb.black,
+                                 'v_title_color': pyx.color.rgb.black,
+                                 'wd_axis_color': pyx.color.rgb.black,
+                                 'wd_text_color': pyx.color.rgb.black,
+                                 'wd_title_color': pyx.color.rgb.black,
                                  'allow_additional_v_scale': False,  # to draw additional scale as atom
                                  # isopleths do not work
                                  'v_scale_u_value': 1.0,  # this value sets additional v_scale
@@ -282,7 +278,7 @@ class Nomo_Grid_Box(object):
             'u_max': w_max,  # this is w_max
             'F': lambda w: self.x_right,  # x-coordinate
             'G': lambda w: self.y_bottom + (f2(w) - f2(w_min)) / (f2(w_max) - f2(w_min)) \
-                                           * self.params['height'] * y_factor,  # y-coordinate
+                           * self.params['height'] * y_factor,  # y-coordinate
             'title': self.params['w_title'],
             'scale_type': self.params['scale_type_w'],
             'manual_axis_data': w_manual_axis_data,
@@ -460,8 +456,8 @@ class Nomo_Grid_Box(object):
             mean_x = (self.params['x_min'] + self.params['x_max']) / 2.0
             x_guess_top = mean_x
             x_guess_bottom = mean_x
-        x_top = scipy.optimize.fmin(func_top, [x_guess_top], disp=0, ftol=1e-5, xtol=1e-5)[0]
-        x_bottom = scipy.optimize.fmin(func_bottom, [x_guess_bottom], disp=0, ftol=1e-5, xtol=1e-5)[0]
+        x_top = optimize.fmin(func_top, [x_guess_top], disp=0, ftol=1e-5, xtol=1e-5)[0]
+        x_bottom = optimize.fmin(func_bottom, [x_guess_bottom], disp=0, ftol=1e-5, xtol=1e-5)[0]
         # print "x_top %f"%x_top
         # print "x_bottom %f" % x_bottom
         # print "g(x_top) %f"%g(x_top)
@@ -484,7 +480,7 @@ class Nomo_Grid_Box(object):
         # if self.params['manual_x_scale']==True:
         #    start=min(self.params['x_min'],self.params['x_max'])
         #    stop=max(self.params['x_min'],self.params['x_max'])
-        du = fabs(stop - start) * 1e-12
+        du = np.fabs(stop - start) * 1e-12
         # approximate line length is found
         line_length_straigth = max_fu - min_fu
         sections = 200.0  # number of sections
@@ -499,7 +495,7 @@ class Nomo_Grid_Box(object):
                 count = 1
                 dx = (f(u + du) - f(u))
                 dy = (g(u + du) - g(u))
-                dl = sqrt(dx ** 2 + dy ** 2)
+                dl = np.sqrt(dx ** 2 + dy ** 2)
                 if dl > 0:
                     delta_u = du * section_length / dl
                 else:
@@ -510,10 +506,10 @@ class Nomo_Grid_Box(object):
                     count = count + 1
                     delta_x = f(u + delta_u) - f(u)
                     delta_y = g(u + delta_u) - g(u)
-                    delta_l = sqrt(delta_x ** 2 + delta_y ** 2)
+                    delta_l = np.sqrt(delta_x ** 2 + delta_y ** 2)
                     if delta_l > 2.0 * section_length:
                         delta_u = delta_u * 0.999
-                        # print "v:%g, delta_x:%g delta_y:%g delta_l:%g, section_length:%g, delta_u pienenee:%g"%(v,delta_x,delta_y,delta_l,section_length,delta_u)
+                        # print "v:%g, delta_x:%g delta_y:%g delta_l:%g, section_length:%g, delta_u math.pienenee:%g"%(v,delta_x,delta_y,delta_l,section_length,delta_u)
                     else:
                         if delta_l < section_length / 2.0:
                             delta_u = delta_u * 1.001
@@ -552,9 +548,9 @@ class Nomo_Grid_Box(object):
         """
         (x_0, y_0) = self.v_lines[0][0]
         x_left = x_0
-        y_top = max(self.u_func(array(self.params['u_values'])))
+        y_top = max(self.u_func(np.array(self.params['u_values'])))
         x_right = x_0
-        y_bottom = min(self.u_func(array(self.params['u_values'])))
+        y_bottom = min(self.u_func(np.array(self.params['u_values'])))
         for line in self.v_lines:
             for x, y in line:
                 if x < x_left:
@@ -616,7 +612,7 @@ class Nomo_Grid_Box(object):
 
 if __name__ == '__main__':
     def f1(x, u):
-        return log(x / (x - u / 100.0)) / log(1 + u / 100.0)
+        return np.log(x / (x - u / 100.0)) / np.log(1 + u / 100.0)
 
 
     params = {'width': 10.0,
@@ -630,7 +626,7 @@ if __name__ == '__main__':
     tic = time.time()
     test = Nomo_Grid_Box(params=params)
     toc = time.time()
-    #print toc - tic, ' has elapsed'
+    # print toc - tic, ' has elapsed'
 
     manual_axis_data = {1.0: 'first',
                         2.0: 'second',

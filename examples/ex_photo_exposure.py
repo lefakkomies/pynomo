@@ -20,8 +20,12 @@
 """
 import sys
 
+import numpy as np
+import pyx
+import math
+
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
 """
 functions for solartime taken from solareqns.pdf from
@@ -31,7 +35,7 @@ http://www.srrb.noaa.gov/highlights/sunrise/solareqns.PDF
 
 # fractional year
 def gamma(day):
-    return 2 * pi / 365.0 * (day - 1 + 0.5)
+    return 2 * np.pi / 365.0 * (day - 1 + 0.5)
 
 
 # equation of time
@@ -39,22 +43,22 @@ def gamma(day):
 
 def eq_time(day):
     gamma0 = gamma(day)
-    return 229.18 * (0.000075 + 0.001868 * cos(gamma0) - 0.032077 * sin(gamma0) \
-                     - 0.014615 * cos(2 * gamma0) - 0.040849 * sin(2 * gamma0))
+    return 229.18 * (0.000075 + 0.001868 * np.cos(gamma0) - 0.032077 * np.sin(gamma0) \
+                     - 0.014615 * np.cos(2 * gamma0) - 0.040849 * np.sin(2 * gamma0))
 
 
 # mean correction, with constant correction we make less than 17 minutes  error
 # in time axis
-temp_a = arange(0, 365.0, 0.1)
+temp_a = np.arange(0, 365.0, 0.1)
 temp_b = eq_time(temp_a)
-correction = mean(temp_b)  # this is 0.0171885 minutes
+correction = np.mean(temp_b)  # this is 0.0171885 minutes
 
 
 # declination
 def eq_declination(day):
     g0 = gamma(day)
-    return 0.006918 - 0.399912 * cos(g0) + 0.070257 * sin(g0) - 0.006758 * cos(2 * g0) \
-           + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
+    return 0.006918 - 0.399912 * np.cos(g0) + 0.070257 * np.sin(g0) - 0.006758 * np.cos(2 * g0) \
+           + 0.000907 * np.sin(2 * g0) - 0.002697 * np.cos(3 * g0) + 0.00148 * np.sin(3 * g0)
 
 
 def f1(dummy):
@@ -62,17 +66,17 @@ def f1(dummy):
 
 
 def g1(fii):
-    return cos(fii * pi / 180.0)
+    return np.cos(fii * np.pi / 180.0)
 
 
 def f2(lat, day):
     dec = eq_declination(day)
-    return (cos(lat * pi / 180.0) * cos(dec)) / (1.0 + (cos(lat * pi / 180.0) * cos(dec)))
+    return (np.cos(lat * np.pi / 180.0) * np.cos(dec)) / (1.0 + (np.cos(lat * np.pi / 180.0) * np.cos(dec)))
 
 
 def g2(lat, day):
     dec = eq_declination(day)  # in radians
-    return (sin(lat * pi / 180.0) * sin(dec)) / (1.0 + (cos(lat * pi / 180.0) * cos(dec)))
+    return (np.sin(lat * np.pi / 180.0) * np.sin(dec)) / (1.0 + (np.cos(lat * np.pi / 180.0) * np.cos(dec)))
 
 
 def f3(dummy):
@@ -81,7 +85,7 @@ def f3(dummy):
 
 def g3(h):
     hr = (h * 60.0 + correction) / 4.0 - 180.0
-    return -1.0 * cos(hr * pi / 180.0)
+    return -1.0 * np.cos(hr * np.pi / 180.0)
 
 
 days_in_month = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
@@ -180,7 +184,7 @@ const_B = -13.656
 
 block_params_weather = {'block_type': 'type_5',
                         'u_func': lambda u: u,
-                        'v_func': lambda x, v: const_A + const_B * log10(x) + v,
+                        'v_func': lambda x, v: const_A + const_B * np.log10(x) + v,
                         'u_values': [1.0, 25.0],
                         'u_manual_axis_data': {1.0: '',
                                                25.0: ''},
@@ -206,10 +210,11 @@ block_params_weather = {'block_type': 'type_5',
                         'v_title': '',
                         'wd_title_opposite_tick': True,
                         'wd_title_distance_center': 2.5,
-                        'wd_align_func': lambda L: acos(limit_xx(10.0 ** ((L - const_A) / const_B))) * 180.0 / pi,
+                        'wd_align_func': lambda L: math.acos(
+                            limit_xx(10.0 ** ((L - const_A) / const_B))) * 180.0 / np.pi,
                         # phi as L
                         'wd_func': lambda L: 10.0 ** ((L - const_A) / const_B),  # x as L
-                        'wd_func_inv': lambda x: const_A + const_B * log10(x),  # L as x
+                        'wd_func_inv': lambda x: const_A + const_B * np.log10(x),  # L as x
                         'wd_tag': 'phi',
                         'mirror_y': True,
                         'mirror_x': False,
@@ -263,7 +268,7 @@ camera_params_1 = {'u_min': -10.0,
                    }
 camera_params_2 = {'u_min': 10.0,
                    'u_max': 25600.0,
-                   'function': lambda S: -(10 * log10(S) + 1.0),
+                   'function': lambda S: -(10 * np.log10(S) + 1.0),
                    'title': r'Film speed',
                    'manual_axis_data': {10.0: 'ISO 10',
                                         20.0: 'ISO 20',
@@ -282,7 +287,7 @@ camera_params_2 = {'u_min': 10.0,
                    }
 camera_params_3 = {'u_min': 0.1,
                    'u_max': 10000.0,
-                   'function': lambda t: -10 * log10((1.0 / t) / (1.0 / 10.0)) - 30,
+                   'function': lambda t: -10 * np.log10((1.0 / t) / (1.0 / 10.0)) - 30,
                    'manual_axis_data': {1 / 10.0: '10',
                                         1 / 7.0: '7',
                                         1 / 5.0: '5',
@@ -318,7 +323,7 @@ camera_params_3 = {'u_min': 0.1,
                    }
 camera_params_4 = {'u_min': 1.0,
                    'u_max': 22.0,
-                   'function': lambda N: 10 * log10((N / 3.2) ** 2) + 30,
+                   'function': lambda N: 10 * np.log10((N / 3.2) ** 2) + 30,
                    'manual_axis_data': {1.0: '$f$/1',
                                         1.2: '$f$/1.2',
                                         1.4: '$f$/1.4',
@@ -374,7 +379,7 @@ EV_block = {'block_type': 'type_8',
 # maximum focal length
 FL_t_para = {'u_min': 0.1,
              'u_max': 10000.0,
-             'function': lambda t: -10 * log10((1.0 / t) / (1.0 / 10.0)) - 30,
+             'function': lambda t: -10 * np.log10((1.0 / t) / (1.0 / 10.0)) - 30,
              'scale_type': 'linear',
              'tick_levels': 0,
              'tick_text_levels': 0,
@@ -384,7 +389,7 @@ FL_t_para = {'u_min': 0.1,
              }
 FL_factor_params_2 = {'u_min': 1.0 / 4.0,
                       'u_max': 3.0 / 2.0,
-                      'function': lambda factor: -10 * log10(factor / 10.0) + 0,
+                      'function': lambda factor: -10 * np.log10(factor / 10.0) + 0,
                       'title': r'Sensor, IS',
                       'scale_type': 'manual point',
                       'manual_axis_data': {1.0 / (2.0 / 3.0): 'DSLR',
@@ -393,11 +398,11 @@ FL_factor_params_2 = {'u_min': 1.0 / 4.0,
                                            1.0 / (4.0): '35mm IS',
                                            },
                       'tick_side': 'left',
-                      'text_size_manual': text.size.footnotesize,  # pyx directive
+                      'text_size_manual': pyx.text.size.footnotesize,  # pyx directive
                       }
 FL_fl_params = {'u_min': 20.0,
                 'u_max': 1000.0,
-                'function': lambda FL: -10 * log10(FL) + 30,
+                'function': lambda FL: -10 * np.log10(FL) + 30,
                 'title': r'Max focal length',
                 'tick_levels': 3,
                 'tick_text_levels': 2,

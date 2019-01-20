@@ -1,16 +1,17 @@
 # ex_axes_2.py
 
 import sys
+
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
 N_params = {'u_min': 1.0,
             'u_max': 10.0,
             'function': lambda u: u,
             'title': 'u',
-            'tick_levels': 3,        # <-
-            'tick_text_levels': 2,   # <-
-            'tick_side': 'left',     # <-
+            'tick_levels': 3,  # <-
+            'tick_text_levels': 2,  # <-
+            'tick_side': 'left',  # <-
             }
 
 block_params = {'block_type': 'type_8',
@@ -20,10 +21,10 @@ block_params = {'block_type': 'type_8',
                 }
 
 main_params = {'filename': 'ex_axes_2.pdf',
-                'paper_height': 10.0,
-                'paper_width': 5.0,
-                'block_params': [block_params],
-                'transformations': [('scale paper',)]
+               'paper_height': 10.0,
+               'paper_width': 5.0,
+               'block_params': [block_params],
+               'transformations': [('scale paper',)]
                }
 
 Nomographer(main_params)

@@ -1,6 +1,10 @@
-#    PyNomo - nomographs with Python
-#    Copyright (C) 2007-2015  Leif Roschier
-#    Otherwise obsolete but used  in nomo_wrapper.py
+# -*- coding: utf-8 -*-
+#    This file is part of PyNomo -
+#    a program to create nomographs with Python (https://github.com/lefakkomies/pynomo)
+#
+#    Copyright (C) 2007-2019  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#
+#    This file otherwise obsolete but used  in nomo_wrapper.py
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,7 +23,7 @@
 import numpy as np
 
 
-class Nomograph3:
+class Nomograph3(object):
     def __init__(self, f1, g1, h1, f2, g2, h2, f3, g3, h3,
                  vk=[['u', 0.5, 'x', -5],
                      ['u', 0.5, 'y', 0.0],

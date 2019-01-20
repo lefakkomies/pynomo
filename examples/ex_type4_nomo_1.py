@@ -1,7 +1,7 @@
 """
     ex_type4_nomo_1.py
 
-    Simple nomogram of type 4: F1/F2=F3/F4
+    Simple nomogram of type 4: F1 / F2 = F3 / F4
 
     Copyright (C) 2007-2009  Leif Roschier
 
@@ -20,7 +20,7 @@
 """
 import sys
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
 N_params_1={
         'u_min':1.0,

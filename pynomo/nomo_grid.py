@@ -17,11 +17,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pyx import *
-from math import *
-from scipy import *
-from numpy import *
-from nomo_axis import *
+from .nomo_axis import Nomo_Axis
+import math
+import numpy as np
+import pyx
 import random
 import sys
 
@@ -45,12 +44,12 @@ class Nomo_Grid:
                                'v_texts_u_stop': True,
                                'u_texts_v_start': False,
                                'u_texts_v_stop': True,
-                               'u_line_color': color.rgb.black,
-                               'v_line_color': color.rgb.black,
-                               'u_text_color': color.rgb.black,
-                               'v_text_color': color.rgb.black,
-                               'u_line_width': style.linewidth.normal,
-                               'v_line_width': style.linewidth.normal,
+                               'u_line_color': pyx.color.rgb.black,
+                               'v_line_color': pyx.color.rgb.black,
+                               'u_text_color': pyx.color.rgb.black,
+                               'v_text_color': pyx.color.rgb.black,
+                               'u_line_width': pyx.style.linewidth.normal,
+                               'v_line_width': pyx.style.linewidth.normal,
                                'text_distance': 0.25,
                                'circles': False,  # if marker circles
                                'text_prefix_u': '',  # for example r'$\alpha$='
@@ -67,7 +66,7 @@ class Nomo_Grid:
 
     def _draw_line_u_(self):
         """
-        draws a single line from start to stop for variable u
+        draws a math.single line from start to stop for variable u
         """
         start = self.grid_data['u_start']
         stop = self.grid_data['u_stop']
@@ -92,7 +91,7 @@ class Nomo_Grid:
 
     def _draw_line_v_(self):
         """
-        draws a single line from start to stop for variable v
+        draws a math.single line from start to stop for variable v
         """
         start = self.grid_data['v_start']
         stop = self.grid_data['v_stop']
@@ -138,28 +137,29 @@ class Nomo_Grid:
 
         return f, g
 
-    def _draw_line_(self, f, g, start, stop, title, axis_color=color.rgb.red,
-                    start_texts=False, stop_texts=True, text_color=color.rgb.black, line_width=style.linewidth.normal):
+    def _draw_line_(self, f, g, start, stop, title, axis_color=pyx.color.rgb.red,
+                    start_texts=False, stop_texts=True, text_color=pyx.color.rgb.black,
+                    line_width=pyx.style.linewidth.normal):
         if start > 0 and stop > 0:
             du = (max(start, stop) - min(start, stop)) * 1e-10  # was 1e-10
             # print "start:%g stop:%g"%(start,stop)
             # print "testing du = %g"%du
         else:
-            du = fabs(start - stop) * 1e-5
+            du = np.fabs(start - stop) * 1e-5
         # approximate line length is found
-        line_length_straigth = sqrt((f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
+        line_length_straigth = np.sqrt((f(start) - f(stop)) ** 2 + (g(start) - g(stop)) ** 2)
         random.seed(0.0)  # so that mistakes always the same
         for dummy in range(100):
             first = random.uniform(start, stop)
             second = random.uniform(start, stop)
-            temp = sqrt((f(first) - f(second)) ** 2 + (g(first) - g(second)) ** 2)
+            temp = np.sqrt((f(first) - f(second)) ** 2 + (g(first) - g(second)) ** 2)
             if temp > line_length_straigth:
                 line_length_straigth = temp
                 # print "length: %f"%line_length_straigth
         sections = 350.0  # about number of sections
         section_length = line_length_straigth / sections
-        line = path.path(path.moveto(f(start), g(start)))
-        line.append(path.lineto(f(start), g(start)))
+        line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
+        line.append(pyx.path.lineto(f(start), g(start)))
         u = start
         laskuri = 1
         up_factor = self.grid_data['iterator_factor']
@@ -169,7 +169,7 @@ class Nomo_Grid:
             if (u + delta_u) < stop:
                 dx = (f(u + du) - f(u))
                 dy = (g(u + du) - g(u))
-                dl = sqrt(dx ** 2 + dy ** 2)
+                dl = np.sqrt(dx ** 2 + dy ** 2)
                 delta_u = du * section_length / dl
                 # let's calculate actual length
                 # and iterate until length is in factor 2 from target
@@ -179,10 +179,10 @@ class Nomo_Grid:
                         break
                     delta_x = f(u + delta_u) - f(u)
                     delta_y = g(u + delta_u) - g(u)
-                    delta_l = sqrt(delta_x ** 2 + delta_y ** 2)
+                    delta_l = np.sqrt(delta_x ** 2 + delta_y ** 2)
                     if delta_l > 5.0 * section_length:
                         delta_u = delta_u * down_factor  # 0.999
-                        # print "delta_u pienenee:%f"%delta_u
+                        # print "delta_u math.pienenee:%f"%delta_u
                     else:
                         if delta_l < section_length / 5.0:
                             delta_u = delta_u * up_factor  # 1.001
@@ -195,9 +195,9 @@ class Nomo_Grid:
                 u += delta_u
                 # print u,stop
                 laskuri = laskuri + 1
-                line.append(path.lineto(f(u), g(u)))
+                line.append(pyx.path.lineto(f(u), g(u)))
             else:
-                line.append(path.lineto(f(stop), g(stop)))
+                line.append(pyx.path.lineto(f(stop), g(stop)))
                 # print laskuri
                 sys.stdout.write('.')
                 break
@@ -209,22 +209,22 @@ class Nomo_Grid:
         if stop_texts:  # set texts to stop
             self._set_text_to_grid_(f, g, stop, -du, title, axis_color, text_color)
         if self.grid_data['circles']:
-            self.canvas.fill(path.circle(f(start), g(start), 0.03), [axis_color])
-            self.canvas.fill(path.circle(f(stop), g(stop), 0.03), [axis_color])
+            self.canvas.fill(pyx.path.circle(f(start), g(start), 0.03), [axis_color])
+            self.canvas.fill(pyx.path.circle(f(stop), g(stop), 0.03), [axis_color])
             # print "line drawn"
 
-    def _set_text_to_grid_(self, f, g, u, du, title, axis_color, text_color=color.rgb.black):
+    def _set_text_to_grid_(self, f, g, u, du, title, axis_color, text_color=pyx.color.rgb.black):
         """
         draws text to the end of gridline
         """
         dx = (f(u + du) - f(u))
         dy = (g(u + du) - g(u))
-        if sqrt(dx ** 2 + dy ** 2) == 0:
+        if np.sqrt(dx ** 2 + dy ** 2) == 0:
             dx_unit = 0
             dy_unit = 0
         else:
-            dx_unit = dx / sqrt(dx ** 2 + dy ** 2)
-            dy_unit = dy / sqrt(dx ** 2 + dy ** 2)
+            dx_unit = dx / np.sqrt(dx ** 2 + dy ** 2)
+            dy_unit = dy / np.sqrt(dx ** 2 + dy ** 2)
         if dy_unit != 0:
             """
             print "du %g"%du
@@ -233,7 +233,7 @@ class Nomo_Grid:
             print "dx_unit %g"%dx_unit
             print "dy_unit %g"%dy_unit
             """
-            angle = -atan(dx_unit / dy_unit) * 180 / pi
+            angle = -math.atan(dx_unit / dy_unit) * 180 / math.pi
         else:
             angle = 0
         text_distance = 0.5
@@ -242,22 +242,26 @@ class Nomo_Grid:
             if (angle - 90.0) <= -90.0:
                 angle = angle + 180.0
             if dx_unit > 0.0:
-                text_attr = [text.valign.middle, text.halign.right, text.size.small, trafo.rotate(angle - 90)]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.right, pyx.text.size.small,
+                             pyx.trafo.rotate(angle - 90)]
             if dx_unit <= 0.0:
-                text_attr = [text.valign.middle, text.halign.left, text.size.small, trafo.rotate(angle - 90)]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.left, pyx.text.size.small,
+                             pyx.trafo.rotate(angle - 90)]
         else:
             if (angle + 90.0) >= 90.0:
                 angle = angle - 180.0
             if dx_unit > 0.0:
-                text_attr = [text.valign.middle, text.halign.right, text.size.small, trafo.rotate(angle + 90)]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.right, pyx.text.size.small,
+                             pyx.trafo.rotate(angle + 90)]
             if dx_unit <= 0.0:
-                text_attr = [text.valign.middle, text.halign.left, text.size.small, trafo.rotate(angle + 90)]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.left, pyx.text.size.small,
+                             pyx.trafo.rotate(angle + 90)]
         """
         copied from nomo_axis.py
         if dy_units[idx]<0:
-            text_attr=[text.valign.middle,text.halign.right,text_size,trafo.rotate(angles[idx])]
+            text_attr=[pyx.text.valign.middle,pyx.text.halign.right,text_size,pyx.trafo.rotate(angles[idx])]
         else:
-            text_attr=[text.valign.middle,text.halign.left,text_size,trafo.rotate(angles[idx])]
+            text_attr=[pyx.text.valign.middle,pyx.text.halign.left,text_size,pyx.trafo.rotate(angles[idx])]
         text_list.append((self._put_text_(u),f(u)+text_distance*dy_units[idx],
                           g(u)-text_distance*dx_units[idx],text_attr))
         """
@@ -266,7 +270,7 @@ class Nomo_Grid:
         self.canvas.text(f(u) - text_distance * dx_unit,
                          g(u) - text_distance * dy_unit,
                          title, text_attr)
-        # self.canvas.fill(path.circle(f(u), g(u), 0.03),[axis_color])
+        # self.canvas.fill(pyx.path.circle(f(u), g(u), 0.03),[axis_color])
 
 
 if __name__ == '__main__':
@@ -274,26 +278,26 @@ if __name__ == '__main__':
     # taken from solareqns.pdf from
     # http://www.srrb.noaa.gov/highlights/sunrise/solareqns.PDF
     def gamma(day):
-        return 2 * pi / 365.0 * (day - 1 + 0.5)
+        return 2 * math.pi / 365.0 * (day - 1 + 0.5)
 
 
     def eq_time(day):
         gamma0 = gamma(day)
-        return 229.18 * (0.000075 + 0.001868 * cos(gamma0) - 0.032077 * sin(gamma0) \
-                         - 0.014615 * cos(2 * gamma0) - 0.040849 * sin(2 * gamma0))
+        return 229.18 * (0.000075 + 0.001868 * np.cos(gamma0) - 0.032077 * np.sin(gamma0)
+                         - 0.014615 * np.cos(2 * gamma0) - 0.040849 * np.sin(2 * gamma0))
 
 
-    # mean correction, with constant correction we make less than 1.5 minutes error
+    # np.mean correction, with constant correction we make less than 1.5 minutes error
     # in time axis
-    temp_a = arange(0, 2 * pi, 0.001)
+    temp_a = np.arange(0, 2 * math.pi, 0.001)
     temp_b = eq_time(temp_a)
-    correction = mean(temp_b)  # this is about four minutes
+    correction = np.mean(temp_b)  # this is about four minutes
 
 
     def eq_declination(day):
         g0 = gamma(day)
-        return 0.006918 - 0.399912 * cos(g0) + 0.070257 * sin(g0) - 0.006758 * cos(2 * g0) \
-               + 0.000907 * sin(2 * g0) - 0.002697 * cos(3 * g0) + 0.00148 * sin(3 * g0)
+        return 0.006918 - 0.399912 * np.cos(g0) + 0.070257 * math.sin(g0) - 0.006758 * np.cos(2 * g0) \
+               + 0.000907 * math.sin(2 * g0) - 0.002697 * np.cos(3 * g0) + 0.00148 * math.sin(3 * g0)
 
 
     def tst(day, hour):
@@ -310,12 +314,14 @@ if __name__ == '__main__':
 
     def f(lat, day):
         dec = eq_declination(day)
-        return multiplier_x * (cos(lat * pi / 180.0) * cos(dec)) / (1.0 + (cos(lat * pi / 180.0) * cos(dec)))
+        return multiplier_x * (np.cos(lat * math.pi / 180.0) * np.cos(dec)) / (
+                    1.0 + (np.cos(lat * math.pi / 180.0) * np.cos(dec)))
 
 
     def g(lat, day):
         dec = eq_declination(day)  # in radians
-        return multiplier_y * (sin(lat * pi / 180.0) * sin(dec)) / (1.0 + (cos(lat * pi / 180.0) * cos(dec)))
+        return multiplier_y * (np.sin(lat * math.pi / 180.0) * math.sin(dec)) / (
+                    1.0 + (np.cos(lat * math.pi / 180.0) * np.cos(dec)))
 
 
     def f1(dummy):
@@ -323,7 +329,7 @@ if __name__ == '__main__':
 
 
     def g1(fii):
-        return multiplier_y * cos(fii * pi / 180.0)
+        return multiplier_y * np.cos(fii * math.pi / 180.0)
 
 
     def f3(dummy):
@@ -332,7 +338,7 @@ if __name__ == '__main__':
 
     def g3(h):
         hr = (h * 60.0 + correction) / 4.0 - 180.0
-        return -multiplier_y * cos(hr * pi / 180.0)
+        return -multiplier_y * np.cos(hr * math.pi / 180.0)
 
 
     days_in_month = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
@@ -340,9 +346,8 @@ if __name__ == '__main__':
     for idx in range(0, 12):
         times1.append(sum(days_in_month[0:idx]) + 1)
 
-
     # times=linspace(0,350,10)
-    times = arange(0.0, 360.0, 10.0, dtype=double).tolist()
+    times = np.arange(0.0, 360.0, 10.0, dtype=np.double).tolist()
     time_titles = ['January', 'February', 'March', 'April', 'May', 'June',
                    'July', 'August', 'September', 'October', 'November', 'December']
     # times.append(365)
@@ -355,7 +360,7 @@ if __name__ == '__main__':
             'v_values': times1,
             'v_texts': time_titles}
 
-    c = canvas.canvas()
+    c = pyx.canvas.canvas()
     gridi = Nomo_Grid(f, g, c, data=data)
     ax1 = Nomo_Axis(func_f=f1, func_g=g1,
                     start=0.0, stop=90.0,
@@ -378,6 +383,6 @@ if __name__ == '__main__':
     test_lat = 60.0
     test_ha = test_h * 60.0 / 4.0 - 180.0
     test_dec = eq_declination(test_day)
-    test_cos_phi = sin(test_lat * pi / 180.0) * sin(test_dec) + \
-                   cos(test_lat * pi / 180.0) * cos(test_dec) * cos(test_ha * pi / 180.0)
+    test_cos_phi = math.sin(test_lat * math.pi / 180.0) * math.sin(test_dec) + \
+                   np.cos(test_lat * math.pi / 180.0) * np.cos(test_dec) * np.cos(test_ha * math.pi / 180.0)
     # print acos(test_cos_phi)*180/pi

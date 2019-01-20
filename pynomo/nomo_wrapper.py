@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 #
 #    This file is part of PyNomo -
-#    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
+#    a program to create nomographs with Python (https://github.com/lefakkomies/pynomo)
 #
-#    Copyright (C) 2007-2008  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2007-2019  Leif Roschier  <lefakkomies@users.sourceforge.net>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,17 +18,24 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from nomo_axis import *
-from nomo_axis_func import *
-from nomo_grid_box import *
-from nomo_grid import *
-from nomograph3 import *
-from math_utilities import *
-from numpy import *
+from .nomo_axis import Nomo_Axis
+from .nomo_axis_func import Axis_Wrapper, Axes_Wrapper
+from .nomo_grid_box import Nomo_Grid_Box
+from .nomo_grid import Nomo_Grid
+from .nomograph3 import Nomograph3
+from .nomo_axis import find_linear_ticks
+from .nomo_axis import find_tick_directions
+from .math_utilities import FourPoint
+
+import math
+import numpy as np
 import scipy
-from pyx import *
-# from copy import copy
-import copy, re, pprint, random
+import pyx
+
+import copy
+import re
+import pprint
+import random
 
 
 class Nomo_Wrapper:
@@ -42,6 +50,7 @@ class Nomo_Wrapper:
             'title_str': '',
             'title_x': paper_width / 2.0,
             'title_y': paper_height,
+            'title_color': pyx.color.rgb.black,
             'title_box_width': paper_width / 2.2,
             'extra_texts': []}
         self.params = self.params_default
@@ -83,17 +92,17 @@ class Nomo_Wrapper:
         yd = alpha2*x+beta2*y+gamma2
         alpha3=0, beta3=0, gamma3=1.0
         """
-        matt = array([[x1, y1, 1.0, 0.0, 0.0, 0.0],
-                      [0, 0, 0, x1, y1, 1],
-                      [x2, y2, 1, 0, 0, 0],
-                      [0, 0, 0, x2, y2, 1],
-                      [x3, y3, 1, 0, 0, 0],
-                      [0, 0, 0, x3, y3, 1]])
+        matt = np.array([[x1, y1, 1.0, 0.0, 0.0, 0.0],
+                         [0, 0, 0, x1, y1, 1],
+                         [x2, y2, 1, 0, 0, 0],
+                         [0, 0, 0, x2, y2, 1],
+                         [x3, y3, 1, 0, 0, 0],
+                         [0, 0, 0, x3, y3, 1]])
         # print rank(mat)
-        inverse = linalg.inv(matt)
+        inverse = np.linalg.inv(matt)
         # vec=dot(inverse,[[x1d,y1d,x2d,y2d,x3d,y3d]])
-        dest = array([x1d, y1d, x2d, y2d, x3d, y3d])
-        vec = linalg.solve(matt, dest)
+        dest = np.array([x1d, y1d, x2d, y2d, x3d, y3d])
+        vec = np.linalg.solve(matt, dest)
         alpha1 = vec[0]
         beta1 = vec[1]
         gamma1 = vec[2]
@@ -197,7 +206,7 @@ class Nomo_Wrapper:
 
     def _do_scale_to_canvas_trafo_(self, params):
         """
-        Finds transformation to scale to canvas
+        Finds transformation to scale to pyx.canvas
         """
         self.axes_wrapper.fit_to_paper()
         # self.axes_wrapper._print_result_pdf_("dummy1_paper.pdf")
@@ -218,7 +227,7 @@ class Nomo_Wrapper:
 
     def _do_rotate_trafo_(self, params):
         """
-        Finds transformation to scale to canvas
+        Finds transformation to scale to pyx.canvas
         """
         self.axes_wrapper.rotate_canvas(params)
         # self.axes_wrapper._print_result_pdf_("dummy1_rotate.pdf")
@@ -242,18 +251,18 @@ class Nomo_Wrapper:
             post_func(canvas)
         if isinstance(self.filename, list):
             for filename_this in self.filename:
-                if not re.compile(".eps$").search(filename_this, 1) == None:
+                if not re.compile(".eps$").search(filename_this, 1) is None:
                     canvas.writeEPSfile(filename_this)
                 else:
-                    if not re.compile(".svg$").search(self.filename, 1) == None:
+                    if not re.compile(".svg$").search(filename_this, 1) is None:
                         canvas.writeSVGfile(filename_this)
                     else:
                         canvas.writePDFfile(filename_this)
         else:
-            if not re.compile(".eps$").search(self.filename, 1) == None:
+            if not re.compile(".eps$").search(self.filename, 1) is None:
                 canvas.writeEPSfile(self.filename)
             else:
-                if not re.compile(".svg$").search(self.filename, 1) == None:
+                if not re.compile(".svg$").search(self.filename, 1) is None:
                     canvas.writeSVGfile(self.filename)
                 else:
                     canvas.writePDFfile(self.filename)
@@ -265,8 +274,8 @@ class Nomo_Wrapper:
         # print self.params
         c.text(self.params['title_x'], self.params['title_y'],
                self.params['title_str'],
-               [text.parbox(self.params['title_box_width']),
-                text.halign.boxcenter, text.halign.flushcenter,
+               [pyx.text.parbox(self.params['title_box_width']),
+                pyx.text.halign.boxcenter, pyx.text.halign.flushcenter,
                 self.params['title_color']])
 
     def _draw_extra_texts_(self, c):
@@ -289,7 +298,7 @@ class Nomo_Wrapper:
                 text_str = texts['text']
                 width = texts['width']
                 pyx_extra_defs = texts['pyx_extra_defs']
-                c.text(x, y, text_str, [text.parbox(width)] + pyx_extra_defs)
+                c.text(x, y, text_str, [pyx.text.parbox(width)] + pyx_extra_defs)
 
     def align_blocks_old(self):
         """
@@ -357,7 +366,7 @@ class Nomo_Wrapper:
                                 # print idx2
                                 # print idx2
                                 if not double_aligned:
-                                    #print "Aligning with tag %s" % atom1.params['tag']
+                                    # print "Aligning with tag %s" % atom1.params['tag']
                                     alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
                                         self._find_trafo_2_atoms_(atom1, atom2)
                                     block2.add_transformation(alpha1, beta1, gamma1,
@@ -440,7 +449,7 @@ class Nomo_Wrapper:
                                                 # print idx2
                                                 # print idx2
                                 if not double_aligned:
-                                    #print "Aligning with tag %s" % atom1.params['tag']
+                                    # print "Aligning with tag %s" % atom1.params['tag']
                                     alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
                                         self._find_trafo_2_atoms_(atom1, atom2)
                                     block2.add_transformation(alpha1, beta1, gamma1,
@@ -530,24 +539,24 @@ class Nomo_Wrapper:
         x3, y3, x4, y4, x3d, y3d, x4d, y4d = find_coords(atom2b, atom1b)
         # DEBUG
         if False:
-            #print "x1: %f y1: %f x2: %f y2: %f x1d: %f y1d: %f x2d: %f y2d: %f" % (x1, y1, x2, y2, x1d, y1d, x2d, y2d)
-            #print "x3: %f y3: %f x4: %f y4: %f x3d: %f y3d: %f x4d: %f y4d: %f" % (x3, y3, x4, y4, x3d, y3d, x4d, y4d)
-            c = canvas.canvas()
-            c.fill(path.circle(x1, y1, 0.02))
+            # print "x1: %f y1: %f x2: %f y2: %f x1d: %f y1d: %f x2d: %f y2d: %f" % (x1, y1, x2, y2, x1d, y1d, x2d, y2d)
+            # print "x3: %f y3: %f x4: %f y4: %f x3d: %f y3d: %f x4d: %f y4d: %f" % (x3, y3, x4, y4, x3d, y3d, x4d, y4d)
+            c = pyx.canvas.canvas()
+            c.fill(pyx.path.circle(x1, y1, 0.02))
             c.text(x1, y1, '1')
-            c.fill(path.circle(x2, y2, 0.03))
+            c.fill(pyx.path.circle(x2, y2, 0.03))
             c.text(x2, y2, '2')
-            c.fill(path.circle(x3, y3, 0.04))
+            c.fill(pyx.path.circle(x3, y3, 0.04))
             c.text(x3, y3, '3')
-            c.fill(path.circle(x4, y4, 0.05))
+            c.fill(pyx.path.circle(x4, y4, 0.05))
             c.text(x4, y4, '4')
-            c.fill(path.circle(x1d, y1d, 0.02))
+            c.fill(pyx.path.circle(x1d, y1d, 0.02))
             c.text(x1d, y1d, '1d')
-            c.fill(path.circle(x2d, y2d, 0.03))
+            c.fill(pyx.path.circle(x2d, y2d, 0.03))
             c.text(x2d, y2d, '2d')
-            c.fill(path.circle(x3d, y3d, 0.04))
+            c.fill(pyx.path.circle(x3d, y3d, 0.04))
             c.text(x3d, y3d, '3d')
-            c.fill(path.circle(x4d, y4d, 0.05))
+            c.fill(pyx.path.circle(x4d, y4d, 0.05))
             c.text(x4d, y4d, '4d')
             c.writePDFfile('double_debug.pdf')
 
@@ -587,11 +596,11 @@ class Nomo_Wrapper:
             # to make expressions shorter
             cv = coord_value
             if coordinate == 'x':
-                row = array([y, 1, 0, 0, 0, -cv * x, -cv * y, -cv * 1])
-                value = array([x])
+                row = np.array([y, 1, 0, 0, 0, -cv * x, -cv * y, -cv * 1])
+                value = np.array([x])
             if coordinate == 'y':
-                row = array([0, 0, x, y, 1, -cv * x, -cv * y, -cv * 1])
-                value = array([0])
+                row = np.array([0, 0, x, y, 1, -cv * x, -cv * y, -cv * 1])
+                value = np.array([0])
             return row, value
 
         row1, const1 = _make_row_(coordinate='x', coord_value=x2d, x=x2, y=y2)
@@ -603,10 +612,10 @@ class Nomo_Wrapper:
         row7, const7 = _make_row_(coordinate='x', coord_value=x3d, x=x3, y=y3)
         row8, const8 = _make_row_(coordinate='y', coord_value=y3d, x=x3, y=y3)
 
-        matrix = array([row1, row2, row3, row4, row5, row6, row7, row8])
+        matrix = np.array([row1, row2, row3, row4, row5, row6, row7, row8])
         # print matrix
-        b = array([const1, const2, const3, const4, const5, const6, const7, const8])
-        coeff_vector = linalg.solve(matrix, b)
+        b = np.array([const1, const2, const3, const4, const5, const6, const7, const8])
+        coeff_vector = np.linalg.solve(matrix, b)
         alpha1 = -1.0  # fixed
         beta1 = coeff_vector[0][0]
         gamma1 = coeff_vector[1][0]
@@ -706,9 +715,9 @@ class Nomo_Block(object):
         adds transformation to be applied as a basis.
         all transformation matrices are multiplied together
         """
-        trafo_mat = array([[alpha1, beta1, gamma1],
-                           [alpha2, beta2, gamma2],
-                           [alpha3, beta3, gamma3]])
+        trafo_mat = np.array([[alpha1, beta1, gamma1],
+                              [alpha2, beta2, gamma2],
+                              [alpha3, beta3, gamma3]])
         self.trafo_stack.append(trafo_mat)
         self._calculate_total_trafo_mat_()  # update coeffs (also in atoms)
 
@@ -719,9 +728,9 @@ class Nomo_Block(object):
         adds transformation to be applied as a basis.
         all transformation matrices are multiplied together
         """
-        trafo_mat = array([[alpha1, beta1, gamma1],
-                           [alpha2, beta2, gamma2],
-                           [alpha3, beta3, gamma3]])
+        trafo_mat = np.array([[alpha1, beta1, gamma1],
+                              [alpha2, beta2, gamma2],
+                              [alpha3, beta3, gamma3]])
         self.trafo_stack.pop()  # last away
         self.trafo_stack.append(trafo_mat)
         self._calculate_total_trafo_mat_()  # update coeffs (also in atoms)
@@ -749,7 +758,7 @@ class Nomo_Block(object):
         stack_copy.reverse()
         trafo_mat = stack_copy.pop()
         for matrix in stack_copy:
-            trafo_mat = dot(trafo_mat, matrix)  # matrix multiplication
+            trafo_mat = np.dot(trafo_mat, matrix)  # matrix multiplication
         self.alpha1 = trafo_mat[0][0]
         self.beta1 = trafo_mat[0][1]
         self.gamma1 = trafo_mat[0][2]
@@ -1012,7 +1021,7 @@ class Nomo_Block_Type_2(Nomo_Block):
         f3_max = m3 * max(self.F3(self.params_F3['u_min']), self.F3(self.params_F3['u_max']))
         y_offset_1_3 = f1_min - (height - f3_max)
 
-        K = sqrt(height ** 2 + width ** 2)
+        K = np.sqrt(height ** 2 + width ** 2)
         self.params_F1['F'] = lambda u: 0.0
         self.params_F1['G'] = lambda u: ((self.F1(u)) * m1) * self.y_mirror
         self.atom_F1 = Nomo_Atom(self.params_F1)
@@ -1057,7 +1066,7 @@ class Nomo_Block_Type_2(Nomo_Block):
         #    length_f1=length_f3
         m1 = height / length_f1
         m3 = height / length_f3
-        K = sqrt(height ** 2 + width ** 2)
+        K = np.sqrt(height ** 2 + width ** 2)
         self.params_F1['F'] = lambda u: 0.0
         self.params_F1['G'] = lambda u: (c1 * self.F1(u) * m1) * self.y_mirror
         self.atom_F1 = Nomo_Atom(self.params_F1)
@@ -1106,7 +1115,7 @@ class Nomo_Block_Type_3(Nomo_Block):
         self.shift_stack.append(0)  # initial correction 0
 
     def set_block(self, height=10.0, width=10.0, reference_padding=0.2,
-                  reference_titles=[], reference_color=color.rgb.black):
+                  reference_titles=[], reference_color=pyx.color.rgb.black):
         """
         sets up equations in block after definitions are given
         """
@@ -1179,7 +1188,7 @@ class Nomo_Block_Type_3(Nomo_Block):
             if max_value < min_value:
                 min_value, max_value = max_value, min_value
             mean_values.append((min_value + max_value) / 2.0)
-        mean_value = mean(mean_values)
+        mean_value = np.mean(mean_values)
         # calculate needed additions to funcs = shifts
         shift_sum = 0
         for idx in range(1, self.N + 1, 1):
@@ -1201,8 +1210,8 @@ class Nomo_Block_Type_3(Nomo_Block):
         defines functions. Copied originally from nomograp_N_lin.py
         """
         N = self.N
-        self.x_func = {}  # x coordinate to map points into canvas
-        self.y_func = {}  # y coordinate to map points into canvas
+        self.x_func = {}  # x coordinate to map points into pyx.canvas
+        self.y_func = {}  # y coordinate to map points into pyx.canvas
         self.xR_func = {}  # turning-point axis
         self.yR_func = {}
         fn2x_table = {}  # mapping from function fn to x-coord
@@ -1240,12 +1249,12 @@ class Nomo_Block_Type_3(Nomo_Block):
         # make reflection axes
         self.ref_params = []
         ref_para_ini = {  # this is for reference
-                          'u_min': 0.0,
-                          'u_max': 1.0,
-                          'function': lambda u: u,
-                          'title': 'R',
-                          'reference': True
-                          }
+            'u_min': 0.0,
+            'u_max': 1.0,
+            'function': lambda u: u,
+            'title': 'R',
+            'reference': True
+        }
         for idx in range(1, N - 2):
             ref_para = copy.copy(ref_para_ini)
             ref_para['F'] = self._makeDoX_(r_table[idx])
@@ -1275,6 +1284,7 @@ class Nomo_Block_Type_3(Nomo_Block):
         copied trick to solve function definitions inside loop
         (I could not figure out how to use lambda...)
         """
+
         # def ff(u): return (-1)**(idx+1)*0.5*self.functions['f%i'%idx](u)
         def ff(u): return (-1) ** (idx + 1) * 0.5 * (self.F_stack[idx - 1]['function'](u) \
                                                      + self.shift_stack[idx - 1]) * self.y_mirror
@@ -1339,7 +1349,7 @@ class Nomo_Block_Type_4(Nomo_Block):
                                         start=params['u_min'], stop=params['u_max'])
 
     def set_block(self, height=10.0, width=10.0, float_axis='F1 or F2', padding=0.9,
-                  reference_color=color.rgb.black):
+                  reference_color=pyx.color.rgb.black):
         """
         sets up equations in block after definitions are given
         float_axis is the axis that's scaling is set by other's scaling
@@ -1482,21 +1492,21 @@ class Nomo_Block_Type_5(Nomo_Block):
         x00, y00 = self.grid_box.u_lines[0][0]
         x00t = self._give_trafo_x_(x00, y00)
         y00t = self._give_trafo_y_(x00, y00)
-        u_line_list = path.path(path.moveto(x00t, y00t))
+        u_line_list = pyx.path.path(pyx.path.moveto(x00t, y00t))
         for u_line in self.grid_box.u_lines:
             x0, y0 = u_line[0]
             x0t = self._give_trafo_x_(x0, y0)
             y0t = self._give_trafo_y_(x0, y0)
-            u_line_list.append(path.moveto(x0t, y0t))
+            u_line_list.append(pyx.path.moveto(x0t, y0t))
             for x, y in u_line:
                 xt = self._give_trafo_x_(x, y)
                 yt = self._give_trafo_y_(x, y)
-                u_line_list.append(path.lineto(xt, yt))
+                u_line_list.append(pyx.path.lineto(xt, yt))
         # for v-title positioning
         x00, y00 = self.grid_box.v_lines[0][0]
         x00t = self._give_trafo_x_(x00, y00)
         y00t = self._give_trafo_y_(x00, y00)
-        v_line_list = path.path(path.moveto(x00t, y00t))
+        v_line_list = pyx.path.path(pyx.path.moveto(x00t, y00t))
         median_v = len(self.grid_box.v_lines) / 2
         if median_v == 0:
             median_v = 1
@@ -1504,11 +1514,11 @@ class Nomo_Block_Type_5(Nomo_Block):
             x0, y0 = v_line[0]
             x0t = self._give_trafo_x_(x0, y0)
             y0t = self._give_trafo_y_(x0, y0)
-            v_line_list.append(path.moveto(x0t, y0t))
+            v_line_list.append(pyx.path.moveto(x0t, y0t))
             for x, y in v_line:
                 xt = self._give_trafo_x_(x, y)
                 yt = self._give_trafo_y_(x, y)
-                v_line_list.append(path.lineto(xt, yt))
+                v_line_list.append(pyx.path.lineto(xt, yt))
             # make texts
             x_start, y_start = v_line[0]
             x_stop, y_stop = v_line[-1]
@@ -1562,8 +1572,8 @@ class Nomo_Block_Type_5(Nomo_Block):
             dy = yt_1 - yt
             if self.grid_box.params['allow_additional_v_scale'] == False:
                 self._draw_v_text_(xt, yt, dx, dy, canvas, title, title_title, x_corr, y_corr, draw_line)
-        canvas.stroke(u_line_list, [style.linewidth.normal, self.grid_box.params['u_axis_color']])
-        canvas.stroke(v_line_list, [style.linewidth.normal, self.grid_box.params['v_axis_color']])
+        canvas.stroke(u_line_list, [pyx.style.linewidth.normal, self.grid_box.params['u_axis_color']])
+        canvas.stroke(v_line_list, [pyx.style.linewidth.normal, self.grid_box.params['v_axis_color']])
         # take handle
         self.ref_block_lines.append(u_line_list)
         self.ref_block_lines.append(v_line_list)
@@ -1578,14 +1588,14 @@ class Nomo_Block_Type_5(Nomo_Block):
         draws titles to v-contours
         """
         para_v = self.grid_box.params_v
-        if sqrt(dx ** 2 + dy ** 2) == 0:
+        if np.sqrt(dx ** 2 + dy ** 2) == 0:
             dx_unit = 0
             dy_unit = 0
         else:
-            dx_unit = dx / sqrt(dx ** 2 + dy ** 2)
-            dy_unit = dy / sqrt(dx ** 2 + dy ** 2)
+            dx_unit = dx / np.sqrt(dx ** 2 + dy ** 2)
+            dy_unit = dy / np.sqrt(dx ** 2 + dy ** 2)
         if dy_unit != 0:
-            angle = -atan(dx_unit / dy_unit) * 180 / pi
+            angle = -math.atan(dx_unit / dy_unit) * 180 / np.pi
         else:
             angle = 0
         text_distance = 0.5
@@ -1593,23 +1603,23 @@ class Nomo_Block_Type_5(Nomo_Block):
             if (angle - 90.0) <= -90.0:
                 angle = angle + 180.0
             if dx_unit > 0.0:
-                text_attr = [text.valign.middle, text.halign.right, text.size.small, \
-                             trafo.rotate(angle - 90), para_v['text_color']]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.right, pyx.text.size.small,
+                             pyx.trafo.rotate(angle - 90), para_v['text_color']]
                 title_text = title_title + ' ' + title
             if dx_unit <= 0.0:
-                text_attr = [text.valign.middle, text.halign.left, text.size.small, \
-                             trafo.rotate(angle - 90), para_v['text_color']]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.left, pyx.text.size.small,
+                             pyx.trafo.rotate(angle - 90), para_v['text_color']]
                 title_text = title + ' ' + title_title
         else:
             if (angle + 90.0) >= 90.0:
                 angle = angle - 180.0
             if dx_unit > 0.0:
-                text_attr = [text.valign.middle, text.halign.right, text.size.small, \
-                             trafo.rotate(angle + 90), para_v['text_color']]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.right, pyx.text.size.small,
+                             pyx.trafo.rotate(angle + 90), para_v['text_color']]
                 title_text = title_title + ' ' + title
             if dx_unit <= 0.0:
-                text_attr = [text.valign.middle, text.halign.left, text.size.small, \
-                             trafo.rotate(angle + 90), para_v['text_color']]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.left, pyx.text.size.small,
+                             pyx.trafo.rotate(angle + 90), para_v['text_color']]
                 title_text = title + ' ' + title_title
         text_distance = self.grid_box.params['v_text_distance']
         canvas.text(x - text_distance * dx_unit + x_corr,
@@ -1621,12 +1631,13 @@ class Nomo_Block_Type_5(Nomo_Block):
                                      text_attr])
         # draw line if needed
         if draw_line:
-            canvas.stroke(path.line(x, y, x - text_distance * dx_unit + x_corr, y - text_distance * dy_unit + y_corr),
-                          [style.linewidth.normal, para_v['axis_color']])
+            pyx.canvas.stroke(
+                pyx.path.line(x, y, x - text_distance * dx_unit + x_corr, y - text_distance * dy_unit + y_corr),
+                [pyx.style.linewidth.normal, para_v['axis_color']])
         # take handle
-        line_handle = path.path()
-        line_handle.append(path.moveto(x, y))
-        line_handle.append(path.lineto(x - text_distance * dx_unit + x_corr, y - text_distance * dy_unit + y_corr))
+        line_handle = pyx.path.path()
+        line_handle.append(pyx.path.moveto(x, y))
+        line_handle.append(pyx.path.lineto(x - text_distance * dx_unit + x_corr, y - text_distance * dy_unit + y_corr))
         self.ref_block_lines.append(line_handle)
 
     def _draw_box_around_(self, canvas):
@@ -1641,52 +1652,52 @@ class Nomo_Block_Type_5(Nomo_Block):
         yt3 = self._give_trafo_y_(self.grid_box.x_left, self.grid_box.y_bottom)
         xt4 = self._give_trafo_x_(self.grid_box.x_right, self.grid_box.y_bottom)
         yt4 = self._give_trafo_y_(self.grid_box.x_right, self.grid_box.y_bottom)
-        line = path.path()
-        line.append(path.moveto(xt1, yt1))
-        line.append(path.lineto(xt2, yt2))
-        line.append(path.lineto(xt4, yt4))
-        line.append(path.lineto(xt3, yt3))
-        line.append(path.lineto(xt1, yt1))
-        # canvas.stroke(line, [style.linewidth.thick])
+        line = pyx.path.path()
+        line.append(pyx.path.moveto(xt1, yt1))
+        line.append(pyx.path.lineto(xt2, yt2))
+        line.append(pyx.path.lineto(xt4, yt4))
+        line.append(pyx.path.lineto(xt3, yt3))
+        line.append(pyx.path.lineto(xt1, yt1))
+        # pyx.canvas.stroke(line, [pyx.style.linewidth.thick])
         canvas.stroke(line)
         # take handle
         self.ref_block_lines.append(line)
 
-    def _draw_horizontal_guides_(self, canvas, axis_color=color.cmyk.Gray):
+    def _draw_horizontal_guides_(self, canvas, axis_color=pyx.color.cmyk.Gray):
         """
         draws horizontal guides
         """
         p = self.grid_box.params
         if p['horizontal_guides']:
-            line = path.path()
+            line = pyx.path.path()
             nr = p['horizontal_guide_nr']
             for y in scipy.linspace(self.grid_box.y_top, self.grid_box.y_bottom, nr):
                 xt1 = self._give_trafo_x_(self.grid_box.x_left, y)
                 yt1 = self._give_trafo_y_(self.grid_box.x_left, y)
                 xt2 = self._give_trafo_x_(self.grid_box.x_right, y)
                 yt2 = self._give_trafo_y_(self.grid_box.x_right, y)
-                line.append(path.moveto(xt1, yt1))
-                line.append(path.lineto(xt2, yt2))
-            canvas.stroke(line, [style.linewidth.normal, style.linestyle.dotted,
+                line.append(pyx.path.moveto(xt1, yt1))
+                line.append(pyx.path.lineto(xt2, yt2))
+            canvas.stroke(line, [pyx.style.linewidth.normal, pyx.style.linestyle.dotted,
                                  p['u_axis_color']])
             self.ref_block_lines.append(line)
 
-    def _draw_vertical_guides_(self, canvas, axis_color=color.cmyk.Gray):
+    def _draw_vertical_guides_(self, canvas, axis_color=pyx.color.cmyk.Gray):
         """
         draws vertical guides
         """
         p = self.grid_box.params
         if p['vertical_guides']:
-            line = path.path()
+            line = pyx.path.path()
             nr = p['vertical_guide_nr']
             for x in scipy.linspace(self.grid_box.x_left, self.grid_box.x_right, nr):
                 xt1 = self._give_trafo_x_(x, self.grid_box.y_top)
                 yt1 = self._give_trafo_y_(x, self.grid_box.y_top)
                 xt2 = self._give_trafo_x_(x, self.grid_box.y_bottom)
                 yt2 = self._give_trafo_y_(x, self.grid_box.y_bottom)
-                line.append(path.moveto(xt1, yt1))
-                line.append(path.lineto(xt2, yt2))
-            canvas.stroke(line, [style.linewidth.normal, style.linestyle.dotted,
+                line.append(pyx.path.moveto(xt1, yt1))
+                line.append(pyx.path.lineto(xt2, yt2))
+            canvas.stroke(line, [pyx.style.linewidth.normal, pyx.style.linestyle.dotted,
                                  p['wd_axis_color']])
             # take handle
             self.ref_block_lines.append(line)
@@ -1796,7 +1807,7 @@ class Nomo_Block_Type_6(Nomo_Block):
                                         start=params2['u_min'], stop=params2['u_max'])
 
     def set_block(self, width=10.0, height=10.0, type='parallel', x_empty=0.2, y_empty=0.2,
-                  curve_const=0.5, ladder_color=color.rgb.black):
+                  curve_const=0.5, ladder_color=pyx.color.rgb.black):
         """
         sets original width, height and x-distance proportion for the nomogram before
         transformations
@@ -1895,9 +1906,9 @@ class Nomo_Block_Type_6(Nomo_Block):
                 find_tick_directions(tick_1_list, f2, g2, side2, start, stop)
 
             self._draw_ladder_lines_(dx_units_0_1, dy_units_0_1, dx_units_0_2, dy_units_0_2,
-                                     tick_0_list, f1, g1, f2, g2, canvas_given, style.linestyle.solid)
+                                     tick_0_list, f1, g1, f2, g2, canvas_given, pyx.style.linestyle.solid)
             self._draw_ladder_lines_(dx_units_1_1, dy_units_1_1, dx_units_1_2, dy_units_1_2,
-                                     tick_1_list, f1, g1, f2, g2, canvas_given, style.linestyle.dotted)
+                                     tick_1_list, f1, g1, f2, g2, canvas_given, pyx.style.linestyle.dotted)
 
         # Linear smart
         if self.atom_F1.params['scale_type'] == 'linear smart':
@@ -1949,17 +1960,17 @@ class Nomo_Block_Type_6(Nomo_Block):
             #            find_tick_directions(tick_1_list,f2,g2,side2,start,stop)
 
             self._draw_ladder_lines_(dx_units_0_1, dy_units_0_1, dx_units_0_2, dy_units_0_2,
-                                     tick_0_list, f1, g1, f2, g2, canvas_given, style.linestyle.solid)
+                                     tick_0_list, f1, g1, f2, g2, canvas_given, pyx.style.linestyle.solid)
             self._draw_ladder_lines_(dx_units_1_1, dy_units_1_1, dx_units_1_2, dy_units_1_2,
-                                     tick_1_list, f1, g1, f2, g2, canvas_given, style.linestyle.dotted)
+                                     tick_1_list, f1, g1, f2, g2, canvas_given, pyx.style.linestyle.dotted)
 
-        # log smart
+        # np.log smart
         if self.atom_F1.params['scale_type'] == 'log smart':
-            c = canvas.canvas()
+            c = pyx.canvas.canvas()
             dummy_axis = Nomo_Axis(f1, g1, start, stop, turn=1, title='', canvas=c, type='log smart',
                                    text_style='normal', title_x_shift=0, title_y_shift=0.25,
                                    tick_levels=4, tick_text_levels=3,
-                                   text_color=color.rgb.black, axis_color=color.rgb.black,
+                                   text_color=pyx.color.rgb.black, axis_color=pyx.color.rgb.black,
                                    manual_axis_data={},
                                    axis_appear=self.atom_F1.params, side=self.atom_F1.params['tick_side'],
                                    base_start=self.atom_F1.params['base_start'],
@@ -2016,11 +2027,11 @@ class Nomo_Block_Type_6(Nomo_Block):
             #            find_tick_directions(tick_1_list,f2,g2,side2,start,stop)
 
             self._draw_ladder_lines_(dx_units_0_1, dy_units_0_1, dx_units_0_2, dy_units_0_2,
-                                     tick_0_list, f1, g1, f2, g2, canvas_given, style.linestyle.solid)
+                                     tick_0_list, f1, g1, f2, g2, canvas_given, pyx.style.linestyle.solid)
             self._draw_ladder_lines_(dx_units_1_1, dy_units_1_1, dx_units_1_2, dy_units_1_2,
-                                     tick_1_list, f1, g1, f2, g2, canvas_given, style.linestyle.dotted)
+                                     tick_1_list, f1, g1, f2, g2, canvas_given, pyx.style.linestyle.dotted)
 
-        # log
+        # np.log
         if self.atom_F1.params['scale_type'] == 'log':
             tick_0_list, tick_1_list, tick_2_list, start_ax, stop_ax = \
                 find_log_ticks(start, stop)
@@ -2037,13 +2048,13 @@ class Nomo_Block_Type_6(Nomo_Block):
             dx_units_1_2, dy_units_1_2, angles_1_2 = \
                 find_tick_directions(tick_1_list, f2, g2, side2, start, stop)
             self._draw_ladder_lines_(dx_units_0_1, dy_units_0_1, dx_units_0_2, dy_units_0_2,
-                                     tick_0_list, f1, g1, f2, g2, canvas_given, style.linestyle.solid)
+                                     tick_0_list, f1, g1, f2, g2, canvas_given, pyx.style.linestyle.solid)
             self._draw_ladder_lines_(dx_units_1_1, dy_units_1_1, dx_units_1_2, dy_units_1_2,
-                                     tick_1_list, f1, g1, f2, g2, canvas_given, style.linestyle.dotted)
+                                     tick_1_list, f1, g1, f2, g2, canvas_given, pyx.style.linestyle.dotted)
 
         # manual point or manual arrow
         if self.atom_F1.params['scale_type'] == 'manual point' or \
-                        self.atom_F1.params['scale_type'] == 'manual arrow':
+                self.atom_F1.params['scale_type'] == 'manual arrow':
             tick_0_list = self.atom_F1.params['manual_axis_data'].keys()
             tick_0_list.sort()
 
@@ -2054,7 +2065,7 @@ class Nomo_Block_Type_6(Nomo_Block):
                 find_tick_directions(tick_0_list, f2, g2, side2, start, stop)
 
             self._draw_ladder_lines_(dx_units_0_1, dy_units_0_1, dx_units_0_2, dy_units_0_2,
-                                     tick_0_list, f1, g1, f2, g2, canvas_given, style.linestyle.solid)
+                                     tick_0_list, f1, g1, f2, g2, canvas_given, pyx.style.linestyle.solid)
 
         # manual line
         if self.atom_F1.params['scale_type'] == 'manual line':
@@ -2068,28 +2079,28 @@ class Nomo_Block_Type_6(Nomo_Block):
                 find_tick_directions(tick_0_list, f2, g2, side2, start, stop)
 
             self._draw_ladder_lines_(dx_units_0_1, dy_units_0_1, dx_units_0_2, dy_units_0_2,
-                                     tick_0_list, f1, g1, f2, g2, canvas_given, style.linestyle.solid)
+                                     tick_0_list, f1, g1, f2, g2, canvas_given, pyx.style.linestyle.solid)
 
     def _draw_ladder_lines_(self, dx_units_1, dy_units_1, dx_units_2, dy_units_2,
                             tick_list, f1, g1, f2, g2, canvas, line_style):
         """
         draws the lines
         """
-        line = path.path(path.moveto(f1(tick_list[0]), g1(tick_list[0])))
+        line = pyx.path.path(pyx.path.moveto(f1(tick_list[0]), g1(tick_list[0])))
         curves = []
         for idx, u in enumerate(tick_list):
-            # line.append(path.moveto(f1(u), g1(u)))
-            # line.append(path.lineto(f2(u), g2(u)))
-            path_length = sqrt((f1(u) - f2(u)) ** 2 + (g1(u) - g2(u)) ** 2)
-            factor = self.curve_const * path_length
+            # line.append(pyx.path.moveto(f1(u), g1(u)))
+            # line.append(pyx.path.lineto(f2(u), g2(u)))
+            pyx.path_length = np.sqrt((f1(u) - f2(u)) ** 2 + (g1(u) - g2(u)) ** 2)
+            factor = self.curve_const * pyx.path_length
             x1, y1 = f1(u), g1(u)
             x2, y2 = f1(u) - dy_units_1[idx] * factor, g1(u) + dx_units_1[idx] * factor
             x3, y3 = f2(u) - dy_units_2[idx] * factor, g2(u) + dx_units_2[idx] * factor
             x4, y4 = f2(u), g2(u)
-            curves.append(path.curve(x1, y1, x2, y2, x3, y3, x4, y4))
+            curves.append(pyx.path.curve(x1, y1, x2, y2, x3, y3, x4, y4))
         for curve in curves:
-            canvas.stroke(curve, [style.linewidth.normal, line_style, self.ladder_color])
-        canvas.stroke(line, [style.linewidth.normal, line_style, self.ladder_color])
+            canvas.stroke(curve, [pyx.style.linewidth.normal, line_style, self.ladder_color])
+        canvas.stroke(line, [pyx.style.linewidth.normal, line_style, self.ladder_color])
 
 
 class Nomo_Block_Type_7(Nomo_Block):
@@ -2137,20 +2148,20 @@ class Nomo_Block_Type_7(Nomo_Block):
         """
         sets the angle-nomogram of the block
         """
-        angle_u_rad = angle_u * pi / 180.0
-        angle_v_rad = angle_v * pi / 180.0
+        angle_u_rad = angle_u * np.pi / 180.0
+        angle_v_rad = angle_v * np.pi / 180.0
 
         x_dummy, f1_max = self.F1_axis_ini.calc_highest_point()
         x_dummy, f1_min = self.F1_axis_ini.calc_lowest_point()
         axis_1_length = abs(f1_max - f1_min)
         k1 = width_1 / axis_1_length
-        k2 = k1 * sin(angle_u_rad) / sin(angle_v_rad)
-        k3 = k1 * sin(angle_u_rad + angle_v_rad) / sin(angle_v_rad)
+        k2 = k1 * np.sin(angle_u_rad) / np.sin(angle_v_rad)
+        k3 = k1 * np.sin(angle_u_rad + angle_v_rad) / np.sin(angle_v_rad)
 
-        factor_3_x = cos(angle_u_rad)
-        factor_3_y = sin(angle_u_rad)
-        factor_2_x = cos(angle_u_rad + angle_v_rad)
-        factor_2_y = sin(angle_u_rad + angle_v_rad)
+        factor_3_x = np.cos(angle_u_rad)
+        factor_3_y = np.sin(angle_u_rad)
+        factor_2_x = np.cos(angle_u_rad + angle_v_rad)
+        factor_2_y = np.sin(angle_u_rad + angle_v_rad)
 
         self.params_F1['F'] = lambda u: (k1 * self.F1(u)) * self.x_mirror
         self.params_F1['G'] = lambda u: 0.0
@@ -2997,10 +3008,10 @@ class Nomo_Atom_Grid(Nomo_Atom):
             'v_texts_u_stop': True,
             'u_texts_v_start': False,
             'u_texts_v_stop': True,
-            'u_line_color': color.rgb.black,
-            'v_line_color': color.rgb.black,
-            'u_text_color': color.rgb.black,
-            'v_text_color': color.rgb.black,
+            'u_line_color': pyx.color.rgb.black,
+            'v_line_color': pyx.color.rgb.black,
+            'u_text_color': pyx.color.rgb.black,
+            'v_text_color': pyx.color.rgb.black,
             'extra_params': [],
             'debug': False,  # print dictionary
         }
@@ -3094,7 +3105,7 @@ if __name__ == '__main__':
     do_test_2 = False
     # do_test_2=True
     # do_test_3=False
-    do_test_3 = True
+    do_test_3 = False
     do_test_4 = False
     # do_test_4=True
     do_test_5 = False
@@ -3422,7 +3433,7 @@ if __name__ == '__main__':
         wrapper.do_transformation(method='polygon')
         # wrapper.do_transformation(method='optimize')
         wrapper.do_transformation(method='scale paper')
-        c = canvas.canvas()
+        c = pyx.canvas.canvas()
         wrapper.draw_nomogram(c)
     # end of test1
 
@@ -3598,19 +3609,19 @@ if __name__ == '__main__':
         # wrapper1.do_transformation(method='polygon')
         # wrapper1.do_transformation(method='optimize')
         wrapper1.do_transformation(method='scale paper')
-        cc = canvas.canvas()
+        cc = pyx.canvas.canvas()
         wrapper1.draw_nomogram(cc)
     # end of test_2
     if do_test_3:
         def f1(x, u):
-            # return log(log(x/(x-u/100.0))/log(1+u/100.0))
-            return log(log(x / (x - u / (100.0 * 12.0))) / log(1 + u / (100.0 * 12.0)))
+            # return np.log(np.log(x/(x-u/100.0))/log(1+u/100.0))
+            return np.log(np.log(x / (x - u / (100.0 * 12.0))) / np.log(1 + u / (100.0 * 12.0)))
 
 
         params = {'width': 10.0,
                   'height': 10.0,
                   # 'u_func':lambda u:log(u),
-                  'u_func': lambda u: log(u * 12.0),
+                  'u_func': lambda u: np.log(u * 12.0),
                   'v_func': f1,
                   'u_values': [10.0, 15.0, 20.0, 25.0, 30.0, 40.0, 50.0, 60.0],
                   'v_values': [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
@@ -3683,7 +3694,8 @@ if __name__ == '__main__':
             'title_str': r'Amortized loan calculator    \copyright    Leif Roschier  2008',
             'title_x': 17,
             'title_y': 21,
-            'title_box_width': 5},
+            'title_box_width': 5,
+            'mirror_y': False},
             paper_width=20.0, paper_height=20.0, filename='type5.pdf')
         wrapper2.add_block(block11)
         wrapper2.add_block(block12)
@@ -3697,7 +3709,7 @@ if __name__ == '__main__':
         # wrapper2.do_transformation(method='polygon')
         # wrapper2.do_transformation(method='optimize')
         wrapper2.do_transformation(method='scale paper')
-        ccc = canvas.canvas()
+        ccc = pyx.canvas.canvas()
         wrapper2.draw_nomogram(ccc)
         # end of test3
     if do_test_4:
@@ -3772,7 +3784,7 @@ if __name__ == '__main__':
         # wrapper4.do_transformation(method='polygon')
         # wrapper1.do_transformation(method='optimize')
         wrapper4.do_transformation(method='scale paper')
-        cc4 = canvas.canvas()
+        cc4 = pyx.canvas.canvas()
         wrapper4.draw_nomogram(cc4)
 
     if do_test_5:
@@ -3809,7 +3821,7 @@ if __name__ == '__main__':
         block30_f2_para = {
             'u_min': 1.0,
             'u_max': 10.0,
-            'function': lambda u: log(u),
+            'function': lambda u: np.log(u),
             'title': 'F2',
             'tag': 'none',
             'tick_side': 'right',
@@ -3831,7 +3843,7 @@ if __name__ == '__main__':
         # wrapper4.do_transformation(method='polygon')
         # wrapper1.do_transformation(method='optimize')
         wrapper5.do_transformation(method='scale paper')
-        cc5 = canvas.canvas()
+        cc5 = pyx.canvas.canvas()
         wrapper5.draw_nomogram(cc5)
 
     if do_test_6:
@@ -3886,7 +3898,7 @@ if __name__ == '__main__':
         # wrapper4.do_transformation(method='polygon')
         # wrapper1.do_transformation(method='optimize')
         wrapper60.do_transformation(method='scale paper')
-        cc60 = canvas.canvas()
+        cc60 = pyx.canvas.canvas()
         wrapper60.draw_nomogram(cc60)
 
     if do_test_7:
@@ -3930,7 +3942,7 @@ if __name__ == '__main__':
         # wrapper4.do_transformation(method='polygon')
         # wrapper1.do_transformation(method='optimize')
         # wrapper70.do_transformation(method='scale paper')
-        cc70 = canvas.canvas()
+        cc70 = pyx.canvas.canvas()
         wrapper70.draw_nomogram(cc70)
 
     if do_test_8:
@@ -3992,7 +4004,7 @@ if __name__ == '__main__':
         # wrapper80.do_transformation(method='polygon')
         # wrapper1.do_transformation(method='optimize')
         wrapper80.do_transformation(method='scale paper')
-        cc80 = canvas.canvas()
+        cc80 = pyx.canvas.canvas()
         wrapper80.draw_nomogram(cc80)
 
     if do_test_9:
@@ -4088,6 +4100,7 @@ if __name__ == '__main__':
             'title': 'A',
             'title_x_shift': 0.0,
             'title_y_shift': 0.25,
+            'title_color': pyx.color.rgb.red,
             'scale_type': 'linear',
             'tick_levels': 3,
             'tick_text_levels': 2,
@@ -4104,6 +4117,7 @@ if __name__ == '__main__':
             'title': 'B',
             'title_x_shift': 0.0,
             'title_y_shift': 0.25,
+            'title_color': pyx.color.rgb.red,
             'scale_type': 'linear',
             'tick_levels': 3,
             'tick_text_levels': 2,
@@ -4119,6 +4133,7 @@ if __name__ == '__main__':
             'title_y_shift': 0.25,
             'title_distance_center': 0.5,
             'title_opposite_tick': True,
+            'title_color': pyx.color.rgb.red,
             'u_min': 0.0,  # for alignment
             'u_max': 1.0,  # for alignment
             'f_grid': lambda u, v: u + 2.0,
@@ -4150,7 +4165,7 @@ if __name__ == '__main__':
         # wrapper4.do_transformation(method='polygon')
         # wrapper1.do_transformation(method='optimize')
         wrapper80a.do_transformation(method='scale paper')
-        cc90a = canvas.canvas()
+        cc90a = pyx.canvas.canvas()
         wrapper80a.draw_nomogram(cc90a)
 
     if do_test_10:
@@ -4204,5 +4219,5 @@ if __name__ == '__main__':
         # wrapper4.do_transformation(method='polygon')
         # wrapper1.do_transformation(method='optimize')
         wrapper10.do_transformation(method='scale paper')
-        cc10 = canvas.canvas()
+        cc10 = pyx.canvas.canvas()
         wrapper10.draw_nomogram(cc10)

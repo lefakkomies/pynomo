@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 #
 #    This file is part of PyNomo -
-#    a program to create nomographs with Python (http://pynomo.sourceforge.net/)
+#    a program to create nomographs with Python (https://github.com/lefakkomies/pynomo)
 #
-#    Copyright (C) 2007-2013  Leif Roschier  <lefakkomies@users.sourceforge.net>
+#    Copyright (C) 2007-2019  Leif Roschier  <lefakkomies@users.sourceforge.net>
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -17,11 +17,11 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pyx import *
+import pyx
 import math
 import scipy
 import random
-import copy, re, pprint
+import copy #, re, pprint
 import six  # for python 2 and 3 compatibility
 
 
@@ -33,7 +33,7 @@ class Nomo_Axis:
     def __init__(self, func_f, func_g, start, stop, turn, title, canvas, type='linear',
                  text_style='normal', title_x_shift=0, title_y_shift=0.25,
                  tick_levels=4, tick_text_levels=3,
-                 text_color=color.rgb.black, axis_color=color.rgb.black,
+                 text_color=pyx.color.rgb.black, axis_color=pyx.color.rgb.black,
                  manual_axis_data={}, axis_appear={}, side='left',
                  base_start=None, base_stop=None):
         self.titles = []  # holder for titles
@@ -63,17 +63,17 @@ class Nomo_Axis:
             'grid_length_3': 0.3 / 4,
             'grid_length_4': 0.2 / 4,
             'tick_lenghts': [3.0 / 4, 0.9 / 4, 0.5 / 4, 0.3 / 4, 0.2 / 4],
-            'text_size_0': text.size.small,
-            'text_size_1': text.size.scriptsize,
-            'text_size_2': text.size.tiny,
-            'text_size_3': text.size.tiny,
-            'text_size_4': text.size.tiny,
-            'text_sizes': [text.size.small, text.size.scriptsize,
-                           text.size.tiny, text.size.tiny, text.size.tiny],
-            'text_size_log_0': text.size.small,
-            'text_size_log_1': text.size.tiny,
-            'text_size_log_2': text.size.tiny,
-            'text_size_manual': text.size.small,
+            'text_size_0': pyx.text.size.small,
+            'text_size_1': pyx.text.size.scriptsize,
+            'text_size_2': pyx.text.size.tiny,
+            'text_size_3': pyx.text.size.tiny,
+            'text_size_4': pyx.text.size.tiny,
+            'text_sizes': [pyx.text.size.small, pyx.text.size.scriptsize,
+                           pyx.text.size.tiny, pyx.text.size.tiny, pyx.text.size.tiny],
+            'text_size_log_0': pyx.text.size.small,
+            'text_size_log_1': pyx.text.size.tiny,
+            'text_size_log_2': pyx.text.size.tiny,
+            'text_size_manual': pyx.text.size.small,
             'title_distance_center': 0.5,
             'title_opposite_tick': True,
             'title_draw_center': False,
@@ -89,27 +89,27 @@ class Nomo_Axis:
             'angle_tick_direction': 'outer',  # for circular scales
             'arrow_size': 0.2,  # for drawing arrow scale
             'arrow_length': 1.0,
-            'arrow_color': color.rgb.black,
-            'axis_color': color.rgb.black,
-            'text_color': color.rgb.black,
+            'arrow_color': pyx.color.rgb.black,
+            'axis_color': pyx.color.rgb.black,
+            'text_color': pyx.color.rgb.black,
             'text_colors': None,
-            'title_color': color.rgb.black,
+            'title_color': pyx.color.rgb.black,
             'title_extra_angle': 0.0,  # extra rotation
-            'tick_color': color.rgb.black,
-            'tick_colors': None,  # can be list of colors for each tick
+            'tick_color': pyx.color.rgb.black,
+            'tick_colors': None,  # can be list of pyx.colors for each tick
             'extra_titles': [],  # list of dicts
             'base_start': None,  # drive tick scaling
             'base_stop': None,  # drive tick scaling
             'tick_distance_smart': 0.05,  # tick minimum distance for smart axes
             'text_distance_smart': 0.25,  # text minimum distance for smart axes
-            'linewidth_main': style.linewidth.normal,
-            'linewidth_ticks': style.linewidth.normal,
-            'linewidth_ticks_thin': style.linewidth.thin,
-            'tick_linewidths': [style.linewidth.normal,
-                                style.linewidth.normal,
-                                style.linewidth.normal,
-                                style.linewidth.thin,
-                                style.linewidth.thin],
+            'linewidth_main': pyx.style.linewidth.normal,
+            'linewidth_ticks': pyx.style.linewidth.normal,
+            'linewidth_ticks_thin': pyx.style.linewidth.thin,
+            'tick_linewidths': [pyx.style.linewidth.normal,
+                                pyx.style.linewidth.normal,
+                                pyx.style.linewidth.normal,
+                                pyx.style.linewidth.thin,
+                                pyx.style.linewidth.thin],
             'text_formatter': None,
             # a function of format put_ddmmss_text(u,level,tick_info), see example function put_ddmmss_text implementation as template
             'ticker_func': None,
@@ -118,7 +118,7 @@ class Nomo_Axis:
             'text_draw_func': None,  # see template core_text_draw_func
             'mainline_func': None,  # for custom main-line
             'make_default_main_line': True,  # to draw normal main_line
-            # 'level_text_color':None, # list of text colors for each level
+            # 'level_text_color':None, # list of text pyx.colors for each level
             'level_text_size': None,  # list of text sizes for each level
         }
         self.axis_appear = axis_appear_default_values
@@ -257,12 +257,12 @@ class Nomo_Axis:
         main_line_coords = calc_main_line_coords(self.start, self.stop, self.func_f, self.func_g, sections=350.0)
         if ti['make_default_main_line'] is True:
             mainline_draw_func(main_line_coords=main_line_coords,
-                                           func_f=self.func_f, func_g=self.func_g,
-                                           ticks=ticks,
-                                           tick_directions=tick_directions,
-                                           texts=texts,
-                                           text_directions=text_directions,
-                                           c=self.canvas, tick_info=ti)
+                               func_f=self.func_f, func_g=self.func_g,
+                               ticks=ticks,
+                               tick_directions=tick_directions,
+                               texts=texts,
+                               text_directions=text_directions,
+                               c=self.canvas, tick_info=ti)
 
     def _test_tick_(self, u, tick, scale_max):
         """ tests if it is time to put a tick
@@ -294,15 +294,14 @@ class Nomo_Axis:
     #            error=math.fabs(tick_number-number)
     #        return tick_number
 
-
     def _make_linear_axis_old_(self, start, stop, f, g, turn=1):
         """
         OBSOLETE, use _make_linear_axis_
         Makes a linear scale according to functions f(u) and g(u)
         with values u in range [start, stop].
         """
-        line = path.path(path.moveto(f(start), g(start)))
-        thin_line = path.path(path.moveto(f(start), g(start)))
+        line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
+        thin_line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
         # for numerical derivative to find angle
         du = math.fabs(start - stop) * 1e-6
         dy = (g(start + du) - g(start))
@@ -339,52 +338,58 @@ class Nomo_Axis:
                 text_distance = self.axis_appear['text_distance_0']
                 grid_length = self.axis_appear['grid_length_0']
                 if dy <= 0:
-                    text_attr = [text.valign.middle, text.halign.right, text.size.small, trafo.rotate(angle)]
+                    text_attr = [pyx.text.valign.middle, pyx.text.halign.right, pyx.text.size.small,
+                                 pyx.trafo.rotate(angle)]
                 else:
-                    text_attr = [text.valign.middle, text.halign.left, text.size.small, trafo.rotate(angle)]
+                    text_attr = [pyx.text.valign.middle, pyx.text.halign.left, pyx.text.size.small,
+                                 pyx.trafo.rotate(angle)]
                 # texts.append((`u`,f(u)+text_distance*dy_unit,g(u)-text_distance*dx_unit,text_attr))
                 if self.tick_text_levels > 0:
                     texts.append(
                         (self._put_text_(u), f(u) + text_distance * dy_unit, g(u) - text_distance * dx_unit, text_attr))
-                line.append(path.lineto(f(u), g(u)))
+                line.append(pyx.path.lineto(f(u), g(u)))
                 if self.tick_levels > 0:
-                    line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
-                line.append(path.moveto(f(u), g(u)))
+                    line.append(pyx.path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                line.append(pyx.path.moveto(f(u), g(u)))
             elif self._test_tick_(u, tick_1, scale_max):
                 text_distance = self.axis_appear['text_distance_1']
                 grid_length = self.axis_appear['grid_length_1']
                 if dy <= 0:
-                    text_attr = [text.valign.middle, text.halign.right, text.size.scriptsize, trafo.rotate(angle)]
+                    text_attr = [pyx.text.valign.middle, pyx.text.halign.right, pyx.text.size.scriptsize,
+                                 pyx.trafo.rotate(angle)]
                 else:
-                    text_attr = [text.valign.middle, text.halign.left, text.size.scriptsize, trafo.rotate(angle)]
+                    text_attr = [pyx.text.valign.middle, pyx.text.halign.left, pyx.text.size.scriptsize,
+                                 pyx.trafo.rotate(angle)]
                 if self.tick_text_levels > 1:
                     texts.append(
                         (self._put_text_(u), f(u) + text_distance * dy_unit, g(u) - text_distance * dx_unit, text_attr))
-                line.append(path.lineto(f(u), g(u)))
+                line.append(pyx.path.lineto(f(u), g(u)))
                 if self.tick_levels > 1:
-                    line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
-                line.append(path.moveto(f(u), g(u)))
+                    line.append(pyx.path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                line.append(pyx.path.moveto(f(u), g(u)))
             elif self._test_tick_(u, tick_2, scale_max):
                 text_distance = self.axis_appear['text_distance_2']
                 grid_length = self.axis_appear['grid_length_2']
                 if dy <= 0:
-                    text_attr = [text.valign.middle, text.halign.right, text.size.tiny, trafo.rotate(angle)]
+                    text_attr = [pyx.text.valign.middle, pyx.text.halign.right, pyx.text.size.tiny,
+                                 pyx.trafo.rotate(angle)]
                 else:
-                    text_attr = [text.valign.middle, text.halign.left, text.size.tiny, trafo.rotate(angle)]
+                    text_attr = [pyx.text.valign.middle, pyx.text.halign.left, pyx.text.size.tiny,
+                                 pyx.trafo.rotate(angle)]
                 if self.tick_text_levels > 2:
                     texts.append(
                         (self._put_text_(u), f(u) + text_distance * dy_unit, g(u) - text_distance * dx_unit, text_attr))
-                line.append(path.lineto(f(u), g(u)))
+                line.append(pyx.path.lineto(f(u), g(u)))
                 if self.tick_levels > 2:
-                    line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
-                line.append(path.moveto(f(u), g(u)))
+                    line.append(pyx.path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                line.append(pyx.path.moveto(f(u), g(u)))
             else:
                 grid_length = self.axis_appear['grid_length_3']
-                thin_line.append(path.moveto(f(u), g(u)))
+                thin_line.append(pyx.path.moveto(f(u), g(u)))
                 if self.tick_levels > 3:
-                    thin_line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
-                thin_line.append(path.moveto(f(u), g(u)))
-                line.append(path.lineto(f(u), g(u)))
+                    thin_line.append(pyx.path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                thin_line.append(pyx.path.moveto(f(u), g(u)))
+                line.append(pyx.path.lineto(f(u), g(u)))
         self.line = line
         self.thin_line = thin_line
         self.texts = texts
@@ -395,9 +400,9 @@ class Nomo_Axis:
         with values u in range [start, stop].
         """
         # line lists
-        main_line = path.path(path.moveto(f(start), g(start)))
-        line = path.path(path.moveto(f(start), g(start)))
-        thin_line = path.path(path.moveto(f(start), g(start)))
+        main_line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
+        line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
+        thin_line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
         # text list
         texts = []
         # let's find tick positions
@@ -495,9 +500,9 @@ class Nomo_Axis:
         with values u in range [start, stop].
         """
         # line lists
-        line = path.path(path.moveto(f(start), g(start)))
-        thin_line = path.path(path.moveto(f(start), g(start)))
-        main_line = path.path(path.moveto(f(start), g(start)))
+        line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
+        thin_line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
+        main_line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
         # text list
         texts = []
         # let's find tick positions
@@ -632,9 +637,9 @@ class Nomo_Axis:
         with values u in range [start, stop].
         """
         # line lists
-        line = path.path(path.moveto(f(start), g(start)))
-        thin_line = path.path(path.moveto(f(start), g(start)))
-        main_line = path.path(path.moveto(f(start), g(start)))
+        line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
+        thin_line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
+        main_line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
         # text list
         texts = []
         # let's find tick positions
@@ -684,8 +689,8 @@ class Nomo_Axis:
             # make the ticks
             start_decade = start_decade + 1
             stop_decade = stop_decade + 1
-            print ("start_decade value %f" % -10 ** start_decade)
-            print ("stop_decade value %f" % 10 ** stop_decade)
+            print("start_decade value %f" % -10 ** start_decade)
+            print("stop_decade value %f" % 10 ** stop_decade)
             tick_0_list_n, tick_1_list_n, tick_2_list_n, tick_3_list_n, tick_4_list_n = \
                 find_log_ticks_negative_smart(start, -10 ** (start_decade) * 1.0001, f, g, turn=1, base_start=None,
                                               base_stop=None,
@@ -872,9 +877,9 @@ class Nomo_Axis:
         Makes a log scale
         """
         # line lists
-        line = path.path(path.moveto(f(start), g(start)))
-        thin_line = path.path(path.moveto(f(start), g(start)))
-        main_line = path.path(path.moveto(f(start), g(start)))
+        line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
+        thin_line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
+        main_line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
         # text list
         texts = []
         # let's find tick positions
@@ -948,16 +953,16 @@ class Nomo_Axis:
         """
         for idx, u in enumerate(tick_list):
             if dy_units[idx] < 0:
-                text_attr = [text.valign.middle, text.halign.right, text_size, trafo.rotate(angles[idx])]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.right, text_size, pyx.trafo.rotate(angles[idx])]
             else:
-                text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.left, text_size, pyx.trafo.rotate(angles[idx])]
             if self.axis_appear['full_angle'] == True:
                 if self.axis_appear['angle_tick_direction'] == 'outer':
-                    text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+                    text_attr = [pyx.text.valign.middle, pyx.text.halign.left, text_size, pyx.trafo.rotate(angles[idx])]
                 else:  # 'inner'
-                    text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+                    text_attr = [pyx.text.valign.middle, pyx.text.halign.left, text_size, pyx.trafo.rotate(angles[idx])]
             if self.axis_appear['text_horizontal_align_center'] == True:
-                text_attr = [text.valign.top, text.halign.center, text_size, trafo.rotate(angles[idx])]
+                text_attr = [pyx.text.valign.top, pyx.text.halign.center, text_size, pyx.trafo.rotate(angles[idx])]
             if len(manual_texts) > 0:
                 text_list.append((manual_texts[idx], f(u) + text_distance * dy_units[idx], \
                                   g(u) - text_distance * dx_units[idx], text_attr))
@@ -971,9 +976,9 @@ class Nomo_Axis:
         appends to list tick_list lines to be tick markers
         """
         for idx, u in enumerate(tick_list):
-            tick_lines.append(path.moveto(f(u), g(u)))
-            tick_lines.append(path.lineto(f(u) + tick_length * dy_units[idx],
-                                          g(u) - tick_length * dx_units[idx]))
+            tick_lines.append(pyx.path.moveto(f(u), g(u)))
+            tick_lines.append(pyx.path.lineto(f(u) + tick_length * dy_units[idx],
+                                              g(u) - tick_length * dx_units[idx]))
 
     def _make_arrows_(self, tick_list, tick_lines, f, g, dx_units, dy_units,
                       arrow_length):
@@ -981,10 +986,10 @@ class Nomo_Axis:
         appends to list tick_list lines to be tick markers
         """
         for idx, u in enumerate(tick_list):
-            tick_lines.append(path.line(f(u) + arrow_length * dy_units[idx],
-                                        g(u) - arrow_length * dx_units[idx],
-                                        f(u) + 0.02 * dy_units[idx],
-                                        g(u) - 0.02 * dx_units[idx]))
+            tick_lines.append(pyx.path.line(f(u) + arrow_length * dy_units[idx],
+                                            g(u) - arrow_length * dx_units[idx],
+                                            f(u) + 0.02 * dy_units[idx],
+                                            g(u) - 0.02 * dx_units[idx]))
 
     def _make_main_line_(self, start, stop, main_line, f, g, sections=350.0):
         """
@@ -1007,10 +1012,10 @@ class Nomo_Axis:
         section_length = line_length_straigth / sections
         u = start
         laskuri = 1
-        main_line.append(path.moveto(f(start), g(start)))
+        main_line.append(pyx.path.moveto(f(start), g(start)))
         while True:
             if u < stop:
-                main_line.append(path.lineto(f(u), g(u)))
+                main_line.append(pyx.path.lineto(f(u), g(u)))
                 dx = (f(u + du) - f(u))
                 dy = (g(u + du) - g(u))
                 dl = math.sqrt(dx ** 2 + dy ** 2)
@@ -1024,7 +1029,7 @@ class Nomo_Axis:
                 u += delta_u
 
             else:
-                main_line.append(path.lineto(f(stop), g(stop)))
+                main_line.append(pyx.path.lineto(f(stop), g(stop)))
                 break
 
     def _find_center_value_(self, start, stop, f, g):
@@ -1106,8 +1111,8 @@ class Nomo_Axis:
         else:
             min = stop
             max = start
-        line = path.path(path.moveto(f(min), g(min)))
-        thin_line = path.path(path.moveto(f(min), g(min)))
+        line = pyx.path.path(pyx.path.moveto(f(min), g(min)))
+        thin_line = pyx.path.path(pyx.path.moveto(f(min), g(min)))
         max_decade = math.ceil(math.log10(max))
         min_decade = math.floor(math.log10(min))
         for decade in scipy.arange(min_decade, max_decade + 1, 1):
@@ -1124,21 +1129,23 @@ class Nomo_Axis:
                 else:
                     angle = 0
                 if u >= min and u <= max:
-                    line.append(path.lineto(f(u), g(u)))
+                    line.append(pyx.path.lineto(f(u), g(u)))
                     if (number == 1):
                         text_distance = self.axis_appear['text_distance_0']
                         grid_length = self.axis_appear['grid_length_0']
                         if dy <= 0:
-                            text_attr = [text.valign.middle, text.halign.right, text.size.small, trafo.rotate(angle)]
+                            text_attr = [pyx.text.valign.middle, pyx.text.halign.right, pyx.text.size.small,
+                                         pyx.trafo.rotate(angle)]
                         else:
-                            text_attr = [text.valign.middle, text.halign.left, text.size.small, trafo.rotate(angle)]
+                            text_attr = [pyx.text.valign.middle, pyx.text.halign.left, pyx.text.size.small,
+                                         pyx.trafo.rotate(angle)]
                         if self.tick_text_levels > 0:
                             texts.append((self._put_text_(u), f(u) + text_distance * dy_unit,
                                           g(u) - text_distance * dx_unit, text_attr))
-                        # line.append(path.lineto(f(u), g(u)))
+                        # line.append(pyx.path.lineto(f(u), g(u)))
                         if self.tick_levels > 0:
-                            line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
-                        line.append(path.moveto(f(u), g(u)))
+                            line.append(pyx.path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                        line.append(pyx.path.moveto(f(u), g(u)))
                     else:
                         if number in [2, 3, 4, 5, 6, 7, 8, 9]:
                             text_distance = self.axis_appear['text_distance_1']
@@ -1147,22 +1154,24 @@ class Nomo_Axis:
                             text_distance = self.axis_appear['text_distance_2']
                             grid_length = self.axis_appear['grid_length_2']
                         if dy <= 0:
-                            text_attr = [text.valign.middle, text.halign.right, text.size.tiny, trafo.rotate(angle)]
+                            text_attr = [pyx.text.valign.middle, pyx.text.halign.right, pyx.text.size.tiny,
+                                         pyx.trafo.rotate(angle)]
                         else:
-                            text_attr = [text.valign.middle, text.halign.left, text.size.tiny, trafo.rotate(angle)]
+                            text_attr = [pyx.text.valign.middle, pyx.text.halign.left, pyx.text.size.tiny,
+                                         pyx.trafo.rotate(angle)]
                         if self.tick_text_levels > 1:
                             texts.append((self._put_text_(u), f(u) + text_distance * dy_unit,
                                           g(u) - text_distance * dx_unit, text_attr))
-                        # thin_line.append(path.lineto(f(u), g(u)))
+                        # thin_line.append(pyx.path.lineto(f(u), g(u)))
                         if self.tick_levels > 1:
                             if number in [2, 3, 4, 5, 6, 7, 8, 9]:
-                                line.append(path.moveto(f(u), g(u)))
-                                line.append(path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                                line.append(pyx.path.moveto(f(u), g(u)))
+                                line.append(pyx.path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
                             else:
-                                thin_line.append(path.moveto(f(u), g(u)))
+                                thin_line.append(pyx.path.moveto(f(u), g(u)))
                                 thin_line.append(
-                                    path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
-                            line.append(path.lineto(f(u), g(u)))
+                                    pyx.path.lineto(f(u) + grid_length * dy_unit, g(u) - grid_length * dx_unit))
+                            line.append(pyx.path.lineto(f(u), g(u)))
         self.line = line
         self.thin_line = thin_line
         self.texts = texts
@@ -1178,21 +1187,21 @@ class Nomo_Axis:
                                 stop=self.stop, side=self.side)
         # turn=self.turn
         texts = list([])
-        line = path.path(path.moveto(f(self.start), g(self.start)))
-        thin_line = path.path(path.moveto(f(self.start), g(self.start)))
-        main_line = path.path(path.moveto(f(self.start), g(self.start)))
+        line = pyx.path.path(pyx.path.moveto(f(self.start), g(self.start)))
+        thin_line = pyx.path.path(pyx.path.moveto(f(self.start), g(self.start)))
+        main_line = pyx.path.path(pyx.path.moveto(f(self.start), g(self.start)))
         for number, label_string in six.iteritems(manual_axis_data):
             text_distance = 1.0 / 4
             text_size = self.axis_appear['text_size_manual']
             if self.side == 'left':
-                text_attr = [text.valign.middle, text.halign.right, text_size]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.right, text_size]
                 texts.append((label_string, f(number) - text_distance,
                               g(number), text_attr))
             else:
-                text_attr = [text.valign.middle, text.halign.left, text_size]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.left, text_size]
                 texts.append((label_string, f(number) + text_distance,
                               g(number), text_attr))
-            self.canvas.fill(path.circle(f(number), g(number), 0.02))
+            self.canvas.fill(pyx.path.circle(f(number), g(number), 0.02))
         self.line = line
         self.thin_line = thin_line
         self.main_line = main_line
@@ -1208,9 +1217,9 @@ class Nomo_Axis:
         stop = self.stop
         # self._determine_turn_()
         # line lists
-        line = path.path(path.moveto(f(self.start), g(self.start)))
-        thin_line = path.path(path.moveto(f(self.start), g(self.start)))
-        main_line = path.path(path.moveto(f(start), g(start)))
+        line = pyx.path.path(pyx.path.moveto(f(self.start), g(self.start)))
+        thin_line = pyx.path.path(pyx.path.moveto(f(self.start), g(self.start)))
+        main_line = pyx.path.path(pyx.path.moveto(f(start), g(start)))
         arrows = []
         # text list
         texts = []  # pyx structure
@@ -1223,7 +1232,7 @@ class Nomo_Axis:
         #            text_strings.append(label_string)
 
         keys = manual_axis_data.keys()
-        #keys.sort()
+        # keys.sort()
         keys = sorted(keys)  # to make work in python3
         for key in keys:
             tick_list.append(key)
@@ -1278,9 +1287,9 @@ class Nomo_Axis:
         line_length_straigth = math.sqrt((f(max) - f(min)) ** 2 + (g(max) - g(min)) ** 2)
         sections = 300.0  # about number of sections
         section_length = line_length_straigth / sections
-        line = path.path(path.moveto(f(self.start), g(self.start)))
-        thin_line = path.path(path.moveto(f(self.start), g(self.start)))
-        main_line = path.path(path.moveto(f(min), g(min)))
+        line = pyx.path.path(pyx.path.moveto(f(self.start), g(self.start)))
+        thin_line = pyx.path.path(pyx.path.moveto(f(self.start), g(self.start)))
+        main_line = pyx.path.path(pyx.path.moveto(f(min), g(min)))
         u = min
         while u < max:
             dx = (f(u + du) - f(u)) * turn
@@ -1288,7 +1297,7 @@ class Nomo_Axis:
             dl = math.sqrt(dx ** 2 + dy ** 2)
             delta_u = du * section_length / dl
             u += delta_u
-            line.append(path.lineto(f(u), g(u)))
+            line.append(pyx.path.lineto(f(u), g(u)))
         # make lines and texts
         turn_original = turn
         for number, label_def in six.iteritems(manual_axis_data):
@@ -1310,7 +1319,7 @@ class Nomo_Axis:
                 ex_params = label_def[1]
                 if 'manual_relative_text_pos' in ex_params:  # (dx,dy)
                     manual_relative_text_pos = ex_params['manual_relative_text_pos']
-                if 'manual_text_align' in ex_params:  # e.g.[text.valign.middle,text.halign.right]
+                if 'manual_text_align' in ex_params:  # e.g.[pyx.text.valign.middle,text.halign.right]
                     manual_text_align = ex_params['manual_text_align']
                 if 'manual_relative_line' in ex_params:  # e.g. [(0,0),(1,2),(5,5)]
                     manual_relative_line = ex_params['manual_relative_line']
@@ -1360,15 +1369,15 @@ class Nomo_Axis:
             text_size = self.axis_appear['text_size_manual']
             # text alignment defs
             if manual_text_align != None:  # set manual values for align
-                text_attr = [trafo.rotate(angle)]
+                text_attr = [pyx.trafo.rotate(angle)]
                 text_attr.extend(manual_text_align)
             else:  # do the default
                 if dy <= 0:
-                    text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angle)]
+                    text_attr = [pyx.text.valign.middle, pyx.text.halign.left, text_size, pyx.trafo.rotate(angle)]
                 else:
-                    text_attr = [text.valign.middle, text.halign.right, text_size, trafo.rotate(angle)]
+                    text_attr = [pyx.text.valign.middle, pyx.text.halign.right, text_size, pyx.trafo.rotate(angle)]
                 if self.axis_appear['text_horizontal_align_center'] == True:
-                    text_attr = [text.valign.middle, text.halign.center, text_size, trafo.rotate(angle)]
+                    text_attr = [pyx.text.valign.middle, pyx.text.halign.center, text_size, pyx.trafo.rotate(angle)]
             # normal case (not range)
             if range_tick == False:
                 if manual_relative_text_pos == None:  # do default text positioning
@@ -1383,13 +1392,13 @@ class Nomo_Axis:
                                   f(number) - (dy_rel * dy_unit) + (dx_rel * dx_unit) + x_corr,
                                   g(number) + (dy_rel * dx_unit) + (dx_rel * dy_unit) + y_corr, text_attr))
                 if manual_relative_line == None:  # default line tick drawing
-                    line.append(path.moveto(f(number), g(number)))
-                    line.append(path.lineto(f(number) - grid_length * dy_unit, g(number) + grid_length * dx_unit))
+                    line.append(pyx.path.moveto(f(number), g(number)))
+                    line.append(pyx.path.lineto(f(number) - grid_length * dy_unit, g(number) + grid_length * dx_unit))
                 else:  # manual line tick drawing
                     if type(manual_relative_line) is not list:
                         print("'manual_relative_line' should be list [(x0,y0),(x1,y1),...]")
                         print(manual_relative_line)
-                    line.append(path.moveto(f(number), g(number)))
+                    line.append(pyx.path.moveto(f(number), g(number)))
                     x_orig = f(number)
                     y_orig = g(number)
                     for coords in manual_relative_line:
@@ -1399,7 +1408,7 @@ class Nomo_Axis:
                         x_coord = x_orig + x_curr * dx_unit - y_curr * dy_unit
                         y_coord = y_orig + y_curr * dx_unit + x_curr * dy_unit
                         # print "coords:%g,%g"%(x_coord,y_coord)                        
-                        line.append(path.lineto(x_coord, y_coord))
+                        line.append(pyx.path.lineto(x_coord, y_coord))
             else:  # range_tick == True
                 tick_list = [number, range_end]
                 dx_units, dy_units, angles = find_tick_directions(tick_list, f, g, self.side, number, range_end,
@@ -1410,12 +1419,13 @@ class Nomo_Axis:
                 dx_units[0], dx_units[1] = range_side * dx_units[0], range_side * dx_units[1]
                 dy_units[0], dy_units[1] = range_side * dy_units[0], range_side * dy_units[1]
                 # first tick
-                line.append(path.moveto(f(number), g(number)))
-                line.append(path.lineto(f(number) - grid_length * dy_units[0], g(number) + grid_length * dx_units[0]))
-                # second tick
-                line.append(path.moveto(f(range_end), g(range_end)))
+                line.append(pyx.path.moveto(f(number), g(number)))
                 line.append(
-                    path.lineto(f(range_end) - grid_length * dy_units[1], g(range_end) + grid_length * dx_units[1]))
+                    pyx.path.lineto(f(number) - grid_length * dy_units[0], g(number) + grid_length * dx_units[0]))
+                # second tick
+                line.append(pyx.path.moveto(f(range_end), g(range_end)))
+                line.append(
+                    pyx.path.lineto(f(range_end) - grid_length * dy_units[1], g(range_end) + grid_length * dx_units[1]))
                 # text
                 x0 = (f(number) + f(range_end)) / 2.0
                 y0 = (g(number) + g(range_end)) / 2.0
@@ -1427,8 +1437,9 @@ class Nomo_Axis:
                 self._make_main_line_(number, range_end, main_line, f, g, sections=35.0)
             if draw_extra_line:
                 line.append(
-                    path.lineto(f(number) - grid_length * dy_unit + x_corr, g(number) + grid_length * dx_unit + y_corr))
-                # self.canvas.fill(path.circle(f(number), g(number), 0.02))
+                    pyx.path.lineto(f(number) - grid_length * dy_unit + x_corr,
+                                    g(number) + grid_length * dx_unit + y_corr))
+                # self.canvas.fill(pyx.path.circle(f(number), g(number), 0.02))
         self._make_main_line_(min, max, main_line, f, g)
         self.line = line
         self.thin_line = thin_line
@@ -1442,17 +1453,17 @@ class Nomo_Axis:
         linewidth_ticks = self.axis_appear['linewidth_ticks']
         linewidth_ticks_thin = self.axis_appear['linewidth_ticks_thin']
         linewidth_main = self.axis_appear['linewidth_main']
-        # c.stroke(self.line, [style.linewidth.normal,axis_color])
-        # c.stroke(self.thin_line, [style.linewidth.thin,axis_color])
-        c.stroke(self.line, [linewidth_ticks, axis_color, style.linecap.butt])
-        c.stroke(self.thin_line, [linewidth_ticks_thin, axis_color, style.linecap.butt])
-        c.stroke(self.main_line, [linewidth_main, axis_color, style.linecap.square])
+        # c.stroke(self.line, [pyx.style.linewidth.normal,axis_color])
+        # c.stroke(self.thin_line, [pyx.style.linewidth.thin,axis_color])
+        c.stroke(self.line, [linewidth_ticks, axis_color, pyx.style.linecap.butt])
+        c.stroke(self.thin_line, [linewidth_ticks_thin, axis_color, pyx.style.linecap.butt])
+        c.stroke(self.main_line, [linewidth_main, axis_color, pyx.style.linecap.square])
         if self.arrows is not None:
             for arrow in self.arrows:
                 c.stroke(arrow,
-                         [style.linewidth.thick, arrow_color,
-                          deco.earrow([deco.stroked([arrow_color]),
-                                       deco.filled([arrow_color])], size=self.axis_appear['arrow_size'])])
+                         [pyx.style.linewidth.thick, arrow_color,
+                          pyx.deco.earrow([pyx.deco.stroked([arrow_color]),
+                                       pyx.deco.filled([arrow_color])], size=self.axis_appear['arrow_size'])])
         for ttext, x, y, attr in self.texts:
             c.text(x, y, ttext, attr + [text_color])
 
@@ -1473,20 +1484,20 @@ class Nomo_Axis:
                 best_u = number
         c.text(self.func_f(best_u) + self.title_x_shift,
                self.func_g(best_u) + self.title_y_shift,
-               self.title, [text.halign.center, self.axis_appear['title_color']])
+               self.title, [pyx.text.halign.center, self.axis_appear['title_color']])
         self.titles.append((self.title, self.func_f(best_u) + self.title_x_shift,
                             self.func_g(best_u) + self.title_y_shift,
-                            [text.halign.center, self.axis_appear['title_color']]))
+                            [pyx.text.halign.center, self.axis_appear['title_color']]))
 
     #        # find out if start or stop has higher y-value
     #        if self.func_g(self.stop)>self.func_g(self.start):
     #            c.text(self.func_f(self.stop)+self.title_x_shift,
     #                    self.func_g(self.stop)+self.title_y_shift,
-    #                    self.title,[text.halign.center])
+    #                    self.title,[pyx.text.halign.center])
     #        else:
     #            c.text(self.func_f(self.start)+self.title_x_shift,
     #                    self.func_g(self.start)+self.title_y_shift, self.title,
-    #                    [text.halign.center])
+    #                    [pyx.text.halign.center])
 
     def _draw_title_center_(self, c):
         """
@@ -1531,13 +1542,13 @@ class Nomo_Axis:
         text_distance = self.axis_appear['title_distance_center']
         c.text(center_x - text_distance * dy_unit + dx_absolute + dx_relative,
                center_y + text_distance * dx_unit + dy_absolute + dy_relative,
-               self.title, [text.halign.center, trafo.rotate(angle),
+               self.title, [pyx.text.halign.center, pyx.trafo.rotate(angle),
                             self.axis_appear['title_color']])
         self.titles.append((self.title, center_x - text_distance * dy_unit,
                             center_y + text_distance * dx_unit,
-                            [text.halign.center, trafo.rotate(angle),
+                            [pyx.text.halign.center, pyx.trafo.rotate(angle),
                              self.axis_appear['title_color']]))
-        # text_attr=[text.valign.middle,text.halign.left,text.size.small,trafo.rotate(angle)]
+        # text_attr=[pyx.text.valign.middle,text.halign.left,text.size.small,pyx.trafo.rotate(angle)]
         # texts.append((label_string,f(number)-text_distance*dy_unit,g(number)+text_distance*dx_unit,text_attr))
 
     def _draw_extra_titles_(self, c):
@@ -1557,7 +1568,7 @@ class Nomo_Axis:
                 best_u = number
                 #        c.text(self.func_f(best_u)+self.title_x_shift,
                 #                self.func_g(best_u)+self.title_y_shift,
-                #                self.title,[text.halign.center,self.axis_appear['title_color']])
+                #                self.title,[pyx.text.halign.center,self.axis_appear['title_color']])
 
         text_default = {'dx': 0.0,
                         'dy': 0.0,
@@ -1575,13 +1586,13 @@ class Nomo_Axis:
                 text_str = texts['text']
                 width = texts['width']
                 pyx_extra_defs = texts['pyx_extra_defs']
-                #                c.text(x,y,text_str,[text.parbox(width)]+pyx_extra_defs)
+                #                c.text(x,y,text_str,[pyx.text.parbox(width)]+pyx_extra_defs)
                 c.text(self.func_f(best_u) + dx,
                        self.func_g(best_u) + dy,
-                       text_str, [text.parbox(width)] + pyx_extra_defs)
+                       text_str, [pyx.text.parbox(width)] + pyx_extra_defs)
                 self.titles.append((self.func_f(best_u) + dx,
                                     self.func_g(best_u) + dy,
-                                    text_str, [text.parbox(width)] + pyx_extra_defs))
+                                    text_str, [pyx.text.parbox(width)] + pyx_extra_defs))
 
     def _put_text_(self, u):
         if self.text_style == 'oldstyle':
@@ -1660,16 +1671,16 @@ def _find_text_attr(tick_list, dx_units, dy_units, angles, text_size, tick_info)
     text_attrs = []
     for idx, u in enumerate(tick_list):
         if dy_units[idx] < 0:
-            text_attr = [text.valign.middle, text.halign.right, text_size, trafo.rotate(angles[idx])]
+            text_attr = [pyx.text.valign.middle, pyx.text.halign.right, text_size, pyx.trafo.rotate(angles[idx])]
         else:
-            text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+            text_attr = [pyx.text.valign.middle, pyx.text.halign.left, text_size, pyx.trafo.rotate(angles[idx])]
         if tick_info['full_angle'] == True:
             if tick_info['angle_tick_direction'] == 'outer':
-                text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.left, text_size, pyx.trafo.rotate(angles[idx])]
             else:  # 'inner'
-                text_attr = [text.valign.middle, text.halign.left, text_size, trafo.rotate(angles[idx])]
+                text_attr = [pyx.text.valign.middle, pyx.text.halign.left, text_size, pyx.trafo.rotate(angles[idx])]
         if tick_info['text_horizontal_align_center'] == True:
-            text_attr = [text.valign.top, text.halign.center, text_size, trafo.rotate(angles[idx])]
+            text_attr = [pyx.text.valign.top, pyx.text.halign.center, text_size, pyx.trafo.rotate(angles[idx])]
         t_dict = {'valign': text_attr[0],
                   'halign': text_attr[1],
                   'size': text_attr[2],
@@ -2235,12 +2246,12 @@ def core_main_line_draw_func_basic(main_line_coords, func_f, func_g, ticks, tick
     """
     axis_color = tick_info['axis_color']
     linewidth_main = tick_info['linewidth_main']
-    # c.stroke(self.line, [style.linewidth.normal,axis_color])
-    # c.stroke(self.thin_line, [style.linewidth.thin,axis_color])
-    main_line = path.path(path.moveto(main_line_coords[0][0], main_line_coords[0][1]))
+    # c.stroke(self.line, [pyx.style.linewidth.normal,axis_color])
+    # c.stroke(self.thin_line, [pyx.style.linewidth.thin,axis_color])
+    main_line = pyx.path.path(pyx.path.moveto(main_line_coords[0][0], main_line_coords[0][1]))
     for x, y in main_line_coords:
-        main_line.append(path.lineto(x, y))
-    c.stroke(main_line, [linewidth_main, axis_color, style.linecap.square])
+        main_line.append(pyx.path.lineto(x, y))
+    c.stroke(main_line, [linewidth_main, axis_color, pyx.style.linecap.square])
 
 
 def core_tick_draw_func_basic(ticks, texts, level, f, g, dx_units, dy_units,
@@ -2266,7 +2277,7 @@ def core_tick_draw_func_basic(ticks, texts, level, f, g, dx_units, dy_units,
     for i, tick in enumerate(ticks):
         # draw actual tick
         x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
-        # color
+        # pyx.color
         tick_color = ti['tick_color']
         if ti['tick_colors'] != None:
             tick_color = ti['tick_colors'][level]
@@ -2278,7 +2289,7 @@ def core_tick_draw_func_basic(ticks, texts, level, f, g, dx_units, dy_units,
         if ti['tick_linewidths'] != None:
             linewidth_tick = ti['tick_linewidths'][level]
         # draw the tick
-        c.stroke(path.line(x1, y1, x2, y2), [linewidth_tick, tick_color, style.linecap.butt])
+        c.stroke(pyx.path.line(x1, y1, x2, y2), [linewidth_tick, tick_color, pyx.style.linecap.butt])
 
 
 def example_tick_draw_func(ticks, texts, level, f, g, dx_units, dy_units,
@@ -2305,7 +2316,7 @@ def example_tick_draw_func(ticks, texts, level, f, g, dx_units, dy_units,
         x1, y1, x2, y2 = calc_tick_coords(tick, f, g, dx_units[i], dy_units[i], tick_length)
         tick_color = tick_info['tick_colors'][level]
         linewidth_ticks = tick_info['tick_linewidths'][level]
-        c.stroke(path.line(x1, y1, x2, y2), [linewidth_ticks, tick_color, style.linecap.butt])
+        c.stroke(pyx.path.line(x1, y1, x2, y2), [linewidth_ticks, tick_color, pyx.style.linecap.butt])
 
 
 def core_text_draw_func_basic(ticks, texts, level, f, g, dx_units, dy_units, angles,
@@ -2444,7 +2455,6 @@ def core_ticker(start, stop, f, g, tick_levels, text_levels, distance_limit_tick
     return ticks, texts
 
 
-
 ## Testing
 if __name__ == '__main__':
     #######
@@ -2458,7 +2468,7 @@ if __name__ == '__main__':
 
 
     """"
-    c = canvas.canvas()
+    c =pyx.canvas.canvas()
     gr1=Nomo_Axis(func_f=fgen_test,func_g=ggen_test,start=20.5,stop=300.0,turn=-1,title=r'gen test',
               canvas=c,type='general',side='left',tick_levels=3,tick_text_levels=2,
               axis_appear={})    
@@ -2467,7 +2477,7 @@ if __name__ == '__main__':
     """
     #
     # same with custom drawing
-    c2 = canvas.canvas()
+    c2 = pyx.canvas.canvas()
 
 
     def test_text_draw_func(ticks, texts, level, f, g, dx_units, dy_units, angles,
@@ -2494,8 +2504,8 @@ if __name__ == '__main__':
             # draw actual text
             x = f(text_value) + text_distance * dy_units[i]
             y = g(text_value) - text_distance * dx_units[i]
-            trafo.translate(10.0, 10.0)
-            if tick_info['text_colors'] == None:  # use single color for all levels
+            pyx.trafo.translate(10.0, 10.0)
+            if tick_info['text_colors'] == None:  # use single pyx.color for all levels
                 text_color = tick_info['text_color']
             else:
                 text_color = tick_info['text_colors'][level]
@@ -2510,8 +2520,8 @@ if __name__ == '__main__':
                     text_attrs[i]['halign'],  # horizaontal alignment
                     text_color,
                     text_size,
-                    trafo.translate(x, y),  # translation
-                    trafo.rotate(angles[i])  # rotation
+                    pyx.trafo.translate(x, y),  # translation
+                    pyx.trafo.rotate(angles[i])  # rotation
                     ])
 
 
@@ -2540,16 +2550,16 @@ if __name__ == '__main__':
             if level == 0:
                 tick_color = tick_info['tick_color']
             else:
-                tick_color = color.rgb.blue
+                tick_color = pyx.color.rgb.blue
             linewidth_ticks = tick_info['tick_linewidths'][level]
-            c.stroke(path.line(x1, y1, x2, y2), [linewidth_ticks, tick_color, style.linecap.butt])
+            c.stroke(pyx.path.line(x1, y1, x2, y2), [linewidth_ticks, tick_color, pyx.style.linecap.butt])
 
 
     gr2_axis_appear = {'text_draw_func': test_text_draw_func,
                        'tick_draw_func': test_tick_draw_func,
-                       'text_colors': [color.rgb.black, color.rgb.red,
-                                       color.rgb.black, color.rgb.red,
-                                       color.rgb.black]}
+                       'text_colors': [pyx.color.rgb.black, pyx.color.rgb.red,
+                                       pyx.color.rgb.black, pyx.color.rgb.red,
+                                       pyx.color.rgb.black]}
     gr2 = Nomo_Axis(func_f=fgen_test, func_g=ggen_test, start=20.5, stop=300.0, turn=-1, title=r'gen test',
                     canvas=c2, type='general', side='left', tick_levels=4, tick_text_levels=2,
                     axis_appear=gr2_axis_appear)
@@ -2566,7 +2576,7 @@ if __name__ == '__main__':
         return math.sin(angle / 180 * math.pi) * 20
 
 
-    c3 = canvas.canvas()
+    c3 = pyx.canvas.canvas()
 
 
     def draw_balls(num, x1, y1, x2, y2, angle, size, c):
@@ -2574,54 +2584,54 @@ if __name__ == '__main__':
         example function to draw balls
         """
         # make transformation
-        trans = [trafo.rotate(angle), trafo.translate(x1, y1)]
-        tick_color = color.rgb.black
-        tick_width = style.linewidth.normal
-        # c.fill(path.circle(0,0,size),trans+[tick_color,tick_width])
+        trans = [pyx.trafo.rotate(angle), pyx.trafo.translate(x1, y1)]
+        tick_color = pyx.color.rgb.black
+        tick_width = pyx.style.linewidth.normal
+        # c.fill(pyx.path.circle(0,0,size),trans+[tick_color,tick_width])
         while True:  # unities
             if num % 10 == 0: break
-            c.fill(path.circle(-0.4, 0.04, size), trans + [tick_color, tick_width])
+            c.fill(pyx.path.circle(-0.4, 0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 1: break
-            c.fill(path.circle(-0.5, 0.04, size), trans + [tick_color, tick_width])
+            c.fill(pyx.path.circle(-0.5, 0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 2: break
-            c.fill(path.circle(-0.6, 0.04, size), trans + [tick_color, tick_width])
+            c.fill(pyx.path.circle(-0.6, 0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 3: break
-            c.fill(path.circle(-0.7, 0.04, size), trans + [tick_color, tick_width])
+            c.fill(pyx.path.circle(-0.7, 0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 4: break
-            c.fill(path.circle(-0.4, -0.04, size), trans + [tick_color, tick_width])
+            c.fill(pyx.path.circle(-0.4, -0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 5: break
-            c.fill(path.circle(-0.5, -0.04, size), trans + [tick_color, tick_width])
+            c.fill(pyx.path.circle(-0.5, -0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 6: break
-            c.fill(path.circle(-0.6, -0.04, size), trans + [tick_color, tick_width])
+            c.fill(pyx.path.circle(-0.6, -0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 7: break
-            c.fill(path.circle(-0.7, -0.04, size), trans + [tick_color, tick_width])
+            c.fill(pyx.path.circle(-0.7, -0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 8: break
-            c.fill(path.circle(-0.8, 0.0, size), trans + [tick_color, tick_width])
+            c.fill(pyx.path.circle(-0.8, 0.0, size), trans + [tick_color, tick_width])
             if num % 10 == 9: break
             break
         while True:  # tens
             num = int(num / 10)
             if num % 10 == 0: break
-            c.stroke(path.circle(0.4 - 0.3, 0.04, size), trans + [tick_color, tick_width])
+            c.stroke(pyx.path.circle(0.4 - 0.3, 0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 1: break
-            c.stroke(path.circle(0.5 - 0.3, 0.04, size), trans + [tick_color, tick_width])
+            c.stroke(pyx.path.circle(0.5 - 0.3, 0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 2: break
-            c.stroke(path.circle(0.6 - 0.3, 0.04, size), trans + [tick_color, tick_width])
+            c.stroke(pyx.path.circle(0.6 - 0.3, 0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 3: break
-            c.stroke(path.circle(0.7 - 0.3, 0.04, size), trans + [tick_color, tick_width])
+            c.stroke(pyx.path.circle(0.7 - 0.3, 0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 4: break
-            c.stroke(path.circle(0.4 - 0.3, -0.04, size), trans + [tick_color, tick_width])
+            c.stroke(pyx.path.circle(0.4 - 0.3, -0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 5: break
-            c.stroke(path.circle(0.5 - 0.3, -0.04, size), trans + [tick_color, tick_width])
+            c.stroke(pyx.path.circle(0.5 - 0.3, -0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 6: break
-            c.stroke(path.circle(0.6 - 0.3, -0.04, size), trans + [tick_color, tick_width])
+            c.stroke(pyx.path.circle(0.6 - 0.3, -0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 7: break
-            c.stroke(path.circle(0.7 - 0.3, -0.04, size), trans + [tick_color, tick_width])
+            c.stroke(pyx.path.circle(0.7 - 0.3, -0.04, size), trans + [tick_color, tick_width])
             if num % 10 == 8: break
-            c.stroke(path.circle(0.8 - 0.3, 0.0, size), trans + [tick_color, tick_width])
+            c.stroke(pyx.path.circle(0.8 - 0.3, 0.0, size), trans + [tick_color, tick_width])
             if num % 10 == 9: break
             break
-        c.stroke(path.line(0, 0, 0.4, 0), trans + [tick_color, tick_width])
+        c.stroke(pyx.path.line(0, 0, 0.4, 0), trans + [tick_color, tick_width])
         # print "stroking"
 
 
@@ -2650,9 +2660,9 @@ if __name__ == '__main__':
             if level == 0:
                 tick_color = tick_info['tick_color']
             else:
-                tick_color = color.rgb.blue
+                tick_color = pyx.color.rgb.blue
             linewidth_ticks = tick_info['tick_linewidths'][level]
-            c.stroke(path.line(x1, y1, x2, y2), [linewidth_ticks, tick_color, style.linecap.butt])
+            c.stroke(pyx.path.line(x1, y1, x2, y2), [linewidth_ticks, tick_color, pyx.style.linecap.butt])
             # if 1:
             if level == 0:
                 draw_balls(tick, x1, y1, x2, y2, angles[i], 0.02, c)
@@ -2661,9 +2671,9 @@ if __name__ == '__main__':
 
     gr3_axis_appear = {'text_draw_func': test_text_draw_func,
                        'tick_draw_func': test_tick_draw_func_balls,
-                       'text_colors': [color.rgb.black, color.rgb.red,
-                                       color.rgb.black, color.rgb.red,
-                                       color.rgb.black]}
+                       'text_colors': [pyx.color.rgb.black, pyx.color.rgb.red,
+                                       pyx.color.rgb.black, pyx.color.rgb.red,
+                                       pyx.color.rgb.black]}
     gr3 = Nomo_Axis(func_f=fgen_test3, func_g=ggen_test3, start=0.0, stop=20.0, turn=-1, title=r'gen test11',
                     canvas=c3, type='general', side='left', tick_levels=3, tick_text_levels=2,
                     axis_appear=gr3_axis_appear)
@@ -2727,7 +2737,7 @@ if 0:
                         9.0: 'nineth',
                         10.0: 'tenth'}
 
-    c = canvas.canvas()
+    c = pyx.canvas.canvas()
     # gg3=Nomo_Axis(func_f=f3,func_g=g3,start=1.0,stop=0.5,turn=-1,title='func 1',canvas=c,type='linear')
     gr1 = Nomo_Axis(func_f=f1, func_g=g1, start=0.5, stop=1.0, turn=-1, title='func 1',
                     canvas=c, type='linear', side='left')
@@ -2749,8 +2759,8 @@ if 0:
                     manual_axis_data=manual_axis_data, side='right',
                     axis_appear={'extra_angle': 0,
                                  'text_horizontal_align_center': False,
-                                 'arrow_color': color.rgb.blue,
-                                 'text_color': color.rgb.red})
+                                 'arrow_color': pyx.color.rgb.blue,
+                                 'text_color': pyx.color.rgb.red})
     gr44 = Nomo_Axis(func_f=f1c, func_g=g1c, start=1.0, stop=10, turn=-1, title='func 4',
                      canvas=c, type='manual line',
                      manual_axis_data=manual_axis_data, side='left')
@@ -2760,8 +2770,8 @@ if 0:
                     canvas=c, type='linear', side='left',
                     axis_appear={'extra_angle': 0,
                                  'text_horizontal_align_center': False,
-                                 'axis_color': color.rgb.blue,
-                                 'text_color': color.cmyk.Orange})
+                                 'axis_color': pyx.color.rgb.blue,
+                                 'text_color': pyx.color.cmyk.Orange})
 
     gr10 = Nomo_Axis(func_f=lambda u: 20.0, func_g=lambda x: (x + 12.5) / 2.0, start=-17.1757381043, stop=19.5610135785,
                      turn=-1, title='test neg.',
@@ -2773,7 +2783,7 @@ if 0:
     # gg4=Nomo_Axis(func_f=f4,func_g=g4,start=0.5,stop=1.0,turn=-1,title='func 3',canvas=c,type='linear')
     c.writePDFfile("test_nomo_axis")
 
-    cc = canvas.canvas()
+    cc = pyx.canvas.canvas()
     axis_appear = {'full_angle': True,
                    'extra_angle': -90.0,
                    'text_format': "$%3.0f$",
@@ -2794,7 +2804,7 @@ if 0:
                           80.0: '80',
                           90.0: '90',
                           100.0: '100'}
-    ccc = canvas.canvas()
+    ccc = pyx.canvas.canvas()
     axis_appear = {'full_angle': True,
                    'extra_angle': -90.0,
                    'text_format': "$%3.0f$",

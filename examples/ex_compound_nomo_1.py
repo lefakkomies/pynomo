@@ -1,7 +1,7 @@
 """
     ex_compound_nomo_1.py
 
-    Compound nomograph: (A+B)/E=F/(CD)
+    Compound nomograph: (A + B) / E = F / (CD)
 
     Copyright (C) 2007-2015  Leif Roschier
 
@@ -21,7 +21,7 @@
 import sys
 
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
 # type 1
 A_params = {

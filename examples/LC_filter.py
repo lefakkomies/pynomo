@@ -22,36 +22,37 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-sys.path.insert(0, "..")
-from pynomo.nomographer import *
-from scipy.constants import *
 
+sys.path.insert(0, "..")
+from pynomo.nomographer import Nomographer
+from scipy.constants import mu_0
+import pyx
+import numpy as np
 
 # python3 uses later PyX with different command to use latex.
 if sys.version_info >= (3, 0):
-    text.set(text.LatexRunner)  # assumes PyX > 14.0
+    pyx.text.set(pyx.text.LatexRunner)  # assumes PyX > 14.0
+    pyx.text.preamble(r"\usepackage[utf8]{inputenc}")  # latex preamble
 else:
-    text.set(mode="latex")  # assumes PyX 12.x
-
-text.preamble(r"\usepackage[utf8]{inputenc}")  # latex preamble
+    pyx.text.set(mode="latex")  # assumes PyX 12.x
 
 
 def v_func(x, v):
-    R = exp(x) * 1e-3  # mm
+    R = np.exp(x) * 1e-3  # mm
     L = v * 1e-3  # mm
-    return log(9.0 * R + 10.0 * L) - 2.0 * log(R)
+    return np.log(9.0 * R + 10.0 * L) - 2.0 * np.log(R)
 
 
 L_min = 2.0
 L_max = 20.0
 R_min = 0.5
 R_max = 20.0
-u_min_value = exp(v_func(log(R_min), L_min))
-u_max_value = exp(v_func(log(R_max), L_max))
+u_min_value = np.exp(v_func(np.log(R_min), L_min))
+u_max_value = np.exp(v_func(np.log(R_max), L_max))
 
 block_params = {
     'block_type': 'type_5',
-    'u_func': lambda u: log(u),
+    'u_func': lambda u: np.log(u),
     'v_func': v_func,
     'u_values': [u_min_value, u_max_value],  #
     'u_manual_axis_data': {u_min_value: '',
@@ -64,10 +65,10 @@ block_params = {
     'wd_title': r'$R$ (mm)',
     'u_tag': 'AA',
     'manual_x_scale': True,
-    'x_min': log(R_min),
-    'x_max': log(R_max),
-    'wd_func': lambda x: log(x),
-    'wd_func_inv': lambda x: exp(x),
+    'x_min': np.log(R_min),
+    'x_max': np.log(R_max),
+    'wd_func': lambda x: np.log(x),
+    'wd_func_inv': lambda x: np.exp(x),
     'scale_type_wd': 'log smart',
     'u_title': '',
     'v_title': r'$l$ (mm)   ',
@@ -84,61 +85,61 @@ block_params = {
     'v_tick_text_levels': 3,
     'v_min': 2.0,
     'v_max': 300.0,
-    'x_func': lambda d, L: log((9.0 + sqrt(81.0 + 40.0 * d * L * 1e-3)) / (2.0 * d) * 1e3),
+    'x_func': lambda d, L: np.log((9.0 + np.sqrt(81.0 + 40.0 * d * L * 1e-3)) / (2.0 * d) * 1e3),
 }
 
 N_params_1 = {  # N
-                'u_min': 1.0,
-                'u_max': 10000.0,
-                'function': lambda N: -2.0 * log(N) - log(10.0 * pi * mu_0),
-                'title': r'$N$',
-                'tick_levels': 4,
-                'tick_text_levels': 4,
-                'scale_type': 'log smart',
-                'text_format': r"{%6.6g}",
-                'tick_side': 'right',
-                }
+    'u_min': 1.0,
+    'u_max': 10000.0,
+    'function': lambda N: -2.0 * np.log(N) - np.log(10.0 * np.pi * mu_0),
+    'title': r'$N$',
+    'tick_levels': 4,
+    'tick_text_levels': 4,
+    'scale_type': 'log smart',
+    'text_format': r"{%6.6g}",
+    'tick_side': 'right',
+}
 
 N_params_2 = {  # dummy align
-                'u_min': u_min_value,
-                'u_max': u_max_value,
-                'function': lambda y: log(y),  # *1e6
-                'title': r'',
-                'tick_levels': 0,
-                'tick_text_levels': 0,
-                'scale_type': 'linear',
-                'tag': 'AA',
-                }
+    'u_min': u_min_value,
+    'u_max': u_max_value,
+    'function': lambda y: np.log(y),  # *1e6
+    'title': r'',
+    'tick_levels': 0,
+    'tick_text_levels': 0,
+    'scale_type': 'linear',
+    'tag': 'AA',
+}
 
 N_params_3 = {  # L
-                'u_min': 0.01,
-                'u_max': 100000.0,
-                'function': lambda ind: log(ind * 1e-6),
-                'title': r'$L$ ($\mu$H)',
-                'tick_levels': 4,
-                'tick_text_levels': 4,
-                'scale_type': 'log smart',
-                'tick_side': 'left',
-                'text_format': r"$%6.6g$ ",
-                'tag': 'L',
-                }
+    'u_min': 0.01,
+    'u_max': 100000.0,
+    'function': lambda ind: np.log(ind * 1e-6),
+    'title': r'$L$ ($\mu$H)',
+    'tick_levels': 4,
+    'tick_text_levels': 4,
+    'scale_type': 'log smart',
+    'tick_side': 'left',
+    'text_format': r"$%6.6g$ ",
+    'tag': 'L',
+}
 
 block_1_params = {  # inductance from N and contour
-                    'block_type': 'type_1',
-                    'width': 4.0,
-                    'height': 15.0,
-                    'f1_params': N_params_3,
-                    'f2_params': N_params_1,
-                    'f3_params': N_params_2,
-                    'proportion': 0.5,
-                    'isopleth_values': [['x', 'x', 'x']],
-                    }
+    'block_type': 'type_1',
+    'width': 4.0,
+    'height': 15.0,
+    'f1_params': N_params_3,
+    'f2_params': N_params_1,
+    'f3_params': N_params_2,
+    'proportion': 0.5,
+    'isopleth_values': [['x', 'x', 'x']],
+}
 
 # f(L,C)
 N_params_1a = {
     'u_min': 0.1,
     'u_max': 100000.0,
-    'function': lambda ind: log(ind * 1e-6),
+    'function': lambda ind: np.log(ind * 1e-6),
     'title': r'$L$ ($\mu$H)',
     'tick_levels': 4,
     'tick_text_levels': 4,
@@ -152,7 +153,7 @@ N_params_1a = {
 N_params_2a = {
     'u_min': 0.1,
     'u_max': 10000.0,
-    'function': lambda f: 2.0 * log(3.1415 * f * 1e3),
+    'function': lambda f: 2.0 * np.log(3.1415 * f * 1e3),
     'title': r'$f$ (kHz)',
     'tick_levels': 5,
     'tick_text_levels': 5,
@@ -164,7 +165,7 @@ N_params_2a = {
 N_params_3a = {
     'u_min': 1.0,
     'u_max': 10000.0,
-    'function': lambda c: log(c * 1e-9),
+    'function': lambda c: np.log(c * 1e-9),
     'title': r'$C$ (nF)',
     'tick_levels': 4,
     'tick_text_levels': 4,
@@ -186,41 +187,41 @@ block_1_params_a = {
 
 ## R = sqrt(L/C)
 N_params_1b = {  # L
-                 'u_min': 0.1,
-                 'u_max': 100000.0,
-                 'function': lambda ind: -log(ind * 1e-6),
-                 'title': r'$L$ ($\mu$H)',
-                 'tick_levels': 4,
-                 'tick_text_levels': 4,
-                 'scale_type': 'log smart',
-                 'tick_side': 'left',
-                 'text_format': r"$%6.6g$ ",
-                 'tag': 'L',
-                 'dtag': 'L',
-                 }
+    'u_min': 0.1,
+    'u_max': 100000.0,
+    'function': lambda ind: -np.log(ind * 1e-6),
+    'title': r'$L$ ($\mu$H)',
+    'tick_levels': 4,
+    'tick_text_levels': 4,
+    'scale_type': 'log smart',
+    'tick_side': 'left',
+    'text_format': r"$%6.6g$ ",
+    'tag': 'L',
+    'dtag': 'L',
+}
 
 N_params_2b = {  # R
-                 'u_min': 10.0,
-                 'u_max': 400.0,
-                 'function': lambda R: 2.0 * log(R),
-                 'title': r'$R$ ($\Omega$)',
-                 'tick_levels': 5,
-                 'tick_text_levels': 5,
-                 'tick_side': 'right',
-                 'scale_type': 'log smart',
-                 }
+    'u_min': 10.0,
+    'u_max': 400.0,
+    'function': lambda R: 2.0 * np.log(R),
+    'title': r'$R$ ($\Omega$)',
+    'tick_levels': 5,
+    'tick_text_levels': 5,
+    'tick_side': 'right',
+    'scale_type': 'log smart',
+}
 
 N_params_3b = {  # C
-                 'u_min': 1.0,
-                 'u_max': 10000.0,
-                 'function': lambda c: log(c * 1e-9),
-                 'title': r'$C$ (nF)',
-                 'tick_levels': 4,
-                 'tick_text_levels': 4,
-                 'scale_type': 'log smart',
-                 'text_format': r"$%6.6g$ ",
-                 'tag': 'C',
-                 }
+    'u_min': 1.0,
+    'u_max': 10000.0,
+    'function': lambda c: np.log(c * 1e-9),
+    'title': r'$C$ (nF)',
+    'tick_levels': 4,
+    'tick_text_levels': 4,
+    'scale_type': 'log smart',
+    'text_format': r"$%6.6g$ ",
+    'tag': 'C',
+}
 
 block_1_params_b = {
     'block_type': 'type_1',
@@ -244,7 +245,7 @@ main_params = {
                      'y': 13.0,
                      'text': r'$L = \frac{10 \pi \mu_0 N^2 R^2}{9R+10l}$ \par $f = \frac{1}{\pi \sqrt{LC}}$ \par $R = \sqrt{\frac{L}{C}}$',
                      'width': 7,
-                     'pyx_extra_defs': [text.size.Large]
+                     'pyx_extra_defs': [pyx.text.size.Large]
                      }],
 }
 

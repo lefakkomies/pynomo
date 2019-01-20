@@ -19,7 +19,7 @@
 import sys
 
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
 isopleth_value_list = []
 color_list = []

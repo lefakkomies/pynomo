@@ -19,33 +19,34 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import sys
+
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
-N_params_1={
-        'u_min':1.0,
-        'u_max':10.0,
-        'function':lambda u:u,
-        'title':'u',
-        'tick_levels':3,
-        'tick_text_levels':2,
-        'tick_side':'left',
-        }
+N_params_1 = {
+    'u_min': 1.0,
+    'u_max': 10.0,
+    'function': lambda u: u,
+    'title': 'u',
+    'tick_levels': 3,
+    'tick_text_levels': 2,
+    'tick_side': 'left',
+}
 
-block_params={
-              'block_type':'type_8',
-              'f_params':N_params_1,
-              'width':5.0,
-              'height':10.0,
-              'isopleth_values':[[5]]
-                     }
+block_params = {
+    'block_type': 'type_8',
+    'f_params': N_params_1,
+    'width': 5.0,
+    'height': 10.0,
+    'isopleth_values': [[5]]
+}
 
-main_params={
-              'filename':'ex_type8_nomo_1.pdf',
-              'paper_height':10.0,
-              'paper_width':5.0,
-              'block_params':[block_params],
-              'transformations':[]
-              }
+main_params = {
+    'filename': 'ex_type8_nomo_1.pdf',
+    'paper_height': 10.0,
+    'paper_width': 5.0,
+    'block_params': [block_params],
+    'transformations': []
+}
 
 Nomographer(main_params)

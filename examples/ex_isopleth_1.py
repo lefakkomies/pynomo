@@ -19,7 +19,7 @@
 import sys
 
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
 N_params_1 = {
     'u_min': 0.0,

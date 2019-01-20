@@ -1,8 +1,9 @@
 # ex_axes_5.py
 
 import sys
+
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
 N_params = {'u_min': 1.0,
             'u_max': 10.0,
@@ -12,9 +13,9 @@ N_params = {'u_min': 1.0,
             'tick_text_levels': 1,
             'tick_side': 'left',
             'title_draw_center': True,
-            'scale_type': 'manual point',        # <- use manual points
-            'manual_axis_data': {1.0: 'one',     # <- give point values as keys
-                                 2.0: 'two',     # <- and texts as values
+            'scale_type': 'manual point',  # <- use manual points
+            'manual_axis_data': {1.0: 'one',  # <- give point values as keys
+                                 2.0: 'two',  # <- and texts as values
                                  3.0: 'three',
                                  3.1415: r'$\pi$',
                                  4.0: 'four',

@@ -1,8 +1,9 @@
 # ex_axes_6.py
 
 import sys
+
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
 N_params = {'u_min': 1.0,
             'u_max': 10.0,
@@ -12,7 +13,7 @@ N_params = {'u_min': 1.0,
             'tick_text_levels': 1,
             'tick_side': 'left',
             'title_draw_center': True,
-            'scale_type': 'manual line',     # <-
+            'scale_type': 'manual line',  # <-
             'manual_axis_data': {1.0: 'one',
                                  2.0: 'two',
                                  3.0: 'three',

@@ -1,8 +1,9 @@
 # ex_axes_9.py
 
 import sys
+
 sys.path.insert(0, "..")
-from pynomo.nomographer import *
+from pynomo.nomographer import Nomographer
 
 N_params = {'u_min': 1.0,
             'u_max': 10000.0,
@@ -20,5 +21,5 @@ main_params = {'filename': 'ex_axes_9.pdf',
                'paper_width': 5.0,
                'block_params': [block_params],
                'transformations': [('scale paper',)]
-              }
+               }
 Nomographer(main_params)
