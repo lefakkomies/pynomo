@@ -1122,11 +1122,12 @@ class Isopleth_Block_Type_5(Isopleth_Block):
         u_value = u_func(u)  # = y
         func_opt = lambda x: (v_func(x, v) - u_value) ** 2  # func to minimize
         # let's try to find good starting point for optimization
-        x_range = arange(x_start, x_stop, (x_stop - x_start) / 30.0)
+        x_range = arange(x_start, x_stop, (x_stop - x_start) / 30.0, dtype=complex)
         #        print "x_range:"
         #        print x_range
         # use complex numbers to filter results with complex part
-        values = func_opt(x_range.astype(complex))
+        #values = func_opt(x_range.astype(complex))
+        values = x_range
         values_list_complex = values.tolist()
         values_list = []
         for value in values_list_complex:

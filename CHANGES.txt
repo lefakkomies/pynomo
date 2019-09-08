@@ -1,5 +1,9 @@
 PyNomo
 
+0.3.2
+=====
+- Fix of bug with numpy astype() behavior change with arrays  
+
 0.3.1
 =====
 - compatibility with python 3.7

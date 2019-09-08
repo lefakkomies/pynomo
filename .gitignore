@@ -5,6 +5,8 @@
 *.eps
 .idea
 GENERATE_SINGLE.*
+.DS_Store
+
 
 
 # from https://github.com/github/gitignore/blob/master/Python.gitignore
