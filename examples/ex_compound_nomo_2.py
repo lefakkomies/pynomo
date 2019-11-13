@@ -22,6 +22,7 @@ import sys
 
 sys.path.insert(0, "..")
 from pynomo.nomographer import Nomographer
+from math import log
 
 # N
 u_params = {
