@@ -29,6 +29,9 @@ from .nomo_wrapper import Nomo_Block_Type_7
 from .nomo_wrapper import Nomo_Block_Type_8
 from .nomo_wrapper import Nomo_Block_Type_9
 from .nomo_wrapper import Nomo_Block_Type_10
+from .nomo_axis import Nomo_Axis
+from .nomo_axis import find_linear_ticks
+
 
 import pyx
 import numpy as np
@@ -283,22 +286,22 @@ class Nomographer:
         grid_color_1 = pyx.color.cmyk.Gray
         grid_color_2 = pyx.color.cmyk.Tan
         for tick in tick_0_list_v:
-            c.stroke(path.line(-axis_offset, tick, params['paper_width'] + axis_offset, tick),
+            c.stroke(pyx.path.line(-axis_offset, tick, params['paper_width'] + axis_offset, tick),
                      [grid_color_0, pyx.style.linewidth.THin])
         for tick in tick_1_list_v:
-            c.stroke(path.line(-axis_offset, tick, params['paper_width'] + axis_offset, tick),
+            c.stroke(pyx.path.line(-axis_offset, tick, params['paper_width'] + axis_offset, tick),
                      [grid_color_1, pyx.style.linewidth.THIN])
         for tick in tick_2_list_v:
-            c.stroke(path.line(-axis_offset, tick, params['paper_width'] + axis_offset, tick),
+            c.stroke(pyx.path.line(-axis_offset, tick, params['paper_width'] + axis_offset, tick),
                      [grid_color_2, pyx.style.linewidth.THIN])
         for tick in tick_0_list_h:
-            c.stroke(path.line(tick, -axis_offset, tick, params['paper_height'] + axis_offset),
+            c.stroke(pyx.path.line(tick, -axis_offset, tick, params['paper_height'] + axis_offset),
                      [grid_color_0, pyx.style.linewidth.THin])
         for tick in tick_1_list_h:
-            c.stroke(path.line(tick, -axis_offset, tick, params['paper_height'] + axis_offset),
+            c.stroke(pyx.path.line(tick, -axis_offset, tick, params['paper_height'] + axis_offset),
                      [grid_color_1, pyx.style.linewidth.THIN])
         for tick in tick_2_list_h:
-            c.stroke(path.line(tick, -axis_offset, tick, params['paper_height'] + axis_offset),
+            c.stroke(pyx.path.line(tick, -axis_offset, tick, params['paper_height'] + axis_offset),
                      [grid_color_2, pyx.style.linewidth.THIN])
 
     def _draw_lines_(self, params, c):
