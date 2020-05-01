@@ -23,8 +23,8 @@ from .nomo_axis_func import Axis_Wrapper, Axes_Wrapper
 from .nomo_grid_box import Nomo_Grid_Box
 from .nomo_grid import Nomo_Grid
 from .nomograph3 import Nomograph3
-from .nomo_axis import find_linear_ticks
-from .nomo_axis import find_tick_directions
+from .nomo_axis import find_linear_ticks, find_log_ticks
+from .nomo_axis import find_tick_directions, find_linear_ticks_smart
 from .math_utilities import FourPoint
 
 import math

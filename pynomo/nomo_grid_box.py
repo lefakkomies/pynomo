@@ -592,21 +592,21 @@ class Nomo_Grid_Box(object):
         """
         draws lines for debugging purposes, initial figure
         """
-        cc = canvas.canvas()
+        cc = pyx.canvas.canvas()
         x00, y00 = self.u_lines[0][0]
-        line = path.path(path.moveto(x00, y00))
+        line = pyx.path.path(pyx.path.moveto(x00, y00))
         for u_line in self.u_lines:
             x0, y0 = u_line[0]
-            line.append(path.moveto(x0, y0))
+            line.append(pyx.path.moveto(x0, y0))
             for x, y in u_line:
-                line.append(path.lineto(x, y))
+                line.append(pyx.path.lineto(x, y))
         for v_line in self.v_lines:
             x0, y0 = v_line[0]
-            line.append(path.moveto(x0, y0))
+            line.append(pyx.path.moveto(x0, y0))
             for x, y in v_line:
-                line.append(path.lineto(x, y))
+                line.append(pyx.path.lineto(x, y))
 
-        cc.stroke(line, [style.linewidth.normal])
+        cc.stroke(line, [pyx.style.linewidth.normal])
         cc.writePDFfile(filename)
 
 

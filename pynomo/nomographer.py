@@ -31,7 +31,7 @@ from .nomo_wrapper import Nomo_Block_Type_9
 from .nomo_wrapper import Nomo_Block_Type_10
 from .nomo_axis import Nomo_Axis
 from .nomo_axis import find_linear_ticks
-
+from pprint import pprint
 
 import pyx
 import numpy as np
@@ -237,10 +237,10 @@ class Nomographer:
         for block in params['block_params']:
             if block['debug']:
                 print("##### np.sinGLE BLOCK PARAMS #######")
-                pprint.pprint(block)
+                pprint(block)
         if params['debug']:
             print("##### MAIN PARAMS #######")
-            pprint.pprint(params)
+            pprint(params)
         self.wrapper = wrapper
         self.canvas = c
 
@@ -326,9 +326,9 @@ class Nomographer:
                 circle_color = self.line_defs_default['circle_color']
             # do lines and circles
             for line in line_defs['coords']:
-                c.stroke(path.line(line[0], line[1], line[2], line[3]), line_style)
-                c.fill(path.circle(line[0], line[1], circle_size), [circle_color])
-                c.fill(path.circle(line[2], line[3], circle_size), [circle_color])
+                c.stroke(pyx.path.line(line[0], line[1], line[2], line[3]), line_style)
+                c.fill(pyx.path.circle(line[0], line[1], circle_size), [circle_color])
+                c.fill(pyx.path.circle(line[2], line[3], circle_size), [circle_color])
 
     def _check_params_(self, params):
         """
@@ -714,12 +714,12 @@ if __name__ == '__main__':
 
         def f1(x, u):
             # return log(log(x/(x-u/100.0))/log(1+u/100.0))
-            return log(log(x / (x - u / (100.0 * 12.0))) / log(1 + u / (100.0 * 12.0)))
+            return np.log(np.log(x / (x - u / (100.0 * 12.0))) / np.log(1 + u / (100.0 * 12.0)))
 
 
         test5_block5_params = {
             'block_type': 'type_5',
-            'u_func': lambda u: log(u * 12.0),
+            'u_func': lambda u: np.log(u * 12.0),
             'v_func': f1,
             'u_values': [10.0, 15.0, 20.0, 25.0, 30.0, 40.0, 50.0, 60.0],
             'v_values': [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],

@@ -2679,7 +2679,7 @@ if __name__ == '__main__':
                     axis_appear=gr3_axis_appear)
     c3.writePDFfile("test_nomo_axis_2013b")
 
-if 0:
+if False:
     # find_log_ticks(990.0,999.0)
     # find_log_ticks(-33,52)
     find_log_ticks(0.12, 10.0)

@@ -460,7 +460,7 @@ class Axes_Wrapper:
         x0 = [1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0]
         self._add_params_trafo_stack_(x0)
         print("starts optimizing...")
-        fmin(self._calc_min_func_, x0, full_output=1, maxiter=2000)
+        np.fmin(self._calc_min_func_, x0, full_output=1, maxiter=2000)
         # self.alpha1=self.multiplier_x*self.alpha1
         # self.beta1=self.multiplier_x*self.beta1
         # self.gamma1=self.multiplier_x*self.gamma1
