@@ -35,6 +35,7 @@ from .nomo_axis import find_linear_ticks
 
 import pyx
 import numpy as np
+import pprint
 
 
 class Nomographer:
