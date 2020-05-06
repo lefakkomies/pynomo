@@ -396,7 +396,7 @@ class Circ_Block_Type_1(Circ_Block):
         }
         params_default_f1.update(params_default_f1_0)
         for key in params_default_f1:
-            if not self.f1_params.has_key(key):
+            if not key in self.f1_params:
                 self.f1_params[key] = params_default_f1[key]
             #        if self.f1_params['angle_tick_direction']=='inner':
             #            self.side_f1='left'
@@ -412,7 +412,7 @@ class Circ_Block_Type_1(Circ_Block):
         }
         params_default_f2.update(params_default_f2_0)
         for key in params_default_f2:
-            if not self.f2_params.has_key(key):
+            if not key in self.f2_params:
                 self.f2_params[key] = params_default_f2[key]
             #        if self.f2_params['angle_tick_direction']=='inner':
             #            self.side_f2='left'
@@ -428,7 +428,7 @@ class Circ_Block_Type_1(Circ_Block):
         }
         params_default_f3.update(params_default_f3_0)
         for key in params_default_f3:
-            if not self.f3_params.has_key(key):
+            if not key in self.f3_params:
                 self.f3_params[key] = params_default_f3[key]
             #        if self.f3_params['angle_tick_direction']=='inner':
             #            self.side_f3='left'
