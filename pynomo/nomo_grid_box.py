@@ -142,7 +142,7 @@ class Nomo_Grid_Box(object):
         self._calc_bound_box_ini_()
         self._build_u_lines_(self.u_func)
         # debug by looking pdf
-        ##self._draw_debug_ini_()
+        # self._draw_debug_ini_()
         # build scaled versions
         self._scale_and_mirror_()
         # self._draw_debug_ini_('after.pdf')
@@ -174,13 +174,16 @@ class Nomo_Grid_Box(object):
             'F': lambda u: x_coordinate,  # x-coordinate
             'G': u_func,  # y-coordinate
             'title': self.params['u_title'],
-            'scale_type': self.params['scale_type_u'],  # 'linear' 'log' 'manual point' 'manual line'
+            # 'linear' 'log' 'manual point' 'manual line'
+            'scale_type': self.params['scale_type_u'],
             'manual_axis_data': u_manual_axis_data,
             'tick_side': self.params['u_tick_side'],
             'tag': self.params['u_tag'],  # for aligning block wrt others
             'reference': self.params['u_reference'],
-            'tick_levels': self.params['u_tick_levels'],  # not really used, yet
-            'tick_text_levels': self.params['u_tick_text_levels'],  # not really used, yet
+            # not really used, yet
+            'tick_levels': self.params['u_tick_levels'],
+            # not really used, yet
+            'tick_text_levels': self.params['u_tick_text_levels'],
             'title_opposite_tick': self.params['u_title_opposite_tick'],
             'title_distance_center': self.params['u_title_distance_center'],
             'title_draw_center': self.params['u_title_draw_center'],
@@ -214,14 +217,15 @@ class Nomo_Grid_Box(object):
         if self.params['allow_additional_v_scale']:
             v_min = self.params['v_min']
             v_max = self.params['v_max']
-            u_value = self.params['v_scale_u_value']  # this value has to be set manually
-            f_v = lambda v: self.x_func(u_value, v)
-            g_v = lambda u: self.u_func(u_value)
+            # this value has to be set manually
+            u_value = self.params['v_scale_u_value']
+            def f_v(v): return self.x_func(u_value, v)
+            def g_v(u): return self.u_func(u_value)
         else:  # assuming manual data
             v_min = self.x_left
             v_max = self.x_right
-            f_v = lambda u: u
-            g_v = lambda u: self.x_top
+            def f_v(u): return u
+            def g_v(u): return self.x_top
         self.params_v = {
             #            'u_min':self.x_left,
             #            'u_max':self.x_right,
@@ -238,8 +242,10 @@ class Nomo_Grid_Box(object):
             'tick_side': self.params['v_tick_side'],
             'tag': 'none',  # this axis should not be aligned
             'reference': self.params['v_reference'],
-            'tick_levels': self.params['v_tick_levels'],  # not really used, yet
-            'tick_text_levels': self.params['v_tick_text_levels'],  # not really used, yet
+            # not really used, yet
+            'tick_levels': self.params['v_tick_levels'],
+            # not really used, yet
+            'tick_text_levels': self.params['v_tick_text_levels'],
             'title_opposite_tick': self.params['v_title_opposite_tick'],
             'title_distance_center': self.params['v_title_distance_center'],
             'title_draw_center': self.params['v_title_draw_center'],
@@ -278,7 +284,7 @@ class Nomo_Grid_Box(object):
             'u_max': w_max,  # this is w_max
             'F': lambda w: self.x_right,  # x-coordinate
             'G': lambda w: self.y_bottom + (f2(w) - f2(w_min)) / (f2(w_max) - f2(w_min)) \
-                           * self.params['height'] * y_factor,  # y-coordinate
+            * self.params['height'] * y_factor,  # y-coordinate
             'title': self.params['w_title'],
             'scale_type': self.params['scale_type_w'],
             'manual_axis_data': w_manual_axis_data,
@@ -364,7 +370,8 @@ class Nomo_Grid_Box(object):
                 self.v_lines[idx1][idx2] = (x_new, y_new)
         # scale functions
         self.u_func = lambda u: self.params['u_func'](u) * y_factor
-        self.v_func = lambda x, v: self.params['v_func'](x / x_factor, v) * y_factor
+        self.v_func = lambda x, v: self.params['v_func'](
+            x / x_factor, v) * y_factor
         self.x_func = lambda u, v: self.params['x_func'](u, v) * x_factor
         self.x_left = self.x_left_ini * x_factor
         self.x_right = self.x_right_ini * x_factor
@@ -447,8 +454,8 @@ class Nomo_Grid_Box(object):
 
         # func_top=lambda x:((func2(x.astype(complex),v)-max_fu)**2).real+1e8*((func2(x.astype(complex),v)-max_fu)**2).imag # minimum at height
         # func_bottom=lambda x:((func2(x.astype(complex),v)-min_fu)**2).real+1e8*((func2(x.astype(complex),v)-min_fu)**2).imag # minimum at 0.0
-        f = lambda x: x
-        g = lambda x: func2(x, v)
+        def f(x): return x
+        def g(x): return func2(x, v)
         # find point of scale to meet point 1.0
         x_guess_top = 1.0
         x_guess_bottom = 1.0
@@ -456,8 +463,10 @@ class Nomo_Grid_Box(object):
             mean_x = (self.params['x_min'] + self.params['x_max']) / 2.0
             x_guess_top = mean_x
             x_guess_bottom = mean_x
-        x_top = optimize.fmin(func_top, [x_guess_top], disp=0, ftol=1e-5, xtol=1e-5)[0]
-        x_bottom = optimize.fmin(func_bottom, [x_guess_bottom], disp=0, ftol=1e-5, xtol=1e-5)[0]
+        x_top = optimize.fmin(
+            func_top, [x_guess_top], disp=0, ftol=1e-5, xtol=1e-5)[0]
+        x_bottom = optimize.fmin(
+            func_bottom, [x_guess_bottom], disp=0, ftol=1e-5, xtol=1e-5)[0]
         # print "x_top %f"%x_top
         # print "x_bottom %f" % x_bottom
         # print "g(x_top) %f"%g(x_top)
@@ -613,7 +622,6 @@ class Nomo_Grid_Box(object):
 if __name__ == '__main__':
     def f1(x, u):
         return np.log(x / (x - u / 100.0)) / np.log(1 + u / 100.0)
-
 
     params = {'width': 10.0,
               'height': 10.0,

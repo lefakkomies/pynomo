@@ -258,7 +258,8 @@ class Nomographer:
                                                                       'axis_color': axis_color,
                                                                       'text_color': axis_color})
         Nomo_Axis(func_f=lambda u: u,
-                  func_g=lambda u: params['paper_height'] + axis_offset + u * 1e-5,
+                  func_g=lambda u: params['paper_height'] +
+                  axis_offset + u * 1e-5,
                   start=-axis_offset, stop=params['paper_width'] + axis_offset, turn=-1, title='',
                   tick_levels=3, tick_text_levels=2,
                   canvas=c, type='linear', side='left', axis_appear={'turn_relative': True,
@@ -279,9 +280,11 @@ class Nomographer:
                                                                       'axis_color': axis_color,
                                                                       'text_color': axis_color})
         tick_0_list_v, tick_1_list_v, tick_2_list_v, tick_3_list_v, tick_4_list_v, \
-        start_ax, stop_ax = find_linear_ticks(-axis_offset, params['paper_height'] + axis_offset)
+            start_ax, stop_ax = find_linear_ticks(
+                -axis_offset, params['paper_height'] + axis_offset)
         tick_0_list_h, tick_1_list_h, tick_2_list_h, tick_3_list_h, tick_4_list_h, \
-        start_ax, stop_ax = find_linear_ticks(-axis_offset, params['paper_width'] + axis_offset)
+            start_ax, stop_ax = find_linear_ticks(
+                -axis_offset, params['paper_width'] + axis_offset)
         grid_color_0 = pyx.color.cmyk.Brown
         grid_color_1 = pyx.color.cmyk.Gray
         grid_color_2 = pyx.color.cmyk.Tan
@@ -310,25 +313,28 @@ class Nomographer:
         """
         for line_defs in params['line_params']:
             # line style
-            if line_defs.has_key('line_style'):
+            if 'line_style' in line_defs:
                 line_style = line_defs['line_style']
             else:
                 line_style = self.line_defs_default['line_style']
             # circle size
-            if line_defs.has_key('circle_size'):
+            if 'circle_size' in line_defs:
                 circle_size = line_defs['circle_size']
             else:
                 circle_size = self.line_defs_default['circle_size']
             # circle color
-            if line_defs.has_key('circle_color'):
+            if 'circle_color' in line_defs:
                 circle_color = line_defs['circle_color']
             else:
                 circle_color = self.line_defs_default['circle_color']
             # do lines and circles
             for line in line_defs['coords']:
-                c.stroke(pyx.path.line(line[0], line[1], line[2], line[3]), line_style)
-                c.fill(pyx.path.circle(line[0], line[1], circle_size), [circle_color])
-                c.fill(pyx.path.circle(line[2], line[3], circle_size), [circle_color])
+                c.stroke(pyx.path.line(
+                    line[0], line[1], line[2], line[3]), line_style)
+                c.fill(pyx.path.circle(
+                    line[0], line[1], circle_size), [circle_color])
+                c.fill(pyx.path.circle(
+                    line[2], line[3], circle_size), [circle_color])
 
     def _check_params_(self, params):
         """
@@ -711,11 +717,9 @@ if __name__ == '__main__':
 
         Nomographer(test4_params)
 
-
         def f1(x, u):
             # return log(log(x/(x-u/100.0))/log(1+u/100.0))
             return np.log(np.log(x / (x - u / (100.0 * 12.0))) / np.log(1 + u / (100.0 * 12.0)))
-
 
         test5_block5_params = {
             'block_type': 'type_5',
@@ -754,10 +758,8 @@ if __name__ == '__main__':
     C_start = -40.0
     C_stop = 30.0
 
-
     def celcius(fahrenheit):
         return (fahrenheit - 32.0) / 1.8
-
 
     test8_f1_para = {
         'tag': 'A',
@@ -991,7 +993,7 @@ if __name__ == '__main__':
         'u_max': 1.0,  # for alignment
         'f_grid': lambda u, v: 100 * np.cos(u * np.pi / 180.0) / (1.0 + np.cos(u * np.pi / 180.0)),
         'g_grid': lambda u, v: (v * np.sin(u * np.pi / 180.0) + 100.0 * np.cos(u * np.pi / 180.0)) / (
-                    1.0 + np.cos(u * np.pi / 180.0)),
+            1.0 + np.cos(u * np.pi / 180.0)),
         'h_grid': lambda u, v: 1.0,
         'u_start': 15.0,
         'u_stop': 75.0,
