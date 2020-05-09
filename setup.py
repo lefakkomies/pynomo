@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 #
 #    PyNomo - nomographs with Python
-#    Copyright (C) 2007- 2015  Leif Roschier
+#    Copyright (C) 2007- 2020  Leif Roschier
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name='PyNomo',
-      version='0.3.2',
+      version='0.3.3',
       description='PyNomo - Python Nomograms',
       long_description=long_description,
       author='Leif Roschier',
