@@ -4,10 +4,11 @@ import sys
 
 sys.path.insert(0, "..")
 from pynomo.nomographer import Nomographer
+import numpy as np
 
 N_params = {'u_min': 1.0,
             'u_max': 10000.0,
-            'function': lambda u: log(u),
+            'function': lambda u: np.log(u),
             'title': 'u',
             'scale_type': 'log',
             }
