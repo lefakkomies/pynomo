@@ -10,22 +10,27 @@ bare essentials.  It doesn't always work, but mostly it does.
 
 Quick start:
 ------------
-- Look at the example nomogram classes near the top of nomogen.py.
+- Look at the example nomogram classes, eg fv.py.
 - Modify or copy one of these for your formula.
-  The uscale is the left, the v scale is on the right, and the w scale is in
+  The uscale is on the left, the v scale is on the right, and the w scale is in
   the middle.
-- set the upper and lower limits for each scale.  nomogen is very fussy
-  about this.
-- edit the line
-                      testNomo = yrs()
-  to match your nomogram class
-- edit the nomogram parameters as normally for pynomo.  Se the pynomo
+  The linearity argument is technically the order of the polyniomials needed
+  to define the scale lines.  Straight (or nearly straight) line nomograms
+  with even scales need a small number (say 5), more complicated nomograms
+  need a larger number.  Use the smallest number that works because
+  larger numbers make **nomogen** slow.
+
+- set the upper and lower limits for each scale.  **nomogen** needs to be very fussy
+  about this because extrapolating scale lines past their defined range is
+  wildly inaccurate..
+- edit the nomogram parameters as normally for pynomo.  See the pynomo
   documentation, and this excellent article by Ron Doerfler:
   https://deadreckonings.files.wordpress.com/2009/07/creatingnomogramswithpynomo.pdf
+  Ignore the stuff about filling in the determinant, nonogen does that for you
 
-- run nomogen
-              python3 nomogen
-- nomogen.pdf is created, unless you have changed the default
+- run the example
+              python3 fv.py
+- a pdf file is created, eg fv.py creayes fv.pdf
 - this takes about 20 or 30 seconds for my setup (Ryzen 3600).
 
 
