@@ -77,6 +77,7 @@ class Nomo_Axis:
             'title_distance_center': 0.5,
             'title_opposite_tick': True,
             'title_draw_center': False,
+            'title_rotate_text':False,
             'title_relative_offset': (0, 0),  # relative (dx,dy)
             'title_absolute_offset': (0, 0),  # absolute (dx,dy)
             'text_format': "$%4.4g$",
@@ -165,7 +166,10 @@ class Nomo_Axis:
         if self.axis_appear['title_draw_center']:
             self._draw_title_center_(canvas)
         else:
-            self._draw_title_top_(canvas)
+            if self.axis_appear['title_rotate_text']:
+                self._draw_title_rotate_(canvas)
+            else:
+                self._draw_title_top_(canvas)
         self._draw_extra_titles_(canvas)
 
     def _make_general_axis_(self):
@@ -1485,6 +1489,7 @@ class Nomo_Axis:
         c.text(self.func_f(best_u) + self.title_x_shift,
                self.func_g(best_u) + self.title_y_shift,
                self.title, [pyx.text.halign.center, self.axis_appear['title_color']])
+
         self.titles.append((self.title, self.func_f(best_u) + self.title_x_shift,
                             self.func_g(best_u) + self.title_y_shift,
                             [pyx.text.halign.center, self.axis_appear['title_color']]))
@@ -1544,12 +1549,57 @@ class Nomo_Axis:
                center_y + text_distance * dx_unit + dy_absolute + dy_relative,
                self.title, [pyx.text.halign.center, pyx.trafo.rotate(angle),
                             self.axis_appear['title_color']])
+        
         self.titles.append((self.title, center_x - text_distance * dy_unit,
                             center_y + text_distance * dx_unit,
                             [pyx.text.halign.center, pyx.trafo.rotate(angle),
                              self.axis_appear['title_color']]))
+
         # text_attr=[pyx.text.valign.middle,text.halign.left,text.size.small,pyx.trafo.rotate(angle)]
         # texts.append((label_string,f(number)-text_distance*dy_unit,g(number)+text_distance*dx_unit,text_attr))
+
+    def _draw_title_rotate_(self, c):
+        """
+        draws axis title to the top but rotate to align with axis
+        """
+
+        best_u = self.start
+        y_max = self.func_g(best_u)
+        if self.func_g(self.stop) > y_max:
+            y_max = self.func_g(self.stop)
+            best_u = self.stop
+        for dummy in range(500):
+            number = random.uniform(min(self.start, self.stop), max(self.start, self.stop))
+            y_value = self.func_g(number)
+            if y_value > y_max:
+                y_max = y_value
+                best_u = number
+        
+        f = self.func_f
+        g = self.func_g
+        u_mid = self._find_center_value_(self.start, self.stop, f, g)
+
+        du = math.fabs(self.start - self.stop) * 1e-6
+        turn = self.turn
+
+        dx = (f(u_mid + du) - f(u_mid)) * turn
+        dy = (g(u_mid + du) - g(u_mid)) * turn
+
+        dx_unit = dx / math.sqrt(dx ** 2 + dy ** 2)
+        dy_unit = dy / math.sqrt(dx ** 2 + dy ** 2)
+
+        if dy_unit != 0:
+            angle = -math.atan(dx_unit / dy_unit) * 180 / math.pi
+        else:
+            angle = -180.0
+
+        c.text(self.func_f(best_u) + self.title_x_shift,
+               self.func_g(best_u) + self.title_y_shift,
+               self.title, [pyx.trafo.rotate(angle), pyx.text.halign.center, self.axis_appear['title_color']])
+
+        self.titles.append((self.title, self.func_f(best_u) + self.title_x_shift,
+                            self.func_g(best_u) + self.title_y_shift,
+                            [pyx.trafo.rotate(angle),pyx.text.halign.center, self.axis_appear['title_color']]))
 
     def _draw_extra_titles_(self, c):
         """
