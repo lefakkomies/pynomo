@@ -22,9 +22,9 @@ from pynomo.nomographer import Nomographer
 def recip(u,v):
     return 1/(1/u + 1/v)
 
-umin = 5; umax = 10;
-vmin = 6; vmax = 12;
-wmin = 30/11; wmax = 120/22;
+umin = 5; umax = 50;
+vmin = 5; vmax = 50;
+wmin = (umin*vmin)/(umin+vmin); wmax = (umax*vmax)/(umax+vmax);
 
 
 ###############################################################
@@ -32,7 +32,7 @@ wmin = 30/11; wmax = 120/22;
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 5
+NN = 13
 
 
 ##############################################
@@ -80,16 +80,16 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': 'recip.pdf',
+    'filename': __file__.endswith(".py") and __file__.replace(".py", ".pdf") or "nomogen.pdf",
     'paper_height': 10, # units are cm
     'paper_width': 10,
-    'title_x': 4.0,
+    'title_x': 3.0,
     'title_y': 9.0,
     'title_box_width': 8.0,
     'title_str':r'${1 \over R} = {1 \over R_1} + {1 \over R_2}$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'nlinearity': NN
+    'pdegree': NN
 }
 
 print("calculating the nomogram ...")

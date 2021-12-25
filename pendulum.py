@@ -91,7 +91,7 @@ main_params = {
     'title_str':r'$L = {{u^2 + v^2} \over {u + v}}$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'nlinearity': NN
+    'pdegree': NN
 }
 
 print("calculating the nomogram ...")

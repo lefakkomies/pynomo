@@ -3,6 +3,7 @@
 #nomogen example program
 
 import sys
+
 import math
 
 from nomogen import Nomogen
@@ -34,7 +35,7 @@ def AJh(L,p):
     c = -(1-L)*(1+2*p)/3
     h = ( -b + math.sqrt(b**2 - 4*a*c) ) / (2*a)
     #print("result is ", (1+L)*h**2 - L*h*(1+p) - (1-L)*(1+2*p)/3)
-    if abs(AJcheck(L,h,p)) > 1e-10:
+    if not math.isclose(AJcheck(L,h,p), 0, abs_tol = 1e-10):
         print("AJh equation failed")
         sys.exit("quitting")
     return h
@@ -50,7 +51,7 @@ hmax = AJh(Lmin, pmax);
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 9
+NN = 3
 
 
 ##############################################
@@ -64,8 +65,8 @@ left_scale = {
     'title': r'$L$',
     'scale_type': 'linear smart',
     'tick_levels': 3,
-    'tick_text_levels': 2,
-    'grid': False}
+    'tick_text_levels': 2
+}
 
 right_scale = {
     'u_min': pmin,
@@ -73,8 +74,7 @@ right_scale = {
     'title': r'$p$',
     'scale_type': 'linear smart',
     'tick_levels': 3,
-    'tick_text_levels': 2,
-    'grid': False
+    'tick_text_levels': 2
 }
 
 middle_scale = {
@@ -84,7 +84,6 @@ middle_scale = {
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
-    'grid': False
 }
 
 block_params0 = {
@@ -93,20 +92,22 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[0.7, 'x', 0.6]]
+    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, \
+                         'x', \
+                         (right_scale['u_min'] + right_scale['u_max'])/2 ]]
 }
 
 main_params = {
-    'filename': 'AJh.pdf',
-    'paper_height': 10, # units are cm
+    'filename': __file__.endswith(".py") and __file__.replace(".py", ".pdf") or "nomogen.pdf",
+    'paper_height': 15, # units are cm
     'paper_width': 10,
-    'title_x': 4,
-    'title_y': 10.75,
+    'title_x': 4.5,
+    'title_y': 1.5,
     'title_box_width': 8.0,
-    'title_str':r'\small $(1+L)h^2 - Lh(1+p) - {1 \over 3} (1-L)(1+2p) = 0$',
+    'title_str':r'\scriptsize $(1+L)h^2 - Lh(1+p) - {1 \over 3} (1-L)(1+2p) = 0$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'nlinearity': NN
+    'pdegree': NN
 }
 
 print("calculating the nomogram ...")

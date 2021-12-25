@@ -32,7 +32,7 @@ wmax = sq(umax, vmax);
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 11
+NN = 21
 
 
 
@@ -77,7 +77,9 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[6, 'x', 2]]
+    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, \
+                         'x', \
+                         (right_scale['u_min'] + right_scale['u_max'])/2]]
 }
 
 main_params = {
@@ -90,7 +92,7 @@ main_params = {
     'title_str':r'$w = {(uv)^2 \over 2}$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'nlinearity': NN
+    'pdegree': NN
 }
 
 print("calculating the nomogram ...")

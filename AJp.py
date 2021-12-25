@@ -33,7 +33,7 @@ def AJcheck(L,h,p):
 def AJp(L,h):
     p = ( (1+L)*h**2 - L*h - (1-L)/3 )/( L*h + 2*(1-L)/3 )
     #print("result is ", (1+L)*h**2 - L*h*(1+p) - (1-L)*(1+2*p)/3)
-    if abs(AJcheck(L,h,p)) > 1e-10:
+    if not math.isclose(AJcheck(L,h,p), 0, abs_tol = 1e-10):
         print("AJp equation failed")
         sys.exit("quitting")
     return p
@@ -50,7 +50,7 @@ pmax = AJp(Lmin, hmax);
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 5
+NN = 3
 
 
 ##############################################
@@ -103,12 +103,12 @@ main_params = {
     'paper_height': 10, # units are cm
     'paper_width': 10,
     'title_x': 5,
-    'title_y': 10.0,
+    'title_y': 9.0,
     'title_box_width': 8.0,
-    'title_str':r'\small $(1+L)h^2 - Lh(1+p) - {1 \over 3} (1-L)(1+2p) = 0$',
+    'title_str':r'\scriptsize $(1+L)h^2 - Lh(1+p) - {1 \over 3} (1-L)(1+2p) = 0$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'nlinearity': NN
+    'pdegree': NN
 }
 
 print("calculating the nomogram ...")

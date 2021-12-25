@@ -19,9 +19,9 @@ from pynomo.nomographer import Nomographer
 
 ###################
 # compound interest, epidemics, etc
-def compound(u,y):
-    # u = % rate pa, y = nr years
-    i = u/100
+def compound(r,y):
+    # r = % rate pa, y = nr years
+    i = r/100
     return (1 + i/365) ** (365*y)
 
 imin = 1   ; imax = 5
@@ -44,7 +44,7 @@ NN = 11
 
   # the u scale
   # dictionary with key:value pairs
-right_scale = {
+left_scale = {
     'u_min': imin,
     'u_max': imax,
     'title': r'$interest \thinspace rate$',
@@ -54,12 +54,9 @@ right_scale = {
     'grid': False
 }
 
-left_scale = {
+right_scale = {
     'u_min': ymin,
     'u_max': ymax,
-    'f': lambda u: evaluate(u, vnodes, vx),
-    'g': lambda u: evaluate(u, vnodes, vy),
-    'h': lambda u: 1.0,
     'title': r'$years$',
     'scale_type': 'linear smart',
     'tick_levels': 3,
@@ -83,11 +80,11 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[8, 'x', 2]]
+    'isopleth_values': [[(imin+imax)/2, 'x', (ymin+ymax)/2]]
 }
 
 main_params = {
-    'filename': 'compound.pdf',
+    'filename': __file__.endswith(".py") and __file__.replace(".py", ".pdf") or "nomogen.pdf",
     'paper_height': 10, # units are cm
     'paper_width': 10,
     'title_x': 5.0,
@@ -96,7 +93,7 @@ main_params = {
     'title_str':r'$final \thinspace value = (1 + {i \over 365}) ^ {365y}$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'nlinearity': NN
+    'pdegree': NN
 }
 
 print("calculating the nomogram ...")

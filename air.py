@@ -18,32 +18,29 @@ from pynomo.nomographer import Nomographer
 #                        for the left, middle & right hand scales
 ########################################
 
-# nr years to achieve future value fv by investing $1 every year
-# - years is return value and will be the middle scale,
-# - first argument is fv and will become the left scale, and
-# - second argument is r and will become the right scale
+###############################################
 #
-#   fv = ((1 + i)**y - 1) / i
+# from Allcock & Jones, example v, p44..47
+# air flow thru a circular duct
+# Q = pi/4/144 * d**2 * v
 #
-def yrs(fv, r):
-    i = r/100
-    y = math.log(fv*i + 1)/math.log(i+1)
-    if abs((((1 + i) ** y) - 1)/i - fv) > 1e-10:
-        print("yrs: equation fault, y = ", y, ", i is ", i, ", fv is ", fv);
-        sys.exit("quitting")
-    return y
+def Q(d,v):
 
-fvmin = 1;   fvmax = 33     # required future value
-imin = 0.5; imax = 5        # interest rates
-ymin = yrs(fvmin, imax);    # nr years
-ymax = yrs(fvmax, imin);
+    return d*d*v*math.pi/4/144
 
+dmin = 4; dmax = 12.0;
+vmin = 1; vmax = 15.0;
+Qmin = Q(dmin,vmin)
+Qmax = Q(dmax,vmax)
+
+
+print('Qmin is ', Qmin, ', Qmax is ', Qmax);
 ###############################################################
 #
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 5
+NN = 17
 
 
 ##############################################
@@ -52,19 +49,19 @@ NN = 5
 # dictionary with key:value pairs
 
 left_scale = {
-    'u_min': fvmin,
-    'u_max': fvmax,
-    'title': r'$future \enspace value$',
+    'u_min': dmin,
+    'u_max': dmax,
+    'title': r'$d$',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
-    'grid': False
-}
+    'grid': False}
 
 right_scale = {
-    'u_min': imin,
-    'u_max': imax,
-    'title': r'$interest \enspace rate$',
+    'u_min': vmin,
+    'u_max': vmax,
+    'title_x_shift': 0.5,
+    'title': r'$v$',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
@@ -72,9 +69,10 @@ right_scale = {
 }
 
 middle_scale = {
-    'u_min': ymin,
-    'u_max': ymax,
-    'title': r'$years$',
+    'u_min': Qmin,
+    'u_max': Qmax,
+    'title_x_shift': -0.5,
+    'title': r'$Q$',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
@@ -87,30 +85,30 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[20, 'x', 1.5]]
+    'isopleth_values': [[8, 'x', 5]]
 }
 
 main_params = {
-    'filename': 'yrs.pdf',
+    'filename': 'air.pdf',
     'paper_height': 10, # units are cm
     'paper_width': 10,
-    'title_x': 6.0,
-    'title_y': 1.0,
+    'title_x': 6,
+    'title_y': 9.0,
     'title_box_width': 8.0,
-    'title_str':r'$future \thinspace value \thinspace of \thinspace \$1 \thinspace invested \thinspace each \thinspace year$',
+    'title_str':r'\small $ Q = {{\pi / 4} \over 144 } d^2 v $',
     'extra_texts':[
-        {'x':5,
-         'y':2,
-         'text':r'$FV = {(1+i)^y-1 \over i}$',
-         'width':5,
+        {'x':3,
+         'y':10,
+         'text':r'$Air \thinspace flow \thinspace through \thinspace a \thinspace circular \thinspace duct $',
+         'width':7,
          }],
-    'block_params': [block_params0],
+        'block_params': [block_params0],
     'transformations': [('scale paper',)],
     'pdegree': NN
 }
 
 print("calculating the nomogram ...")
-Nomogen(yrs, main_params);  # generate nomogram for yrs function
+Nomogen(Q, main_params);  # generate nomogram for Q function
 
 print("printing the nomogram ...")
 Nomographer(main_params);

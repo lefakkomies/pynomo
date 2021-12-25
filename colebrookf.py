@@ -44,7 +44,7 @@ fmin = colebrookf(kondmin, Remax);
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 7
+NN = 3
 
 
 ##############################################
@@ -107,7 +107,7 @@ main_params = {
          }],
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'nlinearity': NN
+    'pdegree': NN
 }
 
 print("calculating the nomogram ...")
