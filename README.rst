@@ -3,7 +3,8 @@ Python nomographs (nomograms).
 
                             Autogenerate nomograms from a formula
 
-This branch contains the nomogen program
+This branch contains the nomogen program.
+
 Generating nomograms is hard work.
 This program auto-calculates the lines of a nomogram from a formula.
 
