@@ -83,11 +83,13 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[0.021, 'x', 105000]]
+    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, \
+                         'x', \
+                         (right_scale['u_min'] + right_scale['u_max'])/2]]
 }
 
 main_params = {
-    'filename': 'colebrookr.pdf',
+    'filename': __file__.endswith(".py") and __file__.replace(".py", ".pdf") or "nomogen.pdf",
     'paper_height': 10, # units are cm
     'paper_width': 10,
     'title_x': 6.0,
@@ -108,5 +110,5 @@ main_params = {
 print("calculating the nomogram ...")
 Nomogen(colebrookr, main_params);  # generate nomogram for yrs function
 
-print("printing the nomogram ...")
+print("printing ", main_params['filename'], " ...")
 Nomographer(main_params);

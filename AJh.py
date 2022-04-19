@@ -113,5 +113,5 @@ main_params = {
 print("calculating the nomogram ...")
 Nomogen(AJh, main_params);  # generate nomogram for AJh function
 
-print("printing the nomogram ...")
+print("printing ", main_params['filename'], " ...")
 Nomographer(main_params);

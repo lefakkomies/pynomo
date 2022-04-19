@@ -83,7 +83,7 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': 'sq.pdf',
+    'filename': __file__.endswith(".py") and __file__.replace(".py", ".pdf") or "nomogen.pdf",
     'paper_height': 10, # units are cm
     'paper_width': 10,
     'title_x': 7.0,
@@ -98,5 +98,5 @@ main_params = {
 print("calculating the nomogram ...")
 Nomogen(sq, main_params);  # generate nomogram for yrs function
 
-print("printing the nomogram ...")
+print("printing ", main_params['filename'], " ...")
 Nomographer(main_params);

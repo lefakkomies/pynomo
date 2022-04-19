@@ -76,7 +76,10 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[7, 'x', 8]]
+    'isopleth_values': [[(2*left_scale['u_min'] + left_scale['u_max'])/3, \
+                         'x', \
+                         (right_scale['u_min'] + 2*right_scale['u_max'])/3]]
+#    'isopleth_values': [[7, 'x', 8]]
 }
 
 main_params = {
@@ -95,5 +98,5 @@ main_params = {
 print("calculating the nomogram ...")
 Nomogen(recip, main_params);  # generate nomogram for yrs function
 
-print("printing the nomogram ...")
+print("printing ", main_params['filename'], " ...")
 Nomographer(main_params);
