@@ -18,33 +18,32 @@ from pynomo.nomographer import Nomographer
 #                        for the left, middle & right hand scales
 ########################################
 
-#####################################################
-#colebrook equation, friction in pipes:
-# return relative roughness, k/D
-# Re = Reynolds nr
-# f = friction coefficient
-# Note: f is implicit, so use a loop to solve for f numerically
-def colebrookf(kond, Re):
-    f = 0.02
-    for i in range(5): # loop 5 times
-        sqrtf = math.sqrt(f)
-        t = -2 * math.log10(2.51/(Re*sqrtf) + kond/3.72)
-        f = 1/(t*t)
-    #            print("f is ", f)
-    return f
+###############################################
+#
+# from Allcock & Jones, example (vi), p53..56
+# breaking strain of a wire
+# W = 1000*m /(pi/4 * d**2)
+#
+#  converted to SI units
+#
+def W(m,d):
 
-Remin = 1e5; Remax = 1.5e5;
-kondmin = 0.000010; kondmax = 0.0018;
+    return 1000*m / (d*d*math.pi/4)
 
-fmax = colebrookf(kondmax, Remin);
-fmin = colebrookf(kondmin, Remax);
+dmin = 1.5; dmax = 5;  # mm
+mmin = 0.6; mmax = 9;  # kNewtons
 
+Wmin = W(mmin,dmax)    # MPa
+Wmax = W(mmax,dmin)
+
+
+print('Wmin is ', Wmin, ', Wmax is ', Wmax);
 ###############################################################
 #
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 3
+NN = 11
 
 
 ##############################################
@@ -53,31 +52,33 @@ NN = 3
 # dictionary with key:value pairs
 
 left_scale = {
-    'u_min': kondmin,
-    'u_max': kondmax,
-    'title': r'${\kappa/D}$',
-    'scale_type': 'linear smart',
-    'tick_levels': 3,
-    'tick_text_levels': 2,
+    'u_min': mmin,
+    'u_max': mmax,
+    'title': r'$m \thinspace kN$',
+    'scale_type': 'log smart',
+    'tick_levels':5,
+    'tick_text_levels': 4,
     'grid': False
 }
 
 right_scale = {
-    'u_min': Remin,
-    'u_max': Remax,
-    'title': r'$Reynolds \enspace nr$',
-    'scale_type': 'linear smart',
-    'tick_levels': 3,
-    'tick_text_levels': 2,
+    'u_min': dmin,
+    'u_max': dmax,
+#    'title_x_shift': 0.5,
+    'title': r'$d \thinspace mm$',
+    'scale_type': 'log smart',
+    'tick_levels': 5,
+    'tick_text_levels': 4,
     'grid': False
 }
 
 middle_scale = {
-    'u_min': fmin,
-    'u_max': fmax,
-    'title': r'$f$',
-    'scale_type': 'linear smart',
-    'tick_levels': 3,
+    'u_min': Wmin,
+    'u_max': Wmax,
+#    'title_x_shift': -0.5,
+    'title': r'$W \thinspace MPa$',
+    'scale_type': 'log smart',
+    'tick_levels': 4,
     'tick_text_levels': 2,
     'grid': False
 }
@@ -97,15 +98,15 @@ main_params = {
     'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
     'paper_height': 10, # units are cm
     'paper_width': 10,
-    'title_x': 6.0,
-    'title_y': 9.0,
+    'title_x': 7,
+    'title_y': 8.1,
     'title_box_width': 8.0,
-    'title_str':r'$friction \thinspace in \thinspace pipes$',
+    'title_str':r'\small $ W = {m \over {{\pi \over 4} d^2 }}$',
     'extra_texts':[
-        {'x':4,
-         'y':8,
-         'text':r'${1 \over \sqrt f} = -2 log_{10} ({2.51 \over Re \sqrt f} + {\kappa / D \over 3.72})$',
-         'width':5,
+        {'x':5,
+         'y':8.9,
+         'text':r'$breaking \thinspace strain \thinspace of \thinspace a \thinspace wire $',
+         'width':7,
          }],
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
@@ -113,7 +114,7 @@ main_params = {
 }
 
 print("calculating the nomogram ...")
-Nomogen(colebrookf, main_params);  # generate nomogram for yrs function
+Nomogen(W, main_params);  # generate nomogram for Q function
 
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")

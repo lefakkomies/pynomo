@@ -32,7 +32,7 @@ wmax = sq(umax, vmax);
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 21
+NN = 3
 
 
 
@@ -45,7 +45,7 @@ left_scale = {
     'u_min': umin,
     'u_max': umax,
     'title': r'$u \enspace value$',
-    'scale_type': 'linear smart',
+    'scale_type': 'log smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
     'grid': False
@@ -55,7 +55,7 @@ right_scale = {
     'u_min': vmin,
     'u_max': vmax,
     'title': r'$v \enspace scale$',
-    'scale_type': 'linear smart',
+    'scale_type': 'log smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
     'grid': False
@@ -65,7 +65,7 @@ middle_scale = {
     'u_min': wmin,
     'u_max': wmax,
     'title': r'$w \thinspace scale$',
-    'scale_type': 'linear smart',
+    'scale_type': 'log smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
     'grid': False
@@ -83,7 +83,7 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': __file__.endswith(".py") and __file__.replace(".py", ".pdf") or "nomogen.pdf",
+    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
     'paper_height': 10, # units are cm
     'paper_width': 10,
     'title_x': 7.0,
@@ -98,5 +98,6 @@ main_params = {
 print("calculating the nomogram ...")
 Nomogen(sq, main_params);  # generate nomogram for yrs function
 
+main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
 Nomographer(main_params);

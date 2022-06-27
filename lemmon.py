@@ -87,7 +87,7 @@ if correct:
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 7
+NN = 9
 
 
 
@@ -138,7 +138,7 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': __file__.endswith(".py") and __file__.replace(".py", ".pdf") or "nomogen.pdf",
+    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
     'paper_height': 25, # units are cm
     'paper_width': 18,
     'title_x': 9.0,
@@ -160,5 +160,6 @@ print("calculating the nomogram ...")
 Nomogen(Z, main_params);  # generate nomogram for yrs function
 middle_scale.update({'tick_side':'left'})
 
-print("printing the nomogram ...")
+main_params['filename'] += '.pdf'
+print("printing ", main_params['filename'], " ...")
 Nomographer(main_params);

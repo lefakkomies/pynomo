@@ -22,14 +22,15 @@ from pynomo.nomographer import Nomographer
 #
 # from Allcock & Jones, example v, p44..47
 # air flow thru a circular duct
-# Q = pi/4/144 * d**2 * v
+# Q = pi/4 * d**2 * v
 #
 def Q(d,v):
 
-    return d*d*v*math.pi/4/144
+    return d*d*v*math.pi/4
 
-dmin = 4; dmax = 12.0;
-vmin = 1; vmax = 15.0;
+dmin = 0.1; dmax = 0.3;   # metres
+vmin = 0.3; vmax = 4.5;   # meters/sec
+
 Qmin = Q(dmin,vmin)
 Qmax = Q(dmax,vmax)
 
@@ -40,7 +41,7 @@ print('Qmin is ', Qmin, ', Qmax is ', Qmax);
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 17
+NN = 9
 
 
 ##############################################
@@ -52,18 +53,19 @@ left_scale = {
     'u_min': dmin,
     'u_max': dmax,
     'title': r'$d$',
-    'scale_type': 'linear smart',
-    'tick_levels': 3,
-    'tick_text_levels': 2,
-    'grid': False}
+    'scale_type': 'log smart',
+    'tick_levels':5,
+    'tick_text_levels': 4,
+    'grid': False
+}
 
 right_scale = {
     'u_min': vmin,
     'u_max': vmax,
     'title_x_shift': 0.5,
     'title': r'$v$',
-    'scale_type': 'linear smart',
-    'tick_levels': 3,
+    'scale_type': 'log smart',
+    'tick_levels': 4,
     'tick_text_levels': 2,
     'grid': False
 }
@@ -73,8 +75,8 @@ middle_scale = {
     'u_max': Qmax,
     'title_x_shift': -0.5,
     'title': r'$Q$',
-    'scale_type': 'linear smart',
-    'tick_levels': 3,
+    'scale_type': 'log',   # 'log smart' crashes pynomo
+    'tick_levels': 4,
     'tick_text_levels': 2,
     'grid': False
 }
@@ -85,24 +87,26 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[8, 'x', 5]]
+    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, \
+                         'x', \
+                         (right_scale['u_min'] + right_scale['u_max'])/2]]
 }
 
 main_params = {
-    'filename': 'air.pdf',
+    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
     'paper_height': 10, # units are cm
     'paper_width': 10,
-    'title_x': 6,
+    'title_x': 2,
     'title_y': 9.0,
     'title_box_width': 8.0,
-    'title_str':r'\small $ Q = {{\pi / 4} \over 144 } d^2 v $',
+    'title_str':r'\small $ Q = {\pi \over 4} d^2 v $',
     'extra_texts':[
         {'x':3,
          'y':10,
          'text':r'$Air \thinspace flow \thinspace through \thinspace a \thinspace circular \thinspace duct $',
          'width':7,
          }],
-        'block_params': [block_params0],
+    'block_params': [block_params0],
     'transformations': [('scale paper',)],
     'pdegree': NN
 }
@@ -110,5 +114,6 @@ main_params = {
 print("calculating the nomogram ...")
 Nomogen(Q, main_params);  # generate nomogram for Q function
 
-print("printing the nomogram ...")
+main_params['filename'] += '.pdf'
+print("printing ", main_params['filename'], " ...")
 Nomographer(main_params);

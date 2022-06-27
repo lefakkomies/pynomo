@@ -9,11 +9,11 @@ Generating nomograms is normally hard work.
 This program makes it easy because it auto-calculates the lines of a nomogram from a formula.
 It is  not restricted to straight line scales, curved scales are handled just fine.
 
-Currently, it's just a prototype.  Nothing fancy, no optimisation, just the
-bare essentials.  It doesn't always work, but mostly it does.
-
 
 .. image:: example.png
+
+Currently, it's just a prototype.  Nothing fancy, no optimisation, just the
+bare essentials.  It doesn't always work, but often it does.
 
 Quick start:
 ------------
@@ -42,7 +42,6 @@ Quick start:
 
 - nomogen-Notes.pdf contains a user guide and an unedited set of notes about the internals of nomogen
 
-- see nomogen-Notes.pdf for more details
 
 ..............................................................................
 

@@ -89,7 +89,7 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': __file__.endswith(".py") and __file__.replace(".py", ".pdf") or "nomogen.pdf",
+    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
     'paper_height': 10, # units are cm
     'paper_width': 10,
     'title_x': 6.0,
@@ -110,5 +110,6 @@ main_params = {
 print("calculating the nomogram ...")
 Nomogen(colebrookr, main_params);  # generate nomogram for yrs function
 
+main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
 Nomographer(main_params);

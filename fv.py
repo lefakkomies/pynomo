@@ -86,11 +86,13 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, 'x', (right_scale['u_min'] + right_scale['u_max'])/2]]
+    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, \
+                         'x', \
+                         (right_scale['u_min'] + right_scale['u_max'])/2]]
 }
 
 main_params = {
-    'filename': __file__.endswith(".py") and __file__.replace(".py", ".pdf") or "nomogen.pdf",
+    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
     'paper_height': 10, # units are cm
     'paper_width': 10,
     'title_x': 5.0,
@@ -111,5 +113,6 @@ main_params = {
 print("calculating the nomogram ...")
 Nomogen(fv, main_params);  # generate nomogram for fv() function
 
+main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
 Nomographer(main_params);

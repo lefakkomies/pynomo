@@ -22,8 +22,8 @@ from pynomo.nomographer import Nomographer
 def recip(u,v):
     return 1/(1/u + 1/v)
 
-umin = 5; umax = 50;
-vmin = 5; vmax = 50;
+umin = 1; umax = 100;
+vmin = 1; vmax = 100;
 wmin = (umin*vmin)/(umin+vmin); wmax = (umax*vmax)/(umax+vmax);
 
 
@@ -32,7 +32,7 @@ wmin = (umin*vmin)/(umin+vmin); wmax = (umax*vmax)/(umax+vmax);
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 13
+NN = 9
 
 
 ##############################################
@@ -44,7 +44,7 @@ left_scale = {
     'u_min': umin,
     'u_max': umax,
     'title': r'$R_1$',
-    'scale_type': 'linear smart',
+    'scale_type': 'log smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
     'grid': False
@@ -54,7 +54,7 @@ right_scale = {
     'u_min': vmin,
     'u_max': vmax,
     'title': r'$R_2$',
-    'scale_type': 'linear smart',
+    'scale_type': 'log smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
     'grid': False
@@ -64,7 +64,7 @@ middle_scale = {
     'u_min': wmin,
     'u_max': wmax,
     'title': r'$R$',
-    'scale_type': 'linear smart',
+    'scale_type': 'log smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
     'grid': False
@@ -76,14 +76,14 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[(2*left_scale['u_min'] + left_scale['u_max'])/3, \
+    'isopleth_values': [[(left_scale['u_min']**2 * left_scale['u_max'])**(1/3), \
                          'x', \
-                         (right_scale['u_min'] + 2*right_scale['u_max'])/3]]
+                         (right_scale['u_min'] * right_scale['u_max']**2)**(1/3)]]
 #    'isopleth_values': [[7, 'x', 8]]
 }
 
 main_params = {
-    'filename': __file__.endswith(".py") and __file__.replace(".py", ".pdf") or "nomogen.pdf",
+    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
     'paper_height': 10, # units are cm
     'paper_width': 10,
     'title_x': 3.0,
@@ -98,5 +98,6 @@ main_params = {
 print("calculating the nomogram ...")
 Nomogen(recip, main_params);  # generate nomogram for yrs function
 
+main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
 Nomographer(main_params);

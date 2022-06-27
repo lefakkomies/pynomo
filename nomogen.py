@@ -27,7 +27,9 @@ import datetime
 import math;
 import numpy as np;
 import scipy;
+import scipy.interpolate
 import scipy.optimize;
+
 from scipy import integrate;
 from scipy.misc import derivative
 
@@ -37,6 +39,8 @@ from scipy.misc import derivative
 log = { "trace_init" };
 
 itNr = 0
+eAcc = eDeru = eDerv = 0
+old_cost = cost = 0
 
 class Nomogen:
     """
@@ -49,35 +53,42 @@ class Nomogen:
                         needed to define each scale line in the nomogram
     """
 
-    def __init__(self, w,  main_params):
+    def __init__(self, func,  main_params):
+
 
         # NN = nr Chebychev nodes for the scales
         # the nodes have an index in the range 0 .. NN-1
         if 'pdegree' not in main_params:
             print("pdegree parameter not provided, using defualt = 9")
-            NN = 9
+            NNMAX = 9
         elif not isinstance(main_params['pdegree'], int):
             print("pdegree parameter must be an integer, using defualt = 9")
-            NN = 9
+            NNMAX = 9
         else:
-            NN = main_params['pdegree']
-            if NN % 2 == 0:
-                NN = NN+1
-                print("nr In this program, the number of Chebychev nodes must be odd, using ", NN, " nodes");
-            if NN < 3:
-                print("pdegree must be >= 2");
+            NNMAX = main_params['pdegree']
+            if NNMAX < 3:
+                print("pdegree must be >= 3");
                 sys.exit("quitting")
-        print("the number of Chebychev nodes is ", NN);
+            if NNMAX % 2 == 0:
+                NNMAX += 1
+                print("Chebychev nodes must be odd, using ", NNMAX, " nodes");
+        print("Using", NNMAX, "Chebychev nodes");
 
+        NN = 3  ###
+
+        # get the input parameters
         params_u = main_params['block_params'][0]['f1_params']
-        umin = params_u['u_min'];
+        uLog = params_u['scale_type'] and 'log' in params_u['scale_type']
+        umin = params_u['u_min']
         umax = params_u['u_max'];
 
         params_v = main_params['block_params'][0]['f3_params']
+        vLog = params_v['scale_type'] and 'log' in params_v['scale_type']
         vmin = params_v['u_min'];
         vmax = params_v['u_max'];
 
         params_w = main_params['block_params'][0]['f2_params']
+        wLog = params_w['scale_type'] and 'log' in params_w['scale_type']
         wmin = params_w['u_min'];
         wmax = params_w['u_max'];
 
@@ -88,31 +99,53 @@ class Nomogen:
 
         #sanity checks
         if umax < umin:
-            sys.exit("error: umax is less than umin")
+            sys.exit("error: umax ({})is less than umin ({})".format(umax, umin))
         if vmax < vmin:
-            sys.exit("error: vmax is less than vmin")
+            sys.exit("error: vmax ({}) is less than vmin ({})".format(vmax, vmin))
         if wmax < wmin:
-            sys.exit("error: wmax is less than wmin")
-        wvalue = w(umin, vmin)
+            sys.exit("error: wmax ({}) is less than wmin ({})".format(wmax, wmin))
+        wvalue = func(umin, vmin)
         if wvalue < wmin:
             wmin = wvalue
         if wvalue > wmax:
             wmax = wvalue
-        wvalue = w(umax, vmin)
+        wvalue = func(umax, vmin)
         if wvalue < wmin:
             wmin = wvalue
         if wvalue > wmax:
             wmax = wvalue
-        wvalue = w(umin, vmax)
+        wvalue = func(umin, vmax)
         if wvalue < wmin:
             wmin = wvalue
         if wvalue > wmax:
             wmax = wvalue
-        wvalue = w(umax, vmax)
+        wvalue = func(umax, vmax)
         if wvalue < wmin:
             wmin = wvalue
         if wvalue > wmax:
             wmax = wvalue
+
+        # if log scale, use log of corresponding variable
+        if uLog:
+            if umin <= 0:
+                sys.exit("error: cannot have negative umin ({}) for log scale".format(umin))
+            umin =  math.log(umin)
+            umax =  math.log(umax)
+        if vLog:
+            if vmin <= 0:
+                sys.exit("error: cannot have negative vmin ({}) for log scale".format(vmin))
+            vmin =  math.log(vmin)
+            vmax =  math.log(vmax)
+        if wLog:
+            if wmin <= 0:
+                sys.exit("error: cannot have negative wmin ({}) for log scale".format(wmin))
+            wmin =  math.log(wmin)
+            wmax =  math.log(wmax)
+
+        def w(u,v):
+            r = func(u if not uLog else math.exp(u), \
+                       v if not vLog else math.exp(v))
+            return  r if not uLog else math.log(r)
 
         width = 10 * main_params['paper_width'];  # convert cm -> mm
         height = 10 * main_params['paper_height'];
@@ -132,7 +165,10 @@ class Nomogen:
         unodes = umin + (umax-umin)/2 * (1-np.cos(np.linspace(0,math.pi,NN)))
         vnodes = vmin + (vmax-vmin)/2 * (1-np.cos(np.linspace(0,math.pi,NN)))
         wnodes = wmin + (wmax-wmin)/2 * (1-np.cos(np.linspace(0,math.pi,NN)))
+        w_values = np.array( [[w(u, v) for v in vnodes] for u in unodes] ) #L141
 
+        dwdu_values = np.array( [[derivative(lambda uu: w(uu,v), u, dx=1e-6, order=5) for v in vnodes] for u in unodes])
+        dwdv_values = np.array( [[derivative(lambda vv: w(u,vv), v, dx=1e-6, order=5) for v in vnodes] for u in unodes] )
         if "trace_init" in log:
             print("unodes is ", unodes);
             print("vnodes is ", vnodes);
@@ -143,8 +179,8 @@ class Nomogen:
         # - the u & v scales vary linearly from (0,0) to (0,1) along the
         #   left and right edges of the unit square
         # - the w scale lies between these 2
-        # the strategy is the optimiser will make the nomogram more accurate while
-        # still keeping a working solution
+        # the strategy is the optimiser will make the nomogram more accurate
+        # while still keeping a working solution
 
         # the u scale has umax at the top, but which way up are the w & v scales?
         w0 = w(umin, vmin);
@@ -177,12 +213,16 @@ class Nomogen:
         # guess an initial position and slope for the xw scale
         if "trace_init" in log:
             print("wB is ", wB, ", wE is ", wE, "wG is ", wG, ", wH is ", wH)
+
+        # find an initial estimate for the scale lines
+        xu = np.zeros(NN);
+        yu = (1 - np.cos(np.linspace(0,math.pi,NN)))/2;
+        xv = np.ones(NN);
+        yv = (1 - np.cos(np.linspace(yv0 * math.pi, yv2 * math.pi,NN)))/2;
         if math.isclose(wG, wH):
+            # the estimate goes thru the middle of the nomogram
+            # this is ill-conditioned, so just use a vertical line
             xwB = xwE = 0.5
-            xu = np.zeros(NN);
-            yu = (1 - np.cos(np.linspace(0,math.pi,NN)))/2;
-            xv = np.ones(NN);
-            yv = (1 - np.cos(np.linspace(yv0 * math.pi, yv2 * math.pi,NN)))/2;
             xw = np.empty(NN); xw.fill(0.5)
 
             # yw(w) is a quadratic, going thru (wb,0), (wG,0.5) & (wE,1)
@@ -206,301 +246,35 @@ class Nomogen:
                 print("y scale failed for ywE test")
                 sys.exit("quitting")
         else:
+            # we can use a linear estimate
             alphaxw = (wE - wG - wH + wB) / (wE - wB) / (wG - wH)
             xwB = (wH - wB) / (wE - wB) - alphaxw * (wH - wB)
             xwE = xwB + alphaxw*(wE - wB)
             if "trace_init" in log:
+                print("linear initial estimate found")
                 print("xwB is ", xwB, ", xwE is ", xwE)
 
-            if True:
-                # clip to unit square
-                if xwE > 1:
-                    xwE = 1
-                elif xwE < 0:
-                    xwE = 0
-                if xwB > 1:
-                    xwB = 1
-                elif xwB < 0:
-                    xwB = 0
+            # clip to unit square
+            if xwE > 1:
+                xwE = 1
+            elif xwE < 0:
+                xwE = 0
+            if xwB > 1:
+                xwB = 1
+            elif xwB < 0:
+                xwB = 0
 
-            if xwE <= 1 and xwE >= 0 and xwB <= 1 and xwB >= 0:
-                if "trace_init" in log:
-                    print("linear initial estimate found")
-                xu = np.zeros(NN);
-                yu = (1 - np.cos(np.linspace(0,math.pi,NN)))/2;
-                xv = np.ones(NN);
-                yv = (1 - np.cos(np.linspace(yv0 * math.pi, yv2 * math.pi,NN)))/2;
-                xw = xwB + (wnodes.copy() - wmin)*(xwE-xwB)/(wmax-wmin)
-                yw = (1 - np.cos(np.linspace(yw0*math.pi, yw2*math.pi,NN)))/2;
-            elif True:
-            # global optimise for curved lines defined by 3 points
+            xw = xwB + (wnodes.copy() - wmin)*(xwE-xwB)/(wmax-wmin)
+            yw = (1 - np.cos(np.linspace(yw0*math.pi, yw2*math.pi,NN)))/2;
 
-                xu1i, yu1i, xw0i, xw1i, yw1i, xw2i, xv1i, yv1i = range(8)
-                print("enums: ", xu1i, yu1i, xw0i, xw1i, yw1i, xw2i, xv1i, yv1i)
-
-                # evaluate function defined by 3 points
-                def eval3(x, x0, x1, x2, f0, f1, f2):
-                    if False:
-                    # 3-term barycentric interpolation
-                        if x == x0:
-                            return f0
-                        elif x == x1:
-                            return f1
-                        elif x == x2:
-                            return f2
-                        else:
-                            A = f0/(x-x0) - 2*f1/(x-x1) + f2/(x-x2)
-                            B = 1/(x-x0) - 2/(x-x1) + 1/(x-x2)
-                            return A/B
-                    else:
-                        # direct evaluation
-                        d = x1 - x0
-                        a = (f2 - 2*f1 + f0)/2/d/d
-                        b = (f1 - f0  - a*d*(2*x0  + d))/d
-                        c = f0 - x0*(a*x0 + b)
-                        return c + x*(b + a*x)
-
-                # differentiate function defined by 3 points
-                def diff3(x, x0, x1, x2, f0, f1, f2):
-                    # direct evaluation
-                    d = x1 - x0
-                    a = (f2 - 2*f1 + f0)/2/d/d
-                    b = (f1 -f0  - a*d*(2*x0  + d))/d
-                    return b + 2*a*x
-
-                def cost3(tvec):
-                    def check(dsq, x0, y0, x1, y1, x2, y2, msg):
-                        if False and "trace_init" in log:
-                            print("esq ", msg, " is ", dsq)
-                        Area = x1*(y2-y0) + x2*(y0-y1) + x0*(y1-y2)
-                        BaseSq = (x0-x1)**2 + (y0-y1)**2
-                        hsq = Area*Area/BaseSq
-#                       if abs(hsq - dsq) > 1e-13 and abs(hsq - dsq)/hsq > 1e-13:
-                        if 1e10*abs(hsq - dsq) > 1 + hsq:
-                            print("dsq fails", msg, ", error is ", hsq-dsq, ", limit is ", (1 + hsq)*1e-10 )
-                            sys.exit("quitting")
-                        return
-                    print("tvec is ", tvec)
-                    if False:
-                        # confidence tests for check() & eval3()
-                        for i in range(11):
-                            for j in range(11):
-                                check(j*j/100, 0,0,1,0,i/10,j/10,"test1{}{}".format(i, j))
-                                check((10-j)**2/100, 0,1,1,1,i/10,j/10,"test2{}{}".format(i, j))
-                                check((j-i)**2/200, 0,0,1,1,i/10,j/10,"test3{}{}".format(i, j))
-                                check((j+i-10)**2/200, 0,1,1,0,i/10,j/10,"test4{}{}".format(i, j))
-                            for i in range(11):
-                                t = eval3(i/10, 0, 0.5, 1, 1, 2, 3)
-                                if abs(t - 2*i/10 - 1) > 1e-13:
-                                    print("eval3 1 failure, i is ", i)
-                                    sys.exit("quitting")
-                            t = eval3(i/5-1, -1, 0, 1, 1, 0, 1)
-                            if abs(t - (i/5-1)**2) > 1e-13:
-                                print("eval 2 failure, i is ", i)
-                                sys.exit("quitting")
-
-                    cost = 0
-
-                    # create a small cost if any point strays outside the unit square
-                    for t in tvec:
-                        cost = cost + (t*(t-1))**2
-                    print("xxx cost is ", cost)
-
-                    wmid = (wmin+wmax)/2
-
-                    # u0 v0
-                    #cost == 0
-                    dwdu = derivative(lambda uu: w(uu,vbottom), umin, dx=1e-6, order=5)
-                    lhs = -diff3(wbottom, wmin, wmid, wmax, yw0, tvec[yw1i], yw2)*dwdu
-                    rhs = -(eval3(wbottom, wmin, wmid, wmax, tvec[xw0i], tvec[xw1i], tvec[xw2i]) -1) \
-                           * diff3(wbottom, wmin, wmid, wmax, yw0, tvec[yw1i], yw2)
-                    print("lhs is ", lhs, ", rhs is ", rhs)
-                    #cost = abs(lhs - rhs)/1000000
-
-                    # u0, v1
-                    xv1 = tvec[xv1i]
-                    yv1 = tvec[yv1i]
-                    wt = w(umin, (vmin+vmax)/2)
-                    xwt = eval3(wt, wmin, wmid, wmax, tvec[xw0i], tvec[xw1i], tvec[xw2i])
-                    ywt = eval3(wt, wmin, wmid, wmax, yw0, tvec[yw1i], yw2)
-                    esq =((xv1*ywt - xwt*yv1)**2) / (xv1**2 + yv1**2);
-                    check(esq, 0, 0, xv1, yv1, xwt, ywt, "u0, v1")
-                    cost = cost + esq
-
-                    # u0, v2
-                    wt = w(umin, vtop)
-                    xwt = eval3(wt, wmin, wmid, wmax, tvec[xw0i], tvec[xw1i], tvec[xw2i])
-                    ywt = eval3(wt, wmin, wmid, wmax, yw0, tvec[yw1i], yw2)
-                    esq = ((ywt - xwt)**2)/2;
-                    check(esq, 0, 0, 1, 1, xwt, ywt, "u0, v2")
-                    cost = cost + esq
-
-                    # u1, v0
-                    xu1 = tvec[xu1i]
-                    yu1 = tvec[yu1i]
-                    wt = w((umin+umax)/2, vbottom)
-                    xwt = eval3(wt, wmin, wmid, wmax, tvec[xw0i], tvec[xw1i], tvec[xw2i])
-                    ywt = eval3(wt, wmin, wmid, wmax, yw0, tvec[yw1i], yw2)
-                    esq =(((xu1-1)*ywt - (xwt-1)*yu1)**2) / ((1-xu1)**2 + yu1**2);
-                    check(esq, xu1, yu1, 1, 0, xwt, ywt, "u1, v0")
-                    cost = cost + esq
-
-                    # u1, v1
-                    xu1 = tvec[xu1i]
-                    yu1 = tvec[yu1i]
-                    xv1 = tvec[xv1i]
-                    yv1 = tvec[yv1i]
-                    wt = w((umin+umax)/2, (vmin+vmax)/2)
-                    xwt = eval3(wt, wmin, wmid, wmax, tvec[xw0i], tvec[xw1i], tvec[xw2i])
-                    ywt = eval3(wt, wmin, wmid, wmax, yw0, tvec[yw1i], yw2)
-                    esq = (((xu1-xv1)*(ywt-yv1) - (xwt-xv1)*(yu1-yv1))**2) / ((xu1-xv1)**2 + (yu1-yv1)**2);
-                    check(esq, xu1, yu1, xv1, yv1, xwt, ywt, "u1, v1")
-                    cost = cost + esq
-
-                    # u1, v2
-                    xu1 = tvec[xu1i]
-                    yu1 = tvec[yu1i]
-                    wt = w((umin+umax)/2, vtop)
-                    xwt = eval3(wt, wmin, wmid, wmax, tvec[xw0i], tvec[xw1i], tvec[xw2i])
-                    ywt = eval3(wt, wmin, wmid, wmax, yw0, tvec[yw1i], yw2)
-                    esq =(((xu1-1)*(ywt-1) - (xwt-1)*(yu1-1))**2) / ((xu1-1)**2 + (yu1-1)**2);
-                    check(esq, xu1, yu1, 1, 1, xwt, ywt, "u1, v2")
-                    cost = cost + esq
-
-                    # u2, v0
-                    wt = w(umax, vbottom)
-                    xwt = eval3(wt, wmin, wmid, wmax, tvec[xw0i], tvec[xw1i], tvec[xw2i])
-                    ywt = eval3(wt, wmin, wmid, wmax, yw0, tvec[yw1i], yw2)
-                    esq = (1 - ywt - xwt)**2 / 2;
-                    check(esq, 0, 1, 1, 0, xwt, ywt, "u2, v0")
-                    cost = cost + esq
-
-                    # u2, v1
-                    xv1 = tvec[xv1i]
-                    yv1 = tvec[yv1i]
-                    wt = w(umax, (vmin+vmax)/2)
-                    xwt = eval3(wt, wmin, wmid, wmax, tvec[xw0i], tvec[xw1i], tvec[xw2i])
-                    ywt = eval3(wt, wmin, wmid, wmax, yw0, tvec[yw1i], yw2)
-                    esq =  (xv1*(1-ywt) - xwt*(1-yv1))**2 / (xv1**2 + (1-yv1)**2);
-                    check(esq, 0, 1, xv1, yv1, xwt, ywt, "u2, v1")
-                    cost = cost + esq
-
-                    # u2, v2
-                    #cost == 0
-
-                    print("quadratic estimate: cost of fit is ", cost)
-                    return cost
-
-                if "trace_init" in log:
-                    print("looking for best quadratic initial estimate")
-
-                # initial conditions: mid points only, ends tied to unit square
-                testv = np.array([0, 0.5,   # xu1, yu1
-                                  0.5,      # xw0
-                                  0.5, 0.5, # xw1, yw1
-                                  0.5,      # xw2
-                                  0.5, 1    # xv1, yv1
-                                 ])
-                res = scipy.optimize.basinhopping( cost3, testv, stepsize=0.01, niter=100 );
-                if "trace_init" in log:
-                    print("res is ", res)
-
-                xu = np.array([eval3(unodes[k], umin, (umin+umax)/2, umax, 0, res.x[xu1i], 0) \
-                               for k in range(0, NN)]);
-                yu = np.array([eval3(unodes[k], umin, (umin+umax)/2, umax, 0, res.x[yu1i], 1) \
-                               for k in range(0, NN)]);
-
-                xv = np.array([eval3(vnodes[k], vmin, (vmin+vmax)/2, vmax, 1, res.x[xv1i], 1) \
-                               for k in range(0, NN)]);
-                yv = np.array([eval3(vnodes[k], vmin, (vmin+vmax)/2, vmax, yv0, res.x[yv1i], yv2) \
-                               for k in range(0, NN)]);
-
-                xw = np.array([eval3(wnodes[k], wmin, (wmin+wmax)/2, wmax, res.x[xw0i], res.x[xw1i], res.x[xw2i]) \
-                               for k in range(0, NN)]);
-                yw = np.array([eval3(wnodes[k], wmin, (wmin+wmax)/2, wmax, yw0, res.x[yw1i], yw2) \
-                               for k in range(0, NN)]);
-
-                if "trace_init" in log:
-                    print("initial quadratic guess")
-                    print(" xu is ", xu)
-                    print(" yu is ", yu)
-                    print(" xv is ", xv)
-                    print(" yv is ", yv)
-                    print(" xw is ", xw)
-                    print(" yw is ", yw)
-
-            else:
-                # under development ...
-                if "trace_init" in log:
-                    print( "trying quadratic approximation for xw" )
-                R = (wE - wG - wH + wB)/(wG-wH)/(wE-wB)
-                S = 2*wB - wG - wH
-                P = (wH - wB)*(1/(wE-wB) - R)
-                Q = -(wH-wB)*(S + (wH-wB))
-
-                if R != alphaxw:
-                    print("R evaluation problem")
-                    sys.exit("quitting");
-                if P != xwB:
-                    print("P evaluation problem")
-                    sys.exit("quitting");
-
-                # test solution
-                for b in [-2, -1, 0, 1, 2]:
-                    c = P + Q*b
-                    alphaxw = R + S*b
-                    t1 = c + (wH-wB)*(alphaxw + b*(wH-wB)) - (wH-wB)/(wE-wB)
-                    if abs(t1) > 1e-12:
-                        print("eqn1 evaluation problem for b = ", b)
-                        sys.exit("quitting")
-                    t1 = c + (wG-wB)*(alphaxw + b*(wG-wB)) - 1 + (wG-wB)/(wE-wB)
-                    if abs(t1) > 1e-12:
-                        print("eqn2 evaluation problem for b = ", b)
-                        sys.exit("quitting")
-
-                bmin = -P/Q
-                bmax = (1-P)/Q
-                if "trace_init" in log:
-                    print("wB constraint -> bmin is ", bmin, ", bmax is ", bmax);
-                t = -(P + R*(wE-wB))/(Q + (wE-wB)*(S + wE - wB))
-                if "trace_init" in log:
-                    print("wE constraint -> bmin is ", t);
-                if t > bmin:
-                    bmin = t
-                t = (1 - P - R*(wE-wB))/(Q + (wE-wB)*(S + wE - wB))
-                if "trace_init" in log:
-                    print("wE constraint -> bmax is ", t);
-                if t < bmax:
-                    bmax = t
-
-                b = (bmin + bmax)/2
-                alphaxw = R + b*S
-                c = P + Q*b
-                if "trace_init" in log:
-                    print("c is ", c, ", alphaxw is ", alphaxw, ", b is ", b)
-
-                if bmin > bmax:
-                    print("bmin > bmax, quadratic approximation is not feasible, bmin is ", bmin, ", bmax is ", bmax);
-                    xwB = c
-                    xwE = c + (wE-wB)*(alphaxw + b*(wE-wB))
-                    print("xwB is ", xwB, ", xwE is ", xwE)
-                    # rescale from xwB .. xwE -> 0.05 .. 0.95
-                    if xwE > xwB:
-                        xw =  np.array([0.05 + (0.9/(xwE-xwB))*(c + (wnodes[k]-wmin)*(alphaxw + b*(wnodes[k]-wmin)) - xwB) for k in range(0, NN)]);
-                    else:
-                        xw =  np.array([0.95 - (0.9/(xwE-xwB))*(c + (wnodes[k]-wmin)*(alphaxw + b*(wnodes[k]-wmin)) - xwB) for k in range(0, NN)]);
-                else:
-                    xw =  np.array([c + (wnodes[k]-wmin)*(alphaxw + b*(wnodes[k]-wmin)) for k in range(0, NN)]);
-
-                    if "trace_init" in log:
-                        print("xw is ", xw)
 
         #################################################
         #
-        # evaluate function at a, given an array of Chebyshev nodes and function values
+        # evaluate function at a,
+        # given an array of Chebyshev nodes and function values
+        # a   - perform barycentric interpolation at value a
         # an  - array of nodes
         # fan - array of values at the nodes an
-        # perform barycentric interpolation at a ...
 
         def evaluate(a, an, fan):
             if a in an:
@@ -570,7 +344,7 @@ class Nomogen:
             txv = xv[iv];
             tyv = yv[iv];
 
-            w1 = w(unodes[iu], vnodes[iv]);
+            w1 = w_values([iu], [iv]);
             xw1 = evaluate(w1, wnodes, xw);
             yw1 = evaluate(w1, wnodes, yw);
 
@@ -606,19 +380,19 @@ class Nomogen:
             def lint(a, b):
                 # integrating function is dot product of fd and line vector
                 # t varies from 0 .. 1 along the line from a to b
-                return scipy.integrate.quad( lambda t: \
-                                     dotp( fd(a[0] + t*(b[0] - a[0]), a[1] + t*(b[1] - a[1])),
-                                           [b[0] - a[0], b[1] - a[1]]), \
-                                     0, 1 );
+                return integrate.quad( lambda t: \
+                                       dotp( fd(a[0] + t*(b[0] - a[0]), a[1] + t*(b[1] - a[1])),
+                                             [b[0] - a[0], b[1] - a[1]]), \
+                                       0, 1 );
 
             #line integral over a scale line of cost function from point a_min to a_max
             def sint(An, Ax, Ay):
                 Axd = differentiate(An, Ax);
                 Ayd = differentiate(An, Ay);
-                return scipy.integrate.quad( lambda t: \
-                                     dotp( fd(evaluate(t, An, Ax), evaluate(t, An, Ay)), \
-                                           [evaluate(t, An, Axd), evaluate(t, An, Ayd)] ), \
-                                          An[0], An[-1] );
+                return integrate.quad( lambda t: \
+                                       dotp( fd(evaluate(t, An, Ax), evaluate(t, An, Ay)), \
+                                             [evaluate(t, An, Axd), evaluate(t, An, Ayd)] ), \
+                                       An[0], An[-1] );
 
 
             # A0 = coords min value, A1 = coords max value
@@ -725,13 +499,11 @@ class Nomogen:
         # normalise each error to unity
         #
 
-        #kappaAcc = NN*NN * resolution;
-        kappaAcc = resolution/(NN**2);
-        #kappaAcc = 1;
-        #print(" kappaAcc is ", kappaAcc);
+        def calc_cost(dummy):
+            ll = len(xu)-2
+#            xu[1:-1], yu[1:-1], xv[1:-1], yv[1:-1], xw, yw[1:-1] = np.array_split( dummy, [NN-2, 2*NN-4, 3*NN-6, 4*NN-8, 5*NN-8]); #qqq
+            xu[1:-1], yu[1:-1], xv[1:-1], yv[1:-1], xw, yw[1:-1] = np.array_split( dummy, [ll, 2*ll, 3*ll, 4*ll, 5*ll+2]); #qqq
 
-        def cost(dummy):
-            xu[1:-1], yu[1:-1], xv[1:-1], yv[1:-1], xw, yw[1:-1] = np.array_split( dummy, [NN-2, 2*NN-4, 3*NN-6, 4*NN-8, 5*NN-8]); #qqq
             if "trace_cost" in log:
                 print("\ntry");
                 print( "xu is ", xu);
@@ -742,9 +514,10 @@ class Nomogen:
                 print( "yw is ", yw);
                 print()
 
-            eDeru = eDerv = 0;
-            eAcc = 0;
             # estimate position & derivative error
+
+            global eAcc, eDeru, eDerv
+            eAcc = eDeru = eDerv = 0;
 
             fdxdu = differentiate(unodes, xu)
             fdydu = differentiate(unodes, yu)
@@ -753,23 +526,25 @@ class Nomogen:
             fdxdw = differentiate(wnodes, xw)
             fdydw = differentiate(wnodes, yw)
 
-            for iu in range(0,NN):
-                txu = xu[iu];
-                tyu = yu[iu];
+            for iu in range(len(unodes)):
                 u = unodes[iu]
-                dxdu = evaluate(u, unodes, fdxdu)
-                dydu = evaluate(u, unodes, fdydu)
+                txu = xu[iu]
+                tyu = yu[iu]
+                dxdu = fdxdu[iu]
+                dydu = fdydu[iu]
 
-                for iv in range(0,NN):
-                    txv = xv[iv];
-                    tyv = yv[iv];
+                for iv in range(len(vnodes)):
                     v = vnodes[iv]
-                    dxdv = evaluate(v, vnodes, fdxdv)
-                    dydv = evaluate(v, vnodes, fdydv)
-                    dwdu = derivative(lambda uu: w(uu,v), u, dx=1e-6, order=5)
-                    dwdv = derivative(lambda vv: w(u,vv), v, dx=1e-6, order=5)
+                    txv = xv[iv]
+                    tyv = yv[iv]
+                    dxdv = fdxdv[iv]
+                    dydv = fdydv[iv]
 
-                    w1 = w(u, v);
+                    ### these values are predefined for speedup L141
+                    dwdu = dwdu_values[iu][iv]
+                    dwdv = dwdv_values[iu][iv]
+                    w1 = w_values[iu][iv]
+
                     txw = evaluate(w1, wnodes, xw);
                     tyw = evaluate(w1, wnodes, yw);
                     dxdw = evaluate(w1, wnodes, fdxdw)
@@ -790,7 +565,7 @@ class Nomogen:
                     dedu = ((dwdu*tmp + (tyv-tyw)*dxdu - (txv-txw)*dydu))/td - tuc
                     dedv = ((dwdv*tmp + (tyw-tyu)*dxdv - (txw-txu)*dydv))/td + tvc
 
-                    #check = True   # checks are slow
+                    check = True   # checks are slow
                     check = False
                     if check:
                         def gete0(au, av):
@@ -820,64 +595,23 @@ class Nomogen:
                     eDeru += dedu**2
                     eDerv += dedv**2
 
+            # eDeru has units (xy/u)**2
+            # so multiply by range of u to correct units, and
+            # make eDeru independent of the scale of u,
+            eDeru *= (umax-umin)**2
+            eDerv *= (vmax-vmin)**2
 
-            # alpha controls the scaling part of the optimisatin
-            # alpha = 1 => tie the ends of the outer scales to the corners of
-            #              the unit square (measured by eFitPoints)
-            # alpha = 0 => make the areas bounded by the pairs of scales as large
-            #              as possible, while still keeping accuracy and inside
-            #              the unit square (measured by eFitI)
-            # the points method is much faster,
-            # the Area method might be useful if tying the points to the corners
-            # restricts the shape of the nomogram too much
-            alpha = 1 # eFitPoints / eFitI proportion
-            eFitI = 0
-            if alpha < 1:
-                # enable Areas
-                swu = calcAB(wnodes, xw,yw, unodes, xu, yu);
-                if "trace_circ" in log:
-                    print("swu integral Area is ", swu)
-
-                swv = calcAB(wnodes, xw,yw, vnodes, xv, yv);
-                if "trace_circ" in log:
-                    print("swv integral Area is ", swv);
-                if swv > 0 and "trace_cost" in log:
-                    print("coords are (", xw[0], ", ", yw[0], "), (", xv[0], ", ", yv[0], "), (", xv[-1], ", ", yv[-1], "), (", xw[-1], ", ", yw[-1], ")");
-                #swv += 10*(1-swv*swv)*math.exp(-swv*swv*100)
-                #print("swv integral Area is adjusted", swv);
-
-                suv = calcAB(unodes, xu,yu, vnodes, xv, yv);
-                if "trace_circ" in log:
-                    print("suv integral Area is ", suv)
-
-                # a nomogram that perfectly fits the unit square has eFit = -0.6
-                # take geometric mean to force all areas to be about the same
-                eFitI = swu*swv*suv/(swu*swv + suv*swu + swv*suv)
-                #eFitI = swu + swv + suv + 10*(1-(yv[0] - yv[-1])**2)*math.exp(-swv*swv*14)
-                #eFitI += 10*(1 - (xw[0] - xv[0])**2 - (yv[0] - yv[-1])**2)*math.exp(-swv*swv*14)
-
-            eFitPoints = 0
-            print("\reAcc cost is {:.2e}".format( eAcc), end = '' );
-            print(", eDer cost is {:.2e}, {:.2e}".format( eDeru, eDerv), end = '' );
-            #if alpha > 0:
-            #    print(", eFitPoints cost is {:.2e}".format( eFitPoints), end = '' );
-            #if alpha < 1:
-            #    print( ' eFitI cost is {:.2e}'.format( eFitI ), end = '');
-
-        #    return  eAcc + alpha*eFitPoints + (1-alpha)*eFitI/kappaAcc
 
             # mu sets relative priority of eAcc & eDerx
-            # eDeru needs to be independent of the scale of u,
-            # so multiply bu range of u
-            #
-            # there are NN**2 separate error terms, one for each pair of points
-            # so normalise to average error per point pair.
             # TODO:
             #       investigate a good value for mu
+            #
+            # there is one error term for each pair of points
+            # so normalise to average error per point pair.
             mu = 1
-            return  (eAcc + mu*(eDeru*(umax-umin)**2 + eDerv*(vmax-vmin)**2))/(NN**2)
-            #return  eAcc
-        #    return  eAcc + eDer + alpha*eFitPoints + (1-alpha)*eFitI/kappaAcc
+            global cost
+            cost = (eAcc + mu*(eDeru + eDerv))/(len(unodes)*len(vnodes))
+            return  cost
 
         if "trace_result" in log:
             #print("xu is ", xu);
@@ -894,11 +628,18 @@ class Nomogen:
 
         # run this function whenever the optimise function enters a
         # new iteration
-        def newIt(xk):
-            import __main__
+        def newStep(xk):
             global itNr
+            global eAcc, eDeru, eDerv
+            global cost, old_cost
+
             itNr += 1
-            print(" ", __main__.__file__, ": iteration nr ", itNr, sep="", end = "" )
+            print("\r", main_params['filename'], ": iteration nr {:3d}".format(itNr), sep="", end = "" )
+            print(", eAcc cost is {:.2e}".format( eAcc), end = '' );
+            print(", eDer cost is {:.2e}, {:.2e}".format(eDeru, eDerv), end='' )
+            if old_cost != 0 and cost < old_cost:
+                print( ", cost improvement is {:2.0f}%".format(100*(old_cost-cost)/old_cost), end='' )
+            old_cost = cost
 
         #
         # the nomogram is given by the coordinates of the node points that
@@ -909,23 +650,74 @@ class Nomogen:
         #
         #scipy.optimize.minimize(fun, x0, args=(), method=None, jac=None, hess=None, hessp=None, bounds=None, constraints=(), tol=None, callback=None, options=None)
 
+        # the idea of this loop is to start with fast (ie low order) polynomials
+        # then build up to higher degrees later on
+        # should get a better approximation before using the slow polynomials
+        # trial use indicates no reduction in total computation time
+        # and no better accuracy.
+        # The initial iteration gives a very good approximation
+        # to the final solution, so why no reduction in nr of iterations?
+        # entry conditiion:  vectors have degree 3
+        # exit conditiion:   vectors have degree NNMAX
+        # to enable this loop:
+        #  - set maxiter to some non-zero value, say, 10
+        #  - remove the line             NN=NNMAX
+
+        #print('\n ------------ degree ', NN)
+        while NN < NNMAX:
+            x0 = np.concatenate( [xu[1:-1], yu[1:-1], xv[1:-1], yv[1:-1], xw, yw[1:-1]] );  # qqq
+
+            # set maxiter non zero to enable this
+            res = scipy.optimize.minimize( calc_cost, x0, \
+                      callback=newStep, \
+                      options={'disp': False, 'maxiter':0 }, \
+                      tol=1e-4 );
+
+            NN += 2;
+            NN = NNMAX # remove this line to loop around
+
+            #print('\n ------------ degree ', NN)
+
+            # uprate polynomials to the new degree
+            unodes3 = unodes.copy()
+            unodes = umin + (umax-umin)/2 * (1-np.cos(np.linspace(0,math.pi,NN)))
+            xu = np.array( [evaluate(u, unodes3, xu) for u in unodes] )
+            yu = np.array( [evaluate(u, unodes3, yu) for u in unodes] )
+
+            vnodes3 = vnodes.copy()
+            vnodes = vmin + (vmax-vmin)/2 * (1-np.cos(np.linspace(0,math.pi,NN)))
+            xv = np.array( [evaluate(v, vnodes3, xv) for v in vnodes] )
+            yv = np.array( [evaluate(v, vnodes3, yv) for v in vnodes] )
+
+            wnodes3 = wnodes.copy()
+            wnodes = wmin + (wmax-wmin)/2 * (1-np.cos(np.linspace(0,math.pi,NN)))
+            xw = np.array( [evaluate(w, wnodes3, xw) for w in wnodes] )
+            yw = np.array( [evaluate(w, wnodes3, yw) for w in wnodes] )
+            w_values = np.array( [[w(u, v) for v in vnodes] for u in unodes] ) #L141
+            dwdu_values = np.array( [[derivative(lambda uu: w(uu,v), u, dx=1e-6, order=5) for v in vnodes] for u in unodes])
+            dwdv_values = np.array( [[derivative(lambda vv: w(u,vv), v, dx=1e-6, order=5) for v in vnodes] for u in unodes] )
+        # end while
+
+        assert len(xu) == NNMAX
         x0 = np.concatenate( [xu[1:-1], yu[1:-1], xv[1:-1], yv[1:-1], xw, yw[1:-1]] );  # qqq
 
         #increase gtol if this terminates due to loss of precision
-        res = scipy.optimize.minimize( cost, x0, callback=newIt, options={'disp': True, 'gtol':2e-5 }, tol=1e-8 );
-        #res = scipy.optimize.minimize( cost, x0, options={'ftol' : 1e-5, 'gtol':1e-5, 'eps':1e-6} );
-        #res = scipy.optimize.minimize( cost, x0, method='SLSQP', bounds=bnds, options={'ftol' : 1e-5, 'gtol':1e-5, 'eps':1e-5} );
-        #res = scipy.optimize.basinhopping(cost, x0, stepsize=0.01, niter=100 );
-        #res = scipy.optimize.minimize(cost, x0, method="Nelder-Mead" );
-        #res = scipy.optimize.minimize( cost, x0, method='L-BFGS-B' );
-        #res = scipy.optimize.minimize(cost, x0, method='Powell' );
-        #res = scipy.optimize.minimize(cost, x0, method='SLSQP' );
+        res = scipy.optimize.minimize( calc_cost, x0, callback=newStep, options={'disp': False, 'gtol':2e-5,'maxiter':None }, tol=1e-6 );
+
+        #res = scipy.optimize.minimize( calc_cost, x0, options={'ftol' : 1e-5, 'gtol':1e-5, 'eps':1e-6} );
+        #res = scipy.optimize.minimize( calc_cost, x0, method='SLSQP', bounds=bnds, options={'ftol' : 1e-5, 'gtol':1e-5, 'eps':1e-5} );
+        #res = scipy.optimize.basinhopping(calc_cost, x0, stepsize=0.01, niter=100 );
+        #res = scipy.optimize.minimize(calc_cost, x0, method="Nelder-Mead" );
+        #res = scipy.optimize.minimize( calc_cost, x0, method='L-BFGS-B' );
+        #res = scipy.optimize.minimize(calc_cost, x0, method='Powell' );
+        #res = scipy.optimize.minimize(calc_cost, x0, method='SLSQP' );
 
         print( );
         if "trace_result" in log:
             print(res);
         else:
-            print( "after ", res.nit, " iterations, ", res.message, ", fun is ", res.fun );
+            #print( "after ", res.nit, " iterations, ")
+            print( "cost function is {:.2e}".format(res.fun), ", ", res.message, sep='' );
 
 #        if not ("success" in res.keys()) or res.success:  # xxx res.success crashes for some methods
         if True or res.success: # xxx lack of precision still gives a result
@@ -950,26 +742,25 @@ class Nomogen:
             fdydw = differentiate(wnodes, yw)
             maxerr = 0
 
-            for i in range(NN):
+            for i in range(len(unodes)):
                 u = unodes[i]
                 xucoord = evaluate(u, unodes, xu);
                 yucoord = evaluate(u, unodes, yu);
                 dxdu = evaluate(u, unodes, fdxdu)
                 dydu = evaluate(u, unodes, fdydu)
-                for j in range(NN):
+                for j in range(len(vnodes)):
                     v = vnodes[j]
                     xvcoord = evaluate(v, vnodes, xv);
                     yvcoord = evaluate(v, vnodes, yv);
                     dxdv = evaluate(v, vnodes, fdxdv)
                     dydv = evaluate(v, vnodes, fdydv)
-                    wvalue = w(u,v);
+                    wvalue = w_values[i][j]
                     xwcoord = evaluate(wvalue, wnodes, xw);
                     ywcoord = evaluate(wvalue, wnodes, yw);
                     dxdw = evaluate(wvalue, wnodes, fdxdw)
                     dydw = evaluate(wvalue, wnodes, fdydw)
-                    dwdu = derivative(lambda uu: w(uu,v), u, dx=1e-6, order=5)
-                    dwdv = derivative(lambda vv: w(u,vv), v, dx=1e-6, order=5)
-
+                    dwdu = dwdu_values[i][j]
+                    dwdv = dwdv_values[i][j]
                     lhs = dwdu*((xucoord-xvcoord)*dydw - (yucoord-yvcoord)*dxdw)
                     rhs = (xwcoord-xvcoord)*dydu - (ywcoord-yvcoord)*dxdu
                     t = abs(lhs - rhs)
@@ -1050,16 +841,16 @@ class Nomogen:
 
 
             # return the resulting scale lines into the nomogram parameters
-            params_u.update({'f': lambda u: evaluate(u, unodes, xu),
-                             'g': lambda u: evaluate(u, unodes, yu),
+            params_u.update({'f': lambda u: evaluate(u if not uLog else math.log(u), unodes, xu),
+                             'g': lambda u: evaluate(u if not uLog else math.log(u), unodes, yu),
                              'h': lambda u: 1.0,
                              })
-            params_v.update({'f': lambda v: evaluate(v, vnodes, xv),
-                             'g': lambda v: evaluate(v, vnodes, yv),
+            params_v.update({'f': lambda v: evaluate(v if not vLog else math.log(v), vnodes, xv),
+                             'g': lambda v: evaluate(v if not vLog else math.log(v), vnodes, yv),
                              'h': lambda v: 1.0,
                              })
-            params_w.update({'f': lambda w: evaluate(w, wnodes, xw),
-                             'g': lambda w: evaluate(w, wnodes, yw),
+            params_w.update({'f': lambda w: evaluate(w if not wLog else math.log(w), wnodes, xw),
+                             'g': lambda w: evaluate(w if not wLog else math.log(w), wnodes, yw),
                              'h': lambda w: 1.0,
                              })
 
