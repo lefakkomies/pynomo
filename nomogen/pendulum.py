@@ -1,12 +1,14 @@
 #!/usr/bin/python3
 
-#nomogen example program
+# nomogen example program
 
 import sys
+
 sys.path.insert(0, "..")
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
 
 ########################################
 #
@@ -21,14 +23,16 @@ from pynomo.nomographer import Nomographer
 ###############################################
 # compound pendulum example
 # from Allcock & Jones, example xii, p93
-def pendulum(u,v):
-    return (v**2 + u**2)/(u+v)
+def pendulum(u, v):
+    return (v ** 2 + u ** 2) / (u + v)
 
-umin = 0.25; umax = 1;
-vmin = 0.25; vmax = 1;
+
+umin = 0.25;
+umax = 1;
+vmin = 0.25;
+vmax = 1;
 wmin = pendulum(umin, vmin);
 wmax = pendulum(umax, vmax);
-
 
 ###############################################################
 #
@@ -36,7 +40,6 @@ wmax = pendulum(umax, vmax);
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
 NN = 7
-
 
 ##############################################
 #
@@ -79,28 +82,29 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, \
+    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max']) / 2, \
                          'x', \
-                         (right_scale['u_min'] + right_scale['u_max'])/2]]
-#    'isopleth_values': [[0.7, 'x', 0.9]]
+                         (right_scale['u_min'] + right_scale['u_max']) / 2]]
+    #    'isopleth_values': [[0.7, 'x', 0.9]]
 }
 
 main_params = {
-    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
-    'paper_height': 10, # units are cm
+    'filename': __name__ == "__main__" and (
+                __file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
+    'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 2.5,
     'title_y': 9.0,
     'title_box_width': 8.0,
-    'title_str':r'$L = {{u^2 + v^2} \over {u + v}}$',
+    'title_str': r'$L = {{u^2 + v^2} \over {u + v}}$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
     'pdegree': NN
 }
 
 print("calculating the nomogram ...")
-Nomogen(pendulum, main_params);  # generate nomogram for pendulim() function
+Nomogen(pendulum, main_params)  # generate nomogram for pendulim() function
 
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
-Nomographer(main_params);
+Nomographer(main_params)

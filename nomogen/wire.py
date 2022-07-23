@@ -1,14 +1,16 @@
 #!/usr/bin/python3
 
-#nomogen example program
+# nomogen example program
 
 import sys
+
 sys.path.insert(0, "..")
 
 import math
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
 
 ########################################
 #
@@ -28,25 +30,25 @@ from pynomo.nomographer import Nomographer
 #
 #  converted to SI units
 #
-def W(m,d):
-
-    return 1000*m / (d*d*math.pi/4)
-
-dmin = 1.5; dmax = 5;  # mm
-mmin = 0.6; mmax = 9;  # kNewtons
-
-Wmin = W(mmin,dmax)    # MPa
-Wmax = W(mmax,dmin)
+def W(m, d):
+    return 1000 * m / (d * d * math.pi / 4)
 
 
-print('Wmin is ', Wmin, ', Wmax is ', Wmax);
+dmin = 1.5
+dmax = 5  # mm
+mmin = 0.6
+mmax = 9  # kNewtons
+
+Wmin = W(mmin, dmax)  # MPa
+Wmax = W(mmax, dmin)
+
+print('Wmin is ', Wmin, ', Wmax is ', Wmax)
 ###############################################################
 #
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
 NN = 11
-
 
 ##############################################
 #
@@ -58,7 +60,7 @@ left_scale = {
     'u_max': mmax,
     'title': r'$m \thinspace kN$',
     'scale_type': 'log smart',
-    'tick_levels':5,
+    'tick_levels': 5,
     'tick_text_levels': 4,
     'grid': False
 }
@@ -66,7 +68,7 @@ left_scale = {
 right_scale = {
     'u_min': dmin,
     'u_max': dmax,
-#    'title_x_shift': 0.5,
+    #    'title_x_shift': 0.5,
     'title': r'$d \thinspace mm$',
     'scale_type': 'log smart',
     'tick_levels': 5,
@@ -77,7 +79,7 @@ right_scale = {
 middle_scale = {
     'u_min': Wmin,
     'u_max': Wmax,
-#    'title_x_shift': -0.5,
+    #    'title_x_shift': -0.5,
     'title': r'$W \thinspace MPa$',
     'scale_type': 'log smart',
     'tick_levels': 4,
@@ -91,24 +93,25 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, \
+    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max']) / 2, \
                          'x', \
-                         (right_scale['u_min'] + right_scale['u_max'])/2]]
+                         (right_scale['u_min'] + right_scale['u_max']) / 2]]
 }
 
 main_params = {
-    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
-    'paper_height': 10, # units are cm
+    'filename': __name__ == "__main__" and (
+                __file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
+    'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 7,
     'title_y': 8.1,
     'title_box_width': 8.0,
-    'title_str':r'\small $ W = {m \over {{\pi \over 4} d^2 }}$',
-    'extra_texts':[
-        {'x':5.2,
-         'y':8.8,
-         'text':r'\small $breaking \thinspace strain \thinspace of \thinspace a \thinspace wire $',
-         'width':7,
+    'title_str': r'\small $ W = {m \over {{\pi \over 4} d^2 }}$',
+    'extra_texts': [
+        {'x': 5.2,
+         'y': 8.8,
+         'text': r'\small $breaking \thinspace strain \thinspace of \thinspace a \thinspace wire $',
+         'width': 7,
          }],
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
@@ -120,4 +123,4 @@ Nomogen(W, main_params);  # generate nomogram for Q function
 
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
-Nomographer(main_params);
+Nomographer(main_params)

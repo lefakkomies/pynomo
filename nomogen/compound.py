@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-#nomogen example program
+# nomogen example program
 
 import sys
 
@@ -8,6 +8,7 @@ sys.path.insert(0, "..")
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
 
 ########################################
 #
@@ -21,13 +22,16 @@ from pynomo.nomographer import Nomographer
 
 ###################
 # compound interest, epidemics, etc
-def compound(r,y):
+def compound(r, y):
     # r = % rate pa, y = nr years
-    i = r/100
-    return (1 + i/365) ** (365*y)
+    i = r / 100
+    return (1 + i / 365) ** (365 * y)
 
-imin = 1   ; imax = 5
-ymin = 1   ; ymax = 25
+
+imin = 1;
+imax = 5
+ymin = 1;
+ymax = 25
 wmin = compound(imin, ymin);
 wmax = compound(imax, ymax);
 
@@ -44,8 +48,8 @@ NN = 9
 # definitions for the scales for pyNomo
 # dictionary with key:value pairs
 
-  # the u scale
-  # dictionary with key:value pairs
+# the u scale
+# dictionary with key:value pairs
 left_scale = {
     'u_min': imin,
     'u_max': imax,
@@ -82,17 +86,18 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[(imin*imax*imax)**(1/3), 'x', (ymin+ymax)/2]]
+    'isopleth_values': [[(imin * imax * imax) ** (1 / 3), 'x', (ymin + ymax) / 2]]
 }
 
 main_params = {
-    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
-    'paper_height': 10, # units are cm
+    'filename': __name__ == "__main__" and (
+                __file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
+    'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 5.0,
     'title_y': 1.0,
     'title_box_width': 8.0,
-    'title_str':r'$final \thinspace value = (1 + {i \over 365}) ^ {365y}$',
+    'title_str': r'$final \thinspace value = (1 + {i \over 365}) ^ {365y}$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
     'pdegree': NN

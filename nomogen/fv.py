@@ -1,14 +1,16 @@
 #!/usr/bin/python3
 
-#nomogen example program
+# nomogen example program
 
 import sys
+
 sys.path.insert(0, "..")
 
 import math
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
 
 ########################################
 #
@@ -28,13 +30,16 @@ from pynomo.nomographer import Nomographer
 #
 #   fv = ((1 + i)**y - 1) / i
 #
-def fv(r,y):
+def fv(r, y):
     # r = % rate pa, y = nr years
-    i = r/100
-    return (((1 + i) ** y) - 1)/i
+    i = r / 100
+    return (((1 + i) ** y) - 1) / i
 
-rmin = 0.1; rmax = 5
-ymin = 1;   ymax = 25
+
+rmin = 0.1;
+rmax = 5
+ymin = 1;
+ymax = 25
 fvmin = fv(rmin, ymin);
 fvmax = fv(rmax, ymax);
 
@@ -44,7 +49,6 @@ fvmax = fv(rmax, ymax);
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
 NN = 7
-
 
 ##############################################
 #
@@ -88,24 +92,25 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, \
+    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max']) / 2, \
                          'x', \
-                         (right_scale['u_min'] + right_scale['u_max'])/2]]
+                         (right_scale['u_min'] + right_scale['u_max']) / 2]]
 }
 
 main_params = {
-    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
-    'paper_height': 10, # units are cm
+    'filename': __name__ == "__main__" and (
+                __file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
+    'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 5.0,
     'title_y': 1.0,
     'title_box_width': 8.0,
-    'title_str':r'$future \thinspace value \thinspace of \thinspace \$1 \thinspace invested \thinspace each \thinspace year$',
-    'extra_texts':[
-        {'x':4,
-         'y':2,
-         'text':r'$FV = {(1+i)^y-1 \over i}$',
-         'width':5,
+    'title_str': r'$future \thinspace value \thinspace of \thinspace \$1 \thinspace invested \thinspace each \thinspace year$',
+    'extra_texts': [
+        {'x': 4,
+         'y': 2,
+         'text': r'$FV = {(1+i)^y-1 \over i}$',
+         'width': 5,
          }],
     'block_params': [block_params0],
     'transformations': [('scale paper',)],

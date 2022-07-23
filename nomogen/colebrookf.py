@@ -1,14 +1,16 @@
 #!/usr/bin/python3
 
-#nomogen example program
+# nomogen example program
 
 import sys
+
 sys.path.insert(0, "..")
 
 import math
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
 
 ########################################
 #
@@ -21,25 +23,28 @@ from pynomo.nomographer import Nomographer
 ########################################
 
 #####################################################
-#colebrook equation, friction in pipes:
+# colebrook equation, friction in pipes:
 # return relative roughness, k/D
 # Re = Reynolds nr
 # f = friction coefficient
 # Note: f is implicit, so use a loop to solve for f numerically
 def colebrookf(kond, Re):
     f = 0.02
-    for i in range(5): # loop 5 times
+    for i in range(5):  # loop 5 times
         sqrtf = math.sqrt(f)
-        t = -2 * math.log10(2.51/(Re*sqrtf) + kond/3.72)
-        f = 1/(t*t)
+        t = -2 * math.log10(2.51 / (Re * sqrtf) + kond / 3.72)
+        f = 1 / (t * t)
     #            print("f is ", f)
     return f
 
-Remin = 1e5; Remax = 1.5e5;
-kondmin = 0.000010; kondmax = 0.0018;
 
-fmax = colebrookf(kondmax, Remin);
-fmin = colebrookf(kondmin, Remax);
+Remin = 1e5
+Remax = 1.5e5
+kondmin = 0.000010
+kondmax = 0.0018
+
+fmax = colebrookf(kondmax, Remin)
+fmin = colebrookf(kondmin, Remax)
 
 ###############################################################
 #
@@ -47,7 +52,6 @@ fmin = colebrookf(kondmin, Remax);
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
 NN = 3
-
 
 ##############################################
 #
@@ -90,24 +94,25 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, \
+    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max']) / 2, \
                          'x', \
-                         (right_scale['u_min'] + right_scale['u_max'])/2]]
+                         (right_scale['u_min'] + right_scale['u_max']) / 2]]
 }
 
 main_params = {
-    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
-    'paper_height': 10, # units are cm
+    'filename': __name__ == "__main__" and (
+                __file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
+    'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 6.0,
     'title_y': 9.0,
     'title_box_width': 8.0,
-    'title_str':r'$friction \thinspace in \thinspace pipes$',
-    'extra_texts':[
-        {'x':4,
-         'y':8,
-         'text':r'${1 \over \sqrt f} = -2 log_{10} ({2.51 \over Re \sqrt f} + {\kappa / D \over 3.72})$',
-         'width':5,
+    'title_str': r'$friction \thinspace in \thinspace pipes$',
+    'extra_texts': [
+        {'x': 4,
+         'y': 8,
+         'text': r'${1 \over \sqrt f} = -2 log_{10} ({2.51 \over Re \sqrt f} + {\kappa / D \over 3.72})$',
+         'width': 5,
          }],
     'block_params': [block_params0],
     'transformations': [('scale paper',)],

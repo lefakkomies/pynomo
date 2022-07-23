@@ -2,8 +2,7 @@ PyNomo
 
 x.x.x (Jul 2022)
 =====
-- Added nomogen
-  this is program that auto generates nomograms from a formula
+- Added nomogen, a program that auto generates nomograms from a formula
 
 0.3.3
 =====

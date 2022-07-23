@@ -31,14 +31,14 @@ def yrs(fv, r):
     i = r/100
     y = math.log(fv*i + 1)/math.log(i+1)
     if abs((((1 + i) ** y) - 1)/i - fv) > 1e-10:
-        print("yrs: equation fault, y = ", y, ", i is ", i, ", fv is ", fv);
+        print("yrs: equation fault, y = ", y, ", i is ", i, ", fv is ", fv)
         sys.exit("quitting")
     return y
 
 fvmin = 1;   fvmax = 33     # required future value
 imin = 0.5; imax = 5        # interest rates
-ymin = yrs(fvmin, imax);    # nr years
-ymax = yrs(fvmax, imin);
+ymin = yrs(fvmin, imax)    # nr years
+ymax = yrs(fvmax, imin)
 
 ###############################################################
 #
@@ -115,8 +115,8 @@ main_params = {
 }
 
 print("calculating the nomogram ...")
-Nomogen(yrs, main_params);  # generate nomogram for yrs function
+Nomogen(yrs, main_params)  # generate nomogram for yrs function
 
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
-Nomographer(main_params);
+Nomographer(main_params)

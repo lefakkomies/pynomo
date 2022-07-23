@@ -6,6 +6,7 @@
 # Eric W. Lemmon, Jacob W. Leachman and Marcia L. Huber
 
 import sys
+
 sys.path.insert(0, "..")
 
 from nomogen import Nomogen
@@ -25,25 +26,28 @@ import math
 # 8 −0.110 904 0 × 10−6	3.75	4.0
 # 9  0.126 440 3 × 10−9	4.0	5.0
 
-a = [ 0.05888460, -0.06136111, -0.002650473, 0.002731125, 0.001802374, -0.001150707, 0.9588528E-4, -0.1109040E-6, 0.1264403E-9 ]
+a = [0.05888460, -0.06136111, -0.002650473, 0.002731125, 0.001802374, -0.001150707, 0.9588528E-4, -0.1109040E-6,
+     0.1264403E-9]
 
-b = [ 1.325, 1.87, 2.5, 2.8, 2.938, 3.14, 3.37, 3.75, 4.0 ]
+b = [1.325, 1.87, 2.5, 2.8, 2.938, 3.14, 3.37, 3.75, 4.0]
 
-c = [ 1.0, 1.0, 2.0, 2.0, 2.42, 2.63, 3.0, 4.0, 5.0 ]
+c = [1.0, 1.0, 2.0, 2.0, 2.42, 2.63, 3.0, 4.0, 5.0]
 
-M = 2.01588              #  Molar Mass, g/mol
-R = 8.314472             # Universal Gas Constant,  J/(mol · K)
+M = 2.01588  # Molar Mass, g/mol
+R = 8.314472  # Universal Gas Constant,  J/(mol · K)
 
-#p pressure in mPa
-#T degrees K
-def Z(p,T):
+
+# p pressure in mPa
+# T degrees K
+def Z(p, T):
     s = 1
     for i in range(9):
-        s = s + a[i] * (100/T)**b[i] * (p)**c[i]
+        s = s + a[i] * (100 / T) ** b[i] * (p) ** c[i]
     return s
 
+
 pmin = 1
-pmax = 50   # was 200
+pmax = 50  # was 200
 Tmin = 200
 Tmax = 500
 Zmin = 1
@@ -58,23 +62,23 @@ Zmax = Z(pmax, Tmin)
 # 200	  200	2.85953449	42.06006952
 
 correct = True
-if not math.isclose(Z(1,200), 1.00675450, abs_tol=5e-09):
+if not math.isclose(Z(1, 200), 1.00675450, abs_tol=5e-09):
     print("Z(1,200) fails")
     correct = False
 
-if not math.isclose(Z(10,300), 1.05985282, abs_tol=5e-09):
+if not math.isclose(Z(10, 300), 1.05985282, abs_tol=5e-09):
     print("Z(10,300) fails")
     correct = False
 
-if not math.isclose(Z(50,400), 1.24304763, abs_tol=5e-09):
+if not math.isclose(Z(50, 400), 1.24304763, abs_tol=5e-09):
     print("Z(50,400) fails")
     correct = False
 
-if not math.isclose(Z(200,500), 1.74461629, abs_tol=5e-09):
+if not math.isclose(Z(200, 500), 1.74461629, abs_tol=5e-09):
     print("Z(200,500) fails")
     correct = False
 
-if not math.isclose(Z(200,200), 2.85953449, abs_tol=5e-09):
+if not math.isclose(Z(200, 200), 2.85953449, abs_tol=5e-09):
     print("Z(200,200) fails")
     correct = False
 
@@ -89,8 +93,6 @@ if correct:
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
 NN = 9
-
-
 
 ##############################################
 #
@@ -133,24 +135,25 @@ block_params0 = {
     'f2_params': middle_scale,
     'f3_params': right_scale,
     'transform_ini': False,
-    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, \
+    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max']) / 2, \
                          'x', \
-                         (right_scale['u_min'] + right_scale['u_max'])/2]]
+                         (right_scale['u_min'] + right_scale['u_max']) / 2]]
 }
 
 main_params = {
-    'filename': __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
-    'paper_height': 25, # units are cm
+    'filename': __name__ == "__main__" and (
+                __file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
+    'paper_height': 25,  # units are cm
     'paper_width': 18,
     'title_x': 9.0,
     'title_y': 3.0,
     'title_box_width': 8.0,
-    'title_str':r'$\Large Z = {p \over {\rho R T}}$',
-    'extra_texts':[
-        {'x':6,
-         'y':4,
-         'text':r'$compressibility \thinspace factor \thinspace for \thinspace hydrogen$',
-         'width':10,
+    'title_str': r'$\Large Z = {p \over {\rho R T}}$',
+    'extra_texts': [
+        {'x': 6,
+         'y': 4,
+         'text': r'$compressibility \thinspace factor \thinspace for \thinspace hydrogen$',
+         'width': 10,
          }],
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
@@ -158,9 +161,9 @@ main_params = {
 }
 
 print("calculating the nomogram ...")
-Nomogen(Z, main_params);  # generate nomogram for yrs function
-middle_scale.update({'tick_side':'left'})
+Nomogen(Z, main_params)  # generate nomogram for yrs function
+middle_scale.update({'tick_side': 'left'})
 
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
-Nomographer(main_params);
+Nomographer(main_params)
