@@ -104,8 +104,8 @@ main_params = {
 }
 
 print("calculating the nomogram ...")
-Nomogen(compound, main_params);  # generate nomogram for yrs function
+Nomogen(compound, main_params)  # generate nomogram for yrs function
 
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
-Nomographer(main_params);
+Nomographer(main_params)

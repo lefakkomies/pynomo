@@ -122,8 +122,8 @@ main_params = {
 }
 
 print("calculating the nomogram ...")
-Nomogen(AJp, main_params);  # generate nomogram for AJp function
+Nomogen(AJp, main_params)  # generate nomogram for AJp function
 
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
-Nomographer(main_params);
+Nomographer(main_params)
