@@ -3,10 +3,9 @@
 # nomogen example program
 
 import sys
+import math
 
 sys.path.insert(0, "..")
-
-import math
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
@@ -36,19 +35,19 @@ def fv(r, y):
     return (((1 + i) ** y) - 1) / i
 
 
-rmin = 0.1;
-rmax = 5
-ymin = 1;
+rmin = 0.1
+rmax = 10
+ymin = 1
 ymax = 25
-fvmin = fv(rmin, ymin);
-fvmax = fv(rmax, ymax);
+fvmin = fv(rmin, ymin)
+fvmax = fv(rmax, ymax)
 
 ###############################################################
 #
 # nr Chebychev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 7
+NN = 13
 
 ##############################################
 #

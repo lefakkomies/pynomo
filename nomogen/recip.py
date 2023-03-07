@@ -98,6 +98,7 @@ main_params = {
     'title_str': r'${1 \over R} = {1 \over R_1} + {1 \over R_2}$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
+    'muShape': 4,
     'pdegree': NN
 }
 
