@@ -45,8 +45,8 @@ Quick start:
 - a pdf file is created, eg fv.py creates fv.pdf
 - this takes about 20 or 30 seconds for my setup (Ryzen 3600).
 
-- There's more details and a step-by-step example in nomogen-Notes.pdf.  This
-  document contains a user guide and a mostly unedited set of notes about the internals of nomogen
+- There's more details and a step-by-step example in user_guide.pdf.  The
+  notes.pdf document contains mostly unedited sets of notes about the internals of nomogen
 
 
 

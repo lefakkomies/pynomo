@@ -41,17 +41,18 @@ R = 8.314472  # Universal Gas Constant,  J/(mol · K)
 # T degrees K
 def Z(p, T):
     s = 1
-    for i in range(9):
+    for i in range( len(a) ):
         s = s + a[i] * (100 / T) ** b[i] * (p) ** c[i]
     return s
 
 
 pmin = 1
-pmax = 50  # was 200
+pmax = 200
 Tmin = 200
 Tmax = 500
 Zmin = 1
 Zmax = Z(pmax, Tmin)
+
 
 # Test points for validating
 # T(K)	p(MPa)	    Z	         ρ (mol/1)
@@ -82,10 +83,11 @@ if not math.isclose(Z(200, 200), 2.85953449, abs_tol=5e-09):
     print("Z(200,200) fails")
     correct = False
 
-if correct:
-    print("test points for Z(p,T) pass")
+if not correct:
+    # print(  Z(1,200), Z(10,300), Z(50,400), Z(200,500), Z(200,200) )
+    print("test points for Z(p,T) failed")
+    sys.exit()
 
-# print(  Z(1,200), Z(10,300), Z(50,400), Z(200,500), Z(200,200) )
 
 ###############################################################
 #
@@ -106,6 +108,7 @@ left_scale = {
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
+    'tick_side' : 'left',
     'grid': False
 }
 
@@ -116,6 +119,7 @@ right_scale = {
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
+    'tick_side' : 'left',
     'grid': False
 }
 
@@ -123,9 +127,10 @@ middle_scale = {
     'u_min': Zmin,
     'u_max': Zmax,
     'title': r'$Z$',
-    'scale_type': 'linear smart',
-    'tick_levels': 5,
-    'tick_text_levels': 3,
+    'scale_type': 'log smart',
+    'tick_levels': 6,
+    'tick_text_levels': 5,
+    'tick_side' : 'right',
     'grid': False
 }
 
