@@ -1,5 +1,12 @@
 PyNomo
 
+
+0.3.4 (March 2023)
+==================
+- nomogen updates
+- correction to affine-transformation algorithm for aligning axes (or blocks)
+
+
 x.x.x (Jul 2022)
 =====
 - Added nomogen, a program that auto generates nomograms from a formula
