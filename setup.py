@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 #
 #    PyNomo - nomographs with Python
-#    Copyright (C) 2007- 2020  Leif Roschier
+#    Copyright (C) 2007- 2023  Leif Roschier
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
