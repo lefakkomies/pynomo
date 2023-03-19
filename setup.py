@@ -33,11 +33,11 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name='PyNomo',
-      version='0.3.3',
+      version='0.3.4',
       description='PyNomo - Python Nomograms',
       long_description=long_description,
       author='Leif Roschier',
-      author_email='lefakkomies@users.sourceforge.net',
+      author_email='leif.rosch....@iki.fi',
       url='http://pynomo.org/',
       download_url='https://github.com/lefakkomies/pynomo',
       packages=['pynomo'],
