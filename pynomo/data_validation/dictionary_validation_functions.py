@@ -114,6 +114,10 @@ def check_extra_params(field, value, error):
     pass
 
 
+def check_extra_titles(field, value, error):
+    # TODO: check
+    pass
+
 schema = {
     'name': {
         'type': 'string'

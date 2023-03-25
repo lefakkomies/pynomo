@@ -1671,7 +1671,7 @@ class Nomo_Axis:
 #        if dy>0 and self.side=='right':
 #            self.turn=1.0
 
-def _determine_turn_(f, g, start, stop, side, turn_relative=False):
+def _determine_turn_(f, g, start, stop, side, turn_relative=True):
     """
      determines if we are going upwards or downwards at start
     _determine_turn_(f=self.func_f,g=self.func_g,start=self.start,
@@ -1679,7 +1679,7 @@ def _determine_turn_(f, g, start, stop, side, turn_relative=False):
      turn_0 is for overriding the calculation
     """
     du = (stop - start) * 1e-6
-    dy = (g(start + du) - g(start))
+    dy = (g(start + 2 * du) - g(start + du))
     turn = 1.0  # just in case nothing found
     if dy <= 0 and side == 'left':
         turn = 1.0
