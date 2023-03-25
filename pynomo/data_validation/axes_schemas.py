@@ -22,7 +22,7 @@ from pyx import color
 
 from pynomo.data_validation.dictionary_validation_functions import scale_type_strings, tick_level_integers, \
     check_manual_axis_data, is_1_param_function, check_text_format_string, check_extra_params, check_pyx_text_size_type, \
-    check_pyx_color_param, check_extra_titles
+    check_pyx_color_param, check_extra_titles, is_2_param_function, check_pyx_linewidth_param
 
 # Schemas for axes
 
@@ -322,13 +322,376 @@ axis_schema_common = {
     },
 }
 
-
+# typical for many
+axis_schema_generic_a = {
+    'function': {
+        'rules': {'required': True, 'check_with': is_1_param_function()},
+        'info': 'Function in equation.',
+        'default': None
+    },
+    'u_min': {
+        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'info': "Minimum value of function variable.",
+        'default': None
+    },
+    'u_max': {
+        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'info': "Maximum value of function variable.",
+        'default': None
+    }
+}
 # type 1 specific axis params
+axis_schema_type_2 = axis_schema_generic_a
+
 # type 2 specific axis params
+axis_schema_type_2 = axis_schema_generic_a
 # type 3 specific axis params
+axis_schema_type_3 = axis_schema_generic_a
 # type 4 specific axis params
+axis_schema_type_4 = axis_schema_generic_a
 # type 5 specific axis params
+axis_schema_type_5 = {}  # no axes separately
 # type 6 specific axis params
+axis_schema_type_6 = axis_schema_generic_a
 # type 7 specific axis params
+axis_schema_type_7 = axis_schema_generic_a
 # type 8 specific axis params
+axis_schema_type_8 = {
+    'function': {
+        'rules': {'required': True, 'check_with': is_1_param_function()},
+        'info': 'Function in equation.',
+        'default': None
+    },
+    'u_min': {
+        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'info': "Minimum value of function variable.",
+        'default': None
+    },
+    'u_max': {
+        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'info': "Maximum value of function variable.",
+        'default': None
+    },
+    'function_x': {
+        'rules': {'required': True,
+                  'check_with': is_1_param_function,
+                  'dependencies': ['function_y']},
+        'info': 'Function in equation.',
+        'default': None
+    },
+    'function_y': {
+        'rules': {'required': True,
+                  'check_with': is_1_param_function(),
+                  'dependencies': ['function_x']},
+        'info': 'Function in equation.',
+        'default': None
+    }
+}
 # type 9 specific axis params
+axis_schema_type_9 = {
+    'grid': {
+        'rules': {'required': False, 'type': 'boolean'},
+        'info': 'Sets axis as grid if true.',
+        'default': False
+    },
+    'f': {
+        'rules': {'required': False,
+                  'check_with': is_1_param_function,
+                  'exclude': {
+                      'grid': {'allowed': [False]}}
+                  },
+        'info': 'Function f in determinant row.',
+        'default': None
+    },
+    'g': {
+        'rules': {'required': False,
+                  'check_with': is_1_param_function,
+                  'exclude': {
+                      'grid': {'allowed': [False]}}
+                  },
+        'info': 'Function g in determinant row.',
+        'default': None
+    },
+    'h': {
+        'rules': {'required': False,
+                  'check_with': is_1_param_function,
+                  'exclude': {
+                      'grid': {'allowed': [False]}}
+                  },
+        'info': 'Function h in determinant row.',
+        'default': None
+    },
+    'f_grid': {
+        'rules': {'required': True,
+                  'check_with': is_2_param_function,
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': 'Function f_grid in determinant row.',
+        'default': None
+    },
+    'g_grid': {
+        'rules': {'required': False,
+                  'check_with': is_2_param_function,
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': 'Function g_grid in determinant row.',
+        'default': None
+    },
+    'h_grid': {
+        'rules': {'required': False,
+                  'check_with': is_2_param_function,
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': 'Function h_grid in determinant row.',
+        'default': None
+    },
+    'u_start': {
+        'rules': {'required': False,
+                  'type': {'allowed': ['float', 'integer']},
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "Minimum value of function variable.",
+        'default': None
+    },
+    'u_stop': {
+        'rules': {'required': True,
+                  'type': {'allowed': ['float', 'integer']},
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "Maximum value of function variable.",
+        'default': None
+    },
+    'v_start': {
+        'rules': {'required': True,
+                  'type': {'allowed': ['float', 'integer']},
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "Minimum value of function variable.",
+        'default': None
+    },
+    'v_stop': {
+        'rules': {'required': True,
+                  'type': {'allowed': ['float', 'integer']},
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "Maximum value of function variable.",
+        'default': None
+    },
+    'text_prefix_u': {
+        'rules': {'required': False,
+                  'type': 'string',
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "Text prefix for u before value.",
+        'default': ''
+    },
+    'text_prefix_v': {
+        'rules': {'required': False,
+                  'type': 'string',
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "Text prefix for v before value.",
+        'default': ''
+    },
+    'v_texts_u_start': {
+        'rules': {'required': False,
+                  'type': 'boolean',
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "If v-texts are in u start side.",
+        'default': False
+    },
+    'v_texts_u_stop': {
+        'rules': {'required': False,
+                  'type': 'boolean',
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "If v-texts are in u stop side.",
+        'default': True
+    },
+    'u_texts_v_start': {
+        'rules': {'required': False,
+                  'type': 'boolean',
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "If u-texts are in v start side.",
+        'default': False
+    },
+    'u_texts_v_stop': {
+        'rules': {'required': False,
+                  'type': 'boolean',
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "If u-texts are in v stop side.",
+        'default': True
+    },
+    'u_line_color': {
+        'rules': {'required': False,
+                  'check_with': check_pyx_color_param,
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "u-line color.",
+        'default': color.rgb.black
+    },
+    'v_line_color': {
+        'rules': {'required': False,
+                  'check_with': check_pyx_color_param,
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "v-line color.",
+        'default': color.rgb.black
+    },
+    'u_text_color': {
+        'rules': {'required': False,
+                  'check_with': check_pyx_color_param,
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "u-line color.",
+        'default': color.rgb.black
+    },
+    'v_text_color': {
+        'rules': {'required': False,
+                  'check_with': check_pyx_color_param,
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "v-line color.",
+        'default': color.rgb.black
+    },
+    'text_distance': {
+        'rules': {'required': True,
+                  'type': {'allowed': ['float', 'integer']},
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "Text distance.",
+        'default': 0.25
+    },
+    'circles': {
+        'rules': {'required': False,
+                  'type': 'boolean',
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "Circles.",
+        'default': True
+    },
+    'text_format_u': {
+        'rules': {'required': False,
+                  'type': 'boolean',
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "Text format u. For example '$%4.4g$'",
+        'default': "$%4.4g$"
+    },
+    'text_format_v': {
+        'rules': {'required': False,
+                  'type': 'boolean',
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "Text format v. For example '$%4.4g$'",
+        'default': "$%4.4g$"
+    },
+    'u_line_width': {
+        'rules': {'required': False,
+                  'check_with': check_pyx_linewidth_param,
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "u linewidth",
+        'default': pyx.style.linewidth.normal
+    },
+    'v_line_width': {
+        'rules': {'required': False,
+                  'check_with': check_pyx_linewidth_param,
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': "u linewidth",
+        'default': pyx.style.linewidth.normal
+    },
+    'u_values': {
+        'rules': {'required': False,
+                  'type': 'list',  # list of strings
+                  'schema': {'type': {'allowed': ['float', 'integer']}}
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': 'List of grid u values.',
+        'default': []
+    },
+    'v_values': {
+        'rules': {'required': False,
+                  'type': 'list',  # list of strings
+                  'schema': {'type': {'allowed': ['float', 'integer']}},
+                  'depends_on': {
+                      'grid': {'allowed': [True]}}
+                  },
+        'info': 'List of grid v values.',
+        'default': []
+    },
+}
+# type 10 specific axis params
+axis_schema_type_10 = {
+    'function': {
+        'rules': {'required': True, 'check_with': is_1_param_function()},
+        'info': 'Function in equation.',
+        'default': None
+    },
+    'u_min': {
+        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'info': "Minimum value of function variable.",
+        'default': None
+    },
+    'u_max': {
+        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'info': "Maximum value of function variable.",
+        'default': None
+    }
+}
+
+# Axis definition for w-scale of type 10 with two functions
+axis_schema_type_10_w = {
+    'u_min': {
+        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'info': "Minimum value of function variable.",
+        'default': None
+    },
+    'u_max': {
+        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'info': "Maximum value of function variable.",
+        'default': None
+    },
+    'function_3': {
+        'rules': {'required': True,
+                  'check_with': is_1_param_function,
+                  'dependencies': ['function_y']},
+        'info': 'Function in equation.',
+        'default': None
+    },
+    'function_4': {
+        'rules': {'required': True,
+                  'check_with': is_1_param_function(),
+                  'dependencies': ['function_x']},
+        'info': 'Function in equation.',
+        'default': None
+    }
+}

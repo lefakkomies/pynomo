@@ -93,6 +93,12 @@ def check_pyx_color_param(field, value, error):
     # TODO check that parameter is color defined by pyx-library
     pass
 
+def check_pyx_linewidth_param(field, value, error):
+    # TODO check that parameter is color defined by pyx-library
+    pass
+
+
+
 
 def check_pyx_text_size_type(field, value, error):
     # TODO check that parameter is text size defined by pyx-library
