@@ -236,7 +236,7 @@ class Nomographer:
         self.blocks = blocks  # save for debugging
         for block in params['block_params']:
             if block['debug']:
-                print("##### np.sinGLE BLOCK PARAMS #######")
+                print("##### SINGLE BLOCK PARAMS #######")
                 pprint(block)
         if params['debug']:
             print("##### MAIN PARAMS #######")
