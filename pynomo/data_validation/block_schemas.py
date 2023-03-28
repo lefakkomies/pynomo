@@ -39,12 +39,12 @@ block_schema_common = {
         },
         'info': "Block type, what kind of block to make."},
     'width': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Width of the block during setup. To be scaled in main params finally.',
         'default': 10.0
     },
     'height': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Height of the block during setup. To be scaled in main params finally.',
         'default': 10.0
     },
@@ -88,7 +88,7 @@ block_schema_type_1 = {
         'default': None
     },
     'proportion': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Factor for spacings between lines.',
         'default': 1.0
     }
@@ -119,7 +119,7 @@ block_schema_type_3 = {
         'default': None
     },
     'reference_padding': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Additional length to reference axes (turning-point lines).',
         'default': 0.2
     },
@@ -159,7 +159,7 @@ block_schema_type_4 = {
         'default': None
     },
     'padding': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'How much axis extend w.r.t. width/height.',
         'default': 0.9
     },
@@ -209,12 +209,12 @@ block_schema_type_5 = {
     },
     """
     'u_title_x_shift': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'u-title shift in x-direction',
         'default': 0.0
     },
     'u_title_y_shift': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'u-title shift in y-direction',
         'default': 0.25
     },
@@ -249,7 +249,7 @@ block_schema_type_5 = {
     },
     """
     'u_reference_padding': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Fraction of reference line over other lines.',
         'default': 0.2
     },"""
@@ -264,7 +264,7 @@ block_schema_type_5 = {
         'default': False
     },
     'u_title_distance_center': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "When 'u_title_draw_center' is 'True' sets distance of title from axis.",
         'default': 0.5
     },
@@ -279,12 +279,12 @@ block_schema_type_5 = {
         'default': lambda u: u
     },
     'u_align_x_offset': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "If axis is aligned with other axis, this value x offsets final scale.",
         'default': 0.0
     },
     'u_align_y_offset': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "If axis is aligned with other axis, this value y offsets final scale.",
         'default': 0.0
     },
@@ -303,52 +303,52 @@ block_schema_type_5 = {
         },
 
         'u_text_distance_0': {
-            'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+            'rules': {'required': False, 'type': ['float', 'integer']},
             'info': "Distance of text from scale line.",
             'default': 1.0  # TODO: update correct value
         },
         'u_text_distance_1': {
-            'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+            'rules': {'required': False, 'type': ['float', 'integer']},
             'info': "Distance of text from scale line.",
             'default': 1.0  # TODO: update correct value
         },
         'u_text_distance_2': {
-            'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+            'rules': {'required': False, 'type': ['float', 'integer']},
             'info': "Distance of text from scale line.",
             'default': 1.0  # TODO: update correct value
         },
         'u_text_distance_3': {
-            'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+            'rules': {'required': False, 'type': ['float', 'integer']},
             'info': "Distance of text from scale line.",
             'default': 1.0  # TODO: update correct value
         },
         'u_text_distance_4': {
-            'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+            'rules': {'required': False, 'type': ['float', 'integer']},
             'info': "Distance of text from scale line.",
             'default': 1.0  # TODO: update correct value
         },
         'u_grid_length_0': {
-            'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+            'rules': {'required': False, 'type': ['float', 'integer']},
             'info': "Length of the tick..",
             'default': 1.0  # TODO: update correct value
         },
         'u_grid_length_1': {
-            'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+            'rules': {'required': False, 'type': ['float', 'integer']},
             'info': "Length of the tick..",
             'default': 1.0  # TODO: update correct value
         },
         'u_grid_length_2': {
-            'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+            'rules': {'required': False, 'type': ['float', 'integer']},
             'info': "Length of the tick..",
             'default': 1.0  # TODO: update correct value
         },
         'u_grid_length_3': {
-            'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+            'rules': {'required': False, 'type': ['float', 'integer']},
             'info': "Length of the tick..",
             'default': 1.0  # TODO: update correct value
         },
         'u_grid_length_4': {
-            'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+            'rules': {'required': False, 'type': ['float', 'integer']},
             'info': "Length of the tick..",
             'default': 1.0  # TODO: update correct value
         },
@@ -404,7 +404,7 @@ block_schema_type_5 = {
     },
 
     'u_extra_angle': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Angle to rotate tick text from horizontal along tick.',
         'default': 0.0
     },
@@ -431,7 +431,7 @@ block_schema_type_5 = {
     'u_values': {
         'rules': {'required': True,
                   'type': 'list',  # list of strings
-                  'schema': {'type': {'allowed': ['float', 'integer']}}},
+                  'schema': {'type': ['float', 'integer']}},
         'info': 'List of plotted u values.',
         'default': []
     },
@@ -447,7 +447,7 @@ block_schema_type_5 = {
         'default': False
     },
     'v_title_distance_center': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "When 'u_title_draw_center' is 'True' sets distance of title from axis.",
         'default': 0.5
     },
@@ -488,7 +488,7 @@ block_schema_type_5 = {
         'default': False
     },
     'wd_title_distance_center': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "When 'u_title_draw_center' is 'True' sets distance of title from axis.",
         'default': 0.5
     },
@@ -503,12 +503,12 @@ block_schema_type_5 = {
         'default': lambda u: u
     },
     'wd_align_x_offset': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "If axis is aligned with other axis, this value x offsets final scale.",
         'default': 0.0
     },
     'wd_align_y_offset': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "If axis is aligned with other axis, this value y offsets final scale.",
         'default': 0.0
     },
@@ -537,7 +537,7 @@ block_schema_type_5 = {
     'wd_values': {
         'rules': {'required': True,
                   'type': 'list',  # list of strings
-                  'schema': {'type': {'allowed': ['float', 'integer']}}},
+                  'schema': {'type': ['float', 'integer']}},
         'info': 'List of plotted u values.',
         'default': []
     }
@@ -551,17 +551,17 @@ block_schema_type_6 = {
         },
         'info': "Block type, parallel or orthogonal"},
     'x_empty': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'If orthogonal, how much fractional space before start of x-axis.',
         'default': 0.2
     },
     'y_empty': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'If orthogonal, how much fractional space before start of y-axis.',
         'default': 0.2
     },
     'curve_const': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Sets the length of angle of Bezier curve. low value = straigh line, high value = curved line.',
         'default': 0.0
     },
@@ -599,12 +599,12 @@ block_schema_type_7 = {
         'default': None
     },
     'angle_u': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Angle between u1 and u3. Note: later transformations may alter the angle.',
         'default': 45.0
     },
     'angle_v': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Angle between u2 and u3. Note: later transformations may alter the angle.',
         'default': 45.0
     }
@@ -617,7 +617,7 @@ block_schema_type_8 = {
         'default': None
     },
     'length': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Length of axis.',
         'default': 10.0
     },

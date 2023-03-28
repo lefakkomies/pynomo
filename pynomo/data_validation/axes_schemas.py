@@ -18,6 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import pyx
+from cerberus import Validator
 from pyx import color
 
 from pynomo.data_validation.dictionary_validation_functions import scale_type_strings, tick_level_integers, \
@@ -27,7 +28,7 @@ from pynomo.data_validation.dictionary_validation_functions import scale_type_st
 # Schemas for axes
 
 # common axis params
-axis_schema_common = {
+axis_info_common = {
     'scale_type': {
         'rules': {
             'required': True,
@@ -58,12 +59,12 @@ axis_schema_common = {
         'default': ''
     },
     'title_x_shift': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Title shift in x-direction',
         'default': 0.0
     },
     'title_y_shift': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Title shift in y-direction',
         'default': 0.0
     },
@@ -89,7 +90,7 @@ axis_schema_common = {
         'default': 3
     },
     'reference_padding': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Fraction of reference line over other lines.',
         'default': 0.2
     },
@@ -104,7 +105,7 @@ axis_schema_common = {
         'default': False
     },
     'title_distance_center': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "When 'u_title_draw_center' is 'True' sets distance of title from axis.",
         'default': 0.5
     },
@@ -119,19 +120,19 @@ axis_schema_common = {
         'default': lambda u: u
     },
     'align_x_offset': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "If axis is aligned with other axis, this value x offsets final scale.",
         'default': 0.0
     },
     'align_y_offset': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "If axis is aligned with other axis, this value y offsets final scale.",
         'default': 0.0
     },
     'text_format': {
         'rules': {'required': False, 'check_with': check_text_format_string},
-        'info': "If axis is aligned with other axis, this value y offsets final scale.",
-        'default': 0.0
+        'info': "Text format.",
+        'default': "$%4.4g$"
     },
     'extra_params': {
         'rules': {'required': False, 'check_with': check_extra_params},
@@ -139,60 +140,60 @@ axis_schema_common = {
         'default': 0.0
     },
     'text_distance_0': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "Distance of text from scale line.",
         'default': 1.0
     },
     'text_distance_1': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "Distance of text from scale line.",
         'default': 1.0 / 4
     },
     'text_distance_2': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "Distance of text from scale line.",
         'default': 1.0 / 4
     },
     'text_distance_3': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "Distance of text from scale line.",
         'default': 1.0 / 4
     },
     'text_distance_4': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "Distance of text from scale line.",
         'default': 1.0 / 4
     },
     'text_distances': {
         'rules': {'required': False,
                   'type': 'list',
-                  'schema': {'type': {'allowed': ['float', 'integer']}}
+                  'schema': {'type': ['float', 'integer']}
                   },
         'info': "Distance of text from scale line.",
         'default': [1.0, 1.0 / 4.0, 1.0 / 4, 1.0 / 4]
     },
     'grid_length_0': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "Length of the tick..",
         'default': 3.0 / 4
     },
     'grid_length_1': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "Length of the tick..",
         'default': 0.9 / 4
     },
     'grid_length_2': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "Length of the tick..",
         'default': 0.5 / 4
     },
     'grid_length_3': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "Length of the tick..",
         'default': 0.3 / 4
     },
     'grid_length_4': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "Length of the tick..",
         'default': 0.2 / 4
     },
@@ -248,7 +249,7 @@ axis_schema_common = {
         'default': True
     },
     'extra_angle': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Angle to rotate tick text from horizontal along tick.',
         'default': 0.0
     },
@@ -263,12 +264,12 @@ axis_schema_common = {
         'default': True
     },
     'arrow_size': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Used with arrow scale.',
         'default': 0.2
     },
     'arrow_length': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Used with arrow scale.',
         'default': 0.2
     },
@@ -294,7 +295,7 @@ axis_schema_common = {
     },
     'base_start': {
         'rules': {'required': False,
-                  'type': {'allowed': ['float', 'integer']},
+                  'type': ['float', 'integer'],
                   'nullable': True
                   },
         'info': "Defines number with 'base_stop' (instead of 'u_min' or 'u_max') "
@@ -303,7 +304,7 @@ axis_schema_common = {
     },
     'base_stop': {
         'rules': {'required': False,
-                  'type': {'allowed': ['float', 'integer']},
+                  'type': ['float', 'integer'],
                   'nullable': True
                   },
         'info': "Defines number with 'base_start' (instead of 'u_min' or 'u_max') "
@@ -311,64 +312,63 @@ axis_schema_common = {
         'default': None
     },
     'tick_distance_smart': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Used with arrow scale.',
         'default': 0.05
     },
     'text_distance_smart': {
-        'rules': {'required': False, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': False, 'type': ['float', 'integer']},
         'info': 'Used with arrow scale.',
         'default': 0.25
     },
 }
 
 # typical for many
-axis_schema_generic_a = {
+axis_info_generic_a = {
     'function': {
-        'rules': {'required': True, 'check_with': is_1_param_function()},
+        'rules': {'required': True, 'check_with': is_1_param_function},
         'info': 'Function in equation.',
         'default': None
     },
     'u_min': {
-        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': True, 'type': ['float', 'integer']},
         'info': "Minimum value of function variable.",
         'default': None
     },
     'u_max': {
-        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': True, 'type': ['float', 'integer']},
         'info': "Maximum value of function variable.",
         'default': None
     }
 }
 # type 1 specific axis params
-axis_schema_type_2 = axis_schema_generic_a
-
+axis_info_type_1 = axis_info_generic_a
 # type 2 specific axis params
-axis_schema_type_2 = axis_schema_generic_a
+axis_info_type_2 = axis_info_generic_a
 # type 3 specific axis params
-axis_schema_type_3 = axis_schema_generic_a
+axis_info_type_3 = axis_info_generic_a
 # type 4 specific axis params
-axis_schema_type_4 = axis_schema_generic_a
+axis_info_type_4 = axis_info_generic_a
 # type 5 specific axis params
-axis_schema_type_5 = {}  # no axes separately
+axis_info_type_5 = {}  # no axes separately
 # type 6 specific axis params
-axis_schema_type_6 = axis_schema_generic_a
+axis_info_type_6 = axis_info_generic_a
 # type 7 specific axis params
-axis_schema_type_7 = axis_schema_generic_a
+axis_info_type_7 = axis_info_generic_a
 # type 8 specific axis params
-axis_schema_type_8 = {
+axis_info_type_8 = {
     'function': {
-        'rules': {'required': True, 'check_with': is_1_param_function()},
+        'rules': {'required': True, 'check_with': is_1_param_function},
         'info': 'Function in equation.',
         'default': None
     },
     'u_min': {
-        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': True, 'type': ['float', 'integer']},
         'info': "Minimum value of function variable.",
         'default': None
     },
     'u_max': {
-        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': True, 'type': ['float', 'integer']},
         'info': "Maximum value of function variable.",
         'default': None
     },
@@ -381,14 +381,14 @@ axis_schema_type_8 = {
     },
     'function_y': {
         'rules': {'required': True,
-                  'check_with': is_1_param_function(),
+                  'check_with': is_1_param_function,
                   'dependencies': ['function_x']},
         'info': 'Function in equation.',
         'default': None
     }
 }
 # type 9 specific axis params
-axis_schema_type_9 = {
+axis_info_type_9 = {
     'grid': {
         'rules': {'required': False, 'type': 'boolean'},
         'info': 'Sets axis as grid if true.',
@@ -450,7 +450,7 @@ axis_schema_type_9 = {
     },
     'u_start': {
         'rules': {'required': False,
-                  'type': {'allowed': ['float', 'integer']},
+                  'type': ['float', 'integer'],
                   'depends_on': {
                       'grid': {'allowed': [True]}}
                   },
@@ -459,7 +459,7 @@ axis_schema_type_9 = {
     },
     'u_stop': {
         'rules': {'required': True,
-                  'type': {'allowed': ['float', 'integer']},
+                  'type': ['float', 'integer'],
                   'depends_on': {
                       'grid': {'allowed': [True]}}
                   },
@@ -468,7 +468,7 @@ axis_schema_type_9 = {
     },
     'v_start': {
         'rules': {'required': True,
-                  'type': {'allowed': ['float', 'integer']},
+                  'type': ['float', 'integer'],
                   'depends_on': {
                       'grid': {'allowed': [True]}}
                   },
@@ -477,7 +477,7 @@ axis_schema_type_9 = {
     },
     'v_stop': {
         'rules': {'required': True,
-                  'type': {'allowed': ['float', 'integer']},
+                  'type': ['float', 'integer'],
                   'depends_on': {
                       'grid': {'allowed': [True]}}
                   },
@@ -576,7 +576,7 @@ axis_schema_type_9 = {
     },
     'text_distance': {
         'rules': {'required': True,
-                  'type': {'allowed': ['float', 'integer']},
+                  'type': ['float', 'integer'],
                   'depends_on': {
                       'grid': {'allowed': [True]}}
                   },
@@ -631,7 +631,7 @@ axis_schema_type_9 = {
     'u_values': {
         'rules': {'required': False,
                   'type': 'list',  # list of strings
-                  'schema': {'type': {'allowed': ['float', 'integer']}}
+                  'schema': {'type': ['float', 'integer']},
                   'depends_on': {
                       'grid': {'allowed': [True]}}
                   },
@@ -641,7 +641,7 @@ axis_schema_type_9 = {
     'v_values': {
         'rules': {'required': False,
                   'type': 'list',  # list of strings
-                  'schema': {'type': {'allowed': ['float', 'integer']}},
+                  'schema': {'type': ['float', 'integer']},
                   'depends_on': {
                       'grid': {'allowed': [True]}}
                   },
@@ -650,33 +650,33 @@ axis_schema_type_9 = {
     },
 }
 # type 10 specific axis params
-axis_schema_type_10 = {
+axis_info_type_10 = {
     'function': {
-        'rules': {'required': True, 'check_with': is_1_param_function()},
+        'rules': {'required': True, 'check_with': is_1_param_function},
         'info': 'Function in equation.',
         'default': None
     },
     'u_min': {
-        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': True, 'type': ['float', 'integer']},
         'info': "Minimum value of function variable.",
         'default': None
     },
     'u_max': {
-        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': True, 'type': ['float', 'integer']},
         'info': "Maximum value of function variable.",
         'default': None
     }
 }
 
 # Axis definition for w-scale of type 10 with two functions
-axis_schema_type_10_w = {
+axis_info_type_10_w = {
     'u_min': {
-        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+            'rules': {'required': True, 'type': ['float', 'integer']},
         'info': "Minimum value of function variable.",
         'default': None
     },
     'u_max': {
-        'rules': {'required': True, 'type': {'allowed': ['float', 'integer']}},
+        'rules': {'required': True, 'type': ['float', 'integer']},
         'info': "Maximum value of function variable.",
         'default': None
     },
@@ -689,9 +689,44 @@ axis_schema_type_10_w = {
     },
     'function_4': {
         'rules': {'required': True,
-                  'check_with': is_1_param_function(),
+                  'check_with': is_1_param_function,
                   'dependencies': ['function_x']},
         'info': 'Function in equation.',
         'default': None
     }
 }
+
+
+def give_dictionary_dropping_rules(dict_in):
+    result = {}
+    # this is easier to read than dict comprehensions...
+    for key in dict_in.keys():
+        result[key] = dict_in[key]['rules']
+    return result
+
+
+
+def give_rules_from_dictionaries(dict1, dict2):
+    return {
+        **give_dictionary_dropping_rules(dict1),
+        **give_dictionary_dropping_rules(dict2)
+    }
+
+
+axis_schema_type_1 = give_rules_from_dictionaries(axis_info_common, axis_info_type_1)
+
+
+"""
+axis_schema_type_1 = 
+    {
+    **{key: axis_info_common[key]['rules'] for key in axis_info_common if 'rules' in axis_info_common[key]},
+    **{key: axis_info_type_1[key]['rules'] for key in axis_info_type_1 if 'rules' in axis_info_type_1[key]}
+}
+
+new_dict = {key: {k:v for k,v in value.items() if k!='rules'} for key, value in axis_info_type_10_w.items() if 'rules' in value}
+
+"""
+
+print(axis_schema_type_1)
+
+
