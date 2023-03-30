@@ -318,9 +318,6 @@ axis_schema = {
 """
 
 
-def dummy(x):
-    return x
-
 
 # common axis params
 # type 1 specific axis params
@@ -337,17 +334,7 @@ def dummy(x):
 # main params
 
 
-profile_validator = Validator(schema)
-# block_validator = Validator(block_schema)
 
-my_profile = {'name': 'Christopher Tao',
-              'age': '34',
-              'leif': 11,
-              'test_function': dummy,
-              'block_type': 'type_10'}
-
-print(profile_validator.validate(my_profile))
-print(profile_validator.errors)
 
 # print(block_validator.validate(my_profile))
 # print(block_validator.errors)

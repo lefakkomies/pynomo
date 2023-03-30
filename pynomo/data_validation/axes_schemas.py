@@ -20,6 +20,7 @@
 import pyx
 from cerberus import Validator
 from pyx import color
+from pprint import pprint
 
 from pynomo.data_validation.dictionary_validation_functions import scale_type_strings, tick_level_integers, \
     check_manual_axis_data, is_1_param_function, check_text_format_string, check_extra_params, check_pyx_text_size_type, \
@@ -31,12 +32,12 @@ from pynomo.data_validation.dictionary_validation_functions import scale_type_st
 axis_info_common = {
     'scale_type': {
         'rules': {
-            'required': True,
+            'required': False,
             'type': 'string',
             'allowed': scale_type_strings
         },
         'info': "Axis type, what kind of axis to make.",
-        'default': 'linear'
+        'default': 'linear smart'
     },
     'ID': {
         'rules': {'required': False, 'type': 'string'},
@@ -358,7 +359,9 @@ axis_info_type_7 = axis_info_generic_a
 # type 8 specific axis params
 axis_info_type_8 = {
     'function': {
-        'rules': {'required': True, 'check_with': is_1_param_function},
+        'rules': {'required': True,
+                  'check_with': is_1_param_function,
+                  'excludes': ['function_x', 'function_y']},
         'info': 'Function in equation.',
         'default': None
     },
@@ -375,84 +378,55 @@ axis_info_type_8 = {
     'function_x': {
         'rules': {'required': True,
                   'check_with': is_1_param_function,
-                  'dependencies': ['function_y']},
+                  'dependencies': ['function_y'],
+                  'excludes': 'function'},
         'info': 'Function in equation.',
         'default': None
     },
     'function_y': {
         'rules': {'required': True,
                   'check_with': is_1_param_function,
-                  'dependencies': ['function_x']},
+                  'dependencies': ['function_x'],
+                  'excludes': 'function'},
         'info': 'Function in equation.',
         'default': None
     }
 }
 # type 9 specific axis params
-axis_info_type_9 = {
+
+axis_info_type_9_common = {
     'grid': {
         'rules': {'required': False, 'type': 'boolean'},
         'info': 'Sets axis as grid if true.',
         'default': False
     },
-    'f': {
-        'rules': {'required': False,
-                  'check_with': is_1_param_function,
-                  'exclude': {
-                      'grid': {'allowed': [False]}}
-                  },
-        'info': 'Function f in determinant row.',
-        'default': None
-    },
-    'g': {
-        'rules': {'required': False,
-                  'check_with': is_1_param_function,
-                  'exclude': {
-                      'grid': {'allowed': [False]}}
-                  },
-        'info': 'Function g in determinant row.',
-        'default': None
-    },
-    'h': {
-        'rules': {'required': False,
-                  'check_with': is_1_param_function,
-                  'exclude': {
-                      'grid': {'allowed': [False]}}
-                  },
-        'info': 'Function h in determinant row.',
-        'default': None
-    },
+}
+# params when 'grid' == True
+axis_info_type_9_grid = {
     'f_grid': {
         'rules': {'required': True,
-                  'check_with': is_2_param_function,
-                  'depends_on': {
-                      'grid': {'allowed': [True]}}
+                  'check_with': is_2_param_function
                   },
         'info': 'Function f_grid in determinant row.',
         'default': None
     },
     'g_grid': {
         'rules': {'required': False,
-                  'check_with': is_2_param_function,
-                  'depends_on': {
-                      'grid': {'allowed': [True]}}
+                  'check_with': is_2_param_function
                   },
         'info': 'Function g_grid in determinant row.',
         'default': None
     },
     'h_grid': {
         'rules': {'required': False,
-                  'check_with': is_2_param_function,
-                  'depends_on': {
-                      'grid': {'allowed': [True]}}
+                  'check_with': is_2_param_function
                   },
         'info': 'Function h_grid in determinant row.',
         'default': None
     },
     'u_start': {
-        'rules': {'required': False,
+        'rules': {'required': True,
                   'type': ['float', 'integer'],
-                  'depends_on': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "Minimum value of function variable.",
         'default': None
@@ -460,8 +434,6 @@ axis_info_type_9 = {
     'u_stop': {
         'rules': {'required': True,
                   'type': ['float', 'integer'],
-                  'depends_on': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "Maximum value of function variable.",
         'default': None
@@ -469,8 +441,6 @@ axis_info_type_9 = {
     'v_start': {
         'rules': {'required': True,
                   'type': ['float', 'integer'],
-                  'depends_on': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "Minimum value of function variable.",
         'default': None
@@ -478,8 +448,6 @@ axis_info_type_9 = {
     'v_stop': {
         'rules': {'required': True,
                   'type': ['float', 'integer'],
-                  'depends_on': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "Maximum value of function variable.",
         'default': None
@@ -487,7 +455,7 @@ axis_info_type_9 = {
     'text_prefix_u': {
         'rules': {'required': False,
                   'type': 'string',
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "Text prefix for u before value.",
@@ -496,7 +464,7 @@ axis_info_type_9 = {
     'text_prefix_v': {
         'rules': {'required': False,
                   'type': 'string',
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "Text prefix for v before value.",
@@ -505,7 +473,7 @@ axis_info_type_9 = {
     'v_texts_u_start': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "If v-texts are in u start side.",
@@ -514,7 +482,7 @@ axis_info_type_9 = {
     'v_texts_u_stop': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "If v-texts are in u stop side.",
@@ -523,7 +491,7 @@ axis_info_type_9 = {
     'u_texts_v_start': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "If u-texts are in v start side.",
@@ -532,7 +500,7 @@ axis_info_type_9 = {
     'u_texts_v_stop': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "If u-texts are in v stop side.",
@@ -541,7 +509,7 @@ axis_info_type_9 = {
     'u_line_color': {
         'rules': {'required': False,
                   'check_with': check_pyx_color_param,
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "u-line color.",
@@ -550,7 +518,7 @@ axis_info_type_9 = {
     'v_line_color': {
         'rules': {'required': False,
                   'check_with': check_pyx_color_param,
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "v-line color.",
@@ -559,7 +527,7 @@ axis_info_type_9 = {
     'u_text_color': {
         'rules': {'required': False,
                   'check_with': check_pyx_color_param,
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "u-line color.",
@@ -568,16 +536,16 @@ axis_info_type_9 = {
     'v_text_color': {
         'rules': {'required': False,
                   'check_with': check_pyx_color_param,
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "v-line color.",
         'default': color.rgb.black
     },
     'text_distance': {
-        'rules': {'required': True,
+        'rules': {'required': False,
                   'type': ['float', 'integer'],
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "Text distance.",
@@ -586,7 +554,7 @@ axis_info_type_9 = {
     'circles': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "Circles.",
@@ -595,7 +563,7 @@ axis_info_type_9 = {
     'text_format_u': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "Text format u. For example '$%4.4g$'",
@@ -604,7 +572,7 @@ axis_info_type_9 = {
     'text_format_v': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "Text format v. For example '$%4.4g$'",
@@ -613,7 +581,7 @@ axis_info_type_9 = {
     'u_line_width': {
         'rules': {'required': False,
                   'check_with': check_pyx_linewidth_param,
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "u linewidth",
@@ -622,7 +590,7 @@ axis_info_type_9 = {
     'v_line_width': {
         'rules': {'required': False,
                   'check_with': check_pyx_linewidth_param,
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': "u linewidth",
@@ -632,7 +600,7 @@ axis_info_type_9 = {
         'rules': {'required': False,
                   'type': 'list',  # list of strings
                   'schema': {'type': ['float', 'integer']},
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': 'List of grid u values.',
@@ -642,11 +610,35 @@ axis_info_type_9 = {
         'rules': {'required': False,
                   'type': 'list',  # list of strings
                   'schema': {'type': ['float', 'integer']},
-                  'depends_on': {
+                  'dependencies': {
                       'grid': {'allowed': [True]}}
                   },
         'info': 'List of grid v values.',
         'default': []
+    },
+}
+# params when 'grid'== False
+axis_info_type_9_axis = {
+    'f': {
+        'rules': {'required': True,
+                  'check_with': is_1_param_function,
+                  },
+        'info': 'Function f in determinant row.',
+        'default': None
+    },
+    'g': {
+        'rules': {'required': True,
+                  'check_with': is_1_param_function,
+                  },
+        'info': 'Function g in determinant row.',
+        'default': None
+    },
+    'h': {
+        'rules': {'required': True,
+                  'check_with': is_1_param_function,
+                  },
+        'info': 'Function h in determinant row.',
+        'default': None
     },
 }
 # type 10 specific axis params
@@ -671,7 +663,7 @@ axis_info_type_10 = {
 # Axis definition for w-scale of type 10 with two functions
 axis_info_type_10_w = {
     'u_min': {
-            'rules': {'required': True, 'type': ['float', 'integer']},
+        'rules': {'required': True, 'type': ['float', 'integer']},
         'info': "Minimum value of function variable.",
         'default': None
     },
@@ -697,6 +689,16 @@ axis_info_type_10_w = {
 }
 
 
+def give_required_fields(dict_in):
+    result = []
+    # this is easier to read than dict comprehensions...
+    for key in dict_in.keys():
+        if 'required' in dict_in[key]:
+            if dict_in[key]['required']:
+                result += [key]
+    return result
+
+
 def give_dictionary_dropping_rules(dict_in):
     result = {}
     # this is easier to read than dict comprehensions...
@@ -705,16 +707,51 @@ def give_dictionary_dropping_rules(dict_in):
     return result
 
 
+def give_dictionary_default_values(dict_in):
+    result = {}
+    # this is easier to read than dict comprehensions...
+    for key in dict_in.keys():
+        result[key] = dict_in[key]['default']
+    return result
 
-def give_rules_from_dictionaries(dict1, dict2):
-    return {
-        **give_dictionary_dropping_rules(dict1),
-        **give_dictionary_dropping_rules(dict2)
-    }
+
+# def give_rules_from_dictionaries(dict1, dict2):
+#    return {
+#        **give_dictionary_dropping_rules(dict1),
+#        **give_dictionary_dropping_rules(dict2)
+#    }
+
+def give_rules_from_dictionaries(*dicts):
+    return give_dictionary_dropping_rules({k: v for d in dicts for k, v in d.items()})
 
 
+# def give_default_values_from_dictionaries(dict1, dict2):
+#    return {
+#        **give_dictionary_default_values(dict1),
+#        **give_dictionary_default_values(dict2)
+#    }
+
+
+def give_default_values_from_dictionaries(*dicts):
+    return give_dictionary_default_values({k: v for d in dicts for k, v in d.items()})
+
+
+axis_schema_common = give_dictionary_dropping_rules(axis_info_common)
 axis_schema_type_1 = give_rules_from_dictionaries(axis_info_common, axis_info_type_1)
+axis_schema_type_2 = give_rules_from_dictionaries(axis_info_common, axis_info_type_2)
+axis_schema_type_3 = give_rules_from_dictionaries(axis_info_common, axis_info_type_3)
+axis_schema_type_4 = give_rules_from_dictionaries(axis_info_common, axis_info_type_4)
+axis_schema_type_5 = give_rules_from_dictionaries({}, axis_info_type_5)
+axis_schema_type_6 = give_rules_from_dictionaries(axis_info_common, axis_info_type_6)
+axis_schema_type_7 = give_rules_from_dictionaries(axis_info_common, axis_info_type_7)
+axis_schema_type_8 = give_rules_from_dictionaries(axis_info_common, axis_info_type_8)
+axis_schema_type_9_axis = give_rules_from_dictionaries(axis_info_common,
+                                                       axis_info_type_9_common,
+                                                       axis_info_type_9_axis)
+axis_schema_type_9_grid = give_rules_from_dictionaries(axis_info_type_9_common, axis_info_type_9_grid)
+axis_schema_type_10 = give_rules_from_dictionaries(axis_info_common, axis_info_type_10)
 
+axis_default_values_type_1 = give_default_values_from_dictionaries(axis_info_common, axis_info_type_1)
 
 """
 axis_schema_type_1 = 
@@ -727,6 +764,28 @@ new_dict = {key: {k:v for k,v in value.items() if k!='rules'} for key, value in 
 
 """
 
-print(axis_schema_type_1)
+# validates type 9, basically applies different rules based on if scale is grid or axis
+def validate_axis_type_9(params: dict) -> bool:
+    if 'grid' in params.keys():
+        if params['grid'] is False:
+            v = Validator(axis_schema_type_9_axis)
+            if not v.validate(params):
+                print(v.errors)
+                return False
+        if params['grid'] is True:
+            v = Validator(axis_schema_type_9_grid)
+            if not v.validate(params):
+                print(v.errors)
+                return False
+    else:  # grid not defined assume 'grid' = False
+        v = Validator(axis_schema_type_9_axis)
+        if not v.validate(params):
+            print(v.errors)
+            return False
+    return True
 
 
+pprint(axis_schema_type_9_axis)
+pprint(give_required_fields(axis_schema_type_9_axis))
+pprint(give_required_fields(axis_schema_type_9_grid))
+# pprint(axis_default_values_type_1)

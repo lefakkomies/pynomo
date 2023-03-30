@@ -9,7 +9,7 @@ import pyx
 N_params = {'u_min': 1.0,
             'u_max': 10.0,
             'function': lambda u: u,
-            'title': 'title',
+            'title': "title \n tiitle2",
             'tick_levels': 2,
             'tick_text_levels': 1,
             'tick_side': 'left',
