@@ -1,6 +1,7 @@
+from pprint import pprint
 from typing import Dict, Union, List, Any, Callable
 
-from pynomo.data_validation.axis_schemas import axis_schema_type_10
+from pynomo.data_validation.axis_schemas import axis_schema_type_10, give_default_axis_values
 from pynomo.data_validation.block_schemas import block_schema_type_1, block_schema_type_2, block_schema_type_3, \
     block_schema_type_4, block_schema_type_5, block_schema_type_6, block_schema_type_7, block_schema_type_8, \
     block_schema_type_9
@@ -32,16 +33,18 @@ def validate_type_1_block_params(field: Any, value: Any, error: Callable) -> (bo
     errors: Dict[str, Union[str, List[str]]]
     ok, errors = validate_block_params('type_1', value)
     if not ok:
-        error(errors, "Error when inspecting type 1 block")
+        error(errors, errors)
     return ok, errors
 
+
 if __name__ == "__main__":
-    params = {'scale_type': 'linear', 'tick_distance_smart': 30, 'base_stop': None}
-    params = {'f1_params': {},
-              'f2_params': {},
-              'f3_params': {},
-              'f4_params': {}
+    default_values = give_default_axis_values('type_1')
+    required_values = {'function': lambda x:x, 'u_min': 0.0, 'u_max': 1.0}
+    params = {'f1_params': {**default_values, **required_values},
+              'f2_params': {**default_values, **required_values},
+              'f3_params': {**default_values, **required_values}
               }
-    def error(errors, message):
-        print(message)
-    validate_type_1_block_params(True, params, error)
+    # error(errors, "Error when inspecting type 1")
+    ok, errors = validate_type_1_block_params('para', params, lambda a, b: print(a, b))
+    print(errors)
+    #pprint(give_default_axis_values('type_1'))

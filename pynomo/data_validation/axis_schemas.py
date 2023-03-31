@@ -44,7 +44,7 @@ axis_info_common: Dict[str, dict] = {
     'ID': {
         'rules': {'required': False, 'type': 'string'},
         'info': 'To identify the axis..',
-        'default': False
+        'default': 'id'
     },
     'tag': {
         'rules': {'required': False, 'type': 'string'},
@@ -85,12 +85,12 @@ axis_info_common: Dict[str, dict] = {
     'tick_side': {
         'rules': {'required': False, 'type': 'string', 'allowed': ['right', 'left']},
         'info': 'Tick and text side in final paper.',
-        'default': 3
+        'default': 'left'
     },
     'reference': {
         'rules': {'required': False, 'type': 'boolean'},
         'info': ' If axis is treated as reference line that is a turning point.',
-        'default': 3
+        'default': False
     },
     'reference_padding': {
         'rules': {'required': False, 'type': ['float', 'integer']},
@@ -772,7 +772,7 @@ def give_default_axis_values(axis_type: str) -> Dict[str, dict]:
         'type_10_w': give_default_values_from_dictionaries(axis_info_common, axis_info_type_10_w)
     }
     result = switcher.get(axis_type, "Incorrect key")
-    if result is "Incorrect key":
+    if result == "Incorrect key":
         print(f"Internal error: incorrect axis_type '{axis_type}' when getting default values")
         return {}
     return result
@@ -801,9 +801,9 @@ new_dict = {key: {k:v for k,v in value.items() if k!='rules'} for key, value in 
 
 
 if __name__ == "__main__":
-    pprint(axis_schema_type_9_axis)
+    #pprint(axis_schema_type_9_axis)
     pprint(give_default_axis_values('type_1'))
-    pprint(give_required_fields(axis_schema_type_10))
-    pprint(give_required_fields(axis_schema_type_10_w))
+    #pprint(give_required_fields(axis_schema_type_10))
+    #pprint(give_required_fields(axis_schema_type_10_w))
 
 # pprint(axis_default_values_type_1)

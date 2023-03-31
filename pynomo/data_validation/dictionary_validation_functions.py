@@ -28,12 +28,16 @@ from pyx import color
 
 # Generic helpers
 def is_1_param_function(field: Any, value: Any, error: Callable):
-    if len(signature(value).parameters) != 1:
+    if not callable(value):
+        error(field, "Must be a function")
+    elif len(signature(value).parameters) != 1:
         error(field, "Must be one parameter function")
 
 
 def is_2_param_function(field: Any, value: Any, error: Callable):
-    if len(signature(value).parameters) != 2:
+    if not callable(value):
+        error(field, "Must be a function")
+    elif len(signature(value).parameters) != 2:
         error(field, "Must be two parameter function")
 
 
@@ -87,7 +91,7 @@ def validate_params_(schema: Dict[str, dict], params: Dict[str, dict]) -> (bool,
     return True, v.errors
 
 
-scale_type_strings = ['linear', 'smart linear', 'smart log', 'log', 'manual point', 'manual line']
+scale_type_strings = ['linear', 'linear smart', 'log smart', 'log', 'manual point', 'manual line']
 tick_level_integers = [0, 1, 2, 3, 4, 5]
 """
 block_schema = {

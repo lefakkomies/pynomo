@@ -47,7 +47,7 @@ def validate_type_1_axis_params(field: Any, value: Any, error: Callable):
     errors: Dict[str, Union[str, List[str]]]
     ok, errors = validate_axis_params('type_1', value)
     if not ok:
-        error(field, "Error when inspecting type 1")
+        error(field, str(errors))
     return ok, errors
 
 def validate_type_1_axis_params_(field: Any, value: Any, error: Callable):
