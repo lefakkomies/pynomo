@@ -42,22 +42,23 @@ def validate_axis_type_9(params: dict) -> (bool, Dict[str, Union[str, List[str]]
 """
 
 
-def validate_type_1_axis_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
+def validate_type_1_axis_params(field: Any, value: Any, error: Callable):
     ok: bool
     errors: Dict[str, Union[str, List[str]]]
     ok, errors = validate_axis_params('type_1', value)
     if not ok:
-        error(errors, "Error when inspecting type 1")
+        error(field, "Error when inspecting type 1")
     return ok, errors
 
+def validate_type_1_axis_params_(field: Any, value: Any, error: Callable):
+    validate_type_1_axis_params(field, value, error)
 
-def validate_type_2_axis_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
+def validate_type_2_axis_params(field: Any, value: Any, error: Callable):
     ok: bool
     errors: Dict[str, Union[str, List[str]]]
     ok, errors = validate_axis_params('type_2', value)
     if not ok:
-        error(errors, "Error when inspecting type 2")
-    return ok, errors
+        error(field, "Error when inspecting type 2")
 
 
 def validate_type_3_axis_params(field: Any, value: Any, error: Callable):
@@ -88,6 +89,8 @@ def validate_type_8_axis_params(field: Any, value: Any, error: Callable):
 
 
 def validate_type_9_axis_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
+    if type(value) is not dict:
+        return False, "Parameter need to be a dictionary"
     if 'grid' in value.keys():
         if value['grid'] is False:
             return validate_axis_params('type_9_axis', value)

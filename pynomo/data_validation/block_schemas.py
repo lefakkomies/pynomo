@@ -30,7 +30,7 @@ from pynomo.data_validation.dictionary_validation_functions import check_general
 from pynomo.data_validation.axis_validators import validate_type_1_axis_params, validate_type_2_axis_params, \
     validate_type_3_axis_params, \
     validate_type_4_axis_params, validate_type_8_axis_params, validate_type_9_axis_params, \
-    validate_type_10_w_axis_params
+    validate_type_10_w_axis_params, validate_type_1_axis_params_
 
 #
 # Block parameter definitions.
@@ -81,17 +81,17 @@ block_info_common = {
 # type 1 specific block params
 block_info_type_1 = {
     'f1_params': {
-        'rules': {'required': True, 'type': 'dict', 'check_with': validate_type_1_axis_params},
+        'rules': {'required': True, 'type': 'dict', 'check_with': validate_type_1_axis_params_},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'type': 'dict', 'check_with': validate_type_1_axis_params},
+        'rules': {'required': True, 'type': 'dict', 'check_with': validate_type_1_axis_params_},
         'info': 'Axis parameters defining second scale.',
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'type': 'dict', 'check_with': validate_type_1_axis_params},
+        'rules': {'required': True, 'type': 'dict', 'check_with': validate_type_1_axis_params_},
         'info': 'Axis parameters defining third scale.',
         'default': None
     },

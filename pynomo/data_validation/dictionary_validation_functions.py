@@ -78,6 +78,8 @@ def check_extra_titles(field: Any, value: Any, error: Callable):
 
 
 def validate_params_(schema: Dict[str, dict], params: Dict[str, dict]) -> (bool, Dict[str, Union[str, List[str]]]):
+    if type(params) is not dict:
+        return False, "Parameter not dictionary"
     v = Validator(schema)
     if not v.validate(params):
         #print(v.errors)

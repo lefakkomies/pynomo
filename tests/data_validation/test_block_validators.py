@@ -24,12 +24,12 @@ def test_validate_type_1_block_params_a(fixture):
 def test_validate_type_1_block_params_b(fixture):
     # correct input
     error = fixture
-    params = {'f1_params': True,
-              'f2_params': True,
-              'f3_params': True,
-              'f4_params': True
+    params = {'f1_params': 1.0,
+              'f2_params': {},
+              'f3_params': {},
+              'f4_params': {}
               }
     # error(errors, "Error when inspecting type 1")
     ok, errors = validate_type_1_block_params(True, params, error)
-    #print(errors)
+    print(errors)
     assert ok is False
