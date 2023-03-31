@@ -1,7 +1,7 @@
 import pytest
 from cerberus import Validator
 
-from pynomo.data_validation.axes_schemas import axis_schema_type_1, axis_schema_common, axis_schema_type_2, \
+from pynomo.data_validation.axis_schemas import axis_schema_type_1, axis_schema_common, axis_schema_type_2, \
     axis_schema_type_3, axis_schema_type_4, axis_schema_type_5, axis_schema_type_6, \
     axis_schema_type_8, axis_schema_type_7, axis_schema_type_9_axis, axis_schema_type_9_grid, validate_axis_type_9, \
     axis_schema_type_10, axis_schema_type_10_w, give_default_axis_values

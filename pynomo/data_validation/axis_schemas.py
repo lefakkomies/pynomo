@@ -26,10 +26,12 @@ from pynomo.data_validation.dictionary_validation_functions import scale_type_st
     check_manual_axis_data, is_1_param_function, check_text_format_string, check_extra_params, check_pyx_text_size_type, \
     check_pyx_color_param, check_extra_titles, is_2_param_function, check_pyx_linewidth_param
 
+from typing import Dict, Union, List
+
 # Schemas for axes
 
 # common axis params
-axis_info_common = {
+axis_info_common: Dict[str, dict] = {
     'scale_type': {
         'rules': {
             'required': False,
@@ -325,7 +327,7 @@ axis_info_common = {
 }
 
 # typical for many
-axis_info_generic_a = {
+axis_info_generic_a: Dict[str, dict] = {
     'function': {
         'rules': {'required': True, 'check_with': is_1_param_function},
         'info': 'Function in equation.',
@@ -343,21 +345,21 @@ axis_info_generic_a = {
     }
 }
 # type 1 specific axis params
-axis_info_type_1 = axis_info_generic_a
+axis_info_type_1: Dict[str, dict] = axis_info_generic_a
 # type 2 specific axis params
-axis_info_type_2 = axis_info_generic_a
+axis_info_type_2: Dict[str, dict] = axis_info_generic_a
 # type 3 specific axis params
-axis_info_type_3 = axis_info_generic_a
+axis_info_type_3: Dict[str, dict] = axis_info_generic_a
 # type 4 specific axis params
-axis_info_type_4 = axis_info_generic_a
+axis_info_type_4: Dict[str, dict] = axis_info_generic_a
 # type 5 specific axis params
-axis_info_type_5 = {}  # no axes separately
+axis_info_type_5: Dict[str, dict] = {}  # no axes separately
 # type 6 specific axis params
-axis_info_type_6 = axis_info_generic_a
+axis_info_type_6: Dict[str, dict] = axis_info_generic_a
 # type 7 specific axis params
-axis_info_type_7 = axis_info_generic_a
+axis_info_type_7: Dict[str, dict] = axis_info_generic_a
 # type 8 specific axis params
-axis_info_type_8 = {
+axis_info_type_8: Dict[str, dict] = {
     'function': {
         'rules': {'required': True,
                   'check_with': is_1_param_function,
@@ -402,7 +404,7 @@ axis_info_type_9_common = {
     },
 }
 # params when 'grid' == True
-axis_info_type_9_grid = {
+axis_info_type_9_grid: Dict[str, dict] = {
     'f_grid': {
         'rules': {'required': True,
                   'check_with': is_2_param_function
@@ -618,7 +620,7 @@ axis_info_type_9_grid = {
     },
 }
 # params when 'grid'== False
-axis_info_type_9_axis = {
+axis_info_type_9_axis: Dict[str, dict] = {
     'f': {
         'rules': {'required': True,
                   'check_with': is_1_param_function,
@@ -642,7 +644,7 @@ axis_info_type_9_axis = {
     },
 }
 # type 10 specific axis params
-axis_info_type_10 = {
+axis_info_type_10: Dict[str, dict] = {
     'function': {
         'rules': {'required': True, 'check_with': is_1_param_function},
         'info': 'Function in equation.',
@@ -661,7 +663,7 @@ axis_info_type_10 = {
 }
 
 # Axis definition for w-scale of type 10 with two functions
-axis_info_type_10_w = {
+axis_info_type_10_w: Dict[str, dict] = {
     'u_min': {
         'rules': {'required': True, 'type': ['float', 'integer']},
         'info': "Minimum value of function variable.",
@@ -689,7 +691,7 @@ axis_info_type_10_w = {
 }
 
 
-def give_required_fields(dict_in):
+def give_required_fields(dict_in: Dict[str, dict]) -> Dict[str, dict]:
     result = []
     # this is easier to read than dict comprehensions...
     for key in dict_in.keys():
@@ -699,7 +701,7 @@ def give_required_fields(dict_in):
     return result
 
 
-def give_dictionary_dropping_rules(dict_in):
+def give_dictionary_dropping_rules(dict_in: Dict[str, dict]) -> Dict[str, dict]:
     result = {}
     # this is easier to read than dict comprehensions...
     for key in dict_in.keys():
@@ -707,7 +709,7 @@ def give_dictionary_dropping_rules(dict_in):
     return result
 
 
-def give_dictionary_default_values(dict_in):
+def give_dictionary_default_values(dict_in: Dict[str, dict]) -> Dict[str, dict]:
     result = {}
     # this is easier to read than dict comprehensions...
     for key in dict_in.keys():
@@ -736,25 +738,25 @@ def give_default_values_from_dictionaries(*dicts):
     return give_dictionary_default_values({k: v for d in dicts for k, v in d.items()})
 
 
-axis_schema_common = give_dictionary_dropping_rules(axis_info_common)
-axis_schema_type_1 = give_rules_from_dictionaries(axis_info_common, axis_info_type_1)
-axis_schema_type_2 = give_rules_from_dictionaries(axis_info_common, axis_info_type_2)
-axis_schema_type_3 = give_rules_from_dictionaries(axis_info_common, axis_info_type_3)
-axis_schema_type_4 = give_rules_from_dictionaries(axis_info_common, axis_info_type_4)
-axis_schema_type_5 = give_rules_from_dictionaries({}, axis_info_type_5)
-axis_schema_type_6 = give_rules_from_dictionaries(axis_info_common, axis_info_type_6)
-axis_schema_type_7 = give_rules_from_dictionaries(axis_info_common, axis_info_type_7)
-axis_schema_type_8 = give_rules_from_dictionaries(axis_info_common, axis_info_type_8)
-axis_schema_type_9_axis = give_rules_from_dictionaries(axis_info_common,
-                                                       axis_info_type_9_common,
-                                                       axis_info_type_9_axis)
+# Actual schemas
+axis_schema_common: Dict[str, dict] = give_dictionary_dropping_rules(axis_info_common)
+axis_schema_type_1: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common, axis_info_type_1)
+axis_schema_type_2: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common, axis_info_type_2)
+axis_schema_type_3: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common, axis_info_type_3)
+axis_schema_type_4: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common, axis_info_type_4)
+axis_schema_type_5: Dict[str, dict] = give_rules_from_dictionaries({}, axis_info_type_5)
+axis_schema_type_6: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common, axis_info_type_6)
+axis_schema_type_7: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common, axis_info_type_7)
+axis_schema_type_8: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common, axis_info_type_8)
+axis_schema_type_9_axis: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common,
+                                                                        axis_info_type_9_common,
+                                                                        axis_info_type_9_axis)
 axis_schema_type_9_grid = give_rules_from_dictionaries(axis_info_type_9_common, axis_info_type_9_grid)
 axis_schema_type_10 = give_rules_from_dictionaries(axis_info_common, axis_info_type_10)
 axis_schema_type_10_w = give_rules_from_dictionaries(axis_info_common, axis_info_type_10_w)
 
 
-
-def give_default_axis_values(axis_type):
+def give_default_axis_values(axis_type: str) -> Dict[str, dict]:
     switcher = {
         'type_1': give_default_values_from_dictionaries(axis_info_common, axis_info_type_1),
         'type_2': give_default_values_from_dictionaries(axis_info_common, axis_info_type_2),
@@ -788,25 +790,14 @@ new_dict = {key: {k:v for k,v in value.items() if k!='rules'} for key, value in 
 """
 
 
+
+
+
+
+
+
 # validates type 9, basically applies different rules based on if scale is grid or axis
-def validate_axis_type_9(params: dict) -> bool:
-    if 'grid' in params.keys():
-        if params['grid'] is False:
-            v = Validator(axis_schema_type_9_axis)
-            if not v.validate(params):
-                print(v.errors)
-                return False
-        if params['grid'] is True:
-            v = Validator(axis_schema_type_9_grid)
-            if not v.validate(params):
-                print(v.errors)
-                return False
-    else:  # grid not defined assume 'grid' = False
-        v = Validator(axis_schema_type_9_axis)
-        if not v.validate(params):
-            print(v.errors)
-            return False
-    return True
+
 
 
 if __name__ == "__main__":

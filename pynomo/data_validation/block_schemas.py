@@ -17,12 +17,20 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from pprint import pprint
+from typing import Dict
+
 from pyx import color
 
+from pynomo.data_validation.axis_schemas import give_rules_from_dictionaries
 from pynomo.data_validation.dictionary_validation_functions import check_general_axis_params, check_pyx_color_param, \
-    check_type_8_axis_params, check_type_9_axis_params, check_type_10_w_axis_params, is_1_param_function, \
-    check_manual_axis_data, scale_type_strings, check_text_format_string, check_type_4_axis_params, \
-    check_type_3_axis_params, check_type_2_axis_params, check_type_1_axis_params
+    is_1_param_function, \
+    check_manual_axis_data, scale_type_strings, check_text_format_string
+
+from pynomo.data_validation.axis_validators import validate_type_1_axis_params, validate_type_2_axis_params, \
+    validate_type_3_axis_params, \
+    validate_type_4_axis_params, validate_type_8_axis_params, validate_type_9_axis_params, \
+    validate_type_10_w_axis_params
 
 #
 # Block parameter definitions.
@@ -30,7 +38,7 @@ from pynomo.data_validation.dictionary_validation_functions import check_general
 
 
 # common block params
-block_schema_common = {
+block_info_common = {
     'block_type': {
         'rules': {
             'type': 'string',
@@ -71,19 +79,19 @@ block_schema_common = {
     },
 }
 # type 1 specific block params
-block_schema_type_1 = {
+block_info_type_1 = {
     'f1_params': {
-        'rules': {'required': True, 'check_with': check_type_1_axis_params},
+        'rules': {'required': True, 'type': 'dict', 'check_with': validate_type_1_axis_params},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'check_with': check_type_1_axis_params},
+        'rules': {'required': True, 'type': 'dict', 'check_with': validate_type_1_axis_params},
         'info': 'Axis parameters defining second scale.',
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'check_with': check_type_1_axis_params},
+        'rules': {'required': True, 'type': 'dict', 'check_with': validate_type_1_axis_params},
         'info': 'Axis parameters defining third scale.',
         'default': None
     },
@@ -94,27 +102,27 @@ block_schema_type_1 = {
     }
 }
 # type 2 specific block params
-block_schema_type_2 = {
+block_info_type_2 = {
     'f1_params': {
-        'rules': {'required': True, 'check_with': check_type_2_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_2_axis_params},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'check_with': check_type_2_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_2_axis_params},
         'info': 'Axis parameters defining second scale.',
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'check_with': check_type_2_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_2_axis_params},
         'info': 'Axis parameters defining third scale.',
         'default': None
     }
 }
 # type 3 specific block params
-block_schema_type_3 = {
+block_info_type_3 = {
     'f_params': {
-        'rules': {'required': True, 'check_with': check_type_3_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_3_axis_params},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
@@ -137,24 +145,24 @@ block_schema_type_3 = {
     }
 }
 # type 4 specific block params
-block_schema_type_4 = {
+block_info_type_4 = {
     'f1_params': {
-        'rules': {'required': True, 'check_with': check_type_4_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_4_axis_params},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'check_with': check_type_4_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_4_axis_params},
         'info': 'Axis parameters defining second scale.',
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'check_with': check_type_4_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_4_axis_params},
         'info': 'Axis parameters defining third scale.',
         'default': None
     },
     'f4_params': {
-        'rules': {'required': True, 'check_with': check_type_4_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_4_axis_params},
         'info': 'Axis parameters defining fourth scale.',
         'default': None
     },
@@ -169,14 +177,14 @@ block_schema_type_4 = {
         'default': color.rgb.black
     },
     'float_axis': {
-        'rules': {'required': False, type: "string"},
+        'rules': {'required': False, 'type': 'string'},
         'info': 'If given "F1 or F2", then scaling is according to them, '
                 'otherwise (any other string) according to F3 and F4.',
         'default': 'F1 or F2'
     }
 }
 # type 5 specific block params
-block_schema_type_5 = {
+block_info_type_5 = {
     'u_func': {
         'rules': {'required': True, 'check_with': is_1_param_function},
         'info': 'u-function',
@@ -543,7 +551,7 @@ block_schema_type_5 = {
     }
 }
 # type 6 specific block params
-block_schema_type_6 = {
+block_info_type_6 = {
     'type': {
         'rules': {
             'type': 'string',
@@ -582,7 +590,7 @@ block_schema_type_6 = {
     },
 }
 # type 7 specific block params
-block_schema_type_7 = {
+block_info_type_7 = {
     'f1_params': {
         'rules': {'required': True, 'check_with': check_general_axis_params},
         'info': 'Axis parameters defining first scale.',
@@ -610,9 +618,9 @@ block_schema_type_7 = {
     }
 }
 # type 8 specific block params
-block_schema_type_8 = {
+block_info_type_8 = {
     'f1_params': {
-        'rules': {'required': True, 'check_with': check_type_8_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_8_axis_params},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
@@ -623,19 +631,19 @@ block_schema_type_8 = {
     },
 }
 # type 9 specific block params
-block_schema_type_9 = {
+block_info_type_9 = {
     'f1_params': {
-        'rules': {'required': True, 'check_with': check_type_9_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_9_axis_params},
         'info': 'Axis parameters defining first scale or grid.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'check_with': check_type_9_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_9_axis_params},
         'info': 'Axis parameters defining second scale or grid.',
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'check_with': check_type_9_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_9_axis_params},
         'info': 'Axis parameters defining third scale or grid.',
         'default': None
     },
@@ -646,7 +654,7 @@ block_schema_type_9 = {
     }
 }
 # type 10 specific block params
-block_schema_type_10 = {
+block_info_type_10 = {
     'f1_params': {
         'rules': {'required': True, 'check_with': check_general_axis_params},
         'info': 'Axis parameters defining first scale or grid.',
@@ -658,8 +666,26 @@ block_schema_type_10 = {
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'check_with': check_type_10_w_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_10_w_axis_params},
         'info': 'Axis parameters defining third scale or grid.',
         'default': None
     }
 }
+
+block_schema_type_1: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_1)
+block_schema_type_2: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_2)
+block_schema_type_3: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_3)
+block_schema_type_4: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_4)
+block_schema_type_5: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_5)
+block_schema_type_6: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_6)
+block_schema_type_7: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_7)
+block_schema_type_8: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_8)
+block_schema_type_9: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_9)
+block_schema_type_10: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_10)
+
+if __name__ == "__main__":
+    from cerberus import Validator
+
+    pprint(block_schema_type_4)
+    v = Validator(block_schema_type_4)
+    params = {'scale_type': 'linear', 'tick_distance_smart': 30, 'base_stop': None}

@@ -22,123 +22,68 @@ import re
 import pyx
 from cerberus import Validator
 from inspect import isfunction, signature
-
+from typing import Any, Callable, List, Union, Dict
 from pyx import color
 
 
-def is_1_param_function(field, value, error):
+# Generic helpers
+def is_1_param_function(field: Any, value: Any, error: Callable):
     if len(signature(value).parameters) != 1:
         error(field, "Must be one parameter function")
 
 
-def is_2_param_function(field, value, error):
+def is_2_param_function(field: Any, value: Any, error: Callable):
     if len(signature(value).parameters) != 2:
         error(field, "Must be two parameter function")
 
 
-def check_general_axis_params(field, value, error):
+def check_general_axis_params(field: Any, value: Any, error: Callable):
     # TODO:
     pass
 
 
-def check_type_1_axis_params(field, value, error):
-    check_general_axis_params(field, value, error)
 
 
-def check_type_2_axis_params(field, value, error):
-    check_general_axis_params(field, value, error)
-
-
-def check_type_3_axis_params(field, value, error):
-    check_general_axis_params(field, value, error)
-
-
-def check_type_4_axis_params(field, value, error):
-    check_general_axis_params(field, value, error)
-
-
-def check_type_5_axis_params(field, value, error):
-    # TODO run checker for type 5 axis params
-    pass
-
-
-def check_type_6_axis_params(field, value, error):
-    check_general_axis_params(field, value, error)
-
-
-def check_type_7_axis_params(field, value, error):
-    # TODO run checker for type 7 axis params
-    pass
-
-
-def check_type_8_axis_params(field, value, error):
-    # TODO run checker for type 8 axis params
-    pass
-
-
-def check_type_9_axis_params(field, value, error):
-    # TODO run checker for type 9 axis params
-    pass
-
-
-def check_type_10_w_axis_params(field, value, error):
-    # TODO run checker for type 9 axis params
-    pass
-
-
-def check_pyx_color_param(field, value, error):
+def check_pyx_color_param(field: Any, value: Any, error: Callable):
     return isinstance(value, type(pyx.color.rgb.black))
 
 
-def check_pyx_linewidth_param(field, value, error):
+def check_pyx_linewidth_param(field: Any, value: Any, error: Callable):
     return isinstance(value, type(pyx.style.linewidth.normal))
 
 
-def check_pyx_text_size_type(field, value, error):
+def check_pyx_text_size_type(field: Any, value: Any, error: Callable):
     return isinstance(value, type(pyx.text.size.tiny))
 
 
-def check_manual_axis_data(field, value, error):
+def check_manual_axis_data(field: Any, value: Any, error: Callable):
     # TODO: check manual-axis data parameters are correct
     pass
 
 
-def check_text_format_string(field, value, error):
+def check_text_format_string(field: Any, value: Any, error: Callable):
     pattern = r"\$%[\d\.]+[a-zA-Z]\$"
     if not re.match(pattern, value):
         error(field, f"{value} does not match the required format")
 
 
-def check_extra_params(field, value, error):
+def check_extra_params(field: Any, value: Any, error: Callable):
     # TODO: check extra-params dictionary
     pass
 
 
-def check_extra_titles(field, value, error):
+def check_extra_titles(field: Any, value: Any, error: Callable):
     # TODO: check
     pass
 
 
-schema = {
-    'name': {
-        'type': 'string'
-    },
-    'age': {
-        'type': 'integer'
-    },
-    'data': {
-        'type': 'integer',
-        'required': False
-    },
-    'data_object': {
-        'type': 'integer',
-        'required': False
-    },
-    'test_function': {
-        'check_with': is_2_param_function
-    }
+def validate_params_(schema: Dict[str, dict], params: Dict[str, dict]) -> (bool, Dict[str, Union[str, List[str]]]):
+    v = Validator(schema)
+    if not v.validate(params):
+        #print(v.errors)
+        return False, v.errors
+    return True, v.errors
 
-}
 
 scale_type_strings = ['linear', 'smart linear', 'smart log', 'log', 'manual point', 'manual line']
 tick_level_integers = [0, 1, 2, 3, 4, 5]
@@ -317,8 +262,6 @@ axis_schema = {
 }
 """
 
-
-
 # common axis params
 # type 1 specific axis params
 # type 2 specific axis params
@@ -332,8 +275,6 @@ axis_schema = {
 
 
 # main params
-
-
 
 
 # print(block_validator.validate(my_profile))
