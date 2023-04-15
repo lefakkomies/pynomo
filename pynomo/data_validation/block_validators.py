@@ -1,7 +1,46 @@
+# -*- coding: utf-8 -*-
+#
+#    This file is part of PyNomo -
+#    a program to create nomographs with Python (https://github.com/lefakkomies/pynomo)
+#
+#    Copyright (C) 2007-2023  Leif Roschier  <leif.roschier@iki.fi>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+""" Block validators
+
+    Block validators validate that dictionaries defining blocks have required keys and no unknown keys or
+    wrong data-types
+
+    Example:
+        # Validates dictionary defining block type 1
+
+        # define error function that is required
+        def error(errors, message):
+            print(message)
+
+        # ok:       True if validation ok
+        # errors:   dictionary of keys and error messages related to that key
+        ok, errors = validate_type_1_block_params("block 1", params, error)
+
+
+"""
+
 from pprint import pprint
 from typing import Dict, Union, List, Any, Callable
 
-from pynomo.data_validation.axis_schemas import axis_schema_type_10, give_default_axis_values
+from pynomo.data_validation.axis_schemas import give_default_axis_values
 from pynomo.data_validation.block_schemas import block_schema_type_1, block_schema_type_2, block_schema_type_3, \
     block_schema_type_4, block_schema_type_5, block_schema_type_6, block_schema_type_7, block_schema_type_8, \
     block_schema_type_9, block_schema_type_10

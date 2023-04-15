@@ -1,12 +1,49 @@
-from typing import Dict, Union, List, Any, Callable
+# -*- coding: utf-8 -*-
+#
+#    This file is part of PyNomo -
+#    a program to create nomographs with Python (https://github.com/lefakkomies/pynomo)
+#
+#    Copyright (C) 2007-2023  Leif Roschier  <leif.roschier@iki.fi>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from cerberus import Validator
+""" Axis validators
+
+    Axis validators validate that dictionaries defining axes or grids have required keys and no unknown keys or
+    wrong data-types
+
+    Example:
+        # Validates dictionary defining axis type 1 params
+
+        # define error function that is required
+        def error(errors, message):
+            print(message)
+
+        # ok:       True if validation ok
+        # errors:   dictionary of keys and error messages related to that key
+        ok, errors = validate_type_1_axis_params("axis 1", params, error)
+
+
+"""
+
+from typing import Dict, Union, List, Any, Callable
 
 from pynomo.data_validation.axis_schemas import axis_schema_type_9_axis, axis_schema_type_9_grid, axis_schema_type_1, \
     axis_schema_type_2, axis_schema_type_3, axis_schema_type_4, axis_schema_type_5, axis_schema_type_6, \
     axis_schema_type_7, axis_schema_type_10, axis_schema_type_10_w, axis_schema_type_8_function, \
     axis_schema_type_8_function_xy
-from pynomo.data_validation.dictionary_validation_functions import validate_params_, check_general_axis_params
+from pynomo.data_validation.dictionary_validation_functions import validate_params_
 
 
 def validate_axis_params(axis_type: str, params: Dict[str, dict]) -> (bool, Dict[str, Union[str, List[str]]]):
