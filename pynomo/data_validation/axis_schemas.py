@@ -41,7 +41,7 @@ axis_info_common: Dict[str, dict] = {
         'info': "Axis type, what kind of axis to make.",
         'default': 'linear smart'
     },
-    'ID': {
+    'id': {
         'rules': {'required': False, 'type': 'string'},
         'info': 'To identify the axis..',
         'default': 'id'
@@ -411,8 +411,11 @@ axis_info_type_8_function_xy: Dict[str, dict] = {
         'default': None
     }
 }
-# type 9 specific axis params
 
+######################################################################################
+# Type 9 specific axis params
+######################################################################################
+# for both 'grid' == True or False
 axis_info_type_9_common = {
     'grid': {
         'rules': {'required': False, 'type': 'boolean'},
@@ -430,14 +433,14 @@ axis_info_type_9_grid: Dict[str, dict] = {
         'default': None
     },
     'g_grid': {
-        'rules': {'required': False,
+        'rules': {'required': True,
                   'check_with': is_2_param_function
                   },
         'info': 'Function g_grid in determinant row.',
         'default': None
     },
     'h_grid': {
-        'rules': {'required': False,
+        'rules': {'required': True,
                   'check_with': is_2_param_function
                   },
         'info': 'Function h_grid in determinant row.',
@@ -470,12 +473,40 @@ axis_info_type_9_grid: Dict[str, dict] = {
                   },
         'info': "Maximum value of function variable.",
         'default': None
+    }
+}
+axis_info_type_9_grid_common: Dict[str, dict] = {
+    'u_min': {
+        'rules': {'required': False,
+                  'type': ['float', 'integer'],
+                  },
+        'info': "Minimum value of function variable (for alignement).",
+        'default': 0.0
+    },
+    'u_max': {
+        'rules': {'required': False,
+                  'type': ['float', 'integer'],
+                  },
+        'info': "Maximum value of function variable (for alignment).",
+        'default': 1.0
+    },
+    'u_min_trafo': {
+        'rules': {'required': False,
+                  'type': ['float', 'integer'],
+                  },
+        'info': "For transforming initially value to corner.",
+        'default': 0.0
+    },
+    'u_max_trafo': {
+        'rules': {'required': False,
+                  'type': ['float', 'integer'],
+                  },
+        'info': "For transforming initially value to corner.",
+        'default': 0.0
     },
     'text_prefix_u': {
         'rules': {'required': False,
                   'type': 'string',
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "Text prefix for u before value.",
         'default': ''
@@ -483,8 +514,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'text_prefix_v': {
         'rules': {'required': False,
                   'type': 'string',
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "Text prefix for v before value.",
         'default': ''
@@ -492,8 +521,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'v_texts_u_start': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "If v-texts are in u start side.",
         'default': False
@@ -501,8 +528,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'v_texts_u_stop': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "If v-texts are in u stop side.",
         'default': True
@@ -510,8 +535,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'u_texts_v_start': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "If u-texts are in v start side.",
         'default': False
@@ -519,8 +542,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'u_texts_v_stop': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "If u-texts are in v stop side.",
         'default': True
@@ -528,8 +549,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'u_line_color': {
         'rules': {'required': False,
                   'check_with': check_pyx_color_param,
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "u-line color.",
         'default': color.rgb.black
@@ -537,8 +556,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'v_line_color': {
         'rules': {'required': False,
                   'check_with': check_pyx_color_param,
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "v-line color.",
         'default': color.rgb.black
@@ -546,8 +563,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'u_text_color': {
         'rules': {'required': False,
                   'check_with': check_pyx_color_param,
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "u-line color.",
         'default': color.rgb.black
@@ -555,8 +570,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'v_text_color': {
         'rules': {'required': False,
                   'check_with': check_pyx_color_param,
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "v-line color.",
         'default': color.rgb.black
@@ -564,8 +577,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'text_distance': {
         'rules': {'required': False,
                   'type': ['float', 'integer'],
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "Text distance.",
         'default': 0.25
@@ -573,26 +584,20 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'circles': {
         'rules': {'required': False,
                   'type': 'boolean',
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "Circles.",
         'default': True
     },
     'text_format_u': {
         'rules': {'required': False,
-                  'type': 'boolean',
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
+                  'type': 'string',
                   },
         'info': "Text format u. For example '$%4.4g$'",
         'default': "$%4.4g$"
     },
     'text_format_v': {
         'rules': {'required': False,
-                  'type': 'boolean',
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
+                  'type': 'string',
                   },
         'info': "Text format v. For example '$%4.4g$'",
         'default': "$%4.4g$"
@@ -600,8 +605,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'u_line_width': {
         'rules': {'required': False,
                   'check_with': check_pyx_linewidth_param,
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "u linewidth",
         'default': pyx.style.linewidth.normal
@@ -609,8 +612,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
     'v_line_width': {
         'rules': {'required': False,
                   'check_with': check_pyx_linewidth_param,
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': "u linewidth",
         'default': pyx.style.linewidth.normal
@@ -619,8 +620,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
         'rules': {'required': False,
                   'type': 'list',  # list of strings
                   'schema': {'type': ['float', 'integer']},
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': 'List of grid u values.',
         'default': []
@@ -629,8 +628,6 @@ axis_info_type_9_grid: Dict[str, dict] = {
         'rules': {'required': False,
                   'type': 'list',  # list of strings
                   'schema': {'type': ['float', 'integer']},
-                  'dependencies': {
-                      'grid': {'allowed': [True]}}
                   },
         'info': 'List of grid v values.',
         'default': []
@@ -659,8 +656,21 @@ axis_info_type_9_axis: Dict[str, dict] = {
         'info': 'Function h in determinant row.',
         'default': None
     },
+    'u_min': {
+        'rules': {'required': True, 'type': ['float', 'integer']},
+        'info': "Minimum value of function variable.",
+        'default': None
+    },
+    'u_max': {
+        'rules': {'required': True, 'type': ['float', 'integer']},
+        'info': "Maximum value of function variable.",
+        'default': None
+    }
 }
-# type 10 specific axis params
+
+######################################################################################
+# Type 10 specific axis params
+######################################################################################
 axis_info_type_10: Dict[str, dict] = {
     'function': {
         'rules': {'required': True, 'check_with': is_1_param_function},
@@ -771,25 +781,30 @@ axis_schema_type_8_function_xy: Dict[str, dict] = give_rules_from_dictionaries(a
 axis_schema_type_9_axis: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common,
                                                                         axis_info_type_9_common,
                                                                         axis_info_type_9_axis)
-axis_schema_type_9_grid = give_rules_from_dictionaries(axis_info_type_9_common, axis_info_type_9_grid)
+axis_schema_type_9_grid = give_rules_from_dictionaries(axis_info_type_9_common,
+                                                       axis_info_type_9_grid,
+                                                       axis_info_type_9_grid_common)
 axis_schema_type_10 = give_rules_from_dictionaries(axis_info_common, axis_info_type_10)
 axis_schema_type_10_w = give_rules_from_dictionaries(axis_info_common, axis_info_type_10_w)
+
 
 # only values that are filled automatically, others users need to give
 def give_default_axis_values(axis_type: str) -> Dict[str, dict]:
     switcher = {
-        'type_1': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_1),
-        'type_2': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_2),
-        'type_3': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_3),
-        'type_4': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_4),
-        'type_5': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_5),
-        'type_6': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_6),
-        'type_7': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_7),
-        'type_8': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_8),
-        'type_9_axis': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_9_axis),
-        'type_9_grid': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_9_grid),
-        'type_10': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_10),
-        'type_10_w': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_10_w)
+        'type_1': give_default_values_from_dictionaries(axis_info_common),  # , axis_info_type_1),
+        'type_2': give_default_values_from_dictionaries(axis_info_common),  # , axis_info_type_2),
+        'type_3': give_default_values_from_dictionaries(axis_info_common),  # , axis_info_type_3),
+        'type_4': give_default_values_from_dictionaries(axis_info_common),  # , axis_info_type_4),
+        'type_5': give_default_values_from_dictionaries(axis_info_common),  # , axis_info_type_5),
+        'type_6': give_default_values_from_dictionaries(axis_info_common),  # , axis_info_type_6),
+        'type_7': give_default_values_from_dictionaries(axis_info_common),  # , axis_info_type_7),
+        'type_8': give_default_values_from_dictionaries(axis_info_common),  # , axis_info_type_8),
+        'type_9_axis': give_default_values_from_dictionaries(axis_info_common,
+                                                             axis_info_type_9_common),  # , axis_info_type_9_axis),
+        'type_9_grid': give_default_values_from_dictionaries(axis_info_type_9_common,
+                                                             axis_info_type_9_grid_common),  # , axis_info_type_9_grid),
+        'type_10': give_default_values_from_dictionaries(axis_info_common),  # , axis_info_type_10),
+        'type_10_w': give_default_values_from_dictionaries(axis_info_common),  # , axis_info_type_10_w)
     }
     result = switcher.get(axis_type, "Incorrect key")
     if result == "Incorrect key":

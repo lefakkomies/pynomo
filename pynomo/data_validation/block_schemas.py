@@ -23,24 +23,20 @@ from typing import Dict
 from pyx import color
 
 from pynomo.data_validation.axis_schemas import give_rules_from_dictionaries
-from pynomo.data_validation.dictionary_validation_functions import check_general_axis_params, check_pyx_color_param, \
+from pynomo.data_validation.dictionary_validation_functions import check_pyx_color_param, \
     is_1_param_function, \
     check_manual_axis_data, scale_type_strings, check_text_format_string
 
-from pynomo.data_validation.axis_validators import validate_type_1_axis_params, validate_type_2_axis_params, \
-    validate_type_3_axis_params, \
-    validate_type_4_axis_params, validate_type_8_axis_params, validate_type_9_axis_params, \
-    validate_type_10_w_axis_params, validate_type_1_axis_params_, validate_type_2_axis_params_, \
+from pynomo.data_validation.axis_validators import validate_type_1_axis_params_, validate_type_2_axis_params_, \
     validate_type_3_axis_params_, validate_type_4_axis_params_, validate_type_6_axis_params_, \
-    validate_type_7_axis_params_, validate_type_8_axis_params_, validate_type_9_axis_params_, \
+    validate_type_7_axis_params_, validate_type_8_axis_params_, validate_type_9_axis_grid_params_, \
     validate_type_10_w_axis_params_, validate_type_10_axis_params_
 
-#
-# Block parameter definitions.
-#
+######################################################################################
+# Block parameter definitions
+######################################################################################
 
-
-# common block params
+# common block params (common = not required)
 block_info_common = {
     'block_type': {
         'rules': {
@@ -81,7 +77,10 @@ block_info_common = {
         'default': []
     },
 }
-# type 1 specific block params
+
+######################################################################################
+# Type 1 specific block params
+######################################################################################
 block_info_type_1 = {
     'f1_params': {
         'rules': {'required': True, 'type': 'dict', 'check_with': validate_type_1_axis_params_},
@@ -104,7 +103,10 @@ block_info_type_1 = {
         'default': 1.0
     }
 }
-# type 2 specific block params
+
+######################################################################################
+# Type 2 specific block params
+######################################################################################
 block_info_type_2 = {
     'f1_params': {
         'rules': {'required': True, 'check_with': validate_type_2_axis_params_},
@@ -122,7 +124,10 @@ block_info_type_2 = {
         'default': None
     }
 }
-# type 3 specific block params
+
+######################################################################################
+# Type 3 specific block params
+######################################################################################
 block_info_type_3 = {
     'f_params': {
         'rules': {'required': True,
@@ -153,7 +158,10 @@ block_info_type_3 = {
         'default': color.rgb.black
     }
 }
-# type 4 specific block params
+
+######################################################################################
+# Type 4 specific block params
+######################################################################################
 block_info_type_4 = {
     'f1_params': {
         'rules': {'required': True, 'check_with': validate_type_4_axis_params_},
@@ -192,7 +200,10 @@ block_info_type_4 = {
         'default': 'F1 or F2'
     }
 }
-# type 5 specific block params
+
+######################################################################################
+# Type 5 specific block params
+######################################################################################
 block_info_type_5 = {
     'u_func': {
         'rules': {'required': True, 'check_with': is_1_param_function},
@@ -559,7 +570,10 @@ block_info_type_5 = {
         'default': []
     }
 }
-# type 6 specific block params
+
+######################################################################################
+# Type 6 specific block params
+######################################################################################
 block_info_type_6 = {
     'type': {
         'rules': {
@@ -598,7 +612,10 @@ block_info_type_6 = {
         'default': color.rgb.black
     },
 }
-# type 7 specific block params
+
+######################################################################################
+# Type 7 specific block params
+######################################################################################
 block_info_type_7 = {
     'f1_params': {
         'rules': {'required': True, 'check_with': validate_type_7_axis_params_},
@@ -626,7 +643,10 @@ block_info_type_7 = {
         'default': 45.0
     }
 }
-# type 8 specific block params
+
+######################################################################################
+# Type 8 specific block params
+######################################################################################
 block_info_type_8 = {
     'f_params': {
         'rules': {'required': True, 'check_with': validate_type_8_axis_params_},
@@ -639,20 +659,22 @@ block_info_type_8 = {
         'default': 10.0
     },
 }
-# type 9 specific block params
+######################################################################################
+# Type 9 specific block params
+######################################################################################
 block_info_type_9 = {
     'f1_params': {
-        'rules': {'required': True, 'check_with': validate_type_9_axis_params_},
+        'rules': {'required': True, 'check_with': validate_type_9_axis_grid_params_},
         'info': 'Axis parameters defining first scale or grid.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'check_with': validate_type_9_axis_params_},
+        'rules': {'required': True, 'check_with': validate_type_9_axis_grid_params_},
         'info': 'Axis parameters defining second scale or grid.',
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'check_with': validate_type_9_axis_params_},
+        'rules': {'required': True, 'check_with': validate_type_9_axis_grid_params_},
         'info': 'Axis parameters defining third scale or grid.',
         'default': None
     },
@@ -662,7 +684,10 @@ block_info_type_9 = {
         'default': False
     }
 }
-# type 10 specific block params
+
+######################################################################################
+# Type 10 block params
+######################################################################################
 block_info_type_10 = {
     'f1_params': {
         'rules': {'required': True, 'check_with': validate_type_10_axis_params_},
@@ -681,6 +706,9 @@ block_info_type_10 = {
     }
 }
 
+######################################################################################
+# Actual block schemas
+######################################################################################
 block_schema_type_1: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_1)
 block_schema_type_2: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_2)
 block_schema_type_3: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_3)

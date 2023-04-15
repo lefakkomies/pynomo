@@ -188,22 +188,31 @@ def validate_type_8_axis_params_(field: Any, value: Any, error: Callable):
 ######################################################################################
 # Type 9
 ######################################################################################
-def validate_type_9_axis_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
+def validate_type_9_axis_grid_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
     if not isinstance(value, dict):
         error_str = f"Axis definitions should be a dictionary in {field}"
         error(field, error_str)
         return False, error_str
     if 'grid' in value.keys():
         if value['grid'] is False:
-            return validate_axis_params('type_9_axis', value)
+            ok, errors = validate_axis_params('type_9_axis', value)
+            if not ok:
+                error(field, str(errors))
+            return ok, errors
         if value['grid'] is True:
-            return validate_axis_params('type_9_grid', value)
+            ok, errors = validate_axis_params('type_9_grid', value)
+            if not ok:
+                error(field, str(errors))
+            return ok, errors
     else:  # grid not defined assume 'grid' = False
-        return validate_axis_params('type_9_axis', value)
+        ok, errors = validate_axis_params('type_9_axis', value)
+        if not ok:
+            error(field, str(errors))
+        return ok, errors
 
 
-def validate_type_9_axis_params_(field: Any, value: Any, error: Callable):
-    validate_type_9_axis_params(field, value, error)
+def validate_type_9_axis_grid_params_(field: Any, value: Any, error: Callable):
+    validate_type_9_axis_grid_params(field, value, error)
 
 
 ######################################################################################

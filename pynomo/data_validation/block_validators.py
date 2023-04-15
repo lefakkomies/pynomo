@@ -4,7 +4,7 @@ from typing import Dict, Union, List, Any, Callable
 from pynomo.data_validation.axis_schemas import axis_schema_type_10, give_default_axis_values
 from pynomo.data_validation.block_schemas import block_schema_type_1, block_schema_type_2, block_schema_type_3, \
     block_schema_type_4, block_schema_type_5, block_schema_type_6, block_schema_type_7, block_schema_type_8, \
-    block_schema_type_9
+    block_schema_type_9, block_schema_type_10
 from pynomo.data_validation.dictionary_validation_functions import validate_params_
 
 
@@ -19,7 +19,7 @@ def validate_block_params(block_type: str, params: Dict[str, dict]) -> (bool, Di
         'type_7': lambda: validate_params_(block_schema_type_7, params),
         'type_8': lambda: validate_params_(block_schema_type_8, params),
         'type_9': lambda: validate_params_(block_schema_type_9, params),
-        'type_10': lambda: validate_params_(axis_schema_type_10, params)
+        'type_10': lambda: validate_params_(block_schema_type_10, params)
     }
     result, errors = switcher.get(block_type, "Incorrect key")()
     if result == "Incorrect key":
