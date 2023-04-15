@@ -17,9 +17,12 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+""" Block schemas that user used for validation with Cerberos library
+
+"""
 from pprint import pprint
 from typing import Dict
-
 from pyx import color
 
 from pynomo.data_validation.axis_schemas import give_rules_from_dictionaries
@@ -37,7 +40,7 @@ from pynomo.data_validation.axis_validators import validate_type_1_axis_params_,
 ######################################################################################
 
 # common block params (common = not required)
-block_info_common = {
+_block_info_common = {
     'block_type': {
         'rules': {
             'type': 'string',
@@ -81,7 +84,7 @@ block_info_common = {
 ######################################################################################
 # Type 1 specific block params
 ######################################################################################
-block_info_type_1 = {
+_block_info_type_1 = {
     'f1_params': {
         'rules': {'required': True, 'type': 'dict', 'check_with': validate_type_1_axis_params_},
         'info': 'Axis parameters defining first scale.',
@@ -107,7 +110,7 @@ block_info_type_1 = {
 ######################################################################################
 # Type 2 specific block params
 ######################################################################################
-block_info_type_2 = {
+_block_info_type_2 = {
     'f1_params': {
         'rules': {'required': True, 'check_with': validate_type_2_axis_params_},
         'info': 'Axis parameters defining first scale.',
@@ -128,7 +131,7 @@ block_info_type_2 = {
 ######################################################################################
 # Type 3 specific block params
 ######################################################################################
-block_info_type_3 = {
+_block_info_type_3 = {
     'f_params': {
         'rules': {'required': True,
                   'type': 'list',
@@ -162,7 +165,7 @@ block_info_type_3 = {
 ######################################################################################
 # Type 4 specific block params
 ######################################################################################
-block_info_type_4 = {
+_block_info_type_4 = {
     'f1_params': {
         'rules': {'required': True, 'check_with': validate_type_4_axis_params_},
         'info': 'Axis parameters defining first scale.',
@@ -204,7 +207,7 @@ block_info_type_4 = {
 ######################################################################################
 # Type 5 specific block params
 ######################################################################################
-block_info_type_5 = {
+_block_info_type_5 = {
     'u_func': {
         'rules': {'required': True, 'check_with': is_1_param_function},
         'info': 'u-function',
@@ -574,7 +577,7 @@ block_info_type_5 = {
 ######################################################################################
 # Type 6 specific block params
 ######################################################################################
-block_info_type_6 = {
+_block_info_type_6 = {
     'type': {
         'rules': {
             'type': 'string',
@@ -616,7 +619,7 @@ block_info_type_6 = {
 ######################################################################################
 # Type 7 specific block params
 ######################################################################################
-block_info_type_7 = {
+_block_info_type_7 = {
     'f1_params': {
         'rules': {'required': True, 'check_with': validate_type_7_axis_params_},
         'info': 'Axis parameters defining first scale.',
@@ -647,7 +650,7 @@ block_info_type_7 = {
 ######################################################################################
 # Type 8 specific block params
 ######################################################################################
-block_info_type_8 = {
+_block_info_type_8 = {
     'f_params': {
         'rules': {'required': True, 'check_with': validate_type_8_axis_params_},
         'info': 'Axis parameters defining first scale.',
@@ -662,7 +665,7 @@ block_info_type_8 = {
 ######################################################################################
 # Type 9 specific block params
 ######################################################################################
-block_info_type_9 = {
+_block_info_type_9 = {
     'f1_params': {
         'rules': {'required': True, 'check_with': validate_type_9_axis_grid_params_},
         'info': 'Axis parameters defining first scale or grid.',
@@ -688,7 +691,7 @@ block_info_type_9 = {
 ######################################################################################
 # Type 10 block params
 ######################################################################################
-block_info_type_10 = {
+_block_info_type_10 = {
     'f1_params': {
         'rules': {'required': True, 'check_with': validate_type_10_axis_params_},
         'info': 'Axis parameters defining first scale or grid.',
@@ -709,16 +712,16 @@ block_info_type_10 = {
 ######################################################################################
 # Actual block schemas
 ######################################################################################
-block_schema_type_1: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_1)
-block_schema_type_2: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_2)
-block_schema_type_3: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_3)
-block_schema_type_4: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_4)
-block_schema_type_5: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_5)
-block_schema_type_6: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_6)
-block_schema_type_7: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_7)
-block_schema_type_8: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_8)
-block_schema_type_9: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_9)
-block_schema_type_10: Dict[str, dict] = give_rules_from_dictionaries(block_info_common, block_info_type_10)
+block_schema_type_1: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_1)
+block_schema_type_2: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_2)
+block_schema_type_3: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_3)
+block_schema_type_4: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_4)
+block_schema_type_5: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_5)
+block_schema_type_6: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_6)
+block_schema_type_7: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_7)
+block_schema_type_8: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_8)
+block_schema_type_9: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_9)
+block_schema_type_10: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_10)
 
 if __name__ == "__main__":
     from cerberus import Validator

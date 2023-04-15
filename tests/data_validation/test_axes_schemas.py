@@ -330,12 +330,17 @@ def test_axis_schema_type_9_e():
            'f': lambda x: x,
            'g': lambda x: x,
            'h': lambda x: x,
+           'u_max': 1.0,
+           'u_min': 0.0
            }
-    assert validate_axis_type_9(doc) is True
+    v = Validator(axis_schema_type_9_axis)
+    if not v.validate(doc):
+        print(v.errors)
+    assert v.validate(doc) is True
 
 
 def test_axis_schema_type_9_f():
-    # ok
+    # ok, grid
     doc = {
         'grid': True,
         'f_grid': lambda x, y: x + y,
@@ -346,7 +351,10 @@ def test_axis_schema_type_9_f():
         'v_start': 0.0,
         'v_stop': 0.0,
     }
-    assert validate_axis_type_9(doc) is True
+    v = Validator(axis_schema_type_9_grid)
+    if not v.validate(doc):
+        print(v.errors)
+    assert v.validate(doc) is True
 
 
 def test_axis_schema_type_9_g():
@@ -361,10 +369,13 @@ def test_axis_schema_type_9_g():
         'v_start': 0.0,
         'v_stop': 0.0,
     }
-    assert validate_axis_type_9(doc) is False
+    v = Validator(axis_schema_type_9_grid)
+    if not v.validate(doc):
+        print(v.errors)
+    assert v.validate(doc) is False
 
 
-# Type 8 axis parameters
+# Type 10 axis parameters
 def test_axis_schema_type_10_a():
     # Missing fields
     doc = {'scale_type': 'linear',
