@@ -359,11 +359,13 @@ axis_info_type_6: Dict[str, dict] = axis_info_generic_a
 # type 7 specific axis params
 axis_info_type_7: Dict[str, dict] = axis_info_generic_a
 # type 8 specific axis params
-axis_info_type_8: Dict[str, dict] = {
+axis_info_type_8_function: Dict[str, dict] = {
     'function': {
-        'rules': {'required': True,
+        'rules': {'required': False,
                   'check_with': is_1_param_function,
-                  'excludes': ['function_x', 'function_y']},
+                  'nullable': True,
+                  'excludes': ['function_x', 'function_y']
+                  },
         'info': 'Function in equation.',
         'default': None
     },
@@ -376,20 +378,35 @@ axis_info_type_8: Dict[str, dict] = {
         'rules': {'required': True, 'type': ['float', 'integer']},
         'info': "Maximum value of function variable.",
         'default': None
+    }
+}
+
+axis_info_type_8_function_xy: Dict[str, dict] = {
+    'u_min': {
+        'rules': {'required': True, 'type': ['float', 'integer']},
+        'info': "Minimum value of function variable.",
+        'default': None
+    },
+    'u_max': {
+        'rules': {'required': True, 'type': ['float', 'integer']},
+        'info': "Maximum value of function variable.",
+        'default': None
     },
     'function_x': {
-        'rules': {'required': True,
+        'rules': {'required': False,
                   'check_with': is_1_param_function,
-                  'dependencies': ['function_y'],
-                  'excludes': 'function'},
+                  'nullable': True,
+                  'dependencies': ['function_y']
+                  },
         'info': 'Function in equation.',
         'default': None
     },
     'function_y': {
-        'rules': {'required': True,
+        'rules': {'required': False,
                   'check_with': is_1_param_function,
-                  'dependencies': ['function_x'],
-                  'excludes': 'function'},
+                  'nullable': True,
+                  'dependencies': ['function_x']
+                  },
         'info': 'Function in equation.',
         'default': None
     }
@@ -747,7 +764,10 @@ axis_schema_type_4: Dict[str, dict] = give_rules_from_dictionaries(axis_info_com
 axis_schema_type_5: Dict[str, dict] = give_rules_from_dictionaries({}, axis_info_type_5)
 axis_schema_type_6: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common, axis_info_type_6)
 axis_schema_type_7: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common, axis_info_type_7)
-axis_schema_type_8: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common, axis_info_type_8)
+axis_schema_type_8_function: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common,
+                                                                            axis_info_type_8_function)
+axis_schema_type_8_function_xy: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common,
+                                                                               axis_info_type_8_function_xy)
 axis_schema_type_9_axis: Dict[str, dict] = give_rules_from_dictionaries(axis_info_common,
                                                                         axis_info_type_9_common,
                                                                         axis_info_type_9_axis)
@@ -755,21 +775,21 @@ axis_schema_type_9_grid = give_rules_from_dictionaries(axis_info_type_9_common, 
 axis_schema_type_10 = give_rules_from_dictionaries(axis_info_common, axis_info_type_10)
 axis_schema_type_10_w = give_rules_from_dictionaries(axis_info_common, axis_info_type_10_w)
 
-
+# only values that are filled automatically, others users need to give
 def give_default_axis_values(axis_type: str) -> Dict[str, dict]:
     switcher = {
-        'type_1': give_default_values_from_dictionaries(axis_info_common, axis_info_type_1),
-        'type_2': give_default_values_from_dictionaries(axis_info_common, axis_info_type_2),
-        'type_3': give_default_values_from_dictionaries(axis_info_common, axis_info_type_3),
-        'type_4': give_default_values_from_dictionaries(axis_info_common, axis_info_type_4),
-        'type_5': give_default_values_from_dictionaries(axis_info_common, axis_info_type_5),
-        'type_6': give_default_values_from_dictionaries(axis_info_common, axis_info_type_6),
-        'type_7': give_default_values_from_dictionaries(axis_info_common, axis_info_type_7),
-        'type_8': give_default_values_from_dictionaries(axis_info_common, axis_info_type_8),
-        'type_9_axis': give_default_values_from_dictionaries(axis_info_common, axis_info_type_9_axis),
-        'type_9_grid': give_default_values_from_dictionaries(axis_info_common, axis_info_type_9_grid),
-        'type_10': give_default_values_from_dictionaries(axis_info_common, axis_info_type_10),
-        'type_10_w': give_default_values_from_dictionaries(axis_info_common, axis_info_type_10_w)
+        'type_1': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_1),
+        'type_2': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_2),
+        'type_3': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_3),
+        'type_4': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_4),
+        'type_5': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_5),
+        'type_6': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_6),
+        'type_7': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_7),
+        'type_8': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_8),
+        'type_9_axis': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_9_axis),
+        'type_9_grid': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_9_grid),
+        'type_10': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_10),
+        'type_10_w': give_default_values_from_dictionaries(axis_info_common),  #, axis_info_type_10_w)
     }
     result = switcher.get(axis_type, "Incorrect key")
     if result == "Incorrect key":
@@ -789,21 +809,13 @@ new_dict = {key: {k:v for k,v in value.items() if k!='rules'} for key, value in 
 
 """
 
-
-
-
-
-
-
-
 # validates type 9, basically applies different rules based on if scale is grid or axis
 
 
-
 if __name__ == "__main__":
-    #pprint(axis_schema_type_9_axis)
+    # pprint(axis_schema_type_9_axis)
     pprint(give_default_axis_values('type_1'))
-    #pprint(give_required_fields(axis_schema_type_10))
-    #pprint(give_required_fields(axis_schema_type_10_w))
+    # pprint(give_required_fields(axis_schema_type_10))
+    # pprint(give_required_fields(axis_schema_type_10_w))
 
 # pprint(axis_default_values_type_1)

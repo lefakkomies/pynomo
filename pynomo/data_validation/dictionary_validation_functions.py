@@ -28,13 +28,17 @@ from pyx import color
 
 # Generic helpers
 def is_1_param_function(field: Any, value: Any, error: Callable):
-    if not callable(value):
+    if value is None:
+        pass
+    elif not callable(value):
         error(field, "Must be a function")
     elif len(signature(value).parameters) != 1:
         error(field, "Must be one parameter function")
 
 
 def is_2_param_function(field: Any, value: Any, error: Callable):
+    if value is None:
+        pass
     if not callable(value):
         error(field, "Must be a function")
     elif len(signature(value).parameters) != 2:

@@ -30,7 +30,10 @@ from pynomo.data_validation.dictionary_validation_functions import check_general
 from pynomo.data_validation.axis_validators import validate_type_1_axis_params, validate_type_2_axis_params, \
     validate_type_3_axis_params, \
     validate_type_4_axis_params, validate_type_8_axis_params, validate_type_9_axis_params, \
-    validate_type_10_w_axis_params, validate_type_1_axis_params_
+    validate_type_10_w_axis_params, validate_type_1_axis_params_, validate_type_2_axis_params_, \
+    validate_type_3_axis_params_, validate_type_4_axis_params_, validate_type_6_axis_params_, \
+    validate_type_7_axis_params_, validate_type_8_axis_params_, validate_type_9_axis_params_, \
+    validate_type_10_w_axis_params_, validate_type_10_axis_params_
 
 #
 # Block parameter definitions.
@@ -104,17 +107,17 @@ block_info_type_1 = {
 # type 2 specific block params
 block_info_type_2 = {
     'f1_params': {
-        'rules': {'required': True, 'check_with': validate_type_2_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_2_axis_params_},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'check_with': validate_type_2_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_2_axis_params_},
         'info': 'Axis parameters defining second scale.',
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'check_with': validate_type_2_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_2_axis_params_},
         'info': 'Axis parameters defining third scale.',
         'default': None
     }
@@ -122,7 +125,13 @@ block_info_type_2 = {
 # type 3 specific block params
 block_info_type_3 = {
     'f_params': {
-        'rules': {'required': True, 'check_with': validate_type_3_axis_params},
+        'rules': {'required': True,
+                  'type': 'list',
+                  'minlength': 4,
+                  'schema': {
+                      'type': 'dict',
+                      'check_with': validate_type_3_axis_params_}
+                  },
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
@@ -147,22 +156,22 @@ block_info_type_3 = {
 # type 4 specific block params
 block_info_type_4 = {
     'f1_params': {
-        'rules': {'required': True, 'check_with': validate_type_4_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_4_axis_params_},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'check_with': validate_type_4_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_4_axis_params_},
         'info': 'Axis parameters defining second scale.',
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'check_with': validate_type_4_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_4_axis_params_},
         'info': 'Axis parameters defining third scale.',
         'default': None
     },
     'f4_params': {
-        'rules': {'required': True, 'check_with': validate_type_4_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_4_axis_params_},
         'info': 'Axis parameters defining fourth scale.',
         'default': None
     },
@@ -574,12 +583,12 @@ block_info_type_6 = {
         'default': 0.0
     },
     'f1_params': {
-        'rules': {'required': True, 'check_with': check_general_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_6_axis_params_},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'check_with': check_general_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_6_axis_params_},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
@@ -592,17 +601,17 @@ block_info_type_6 = {
 # type 7 specific block params
 block_info_type_7 = {
     'f1_params': {
-        'rules': {'required': True, 'check_with': check_general_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_7_axis_params_},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'check_with': check_general_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_7_axis_params_},
         'info': 'Axis parameters defining second scale.',
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'check_with': check_general_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_7_axis_params_},
         'info': 'Axis parameters defining third scale.',
         'default': None
     },
@@ -619,8 +628,8 @@ block_info_type_7 = {
 }
 # type 8 specific block params
 block_info_type_8 = {
-    'f1_params': {
-        'rules': {'required': True, 'check_with': validate_type_8_axis_params},
+    'f_params': {
+        'rules': {'required': True, 'check_with': validate_type_8_axis_params_},
         'info': 'Axis parameters defining first scale.',
         'default': None
     },
@@ -633,17 +642,17 @@ block_info_type_8 = {
 # type 9 specific block params
 block_info_type_9 = {
     'f1_params': {
-        'rules': {'required': True, 'check_with': validate_type_9_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_9_axis_params_},
         'info': 'Axis parameters defining first scale or grid.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'check_with': validate_type_9_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_9_axis_params_},
         'info': 'Axis parameters defining second scale or grid.',
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'check_with': validate_type_9_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_9_axis_params_},
         'info': 'Axis parameters defining third scale or grid.',
         'default': None
     },
@@ -656,17 +665,17 @@ block_info_type_9 = {
 # type 10 specific block params
 block_info_type_10 = {
     'f1_params': {
-        'rules': {'required': True, 'check_with': check_general_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_10_axis_params_},
         'info': 'Axis parameters defining first scale or grid.',
         'default': None
     },
     'f2_params': {
-        'rules': {'required': True, 'check_with': check_general_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_10_axis_params_},
         'info': 'Axis parameters defining second scale or grid.',
         'default': None
     },
     'f3_params': {
-        'rules': {'required': True, 'check_with': validate_type_10_w_axis_params},
+        'rules': {'required': True, 'check_with': validate_type_10_w_axis_params_},
         'info': 'Axis parameters defining third scale or grid.',
         'default': None
     }

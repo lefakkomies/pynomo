@@ -3,8 +3,9 @@ from cerberus import Validator
 
 from pynomo.data_validation.axis_schemas import axis_schema_type_1, axis_schema_common, axis_schema_type_2, \
     axis_schema_type_3, axis_schema_type_4, axis_schema_type_5, axis_schema_type_6, \
-    axis_schema_type_8, axis_schema_type_7, axis_schema_type_9_axis, axis_schema_type_9_grid, validate_axis_type_9, \
-    axis_schema_type_10, axis_schema_type_10_w, give_default_axis_values
+    axis_schema_type_7, axis_schema_type_9_axis, axis_schema_type_9_grid, \
+    axis_schema_type_10, axis_schema_type_10_w, give_default_axis_values, axis_schema_type_8_function, \
+    axis_schema_type_8_function_xy
 
 
 # Common axis parameters
@@ -238,7 +239,7 @@ def test_axis_schema_type_7_c():
 def test_axis_schema_type_8_a():
     # Missing fields
     doc = {'scale_type': 'linear', 'tick_distance_smart': 30, 'base_stop': None}
-    v = Validator(axis_schema_type_8)
+    v = Validator(axis_schema_type_8_function)
     if not v.validate(doc):
         print(v.errors)
     assert v.validate(doc) is False
@@ -247,7 +248,7 @@ def test_axis_schema_type_8_a():
 def test_axis_schema_type_8_b():
     # Invalid document (missing all fields)
     doc = {'name': 'Jane Doe', 'email': 'janedoe@example.com'}
-    v = Validator(axis_schema_type_8)
+    v = Validator(axis_schema_type_8_function_xy)
     if not v.validate(doc):
         print(v.errors)
     assert v.validate(doc) is False
@@ -259,7 +260,19 @@ def test_axis_schema_type_8_c():
            'function': lambda x: x,
            'u_min': 0,
            'u_max': 1.0}
-    v = Validator(axis_schema_type_8)
+    v = Validator(axis_schema_type_8_function)
+    if not v.validate(doc):
+        print(v.errors)
+    assert v.validate(doc) is True
+
+def test_axis_schema_type_8_d():
+    # No fields actually
+    doc = {'scale_type': 'linear',
+           'function_x': lambda x: x,
+           'function_y': lambda x: x,
+           'u_min': 0,
+           'u_max': 1.0}
+    v = Validator(axis_schema_type_8_function_xy)
     if not v.validate(doc):
         print(v.errors)
     assert v.validate(doc) is True
