@@ -75,11 +75,6 @@ def check_text_format_string(field: Any, value: Any, error: Callable):
         error(field, f"{value} does not match the required format")
 
 
-def check_extra_params(field: Any, value: Any, error: Callable):
-    # TODO: check extra-params dictionary
-    pass
-
-
 def check_extra_titles(field: Any, value: Any, error: Callable):
     # TODO: check
     pass

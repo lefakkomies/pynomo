@@ -29,7 +29,7 @@ from pprint import pprint
 from typing import Dict, Union, List
 
 from pynomo.data_validation.dictionary_validation_functions import scale_type_strings, tick_level_integers, \
-    check_manual_axis_data, is_1_param_function, check_text_format_string, check_extra_params, check_pyx_text_size_type, \
+    check_manual_axis_data, is_1_param_function, check_text_format_string, check_pyx_text_size_type, \
     check_pyx_color_param, check_extra_titles, is_2_param_function, check_pyx_linewidth_param
 from pynomo.data_validation.validation_helpers import _give_rules_from_dictionaries, \
     _give_default_values_from_dictionaries
@@ -146,9 +146,9 @@ _axis_info_common: Dict[str, dict] = {
         'default': "$%4.4g$"
     },
     'extra_params': {
-        'rules': {'required': False, 'check_with': check_extra_params},
+        'rules': {'required': False, 'type': 'list'},
         'info': "List of dictionary of params to be drawn additionally.",
-        'default': 0.0
+        'default': []
     },
     'text_distance_0': {
         'rules': {'required': False, 'type': ['float', 'integer']},
@@ -734,6 +734,8 @@ axis_schema_type_1_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_1)
 axis_schema_type_1_extra_params.pop("function", None)
 
 axis_schema_type_2: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_2)
+# TODO: make similar extra_params definitions as for type 1
+
 axis_schema_type_3: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_3)
 axis_schema_type_4: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_4)
 axis_schema_type_5: Dict[str, dict] = _give_rules_from_dictionaries({}, _axis_info_type_5)

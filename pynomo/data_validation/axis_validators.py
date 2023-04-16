@@ -125,6 +125,8 @@ def validate_type_2_axis_params(field: Any, value: Any, error: Callable):
     ok, errors = validate_axis_params('type_2', value)
     if not ok:
         error(field, str(errors))
+        return ok, errors
+    # TODO: extra_params handling
     return ok, errors
 
 
