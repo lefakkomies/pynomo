@@ -71,7 +71,7 @@ def validate_type_1_block_params(field: Any, value: Any, error: Callable) -> (bo
     ok_: bool
     errors_: Dict[str, Union[str, List[str]]]
     ok_, errors_ = validate_block_params('type_1', value)
-    if not ok:
+    if not ok_:
         error(errors_, str(errors_))
     return ok_, errors_
 
@@ -152,7 +152,7 @@ def validate_type_10_block_params(field: Any, value: Any, error: Callable) -> (b
     ok_: bool
     errors_: Dict[str, Union[str, List[str]]]
     ok_, errors_ = validate_block_params('type_10', value)
-    if not ok:
+    if not ok_:
         error(errors_, errors_)
     return ok_, errors_
 

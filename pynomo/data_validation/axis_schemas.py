@@ -21,6 +21,8 @@
 """ Schemas for axes that are used for validation with cerberos library
 
 """
+from copy import deepcopy
+
 import pyx
 from pyx import color
 from pprint import pprint
@@ -728,6 +730,9 @@ _axis_info_type_10_w: Dict[str, dict] = {
 ######################################################################################
 axis_schema_common: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common)
 axis_schema_type_1: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_1)
+axis_schema_type_1_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_1)
+axis_schema_type_1_extra_params.pop("function", None)
+
 axis_schema_type_2: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_2)
 axis_schema_type_3: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_3)
 axis_schema_type_4: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_4)

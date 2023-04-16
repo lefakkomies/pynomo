@@ -73,6 +73,33 @@ def test_validate_type_1_axis_params_d(fixture):
     assert ok is False
 
 
+def test_validate_type_1_axis_params_e(fixture):
+    # needed minimum axis params, with extra params
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_min': 0,
+                   'u_max': 10, }
+              ]}
+    ok, errors = validate_type_1_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is True
+
+def test_validate_type_1_axis_params_f(fixture):
+    # needed minimum axis params, with extra params, incorrect
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_minnnn': 0,
+                   'u_maxxxx': 10, }
+              ]}
+    ok, errors = validate_type_1_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
 ######################################################################################
 # Type 2
 ######################################################################################
