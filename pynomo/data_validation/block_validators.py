@@ -68,93 +68,93 @@ def validate_block_params(block_type: str, params: Dict[str, dict]) -> (bool, Di
 
 
 def validate_type_1_block_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
-    ok: bool
-    errors: Dict[str, Union[str, List[str]]]
-    ok, errors = validate_block_params('type_1', value)
+    ok_: bool
+    errors_: Dict[str, Union[str, List[str]]]
+    ok_, errors_ = validate_block_params('type_1', value)
     if not ok:
-        error(errors, str(errors))
-    return ok, errors
+        error(errors_, str(errors_))
+    return ok_, errors_
 
 
 def validate_type_2_block_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
-    ok: bool
-    errors: Dict[str, Union[str, List[str]]]
-    ok, errors = validate_block_params('type_2', value)
-    if not ok:
-        error(errors, errors)
-    return ok, errors
+    ok_: bool
+    errors_: Dict[str, Union[str, List[str]]]
+    ok_, errors_ = validate_block_params('type_2', value)
+    if not ok_:
+        error(errors_, errors_)
+    return ok_, errors_
 
 
 def validate_type_3_block_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
-    ok: bool
-    errors: Dict[str, Union[str, List[str]]]
-    ok, errors = validate_block_params('type_3', value)
-    if not ok:
-        error(errors, errors)
-    return ok, errors
+    ok_: bool
+    errors_: Dict[str, Union[str, List[str]]]
+    ok_, errors_ = validate_block_params('type_3', value)
+    if not ok_:
+        error(errors_, errors_)
+    return ok_, errors_
 
 
 def validate_type_4_block_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
-    ok: bool
-    errors: Dict[str, Union[str, List[str]]]
-    ok, errors = validate_block_params('type_4', value)
-    if not ok:
-        error(errors, errors)
-    return ok, errors
+    ok_: bool
+    errors_: Dict[str, Union[str, List[str]]]
+    ok_, errors_ = validate_block_params('type_4', value)
+    if not ok_:
+        error(errors_, errors_)
+    return ok_, errors_
 
 
 def validate_type_5_block_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
-    ok: bool
-    errors: Dict[str, Union[str, List[str]]]
-    ok, errors = validate_block_params('type_5', value)
-    if not ok:
-        error(errors, errors)
-    return ok, errors
+    ok_: bool
+    errors_: Dict[str, Union[str, List[str]]]
+    ok_, errors_ = validate_block_params('type_5', value)
+    if not ok_:
+        error(errors_, errors_)
+    return ok_, errors_
 
 
 def validate_type_6_block_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
-    ok: bool
-    errors: Dict[str, Union[str, List[str]]]
-    ok, errors = validate_block_params('type_6', value)
-    if not ok:
-        error(errors, errors)
-    return ok, errors
+    ok_: bool
+    errors_: Dict[str, Union[str, List[str]]]
+    ok_, errors_ = validate_block_params('type_6', value)
+    if not ok_:
+        error(errors_, errors_)
+    return ok_, errors_
 
 
 def validate_type_7_block_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
-    ok: bool
-    errors: Dict[str, Union[str, List[str]]]
-    ok, errors = validate_block_params('type_7', value)
-    if not ok:
-        error(errors, errors)
-    return ok, errors
+    ok_: bool
+    errors_: Dict[str, Union[str, List[str]]]
+    ok_, errors_ = validate_block_params('type_7', value)
+    if not ok_:
+        error(errors_, errors_)
+    return ok_, errors_
 
 
 def validate_type_8_block_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
-    ok: bool
-    errors: Dict[str, Union[str, List[str]]]
-    ok, errors = validate_block_params('type_8', value)
-    if not ok:
-        error(errors, str(errors))
-    return ok, errors
+    ok_: bool
+    errors_: Dict[str, Union[str, List[str]]]
+    ok_, errors_ = validate_block_params('type_8', value)
+    if not ok_:
+        error(errors_, str(errors_))
+    return ok_, errors_
 
 
 def validate_type_9_block_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
-    ok: bool
-    errors: Dict[str, Union[str, List[str]]]
-    ok, errors = validate_block_params('type_9', value)
-    if not ok:
-        error(errors, errors)
-    return ok, errors
+    ok_: bool
+    errors_: Dict[str, Union[str, List[str]]]
+    ok_, errors_ = validate_block_params('type_9', value)
+    if not ok_:
+        error(errors_, errors_)
+    return ok_, errors_
 
 
 def validate_type_10_block_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
-    ok: bool
-    errors: Dict[str, Union[str, List[str]]]
-    ok, errors = validate_block_params('type_10', value)
+    ok_: bool
+    errors_: Dict[str, Union[str, List[str]]]
+    ok_, errors_ = validate_block_params('type_10', value)
     if not ok:
-        error(errors, errors)
-    return ok, errors
+        error(errors_, errors_)
+    return ok_, errors_
 
 
 if __name__ == "__main__":

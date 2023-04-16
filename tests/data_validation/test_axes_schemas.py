@@ -57,7 +57,7 @@ def test_axis_schema_type_1_b():
 
 def test_axis_schema_type_1_c():
     # Required fields
-    doc = {'scale_type': 'linear', 'function': lambda x: x, 'u_min': 0, 'u_max': 1.0}
+    doc = {'function': lambda x: x, 'u_min': 0, 'u_max': 1.0}
     v = Validator(axis_schema_type_1)
     if not v.validate(doc):
         print(v.errors)

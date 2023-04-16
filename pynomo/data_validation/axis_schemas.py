@@ -29,7 +29,8 @@ from typing import Dict, Union, List
 from pynomo.data_validation.dictionary_validation_functions import scale_type_strings, tick_level_integers, \
     check_manual_axis_data, is_1_param_function, check_text_format_string, check_extra_params, check_pyx_text_size_type, \
     check_pyx_color_param, check_extra_titles, is_2_param_function, check_pyx_linewidth_param
-
+from pynomo.data_validation.validation_helpers import _give_rules_from_dictionaries, \
+    _give_default_values_from_dictionaries
 
 ######################################################################################
 # Schemas for axes
@@ -722,76 +723,29 @@ _axis_info_type_10_w: Dict[str, dict] = {
     }
 }
 
-
-def give_required_fields(dict_in: Dict[str, dict]) -> Dict[str, dict]:
-    result = []
-    # this is easier to read than dict comprehensions...
-    for key in dict_in.keys():
-        if 'required' in dict_in[key]:
-            if dict_in[key]['required']:
-                result += [key]
-    return result
-
-
-def give_dictionary_dropping_rules(dict_in: Dict[str, dict]) -> Dict[str, dict]:
-    result = {}
-    # this is easier to read than dict comprehensions...
-    for key in dict_in.keys():
-        result[key] = dict_in[key]['rules']
-    return result
-
-
-def give_dictionary_default_values(dict_in: Dict[str, dict]) -> Dict[str, dict]:
-    result = {}
-    # this is easier to read than dict comprehensions...
-    for key in dict_in.keys():
-        result[key] = dict_in[key]['default']
-    return result
-
-
-# def give_rules_from_dictionaries(dict1, dict2):
-#    return {
-#        **give_dictionary_dropping_rules(dict1),
-#        **give_dictionary_dropping_rules(dict2)
-#    }
-
-def give_rules_from_dictionaries(*dicts):
-    return give_dictionary_dropping_rules({k: v for d in dicts for k, v in d.items()})
-
-
-# def give_default_values_from_dictionaries(dict1, dict2):
-#    return {
-#        **give_dictionary_default_values(dict1),
-#        **give_dictionary_default_values(dict2)
-#    }
-
-
-def give_default_values_from_dictionaries(*dicts):
-    return give_dictionary_default_values({k: v for d in dicts for k, v in d.items()})
-
 ######################################################################################
 # Actual axis schemas to be used outside this file
 ######################################################################################
-axis_schema_common: Dict[str, dict] = give_dictionary_dropping_rules(_axis_info_common)
-axis_schema_type_1: Dict[str, dict] = give_rules_from_dictionaries(_axis_info_common, _axis_info_type_1)
-axis_schema_type_2: Dict[str, dict] = give_rules_from_dictionaries(_axis_info_common, _axis_info_type_2)
-axis_schema_type_3: Dict[str, dict] = give_rules_from_dictionaries(_axis_info_common, _axis_info_type_3)
-axis_schema_type_4: Dict[str, dict] = give_rules_from_dictionaries(_axis_info_common, _axis_info_type_4)
-axis_schema_type_5: Dict[str, dict] = give_rules_from_dictionaries({}, _axis_info_type_5)
-axis_schema_type_6: Dict[str, dict] = give_rules_from_dictionaries(_axis_info_common, _axis_info_type_6)
-axis_schema_type_7: Dict[str, dict] = give_rules_from_dictionaries(_axis_info_common, _axis_info_type_7)
-axis_schema_type_8_function: Dict[str, dict] = give_rules_from_dictionaries(_axis_info_common,
-                                                                            _axis_info_type_8_function)
-axis_schema_type_8_function_xy: Dict[str, dict] = give_rules_from_dictionaries(_axis_info_common,
-                                                                               _axis_info_type_8_function_xy)
-axis_schema_type_9_axis: Dict[str, dict] = give_rules_from_dictionaries(_axis_info_common,
-                                                                        _axis_info_type_9_common,
-                                                                        _axis_info_type_9_axis)
-axis_schema_type_9_grid = give_rules_from_dictionaries(_axis_info_type_9_common,
-                                                       _axis_info_type_9_grid,
-                                                       _axis_info_type_9_grid_common)
-axis_schema_type_10 = give_rules_from_dictionaries(_axis_info_common, _axis_info_type_10)
-axis_schema_type_10_w = give_rules_from_dictionaries(_axis_info_common, _axis_info_type_10_w)
+axis_schema_common: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common)
+axis_schema_type_1: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_1)
+axis_schema_type_2: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_2)
+axis_schema_type_3: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_3)
+axis_schema_type_4: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_4)
+axis_schema_type_5: Dict[str, dict] = _give_rules_from_dictionaries({}, _axis_info_type_5)
+axis_schema_type_6: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_6)
+axis_schema_type_7: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_7)
+axis_schema_type_8_function: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common,
+                                                                             _axis_info_type_8_function)
+axis_schema_type_8_function_xy: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common,
+                                                                                _axis_info_type_8_function_xy)
+axis_schema_type_9_axis: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common,
+                                                                         _axis_info_type_9_common,
+                                                                         _axis_info_type_9_axis)
+axis_schema_type_9_grid = _give_rules_from_dictionaries(_axis_info_type_9_common,
+                                                        _axis_info_type_9_grid,
+                                                        _axis_info_type_9_grid_common)
+axis_schema_type_10 = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_10)
+axis_schema_type_10_w = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_10_w)
 
 
 ######################################################################################
@@ -799,20 +753,21 @@ axis_schema_type_10_w = give_rules_from_dictionaries(_axis_info_common, _axis_in
 ######################################################################################
 def give_default_axis_values(axis_type: str) -> Dict[str, dict]:
     switcher = {
-        'type_1': give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_1),
-        'type_2': give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_2),
-        'type_3': give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_3),
-        'type_4': give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_4),
-        'type_5': give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_5),
-        'type_6': give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_6),
-        'type_7': give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_7),
-        'type_8': give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_8),
-        'type_9_axis': give_default_values_from_dictionaries(_axis_info_common,
-                                                             _axis_info_type_9_common),  # , axis_info_type_9_axis),
-        'type_9_grid': give_default_values_from_dictionaries(_axis_info_type_9_common,
-                                                             _axis_info_type_9_grid_common),  # , axis_info_type_9_grid),
-        'type_10': give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_10),
-        'type_10_w': give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_10_w)
+        'type_1': _give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_1),
+        'type_2': _give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_2),
+        'type_3': _give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_3),
+        'type_4': _give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_4),
+        'type_5': _give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_5),
+        'type_6': _give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_6),
+        'type_7': _give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_7),
+        'type_8': _give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_8),
+        'type_9_axis': _give_default_values_from_dictionaries(_axis_info_common,
+                                                              _axis_info_type_9_common),  # , axis_info_type_9_axis),
+        'type_9_grid': _give_default_values_from_dictionaries(_axis_info_type_9_common,
+                                                              _axis_info_type_9_grid_common),
+        # , axis_info_type_9_grid),
+        'type_10': _give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_10),
+        'type_10_w': _give_default_values_from_dictionaries(_axis_info_common),  # , axis_info_type_10_w)
     }
     result = switcher.get(axis_type, "Incorrect key")
     if result == "Incorrect key":
@@ -821,23 +776,8 @@ def give_default_axis_values(axis_type: str) -> Dict[str, dict]:
     return result
 
 
-"""
-axis_schema_type_1 = 
-    {
-    **{key: axis_info_common[key]['rules'] for key in axis_info_common if 'rules' in axis_info_common[key]},
-    **{key: axis_info_type_1[key]['rules'] for key in axis_info_type_1 if 'rules' in axis_info_type_1[key]}
-}
-
-new_dict = {key: {k:v for k,v in value.items() if k!='rules'} for key, value in axis_info_type_10_w.items() if 'rules' in value}
-
-"""
-
-
-
 if __name__ == "__main__":
     # pprint(axis_schema_type_9_axis)
     pprint(give_default_axis_values('type_1'))
     # pprint(give_required_fields(axis_schema_type_10))
     # pprint(give_required_fields(axis_schema_type_10_w))
-
-

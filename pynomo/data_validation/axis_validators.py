@@ -35,6 +35,19 @@
         ok, errors = validate_type_1_axis_params("axis 1", params, error)
 
 
+    Note:
+
+        actual validators are testable because they can return error bit and errors like in
+
+        validate_type_1_axis_params()
+
+        However, these can not be used inside nested schemas because returned value mixes the
+        logic and error should be communicated via error() function. Thus, functions like
+
+        _validate_type_1_axis_params()
+
+        are used instead that return nothing
+
 """
 
 from typing import Dict, Union, List, Any, Callable
@@ -69,18 +82,6 @@ def validate_axis_params(axis_type: str, params: Dict[str, dict]) -> (bool, Dict
     return result, errors
 
 
-"""
-def validate_axis_type_9(params: dict) -> (bool, Dict[str, Union[str, List[str]]]):
-    if 'grid' in params.keys():
-        if params['grid'] is False:
-            return validate_axis_params('type_9_axis')
-        if params['grid'] is True:
-            return validate_axis_params('type_9_grid')
-    else:  # grid not defined assume 'grid' = False
-        return validate_axis_params('type_9_axis')
-"""
-
-
 ######################################################################################
 # Type 1
 ######################################################################################
@@ -106,6 +107,7 @@ def validate_type_2_axis_params(field: Any, value: Any, error: Callable):
     ok, errors = validate_axis_params('type_2', value)
     if not ok:
         error(field, str(errors))
+    return ok, errors
 
 
 def validate_type_2_axis_params_(field: Any, value: Any, error: Callable):
@@ -225,7 +227,8 @@ def validate_type_8_axis_params_(field: Any, value: Any, error: Callable):
 ######################################################################################
 # Type 9
 ######################################################################################
-def validate_type_9_axis_grid_params(field: Any, value: Any, error: Callable) -> (bool, Dict[str, Union[str, List[str]]]):
+def validate_type_9_axis_grid_params(field: Any, value: Any, error: Callable) -> (
+bool, Dict[str, Union[str, List[str]]]):
     if not isinstance(value, dict):
         error_str = f"Axis definitions should be a dictionary in {field}"
         error(field, error_str)
@@ -282,3 +285,9 @@ def validate_type_10_w_axis_params(field: Any, value: Any, error: Callable):
 
 def validate_type_10_w_axis_params_(field: Any, value: Any, error: Callable):
     validate_type_10_w_axis_params(field, value, error)
+
+if __name__ == '__main__':
+    from pprint import pprint
+    from pynomo.data_validation.axis_schemas import give_default_axis_values
+
+    pprint(give_default_axis_values('type_9_axis'))

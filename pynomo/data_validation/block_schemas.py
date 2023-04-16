@@ -25,7 +25,7 @@ from pprint import pprint
 from typing import Dict
 from pyx import color
 
-from pynomo.data_validation.axis_schemas import give_rules_from_dictionaries
+
 from pynomo.data_validation.dictionary_validation_functions import check_pyx_color_param, \
     is_1_param_function, \
     check_manual_axis_data, scale_type_strings, check_text_format_string
@@ -34,6 +34,7 @@ from pynomo.data_validation.axis_validators import validate_type_1_axis_params_,
     validate_type_3_axis_params_, validate_type_4_axis_params_, validate_type_6_axis_params_, \
     validate_type_7_axis_params_, validate_type_8_axis_params_, validate_type_9_axis_grid_params_, \
     validate_type_10_w_axis_params_, validate_type_10_axis_params_
+from pynomo.data_validation.validation_helpers import _give_rules_from_dictionaries
 
 ######################################################################################
 # Block parameter definitions
@@ -712,16 +713,16 @@ _block_info_type_10 = {
 ######################################################################################
 # Actual block schemas
 ######################################################################################
-block_schema_type_1: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_1)
-block_schema_type_2: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_2)
-block_schema_type_3: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_3)
-block_schema_type_4: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_4)
-block_schema_type_5: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_5)
-block_schema_type_6: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_6)
-block_schema_type_7: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_7)
-block_schema_type_8: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_8)
-block_schema_type_9: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_9)
-block_schema_type_10: Dict[str, dict] = give_rules_from_dictionaries(_block_info_common, _block_info_type_10)
+block_schema_type_1: Dict[str, dict] = _give_rules_from_dictionaries(_block_info_common, _block_info_type_1)
+block_schema_type_2: Dict[str, dict] = _give_rules_from_dictionaries(_block_info_common, _block_info_type_2)
+block_schema_type_3: Dict[str, dict] = _give_rules_from_dictionaries(_block_info_common, _block_info_type_3)
+block_schema_type_4: Dict[str, dict] = _give_rules_from_dictionaries(_block_info_common, _block_info_type_4)
+block_schema_type_5: Dict[str, dict] = _give_rules_from_dictionaries(_block_info_common, _block_info_type_5)
+block_schema_type_6: Dict[str, dict] = _give_rules_from_dictionaries(_block_info_common, _block_info_type_6)
+block_schema_type_7: Dict[str, dict] = _give_rules_from_dictionaries(_block_info_common, _block_info_type_7)
+block_schema_type_8: Dict[str, dict] = _give_rules_from_dictionaries(_block_info_common, _block_info_type_8)
+block_schema_type_9: Dict[str, dict] = _give_rules_from_dictionaries(_block_info_common, _block_info_type_9)
+block_schema_type_10: Dict[str, dict] = _give_rules_from_dictionaries(_block_info_common, _block_info_type_10)
 
 if __name__ == "__main__":
     from cerberus import Validator
