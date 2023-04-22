@@ -2,7 +2,7 @@ import pytest
 from cerberus import Validator
 
 from pynomo.data_validation.axis_schemas import axis_schema_type_1, axis_schema_common, axis_schema_type_2, \
-    axis_schema_type_3, axis_schema_type_4, axis_schema_type_5, axis_schema_type_6, \
+    axis_schema_type_3, axis_schema_type_4, axis_schema_type_6, \
     axis_schema_type_7, axis_schema_type_9_axis, axis_schema_type_9_grid, \
     axis_schema_type_10, axis_schema_type_10_w, give_default_axis_values, axis_schema_type_8_function, \
     axis_schema_type_8_function_xy
@@ -149,6 +149,7 @@ def test_axis_schema_type_4_c():
 
 
 # Type 5 axis parameters
+""" NO axis parameters for type 5
 def test_axis_schema_type_5_a():
     # Missing fields
     doc = {'scale_type': 'linear', 'tick_distance_smart': 30, 'base_stop': None}
@@ -174,7 +175,7 @@ def test_axis_schema_type_5_c():
     if not v.validate(doc):
         print(v.errors)
     assert v.validate(doc) is False
-
+"""
 
 # Type 6 axis parameters
 def test_axis_schema_type_6_a():

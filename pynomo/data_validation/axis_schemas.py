@@ -640,6 +640,11 @@ _axis_info_type_9_grid_common: Dict[str, dict] = {
         'info': 'List of grid v values.',
         'default': []
     },
+    'extra_params': {
+        'rules': {'required': False, 'type': 'list'},
+        'info': "List of dictionary of params to be drawn additionally.",
+        'default': []
+    },
 }
 # params when 'grid'== False
 _axis_info_type_9_axis: Dict[str, dict] = {
@@ -734,26 +739,61 @@ axis_schema_type_1_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_1)
 axis_schema_type_1_extra_params.pop("function", None)
 
 axis_schema_type_2: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_2)
-# TODO: make similar extra_params definitions as for type 1
+axis_schema_type_2_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_2)
+axis_schema_type_2_extra_params.pop("function", None)
 
 axis_schema_type_3: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_3)
+axis_schema_type_3_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_3)
+axis_schema_type_3_extra_params.pop("function", None)
+
 axis_schema_type_4: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_4)
-axis_schema_type_5: Dict[str, dict] = _give_rules_from_dictionaries({}, _axis_info_type_5)
+axis_schema_type_4_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_4)
+axis_schema_type_4_extra_params.pop("function", None)
+
+# axis_schema_type_5: Dict[str, dict] = _give_rules_from_dictionaries({}, _axis_info_type_5)
 axis_schema_type_6: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_6)
+axis_schema_type_6_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_6)
+axis_schema_type_6_extra_params.pop("function", None)
+
 axis_schema_type_7: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_7)
+axis_schema_type_7_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_7)
+axis_schema_type_7_extra_params.pop("function", None)
+
 axis_schema_type_8_function: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common,
                                                                              _axis_info_type_8_function)
+axis_schema_type_8_function_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_8_function)
+axis_schema_type_8_function_extra_params.pop("function", None)
+
 axis_schema_type_8_function_xy: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common,
                                                                                 _axis_info_type_8_function_xy)
+axis_schema_type_8_function_xy_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_8_function_xy)
+axis_schema_type_8_function_xy_extra_params.pop("function", None)
+
 axis_schema_type_9_axis: Dict[str, dict] = _give_rules_from_dictionaries(_axis_info_common,
                                                                          _axis_info_type_9_common,
                                                                          _axis_info_type_9_axis)
+axis_schema_type_9_axis_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_9_axis)
+axis_schema_type_9_axis_extra_params.pop("f", None)
+axis_schema_type_9_axis_extra_params.pop("g", None)
+axis_schema_type_9_axis_extra_params.pop("h", None)
+
+
 axis_schema_type_9_grid = _give_rules_from_dictionaries(_axis_info_type_9_common,
                                                         _axis_info_type_9_grid,
                                                         _axis_info_type_9_grid_common)
-axis_schema_type_10 = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_10)
-axis_schema_type_10_w = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_10_w)
+axis_schema_type_9_grid_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_9_grid)
+axis_schema_type_9_grid_extra_params.pop("f_grid", None)
+axis_schema_type_9_grid_extra_params.pop("g_grid", None)
+axis_schema_type_9_grid_extra_params.pop("h_grid", None)
 
+axis_schema_type_10 = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_10)
+axis_schema_type_10_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_10)
+axis_schema_type_10_extra_params.pop("function", None)
+
+axis_schema_type_10_w = _give_rules_from_dictionaries(_axis_info_common, _axis_info_type_10_w)
+axis_schema_type_10_w_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_10_w)
+axis_schema_type_10_w_extra_params.pop("function_3", None)
+axis_schema_type_10_w_extra_params.pop("function_4", None)
 
 ######################################################################################
 # only (default) values that are filled automatically, others users need to give

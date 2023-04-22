@@ -86,6 +86,7 @@ def test_validate_type_1_axis_params_e(fixture):
     print(errors)
     assert ok is True
 
+
 def test_validate_type_1_axis_params_f(fixture):
     # needed minimum axis params, with extra params, incorrect
     params = {'function': lambda x: x,
@@ -139,6 +140,34 @@ def test_validate_type_2_axis_params_d(fixture):
     assert ok is False
 
 
+def test_validate_type_2_axis_params_e(fixture):
+    # needed minimum axis params, with extra params
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_min': 0,
+                   'u_max': 10, }
+              ]}
+    ok, errors = validate_type_2_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is True
+
+
+def test_validate_type_2_axis_params_f(fixture):
+    # needed minimum axis params, with extra params, incorrect
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_minnnn': 0,
+                   'u_maxxxx': 10, }
+              ]}
+    ok, errors = validate_type_2_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
 ######################################################################################
 # Type 3
 ######################################################################################
@@ -163,6 +192,34 @@ def test_validate_type_3_axis_params_b(fixture):
 def test_validate_type_3_axis_params_c(fixture):
     # incorrect params
     params = {'name': 'Jane Doe', 'email': 'janedoe@example.com'}
+    ok, errors = validate_type_3_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
+def test_validate_type_3_axis_params_e(fixture):
+    # needed minimum axis params, with extra params
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_min': 0,
+                   'u_max': 10, }
+              ]}
+    ok, errors = validate_type_3_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is True
+
+
+def test_validate_type_3_axis_params_f(fixture):
+    # needed minimum axis params, with extra params, incorrect
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_minnnn': 0,
+                   'u_maxxxx': 10, }
+              ]}
     ok, errors = validate_type_3_axis_params('params', params, fixture)
     print(errors)
     assert ok is False
@@ -207,6 +264,34 @@ def test_validate_type_4_axis_params_d(fixture):
     assert ok is False
 
 
+def test_validate_type_4_axis_params_e(fixture):
+    # needed minimum axis params, with extra params
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_min': 0,
+                   'u_max': 10, }
+              ]}
+    ok, errors = validate_type_4_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is True
+
+
+def test_validate_type_4_axis_params_f(fixture):
+    # needed minimum axis params, with extra params, incorrect
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_minnnn': 0,
+                   'u_maxxxx': 10, }
+              ]}
+    ok, errors = validate_type_4_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
 ######################################################################################
 # Type 6
 ######################################################################################
@@ -246,6 +331,34 @@ def test_validate_type_6_axis_params_d(fixture):
     assert ok is False
 
 
+def test_validate_type_6_axis_params_e(fixture):
+    # needed minimum axis params, with extra params
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_min': 0,
+                   'u_max': 10, }
+              ]}
+    ok, errors = validate_type_6_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is True
+
+
+def test_validate_type_6_axis_params_f(fixture):
+    # needed minimum axis params, with extra params, incorrect
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_minnnn': 0,
+                   'u_maxxxx': 10, }
+              ]}
+    ok, errors = validate_type_6_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
 ######################################################################################
 # Type 7
 ######################################################################################
@@ -280,6 +393,34 @@ def test_validate_type_7_axis_params_d(fixture):
     params = {'function': 1.0,
               'u_min': None,
               'u_max': 'ten'}
+    ok, errors = validate_type_7_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
+def test_validate_type_7_axis_params_e(fixture):
+    # needed minimum axis params, with extra params
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_min': 0,
+                   'u_max': 10, }
+              ]}
+    ok, errors = validate_type_7_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is True
+
+
+def test_validate_type_7_axis_params_f(fixture):
+    # needed minimum axis params, with extra params, incorrect
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_minnnn': 0,
+                   'u_maxxxx': 10, }
+              ]}
     ok, errors = validate_type_7_axis_params('params', params, fixture)
     print(errors)
     assert ok is False
@@ -354,6 +495,49 @@ def test_validate_type_8_axis_params_g(fixture):
         'function_y': lambda x: x,
         'u_min': 0,
         'u_max': 10}
+    ok, errors = validate_type_8_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
+def test_validate_type_8_axis_params_g(fixture):
+    # needed minimum axis params, with extra params
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_min': 0,
+                   'u_max': 10, }
+              ]}
+    ok, errors = validate_type_8_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is True
+
+
+def test_validate_type_8_axis_params_h(fixture):
+    # needed minimum axis params, with extra params, incorrect
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_minnnn': 0,
+                   'u_maxxxx': 10, }
+              ]}
+    ok, errors = validate_type_8_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
+def test_validate_type_8_axis_params_i(fixture):
+    # needed minimum axis params, with extra params, incorrect
+    params = {'function_x': lambda x: x,
+              'function_y': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_minnnn': 0,
+                   'u_maxxxx': 10, }
+              ]}
     ok, errors = validate_type_8_axis_params('params', params, fixture)
     print(errors)
     assert ok is False
@@ -457,6 +641,80 @@ def test_validate_type_9_axis_params_f(fixture):
     assert ok is True
 
 
+def test_validate_type_9_axis_params_g(fixture):
+    # needed minimum axis params, with extra params
+    params = {'f': lambda x: x,
+              'g': lambda x: x,
+              'h': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_min': 0,
+                   'u_max': 10, }
+              ]}
+    ok, errors = validate_type_9_axis_grid_params('params', params, fixture)
+    print(errors)
+    assert ok is True
+
+
+def test_validate_type_9_axis_params_h(fixture):
+    # needed minimum axis params, with extra params, incorrect
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_minnnn': 0,
+                   'u_maxxxx': 10, }
+              ]}
+    ok, errors = validate_type_9_axis_grid_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
+def test_validate_type_9_axis_params_i(fixture):
+    # needed minimum grid params, with extra params
+    params = {'f_grid': lambda x, y: x + y,
+              'g_grid': lambda x, y: x + y,
+              'h_grid': lambda x, y: x + y,
+              'grid': True,
+              'u_start': 0,
+              'u_stop': 10,
+              'v_start': 0,
+              'v_stop': 10,
+              'extra_params': [
+                  {'u_start': 0,
+                   'u_stop': 10,
+                   'v_start': 0,
+                   'v_stop': 10,
+                   }
+              ]}
+    ok, errors = validate_type_9_axis_grid_params('params', params, fixture)
+    print(errors)
+    assert ok is True
+
+
+def test_validate_type_9_axis_params_j(fixture):
+    # needed minimum axis params, with extra params, missing one param
+    params = {'f_grid': lambda x, y: x + y,
+              'g_grid': lambda x, y: x + y,
+              'h_grid': lambda x, y: x + y,
+              'grid': True,
+              'u_start': 0,
+              'u_stop': 10,
+              'v_start': 0,
+              'v_stop': 10,
+              'extra_params': [
+                  {'u_start': 0,
+                   'u_stop': 10,
+                   'v_start': 0,
+                   # 'v_stop': 10,  # this is needed
+                   }
+              ]}
+    ok, errors = validate_type_9_axis_grid_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
 ######################################################################################
 # Type 10
 ######################################################################################
@@ -512,6 +770,64 @@ def test_validate_type_10_axis_params_f(fixture):
               'function_4': lambda x: x,
               'u_min': 0,
               'u_max': 10}
+    ok, errors = validate_type_10_w_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is True
+
+
+def test_validate_type_10_axis_params_g(fixture):
+    # needed minimum axis params, with extra params
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_min': 0,
+                   'u_max': 10, }
+              ]}
+    ok, errors = validate_type_10_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is True
+
+
+def test_validate_type_10_axis_params_h(fixture):
+    # needed minimum axis params, with extra params, incorrect
+    params = {'function': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_minnnn': 0,
+                   'u_maxxxx': 10, }
+              ]}
+    ok, errors = validate_type_10_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
+def test_validate_type_10_axis_params_i(fixture):
+    # incorrect extra params
+    params = {'function_3': lambda x: x,
+              'function_4': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_minnnn': 0,
+                   'u_maxxxx': 10, }
+              ]}
+    ok, errors = validate_type_10_w_axis_params('params', params, fixture)
+    print(errors)
+    assert ok is False
+
+
+def test_validate_type_10_axis_params_j(fixture):
+    # ok extra_params
+    params = {'function_3': lambda x: x,
+              'function_4': lambda x: x,
+              'u_min': 0,
+              'u_max': 10,
+              'extra_params': [
+                  {'u_min': 0,
+                   'u_max': 10, }
+              ]}
     ok, errors = validate_type_10_w_axis_params('params', params, fixture)
     print(errors)
     assert ok is True
