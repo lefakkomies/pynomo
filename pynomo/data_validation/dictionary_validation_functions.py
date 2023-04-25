@@ -23,6 +23,8 @@ import pyx
 from cerberus import Validator
 from inspect import isfunction, signature
 from typing import Any, Callable, List, Union, Dict
+import numpy as np
+import numbers
 from pyx import color
 
 
@@ -45,11 +47,27 @@ def is_2_param_function(field: Any, value: Any, error: Callable):
         error(field, "Must be two parameter function")
 
 
+def is_3x3_list_of_numbers_(lst):
+    if not isinstance(lst, list) or len(lst) != 3:
+        return False
+    for inner_lst in lst:
+        if not isinstance(inner_lst, list) or len(inner_lst) != 3:
+            return False
+        for element in inner_lst:
+            if not isinstance(element, (int, float, complex, np.generic, numbers.Number)):
+                return False
+    return True
+
+
+def is_number(item):
+    if not isinstance(item, (int, float, complex, np.generic, numbers.Number)):
+        return False
+    return True
+
+
 def check_general_axis_params(field: Any, value: Any, error: Callable):
     # TODO:
     pass
-
-
 
 
 def check_pyx_color_param(field: Any, value: Any, error: Callable):
@@ -85,7 +103,7 @@ def validate_params_(schema: Dict[str, dict], params: Dict[str, dict]) -> (bool,
         return False, "Parameter not dictionary"
     v = Validator(schema)
     if not v.validate(params):
-        #print(v.errors)
+        # print(v.errors)
         return False, v.errors
     return True, v.errors
 
