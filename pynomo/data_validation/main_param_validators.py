@@ -25,6 +25,7 @@ import numbers
 import numpy as np
 from typing import Any, Callable, Dict, Union, List
 
+from pynomo.data_validation.block_validators import validate_block_params
 from pynomo.data_validation.dictionary_validation_functions import is_3x3_list_of_numbers_, is_number, validate_params_
 
 ######################################################################################
@@ -268,3 +269,27 @@ def validate_isopleth_params_(field: Any, value: Any, error: Callable):
     validate_isopleth_params(field, value, error)
 
 
+######################################################################################
+# Validate block params
+######################################################################################
+
+def validate_block_params_list(field: Any, value: Any, error: Callable):
+    ok: bool = True
+    errors: Dict[str, Union[str, List[str]]] = {}
+    if not isinstance(value, list):
+        error_str = f"Block params should be list"
+        error(field, error_str)
+        return False, {value: error_str}
+    for item in value:
+        if not isinstance(item, dict):
+            error_str = f"Block params should be list of dicts, {item}"
+            error(field, error_str)
+            return False, {value: error_str}
+        ok, errors = validate_block_params(isopleth_param_schema, item, error)
+        if not ok:
+            return ok, errors
+    return ok, errors
+
+
+def validate_block_params_list_(field: Any, value: Any, error: Callable):
+    validate_block_params_list(field, value, error)

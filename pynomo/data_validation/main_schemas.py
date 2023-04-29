@@ -29,6 +29,8 @@ import numpy as np
 from pyx import color
 
 from pynomo.data_validation.dictionary_validation_functions import check_pyx_color_param, is_1_param_function
+from pynomo.data_validation.main_param_validators import validate_transformations_, validate_block_params_list_
+from pynomo.data_validation.validation_helpers import _give_rules_from_dictionaries
 
 main_params_info: Dict[str, dict] = {
     'filename': {
@@ -123,5 +125,16 @@ main_params_info: Dict[str, dict] = {
                   'check_with': is_1_param_function},
         'info': "PyX function(canvas) to draw over nomograph. Function takes canvas context as a parameter.",
         'default': None
+    },
+    'block_params': {
+        'rules': {'required': True,
+                  'check_with': validate_block_params_list_},
+        'info': "List of blocks that define individual nomograph blocks making the full compound nomograph.",
+        'default': None
     }
+
 }
+######################################################################################
+# Actual main params schema
+######################################################################################
+main_params_schema: Dict[str, dict] = _give_rules_from_dictionaries(main_params_info)

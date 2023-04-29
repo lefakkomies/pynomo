@@ -31,7 +31,7 @@ from pynomo.data_validation.axis_schemas import give_default_axis_values
 from pynomo.data_validation.block_validators import validate_type_1_block_params, validate_type_2_block_params, \
     validate_type_3_block_params, validate_type_4_block_params, validate_type_5_block_params, \
     validate_type_6_block_params, validate_type_7_block_params, validate_type_8_block_params, \
-    validate_type_9_block_params, validate_type_10_block_params
+    validate_type_9_block_params, validate_type_10_block_params, validate_block_params
 
 
 @pytest.fixture
@@ -629,3 +629,47 @@ def test_validate_type_10_block_params_c(fixture):
     ok, errors = validate_type_10_block_params(True, params, error)
     print(errors)
     assert ok is True
+
+######################################################################################
+# General block validators
+######################################################################################
+def test_validate_block_params_a(fixture):
+    # correct input
+    error = fixture
+    f_params = {**give_default_axis_values('type_10'), **{'function': lambda x: x, 'u_min': 0.0, 'u_max': 1.0}}
+    f_params_w = {
+        **give_default_axis_values('type_10_w'),
+        **{'function_3': lambda x: x,
+           'function_4': lambda x: x,
+           'u_min': 0.0,
+           'u_max': 1.0}
+    }
+    params = {'f1_params': f_params,
+              'f2_params': f_params,
+              'f3_params': f_params_w,
+              'block_type': 'type_10'
+              }
+    ok, errors = validate_block_params(True, params, error)
+    print(errors)
+    assert ok is True
+
+def test_validate_block_params_b(fixture):
+    # incorrect input
+    error = fixture
+    f_params = {**give_default_axis_values('type_10'), **{'function': lambda x: x, 'u_min': 0.0, 'u_max': 1.0}}
+    f_params_w = {
+        **give_default_axis_values('type_10_w'),
+        **{'function_3': lambda x: x,
+           'function_4': lambda x: x,
+           'u_min': 0.0,
+           'u_max': 1.0}
+    }
+    params = {'f1_params': f_params,
+              'f2_params': f_params,
+              'f3_params': f_params_w,
+              'block_type': 'type_1'
+              }
+    ok, errors = validate_block_params(True, params, error)
+    print(errors)
+    assert ok is False
+
