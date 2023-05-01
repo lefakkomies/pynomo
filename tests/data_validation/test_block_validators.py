@@ -630,6 +630,7 @@ def test_validate_type_10_block_params_c(fixture):
     print(errors)
     assert ok is True
 
+
 ######################################################################################
 # General block validators
 ######################################################################################
@@ -653,6 +654,7 @@ def test_validate_block_params_a(fixture):
     print(errors)
     assert ok is True
 
+
 def test_validate_block_params_b(fixture):
     # incorrect input
     error = fixture
@@ -672,4 +674,3 @@ def test_validate_block_params_b(fixture):
     ok, errors = validate_block_params(True, params, error)
     print(errors)
     assert ok is False
-

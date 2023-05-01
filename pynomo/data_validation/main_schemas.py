@@ -131,7 +131,7 @@ main_params_info: Dict[str, dict] = {
         'rules': {'required': False,
                   'check_with': validate_main_extra_texts_},
         'info': "Extra texts to draw to nomograph to given places.",
-        'default': None
+        'default': []
     },
     'isopleth_params': {
         'rules': {'required': False,
