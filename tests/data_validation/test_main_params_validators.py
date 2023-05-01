@@ -23,19 +23,21 @@
     Testing of main params defined in main_param_validators.py
 
 """
+import sys
 
 import pytest
 import logging
 
-from pyx import text
-
-logging.basicConfig(level=logging.INFO)
-
+from pyx import text, path
 from numpy import pi
 from pyx import color
 
 from pynomo.data_validation.axis_schemas import give_default_axis_values
 from pynomo.data_validation.main_params_validators import validate_main_params
+
+# add logging to console
+logging.basicConfig( level=logging.INFO)
+
 
 
 @pytest.fixture
@@ -78,7 +80,7 @@ def test_validate_main_params_a(fixture):
     error = fixture
     params = {'scale_type': 'linear', 'tick_distance_smart': 30, 'base_stop': None}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is False
 
 
@@ -88,7 +90,7 @@ def test_validate_main_params_b(fixture, working_block_dict):
     params = {'filename': 'filename',
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is True
 
 
@@ -98,7 +100,7 @@ def test_validate_main_params_c(fixture, non_working_block_dict):
     params = {'filename': 'filename',
               'block_params': [non_working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is False
 
 
@@ -109,7 +111,7 @@ def test_validate_main_params_d(fixture, working_block_dict):
               'title_color': color.rgb.black,
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is True
 
 
@@ -120,7 +122,7 @@ def test_validate_main_params_e(fixture, working_block_dict):
               'title_color': 'Redd',
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is False
 
 
@@ -135,7 +137,7 @@ def test_validate_main_params_f(fixture, working_block_dict):
               'transformations': [('scale paper',)],
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is True
 
 
@@ -146,7 +148,7 @@ def test_validate_main_params_g(fixture, working_block_dict):
               'transformations': [('scale paper',), ('rotate', pi / 2)],
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is True
 
 
@@ -157,7 +159,7 @@ def test_validate_main_params_g(fixture, working_block_dict):
               'transformations': [('matrix', [[1, 2, 3], [4, 5, 6], [7, 8, 9]]), ('rotate', pi / 2)],
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is True
 
 
@@ -168,7 +170,7 @@ def test_validate_main_params_g(fixture, working_block_dict):
               'transformations': [('matrix', [[1, 2, 3], [4, 5, 6]])],
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is False
 
 
@@ -189,7 +191,7 @@ def test_validate_main_params_h(fixture, working_block_dict):
               'extra_texts': working_extra_texts,
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is True
 
 
@@ -207,7 +209,7 @@ def test_validate_main_params_i(fixture, working_block_dict):
               'extra_texts': non_working_extra_texts,
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is False
 
 
@@ -224,7 +226,7 @@ def test_validate_main_params_j(fixture, working_block_dict):
               'extra_texts': non_working_extra_texts,
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is False
 
 
@@ -246,7 +248,7 @@ def test_validate_main_params_k(fixture, working_block_dict):
               'isopleth_params': isopleth_params,
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is True
 
 
@@ -265,7 +267,7 @@ def test_validate_main_params_k(fixture, working_block_dict):
               'isopleth_params': isopleth_params,
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is False
 
 
@@ -284,7 +286,7 @@ def test_validate_main_params_l(fixture, working_block_dict):
               'isopleth_params': isopleth_params,
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is False
 
 
@@ -303,7 +305,44 @@ def test_validate_main_params_l(fixture, working_block_dict):
               'isopleth_params': isopleth_params,
               'block_params': [working_block_dict]}
     ok, errors = validate_main_params(params)
-    logging.info(errors)
+    print(errors)
     assert ok is False
 
 
+######################################################################################
+# pre_func, post_func
+######################################################################################
+
+def test_validate_main_params_m(fixture, working_block_dict):
+    # correct isopleth params
+    error = fixture
+
+    def post(c):
+        c.stroke(path.line(2, 2, 15, 2) +
+                 path.line(15, 2, 10, 15) +
+                 path.line(15, 15, 2, 15) +
+                 path.line(2, 15, 2, 2))
+
+    params = {'filename': 'filename',
+              'pre_func': post,
+              'post_func': post,
+              'block_params': [working_block_dict]}
+    ok, errors = validate_main_params(params)
+    print(errors)
+    assert ok is True
+
+
+def test_validate_main_params_n(fixture, working_block_dict):
+    # incorrect isopleth params
+    error = fixture
+
+    def post(c):
+        c.add(2)
+
+    params = {'filename': 'filename',
+              'pre_func': post,
+              'post_func': post,
+              'block_params': [working_block_dict]}
+    ok, errors = validate_main_params(params)
+    print(errors)
+    assert ok is False

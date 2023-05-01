@@ -22,8 +22,12 @@
 
 """
 import numbers
+from inspect import signature
+
 import numpy as np
 from typing import Any, Callable, Dict, Union, List
+
+from pyx import canvas
 
 from pynomo.data_validation.block_validators import validate_block_params
 from pynomo.data_validation.dictionary_validation_functions import is_3x3_list_of_numbers_, is_number, validate_params_
@@ -314,10 +318,39 @@ def validate_block_params_list(field: Any, value: Any, error: Callable):
             return False, {value: error_str}
         ok, errors = validate_block_params('block_params', item, error)
         if not ok:
-            error(field, str(errors))
+            #error(field, str(errors))
             return ok, str(errors)
     return ok, errors
 
 
 def validate_block_params_list_(field: Any, value: Any, error: Callable):
     validate_block_params_list(field, value, error)
+
+
+######################################################################################
+# Drawing func testing (pre_func, post_func)
+######################################################################################
+
+def validate_block_pre_post_func(field: Any, value: Any, error: Callable):
+    ok: bool = True
+    errors: Dict[str, Union[str, List[str]]] = {}
+    if not callable(value):
+        error_str = "Must be a function"
+        error(field, error_str)
+        return False, error_str
+    if len(signature(value).parameters) != 1:
+        error_str = "Must be one parameter function"
+        error(field, error_str)
+        return False, error_str
+    c = canvas.canvas()
+    try:
+        value(c)
+    except:
+        error_str = "Function must work with python canvas as parameter"
+        error(field, error_str)
+        return False, error_str
+    return ok, errors
+
+
+def validate_block_pre_post_func_(field: Any, value: Any, error: Callable):
+    validate_block_pre_post_func(field, value, error)

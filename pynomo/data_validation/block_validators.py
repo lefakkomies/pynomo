@@ -68,7 +68,8 @@ def validate_block_params(field: Any, value: Any, error: Callable) -> (bool, Dic
     result, errors = validate_block_params_with_type(value['block_type'], value)
     if not result:
         error(field, str(errors))
-        return False, {field: str(errors)}
+        return False, str(errors)
+        #return False, {field: str(errors)}
     return result, errors
 
 
@@ -90,8 +91,10 @@ def validate_block_params_with_type(block_type: str, params: Dict[str, dict]) ->
     if not result:
         if isinstance(errors, str):
             if errors == "Incorrect key":
-                print(f"Internal error: incorrect block_type '{block_type}' when validating values")
-                return False, {'block_type': f'Incorrect type "{block_type}"'}
+                error_str = f"Internal error: incorrect block_type '{block_type}' when validating values"
+                return False, error_str
+                #print(error_str)
+                #return False, {'block_type': f'Incorrect type "{block_type}"'}
     return result, errors
 
 

@@ -30,7 +30,7 @@ from pyx import color
 
 from pynomo.data_validation.dictionary_validation_functions import check_pyx_color_param, is_1_param_function
 from pynomo.data_validation.main_param_validators import validate_transformations_, validate_block_params_list_, \
-    validate_main_extra_texts_, validate_isopleth_params_
+    validate_main_extra_texts_, validate_isopleth_params_, validate_block_pre_post_func_
 from pynomo.data_validation.validation_helpers import _give_rules_from_dictionaries
 
 main_params_info: Dict[str, dict] = {
@@ -117,13 +117,13 @@ main_params_info: Dict[str, dict] = {
     },
     'pre_func': {
         'rules': {'required': False,
-                  'check_with': is_1_param_function},
+                  'check_with': validate_block_pre_post_func_},
         'info': "PyX function(canvas) to draw under nomograph. Function takes canvas context as a parameter.",
         'default': None
     },
     'post_func': {
         'rules': {'required': False,
-                  'check_with': is_1_param_function},
+                  'check_with': validate_block_pre_post_func_},
         'info': "PyX function(canvas) to draw over nomograph. Function takes canvas context as a parameter.",
         'default': None
     },
