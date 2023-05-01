@@ -56,19 +56,19 @@ def validate_block_params(field: Any, value: Any, error: Callable) -> (bool, Dic
     if not isinstance(value, dict):
         error_str = f"Block params should be dict"
         error(field, error_str)
-        return False, {value: error_str}
+        return False, {field: error_str}
     if 'block_type' not in value:
         error_str = f"Block should have type defined with key 'block_type'"
         error(field, error_str)
-        return False, {value: error_str}
+        return False, {field: error_str}
     if not isinstance(value['block_type'], str):
         error_str = f"'block_type' should be string"
         error(field, error_str)
-        return False, {value: error_str}
+        return False, {field: error_str}
     result, errors = validate_block_params_with_type(value['block_type'], value)
     if not result:
-        error(field, errors)
-        return False, errors
+        error(field, str(errors))
+        return False, {field: str(errors)}
     return result, errors
 
 
@@ -86,10 +86,12 @@ def validate_block_params_with_type(block_type: str, params: Dict[str, dict]) ->
         'type_9': lambda: validate_params_(block_schema_type_9, params),
         'type_10': lambda: validate_params_(block_schema_type_10, params)
     }
-    result, errors = switcher.get(block_type, "Incorrect key")()
-    if result == "Incorrect key":
-        print(f"Internal error: incorrect block_type '{block_type}' when getting default values")
-        return False, {'error': f'Internal error checking "{block_type}"'}
+    result, errors = switcher.get(block_type, lambda: (False, "Incorrect key"))()
+    if not result:
+        if isinstance(errors, str):
+            if errors == "Incorrect key":
+                print(f"Internal error: incorrect block_type '{block_type}' when validating values")
+                return False, {'block_type': f'Incorrect type "{block_type}"'}
     return result, errors
 
 

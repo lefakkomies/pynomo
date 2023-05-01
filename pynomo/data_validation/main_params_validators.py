@@ -32,7 +32,7 @@ from pynomo.data_validation.main_schemas import main_params_schema
 ######################################################################################
 # Main param top level validator
 ######################################################################################
-def validate_main_params(params: Dict[str, dict]) -> (bool, Dict[str, Union[str, List[str]]]):
+def validate_main_params(params: Dict[str, dict | list]) -> (bool, Dict[str, Union[str, List[str]]]):
     ok, errors = validate_params_(main_params_schema, params)
     return ok, errors
 

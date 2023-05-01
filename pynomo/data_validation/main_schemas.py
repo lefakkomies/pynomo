@@ -29,7 +29,8 @@ import numpy as np
 from pyx import color
 
 from pynomo.data_validation.dictionary_validation_functions import check_pyx_color_param, is_1_param_function
-from pynomo.data_validation.main_param_validators import validate_transformations_, validate_block_params_list_
+from pynomo.data_validation.main_param_validators import validate_transformations_, validate_block_params_list_, \
+    validate_main_extra_texts_, validate_isopleth_params_
 from pynomo.data_validation.validation_helpers import _give_rules_from_dictionaries
 
 main_params_info: Dict[str, dict] = {
@@ -124,6 +125,18 @@ main_params_info: Dict[str, dict] = {
         'rules': {'required': False,
                   'check_with': is_1_param_function},
         'info': "PyX function(canvas) to draw over nomograph. Function takes canvas context as a parameter.",
+        'default': None
+    },
+    'extra_texts': {
+        'rules': {'required': False,
+                  'check_with': validate_main_extra_texts_},
+        'info': "Extra texts to draw to nomograph to given places.",
+        'default': None
+    },
+    'isopleth_params': {
+        'rules': {'required': False,
+                  'check_with': validate_isopleth_params_},
+        'info': "Extra texts to draw to nomograph to given places.",
         'default': None
     },
     'block_params': {

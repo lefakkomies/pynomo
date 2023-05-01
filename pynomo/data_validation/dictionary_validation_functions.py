@@ -59,10 +59,9 @@ def is_3x3_list_of_numbers_(lst):
     return True
 
 
-def is_number(item):
-    if not isinstance(item, (int, float, complex, np.generic, numbers.Number)):
-        return False
-    return True
+def is_number(field: Any, value: Any, error: Callable):
+    if not isinstance(value, (int, float, complex, np.generic, numbers.Number)):
+        error(field, "Value not number")
 
 
 def check_general_axis_params(field: Any, value: Any, error: Callable):
@@ -71,15 +70,18 @@ def check_general_axis_params(field: Any, value: Any, error: Callable):
 
 
 def check_pyx_color_param(field: Any, value: Any, error: Callable):
-    return isinstance(value, type(pyx.color.rgb.black))
+    if not isinstance(value, type(pyx.color.rgb.black)):
+        error(field, "Incorrect color type")
 
 
 def check_pyx_linewidth_param(field: Any, value: Any, error: Callable):
-    return isinstance(value, type(pyx.style.linewidth.normal))
+    if not isinstance(value, type(pyx.style.linewidth.normal)):
+        error(field, "Incorrect pyx line-width type")
 
 
 def check_pyx_text_size_type(field: Any, value: Any, error: Callable):
-    return isinstance(value, type(pyx.text.size.tiny))
+    if not isinstance(value, type(pyx.text.size.tiny)):
+        error(field, "Incorrect pyx text type.")
 
 
 def check_manual_axis_data(field: Any, value: Any, error: Callable):

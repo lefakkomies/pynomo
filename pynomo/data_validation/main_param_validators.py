@@ -40,35 +40,35 @@ def validate_transformations(field: Any, value: Any, error: Callable):
     if not isinstance(value, list):
         error_str = f"Transformations should be list"
         error(field, error_str)
-        return False, {value: error_str}
+        return False, {field: error_str}
     for item in value:
         if not isinstance(item, tuple):
             error_str = f"Transformations should be list of tuples, {item}"
             error(field, error_str)
-            return False, {value: error_str}
+            return False, {field: error_str}
         if len(item) == 0:
             error_str = f"Transformation should not be empty"
             error(field, error_str)
-            return False, {value: error_str}
+            return False, {field: error_str}
         if not item[0] in allowed_transformation_strings_:
             error_str = f"Unknown transformation {item[0]}"
             error(field, error_str)
-            return False, {value: error_str}
+            return False, {field: error_str}
         if item[0] == 'scale paper':
             if len(item) != 1:
                 error_str = f"Transformation scale paper with unknown parameter: {item}"
                 error(field, error_str)
-                return False, {value: error_str}
+                return False, {field: error_str}
         if item[0] == 'optimize':
             if len(item) != 1:
                 error_str = f"Transformation optimize with unknown parameter: {item}"
                 error(field, error_str)
-                return False, {value: error_str}
+                return False, {field: error_str}
         if item[0] == 'polygon':
             if len(item) != 1:
                 error_str = f"Transformation polygon with unknown parameter: {item}"
                 error(field, error_str)
-                return False, {value: error_str}
+                return False, {field: error_str}
         if item[0] == 'rotate':
             if len(item) != 2:
                 error_str = f"Transformation rotate with unknown number of parameters: {item}"
@@ -77,16 +77,16 @@ def validate_transformations(field: Any, value: Any, error: Callable):
             if not isinstance(item[1], (int, float, complex, np.generic, numbers.Number)):
                 error_str = f"Transformation rotate with non-number parameter: {item}"
                 error(field, error_str)
-                return False, {value: error_str}
+                return False, {field: error_str}
         if item[0] == 'matrix':
             if len(item) != 2:
                 error_str = f"Transformation matrix with unknown number of parameters: {item}"
                 error(field, error_str)
-                return False, {value: error_str}
+                return False, {field: error_str}
             if not is_3x3_list_of_numbers_(item[1]):
                 error_str = f"Transformation matrix without 3x3 matrix as parameter: {item}"
                 error(field, error_str)
-                return False, {value: error_str}
+                return False, {field: error_str}
     return ok, errors
 
 
@@ -122,11 +122,33 @@ extra_text_item_schema = {
 }
 
 
-def validate_main_extra_texts(field: Any, value: Any, error: Callable):
+def validate_main_extra_texts_item(field: Any, value: Any, error: Callable):
     ok: bool = True
     errors: Dict[str, Union[str, List[str]]] = {}
     ok, errors = validate_params_(extra_text_item_schema, value)
     return ok, errors
+
+
+def validate_main_extra_texts_item_(field: Any, value: Any, error: Callable):
+    validate_main_extra_texts(field, value, error)
+
+
+def validate_main_extra_texts(field: Any, value: Any, error: Callable):
+    ok: bool = True
+    errors: Dict[str, Union[str, List[str]]] = {}
+    if not isinstance(value, list):
+        error_str = f"Extra texts should be a list."
+        error(field, error_str)
+        return False, {field: error_str}
+    for item in value:
+        if not isinstance(item, dict):
+            error_str = f"Transformations should be list of dicts, {item}"
+            error(field, error_str)
+            return False, {field: error_str}
+        ok, errors = validate_main_extra_texts_item(field, item, error)
+        if not ok:
+            error(field, str(errors))
+            return False, {field: str(errors)}
 
 
 def validate_main_extra_texts_(field: Any, value: Any, error: Callable):
@@ -137,7 +159,7 @@ def validate_main_extra_texts_(field: Any, value: Any, error: Callable):
 # Isopleth params
 ######################################################################################
 
-
+# more general schema, detailed checks below
 isopleth_param_schema = {
     'color': {
         'required': False,
@@ -238,30 +260,31 @@ def validate_isopleth_params(field: Any, value: Any, error: Callable):
     if not isinstance(value, list):
         error_str = f"Isopleth params should be list"
         error(field, error_str)
-        return False, {value: error_str}
+        return False, {field: error_str}
     for item in value:
         if not isinstance(item, dict):
             error_str = f"Isopleth params should be list of dicts, {item}"
             error(field, error_str)
-            return False, {value: error_str}
+            return False, {field: error_str}
         ok, errors = validate_params_(isopleth_param_schema, item)
         if not ok:
+            error(field, str(errors))
             return ok, errors
         if 'color' in item:
             if not item['color'] in allowed_color_strings_:
                 error_str = f"Unknown color {item['color']}"
                 error(field, error_str)
-                return False, {value: error_str}
+                return False, {field: error_str}
         if 'linewidth' in item:
             if not item['linewidth'] in allowed_linewidth_strings_:
                 error_str = f"Unknown linewidth {item['linewidth']}"
                 error(field, error_str)
-                return False, {value: error_str}
+                return False, {field: error_str}
         if 'linestyle' in item:
             if not item['linestyle'] in allowed_linestyle_strings_:
                 error_str = f"Unknown linestyle {item['linestyle']}"
                 error(field, error_str)
-                return False, {value: error_str}
+                return False, {field: error_str}
     return ok, errors
 
 
@@ -277,17 +300,22 @@ def validate_block_params_list(field: Any, value: Any, error: Callable):
     ok: bool = True
     errors: Dict[str, Union[str, List[str]]] = {}
     if not isinstance(value, list):
-        error_str = f"Block params should be list"
+        error_str = f"Block params should be a list, {value}."
+        error(field, error_str)
+        return False, {value: error_str}
+    if len(value) == 0:
+        error_str = f"Block params should not be empty list, {value}."
         error(field, error_str)
         return False, {value: error_str}
     for item in value:
         if not isinstance(item, dict):
-            error_str = f"Block params should be list of dicts, {item}"
+            error_str = f"Block params should be list of dicts, {item}."
             error(field, error_str)
             return False, {value: error_str}
-        ok, errors = validate_block_params(isopleth_param_schema, item, error)
+        ok, errors = validate_block_params('block_params', item, error)
         if not ok:
-            return ok, errors
+            error(field, str(errors))
+            return ok, str(errors)
     return ok, errors
 
 
