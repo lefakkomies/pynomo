@@ -35,7 +35,7 @@ from pynomo.data_validation.dictionary_validation_functions import is_3x3_list_o
 ######################################################################################
 # Transformation validation
 ######################################################################################
-allowed_transformation_strings_ = ['scale paper', 'optimize', 'rotate', 'matrix']
+allowed_transformation_strings_ = ['scale paper', 'optimize', 'rotate', 'matrix', 'polygon']
 
 
 def validate_transformations(field: Any, value: Any, error: Callable):

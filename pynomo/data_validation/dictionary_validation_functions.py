@@ -64,6 +64,24 @@ def is_number(field: Any, value: Any, error: Callable):
         error(field, "Value not number")
 
 
+def is_list_of_strings(field: Any, value: Any, error: Callable):
+    if not isinstance(value, list):
+        error(field, "Value not list")
+    else:
+        # Check if all elements in the list are strings
+        if not all(isinstance(element, str) for element in value):
+            error(field, "Value not list of strings")
+
+
+def is_list_of_numbers(field: Any, value: Any, error: Callable):
+    if not isinstance(value, list):
+        error(field, "Value not list")
+    else:
+        # Check if all elements in the list are strings
+        if not all(isinstance(element, (int, float, complex, np.generic, numbers.Number)) for element in value):
+            error(field, "Value not list of strings")
+
+
 def check_general_axis_params(field: Any, value: Any, error: Callable):
     # TODO:
     pass
@@ -90,9 +108,23 @@ def check_manual_axis_data(field: Any, value: Any, error: Callable):
 
 
 def check_text_format_string(field: Any, value: Any, error: Callable):
-    pattern = r"\$%[\d\.]+[a-zA-Z]\$"
-    if not re.match(pattern, value):
+    # pattern = r"\$%[\d\.]+[a-zA-Z]\$"
+    pattern = r"(?:[^$]*\$[^$]*)*(?=.*%[\d\.]+[a-zA-Z])"
+
+    if not bool(re.search(pattern, value)):
         error(field, f"{value} does not match the required format")
+    # check even number of dollar signs
+    if value.count('$') % 2 == 1:
+        error(field, f"{value} does not have even number of dollar-signs")
+
+
+def check_string_or_list_of_strings(field: Any, value: Any, error: Callable):
+    if not isinstance(value, (list, str)):
+        error(field, "Value must be list or string")
+
+    if isinstance(value, list):
+        if not all(isinstance(element, str) for element in value):
+            error(field, "Values of list need to be strings")
 
 
 def check_extra_titles(field: Any, value: Any, error: Callable):

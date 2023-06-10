@@ -30,7 +30,8 @@ from typing import Dict, Union, List
 
 from pynomo.data_validation.dictionary_validation_functions import scale_type_strings, tick_level_integers, \
     check_manual_axis_data, is_1_param_function, check_text_format_string, check_pyx_text_size_type, \
-    check_pyx_color_param, check_extra_titles, is_2_param_function, check_pyx_linewidth_param
+    check_pyx_color_param, check_extra_titles, is_2_param_function, check_pyx_linewidth_param, is_number, \
+    is_list_of_strings
 from pynomo.data_validation.validation_helpers import _give_rules_from_dictionaries, \
     _give_default_values_from_dictionaries
 
@@ -52,7 +53,12 @@ _axis_info_common: Dict[str, dict] = {
     'id': {
         'rules': {'required': False, 'type': 'string'},
         'info': 'To identify the axis..',
-        'default': 'id'
+        'default': ''
+    },
+    'ID': {
+        'rules': {'required': False, 'type': 'string'},
+        'info': 'To identify the axis..',
+        'default': ''
     },
     'tag': {
         'rules': {'required': False, 'type': 'string'},
@@ -430,6 +436,28 @@ _axis_info_type_9_common = {
         'info': 'Sets axis as grid if true.',
         'default': False
     },
+    'id': {
+        'rules': {'required': False, 'type': 'string'},
+        'info': 'To identify the axis..',
+        'default': ''
+    },
+    'ID': {
+        'rules': {'required': False, 'type': 'string'},
+        'info': 'To identify the axis..',
+        'default': ''
+    },
+    'u_max_trafo': {
+        'rules': {'required': False,
+                  'check_with': is_number},
+        'info': "Maximum value for initial transformation to rectangle.",
+        'default': None
+    },
+    'u_min_trafo': {
+        'rules': {'required': False,
+                  'check_with': is_number},
+        'info': "Minimum value for initial transformation to rectangle.",
+        'default': None
+    }
 }
 # params when 'grid' == True
 _axis_info_type_9_grid: Dict[str, dict] = {
@@ -498,19 +526,19 @@ _axis_info_type_9_grid_common: Dict[str, dict] = {
         'info': "Maximum value of function variable (for alignment).",
         'default': 1.0
     },
-    'u_min_trafo': {
+    'u_texts': {
         'rules': {'required': False,
-                  'type': ['float', 'integer'],
+                  'check_with': is_list_of_strings,
                   },
-        'info': "For transforming initially value to corner.",
-        'default': 0.0
+        'info': "List of texts for given values.",
+        'default': None
     },
-    'u_max_trafo': {
+    'v_texts': {
         'rules': {'required': False,
-                  'type': ['float', 'integer'],
+                  'check_with': is_list_of_strings,
                   },
-        'info': "For transforming initially value to corner.",
-        'default': 0.0
+        'info': "List of texts for given values.",
+        'default': None
     },
     'text_prefix_u': {
         'rules': {'required': False,
@@ -777,7 +805,6 @@ axis_schema_type_9_axis_extra_params.pop("f", None)
 axis_schema_type_9_axis_extra_params.pop("g", None)
 axis_schema_type_9_axis_extra_params.pop("h", None)
 
-
 axis_schema_type_9_grid = _give_rules_from_dictionaries(_axis_info_type_9_common,
                                                         _axis_info_type_9_grid,
                                                         _axis_info_type_9_grid_common)
@@ -794,6 +821,7 @@ axis_schema_type_10_w = _give_rules_from_dictionaries(_axis_info_common, _axis_i
 axis_schema_type_10_w_extra_params: Dict[str, dict] = deepcopy(axis_schema_type_10_w)
 axis_schema_type_10_w_extra_params.pop("function_3", None)
 axis_schema_type_10_w_extra_params.pop("function_4", None)
+
 
 ######################################################################################
 # only (default) values that are filled automatically, others users need to give

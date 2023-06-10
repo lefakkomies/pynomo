@@ -25,10 +25,10 @@ from pprint import pprint
 from typing import Dict
 from pyx import color
 
-
 from pynomo.data_validation.dictionary_validation_functions import check_pyx_color_param, \
     is_1_param_function, \
-    check_manual_axis_data, scale_type_strings, check_text_format_string
+    check_manual_axis_data, scale_type_strings, check_text_format_string, is_number, is_2_param_function, \
+    is_list_of_numbers, tick_level_integers
 
 from pynomo.data_validation.axis_validators import validate_type_1_axis_params_, validate_type_2_axis_params_, \
     validate_type_3_axis_params_, validate_type_4_axis_params_, validate_type_6_axis_params_, \
@@ -215,14 +215,14 @@ _block_info_type_5 = {
         'default': None
     },
     'v_func': {
-        'rules': {'required': True, 'check_with': is_1_param_function},
+        'rules': {'required': True, 'check_with': is_2_param_function},
         'info': 'v-function',
         'default': None
     },
     'wd_func': {
-        'rules': {'required': True, 'check_with': is_1_param_function},
+        'rules': {'required': False, 'check_with': is_1_param_function},
         'info': 'wd-function',
-        'default': None
+        'default': lambda x: x
     },
     'wd_func_inv': {
         'rules': {'required': False, 'check_with': is_1_param_function},
@@ -272,12 +272,12 @@ _block_info_type_5 = {
     'u_tick_side': {
         'rules': {'required': False, 'type': 'string', 'allowed': ['right', 'left']},
         'info': 'Tick and text side in final paper.',
-        'default': 3
+        'default': 'left'
     },
     'u_reference': {
         'rules': {'required': False, 'type': 'boolean'},
         'info': ' If axis is treated as reference line that is a turning point..',
-        'default': 3
+        'default': False
     },
     """
     'u_reference_padding': {
@@ -287,8 +287,8 @@ _block_info_type_5 = {
     },"""
     'u_manual_axis_data': {
         'rules': {'required': False, 'check_with': check_manual_axis_data},
-        'info': ' If axis is treated as reference line that is a turning point..',
-        'default': 3
+        'info': ' Axis data is given manually.',
+        'default': None
     },
     'u_title_draw_center': {
         'rules': {'required': False, 'type': 'boolean'},
@@ -462,10 +462,19 @@ _block_info_type_5 = {
     },
     'u_values': {
         'rules': {'required': True,
-                  'type': 'list',  # list of strings
-                  'schema': {'type': ['float', 'integer']}},
+                  'check_with': is_list_of_numbers},
         'info': 'List of plotted u values.',
         'default': []
+    },
+    'u_manual_axis_data': {
+        'rules': {'required': False, 'check_with': check_manual_axis_data},
+        'info': 'Manually set tick/point positions and text positions.',
+        'default': {}
+    },
+    'u_scale_opposite': {
+        'rules': {'required': False, 'type': 'boolean'},
+        'info': 'If u-scale is drawn in opposite side of box.',
+        'default': False
     },
     # v
     'v_title': {
@@ -482,6 +491,22 @@ _block_info_type_5 = {
         'rules': {'required': False, 'type': ['float', 'integer']},
         'info': "When 'u_title_draw_center' is 'True' sets distance of title from axis.",
         'default': 0.5
+    },
+    'v_manual_axis_data': {
+        'rules': {'required': False, 'check_with': check_manual_axis_data},
+        'info': ' Axis data is given manually.',
+        'default': None
+    },
+    'v_text_distance': {
+        'rules': {'required': False, 'check_with': is_number},
+        'info': 'Distance of text for v-axis.',
+        'default': 0.25
+    },
+    'v_values': {
+        'rules': {'required': True,
+                  'check_with': is_list_of_numbers},
+        'info': 'List of plotted v values.',
+        'default': []
     },
     # wd
     'wd_tag': {
@@ -544,6 +569,18 @@ _block_info_type_5 = {
         'info': "If axis is aligned with other axis, this value y offsets final scale.",
         'default': 0.0
     },
+    'wd_tick_levels': {
+        'rules': {'required': False, 'type': 'integer', 'allowed': tick_level_integers},
+        'info': 'How many levels (minor, minor-minor, etc.) of ticks are drawn. '
+                'Largest effect to "linear" scale.',
+        'default': 4
+    },
+    'wd_tick_text_levels': {
+        'rules': {'required': False, 'type': 'integer', 'allowed': tick_level_integers},
+        'info': 'How many levels (minor, minor-minor, etc.) of texts are drawn. '
+                'Largest effect to "linear" scale.',
+        'default': 4
+    },
     """
     # does not exist
     'wd_text_format': {
@@ -567,12 +604,38 @@ _block_info_type_5 = {
         'default': color.rgb.black
     },
     'wd_values': {
-        'rules': {'required': True,
-                  'type': 'list',  # list of strings
-                  'schema': {'type': ['float', 'integer']}},
+        'rules': {'required': False,
+                  'check_with': is_list_of_numbers},
         'info': 'List of plotted u values.',
         'default': []
+    },
+    # other
+    'horizontal_guides': {
+        'rules': {'required': False, 'type': 'boolean'},
+        'info': 'If horizontal guides are drawn.',
+        'default': True
+    },
+    'vertical_guides': {
+        'rules': {'required': False, 'type': 'boolean'},
+        'info': 'If vertical guides are drawn.',
+        'default': True
+    },
+    'manual_x_scale': {
+        'rules': {'required': False, 'type': 'boolean'},
+        'info': 'If x-scale is given implicitly with coordinates.',
+        'default': False
+    },
+    'x_min': {
+        'rules': {'required': False, 'check_with': is_number},
+        'info': 'Min x for manual scale.',
+        'default': 0.0
+    },
+    'x_max': {
+        'rules': {'required': False, 'check_with': is_number},
+        'info': 'Max x for manual scale.',
+        'default': 10.0
     }
+
 }
 
 ######################################################################################
