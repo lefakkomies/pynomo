@@ -450,13 +450,13 @@ _axis_info_type_9_common = {
         'rules': {'required': False,
                   'check_with': is_number},
         'info': "Maximum value for initial transformation to rectangle.",
-        'default': None
+        'default': 0.0
     },
     'u_min_trafo': {
         'rules': {'required': False,
                   'check_with': is_number},
         'info': "Minimum value for initial transformation to rectangle.",
-        'default': None
+        'default': 1.0
     }
 }
 # params when 'grid' == True
@@ -531,14 +531,14 @@ _axis_info_type_9_grid_common: Dict[str, dict] = {
                   'check_with': is_list_of_strings,
                   },
         'info': "List of texts for given values.",
-        'default': None
+        'default': ["1.0", "7.0"]
     },
     'v_texts': {
         'rules': {'required': False,
                   'check_with': is_list_of_strings,
                   },
         'info': "List of texts for given values.",
-        'default': None
+        'default': ["1.0", "7.0"]
     },
     'text_prefix_u': {
         'rules': {'required': False,

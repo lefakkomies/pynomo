@@ -267,7 +267,8 @@ def test_validate_type_5_block_params_d(fixture):
     error = fixture
     params = {'u_func': lambda x: x,
               'u_values': [1, 2, 3],
-              'v_func': lambda x: x,
+              'v_values': [1, 2, 3],
+              'v_func': lambda x, y: x + y,
               'wd_func': lambda x: x,
               'wd_values': [1, 2, 3]
               }

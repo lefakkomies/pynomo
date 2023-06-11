@@ -28,7 +28,7 @@ import numpy as np
 
 from pyx import color
 
-from pynomo.data_validation.dictionary_validation_functions import check_pyx_color_param, is_1_param_function, \
+from pynomo.data_validation.dictionary_validation_functions import check_pyx_color_param, \
     check_string_or_list_of_strings
 from pynomo.data_validation.main_param_validators import validate_transformations_, validate_block_params_list_, \
     validate_main_extra_texts_, validate_isopleth_params_, validate_block_pre_post_func_

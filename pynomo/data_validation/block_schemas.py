@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-""" Block schemas that user used for validation with Cerberos library
+""" Block schemas that are used for validation with Cerberos library
 
 """
 from pprint import pprint
