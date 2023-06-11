@@ -70,12 +70,6 @@ d_params = {
 
 bh_params = {
     'ID': 'none',  # to identify the axis
-    'tag': 'none',  # for aligning block wrt others
-    'title': 'Grid',
-    'title_x_shift': 0.0,
-    'title_y_shift': 0.25,
-    'title_distance_center': 0.5,
-    'title_opposite_tick': True,
     'u_min': 0.0,  # for alignment
     'u_max': 1.0,  # for alignment
     'f_grid': lambda u, v: -np.cos(u * np.pi / 180.0) * np.cos(v * np.pi / 180.0),

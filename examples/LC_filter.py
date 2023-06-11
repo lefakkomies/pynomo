@@ -60,7 +60,7 @@ block_params = {
     'v_values': [2.0, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 15.0, 20.0, 30.0, 50.0, 100.0, 200.0, 300.0],  # L
     'wd_tick_levels': 5,
     'wd_tick_text_levels': 5,
-    'u_tick_text_levels': 0,
+    #'u_tick_text_levels': 0,  # not implemented
     'wd_tick_side': 'right',
     'wd_title': r'$R$ (mm)',
     'u_tag': 'AA',

@@ -149,8 +149,7 @@ middle_scale_alt = {
     'title_draw_center': True,
     'title_distance_center': 2.0,
     'title_opposite_tick': False,
-    'title': '$10w$',
-    'grid': False
+    'title': '$10w$'
 }
 
 block_2_params = {

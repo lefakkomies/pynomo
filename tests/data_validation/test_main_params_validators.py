@@ -32,12 +32,31 @@ import logging
 from pyx import text, path
 from numpy import pi
 from pyx import color
+import os
 
 from pynomo.data_validation.axis_schemas import give_default_axis_values
 from pynomo.data_validation.main_params_validators import validate_main_params
 
 # add logging to console
 logging.basicConfig(level=logging.INFO)
+
+
+def _run_external_file(filename):
+    module_dir = os.path.dirname(__file__)
+    filename_full_path = module_dir + "/../../examples/" + filename
+
+    lines = ""
+    with open(filename_full_path, "r") as file:
+        for line in file:
+            if "Nomographer" not in line:
+                lines += line
+    exec(lines, globals())  # globals() to have same context and allow imports
+
+    # main_params defined in executed source
+    ok, errors = validate_main_params(main_params)
+    print(f"Testing: {filename}")
+    pprint(errors)
+    assert ok is True
 
 
 @pytest.fixture
@@ -544,12 +563,12 @@ def test_validate_main_params_ex_photo_exposure():
                    'grid': False,
                    }
     lat_day_params = {'ID': 'none',  # to identify the axis
-                      #'tag': 'none',  # for aligning block wrt others
-                      #'title': 'Grid',
-                      #'title_x_shift': 0.0,
-                      #'title_y_shift': 0.25,
-                      #'title_distance_center': 0.5,
-                      #'title_opposite_tick': True,
+                      # 'tag': 'none',  # for aligning block wrt others
+                      # 'title': 'Grid',
+                      # 'title_x_shift': 0.0,
+                      # 'title_y_shift': 0.25,
+                      # 'title_distance_center': 0.5,
+                      # 'title_opposite_tick': True,
                       'u_min': 20.0,  # for alignment
                       'u_max': 80.0,  # for alignment
                       'f_grid': f2,
@@ -854,3 +873,138 @@ def test_validate_main_params_ex_photo_exposure():
     ok, errors = validate_main_params(main_params)
     pprint(errors)
     assert ok is True
+
+
+def test_validate_main_params_example_file():
+    module_dir = os.path.dirname(__file__)
+    print(module_dir)
+    filename = module_dir + "/../../examples/LC_filter.py"
+
+    lines = ""
+    with open(filename, "r") as file:
+        for line in file:
+            if "Nomographer" not in line:
+                lines += line
+    exec(lines, globals())  # globals() to have same context and allow imports
+
+    # main_params defined in executed source
+    ok, errors = validate_main_params(main_params)
+    pprint(errors)
+    assert ok is True
+
+
+######################################################################################
+# Example files as tests
+######################################################################################
+def test_validate_LC_filter():
+    _run_external_file("LC_filter.py")
+
+
+def test_validate_ex_star_navi():
+    _run_external_file("ex_star_navi.py")
+
+
+def test_validate_ex_dubois():
+    _run_external_file("ex_dubois.py")
+
+
+def test_validate_ex_amortized_loan():
+    _run_external_file("ex_amortized_loan.py")
+
+
+def test_validate_ex_BMI():
+    _run_external_file("ex_BMI.py")
+
+
+def test_validate_ex_rfset():
+    _run_external_file("ex_rfset.py")
+
+
+def test_ex_second_order_eq():
+    _run_external_file("ex_second_order_eq.py")
+
+
+def test_genus1():
+    _run_external_file("genus1.py")
+
+
+# Axes
+def test_validate_ex_axes_1():
+    _run_external_file("ex_axes_1.py")
+
+
+def test_validate_ex_axes_2():
+    _run_external_file("ex_axes_2.py")
+
+
+def test_validate_ex_axes_3():
+    _run_external_file("ex_axes_3.py")
+
+
+def test_validate_ex_axes_4():
+    _run_external_file("ex_axes_4.py")
+
+
+def test_validate_ex_axes_5():
+    _run_external_file("ex_axes_5.py")
+
+
+def test_validate_ex_axes_6():
+    _run_external_file("ex_axes_6.py")
+
+
+def test_validate_ex_axes_7():
+    _run_external_file("ex_axes_7.py")
+
+
+def test_validate_ex_axes_7_1():
+    _run_external_file("ex_axes_7_1.py")
+
+
+def test_validate_ex_axes_8():
+    _run_external_file("ex_axes_8.py")
+
+
+def test_validate_ex_axes_9():
+    _run_external_file("ex_axes_9.py")
+
+
+# nomo types
+def test_validate_ex_type1_nomo_1():
+    _run_external_file("ex_type1_nomo_1.py")
+
+
+def test_validate_ex_type2_nomo_1():
+    _run_external_file("ex_type2_nomo_1.py")
+
+
+def test_validate_ex_type3_nomo_1():
+    _run_external_file("ex_type3_nomo_1.py")
+
+
+def test_validate_ex_type4_nomo_1():
+    _run_external_file("ex_type4_nomo_1.py")
+
+
+def test_validate_ex_type5_nomo_1():
+    _run_external_file("ex_type5_nomo_1.py")
+
+
+def test_validate_ex_type6_nomo_1():
+    _run_external_file("ex_type6_nomo_1.py")
+
+
+def test_validate_ex_type7_nomo_1():
+    _run_external_file("ex_type7_nomo_1.py")
+
+
+def test_validate_ex_type8_nomo_1():
+    _run_external_file("ex_type8_nomo_1.py")
+
+
+def test_validate_ex_type9_nomo_1():
+    _run_external_file("ex_type9_nomo_1.py")
+
+
+def test_validate_ex_type10_nomo_1():
+    _run_external_file("ex_type10_nomo_1.py")

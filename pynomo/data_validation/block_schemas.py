@@ -322,8 +322,8 @@ _block_info_type_5 = {
     },
     'u_text_format': {
         'rules': {'required': False, 'check_with': check_text_format_string},
-        'info': "If axis is aligned with other axis, this value y offsets final scale.",
-        'default': 0.0
+        'info': "Format for u-scale tick symbols.",
+        'default': r"$%4.4g$"
     },
     """
     # These are in documentation but not really in use...??
@@ -477,6 +477,21 @@ _block_info_type_5 = {
         'default': False
     },
     # v
+    'v_max': {
+        'rules': {'required': False, 'check_with': is_number},
+        'info': 'Max v-value, typically not defined.',
+        'default': 10.0
+    },
+    'v_min': {
+        'rules': {'required': False, 'check_with': is_number},
+        'info': 'Min v-value, typically not defined.',
+        'default': 0.0
+    },
+    'v_scale_u_value': {
+        'rules': {'required': False, 'check_with': is_number},
+        'info': 'u-value where v-scale is drawn.',
+        'default': 0.0
+    },
     'v_title': {
         'rules': {'required': False, 'type': 'string'},
         'info': 'Title for u-scale',
@@ -507,6 +522,31 @@ _block_info_type_5 = {
                   'check_with': is_list_of_numbers},
         'info': 'List of plotted v values.',
         'default': []
+    },
+    'allow_additional_v_scale': {
+        'rules': {'required': False, 'type': 'boolean'},
+        'info': 'Additional v-scale for better v-scale drawing and as atom.',
+        'default': False
+    },
+    'scale_type_v': {
+        'rules': {'required': False, 'type': 'string', 'allowed': scale_type_strings},
+        'info': 'Scale-type for u-axis.',
+        'default': 'manual line'
+    },
+    'v_tick_levels': {
+        'rules': {'required': False, 'allowed': tick_level_integers},
+        'info': 'Levels for v-scale ticks.',
+        'default': 0.0
+    },
+    'v_tick_text_levels': {
+        'rules': {'required': False, 'allowed': tick_level_integers},
+        'info': 'Levels for v-scale texts.',
+        'default': 0.0
+    },
+    'v_text_format': {
+        'rules': {'required': False, 'check_with': check_text_format_string},
+        'info': "Format for v-scale tick symbols.",
+        'default': r"$%4.4g$"
     },
     # wd
     'wd_tag': {
@@ -634,6 +674,11 @@ _block_info_type_5 = {
         'rules': {'required': False, 'check_with': is_number},
         'info': 'Max x for manual scale.',
         'default': 10.0
+    },
+    'x_func': {
+        'rules': {'required': False, 'check_with': is_2_param_function},
+        'info': 'Function for aligning x',
+        'default': None
     }
 
 }
