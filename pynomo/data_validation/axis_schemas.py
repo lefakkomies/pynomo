@@ -531,14 +531,14 @@ _axis_info_type_9_grid_common: Dict[str, dict] = {
                   'check_with': is_list_of_strings,
                   },
         'info': "List of texts for given values.",
-        'default': ["1.0", "7.0"]
+        'default': None
     },
     'v_texts': {
         'rules': {'required': False,
                   'check_with': is_list_of_strings,
                   },
         'info': "List of texts for given values.",
-        'default': ["1.0", "7.0"]
+        'default': None
     },
     'text_prefix_u': {
         'rules': {'required': False,

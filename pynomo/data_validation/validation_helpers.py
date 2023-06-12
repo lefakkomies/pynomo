@@ -46,7 +46,8 @@ def _give_dictionary_default_values(dict_in: Dict[str, dict]) -> Dict[str, dict]
     result = {}
     # this is easier to read than dict comprehensions...
     for key in dict_in.keys():
-        result[key] = dict_in[key]['default']
+        if dict_in[key]['default'] is not None:
+            result[key] = dict_in[key]['default']
     return result
 
 
