@@ -1871,10 +1871,10 @@ def find_log_ticks_smart(start, stop, f, g, turn=1, base_start=None,
         stop = min(value * 10.0, max_value)
         tick_0_list, tick_1_list, tick_2_list, tick_3_list, tick_4_list = \
             find_linear_ticks_smart(start, stop, f, g, turn=1, base_start=base_start,
-                                    base_stop=base_stop, scale_max_0=10 ** (decade + 1),
+                                    base_stop=base_stop, scale_max_0=10.0 ** (decade + 1),
                                     distance_limit=distance_limit)
-        if 10 ** (decade + 1) <= max_value:
-            tick_0_list_final = tick_0_list_final + [10 ** (decade + 1)]
+        if 10.0 ** (decade + 1) <= max_value:
+            tick_0_list_final = tick_0_list_final + [10.0 ** (decade + 1)]
         tick_1_list_final = tick_1_list_final + tick_0_list
         tick_2_list_final = tick_2_list_final + tick_1_list
         tick_3_list_final = tick_3_list_final + tick_2_list
