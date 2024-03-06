@@ -1,11 +1,11 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 #nomogen example program
 
 import sys
 sys.path.insert(0, "..")
 
-import math
+from math import *
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
@@ -17,7 +17,7 @@ from pynomo.nomographer import Nomographer
 #  - the function that the nonogram implements
 #
 #  format is m = m(l,r), where l, m & r are respectively the values
-#                        for the left, middle & right hand scales
+#                        for the left, middle & right hand axes
 ########################################
 
 # nr years to achieve future value fv by investing $1 every year
@@ -29,7 +29,7 @@ from pynomo.nomographer import Nomographer
 #
 def yrs(fv, r):
     i = r/100
-    y = math.log(fv*i + 1)/math.log(i+1)
+    y = log(fv*i + 1)/log(i+1)
     if abs((((1 + i) ** y) - 1)/i - fv) > 1e-10:
         print("yrs: equation fault, y = ", y, ", i is ", i, ", fv is ", fv)
         sys.exit("quitting")
@@ -42,7 +42,7 @@ ymax = yrs(fvmax, imin)
 
 ###############################################################
 #
-# nr Chebychev nodes needed to define the scales
+# nr Chebyshev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
 NN = 5
@@ -50,48 +50,45 @@ NN = 5
 
 ##############################################
 #
-# definitions for the scales for pyNomo
+# definitions for the axes for pyNomo
 # dictionary with key:value pairs
 
-left_scale = {
+left_axis = {
     'u_min': fvmin,
     'u_max': fvmax,
     'title': r'$future \enspace value$',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
-    'grid': False
 }
 
-right_scale = {
+right_axis = {
     'u_min': imin,
     'u_max': imax,
     'title': r'$interest \enspace rate$',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
-    'grid': False
 }
 
-middle_scale = {
+middle_axis = {
     'u_min': ymin,
     'u_max': ymax,
     'title': r'$years$',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
-    'grid': False
 }
 
 block_params0 = {
     'block_type': 'type_9',
-    'f1_params': left_scale,
-    'f2_params': middle_scale,
-    'f3_params': right_scale,
+    'f1_params': left_axis,
+    'f2_params': middle_axis,
+    'f3_params': right_axis,
     'transform_ini': False,
-    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max'])/2, \
+    'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max'])/2, \
                          'x', \
-                         (right_scale['u_min'] + right_scale['u_max'])/2]]
+                         (right_axis['u_min'] + right_axis['u_max'])/2]]
 #    'isopleth_values': [[20, 'x', 1.5]]
 }
 
@@ -111,7 +108,7 @@ main_params = {
          }],
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'pdegree': NN
+    'npoints': NN
 }
 
 print("calculating the nomogram ...")
