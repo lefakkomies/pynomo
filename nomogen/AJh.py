@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # nomogen example program
 
@@ -19,7 +19,7 @@ from pynomo.nomographer import Nomographer
 #  - the function that the nonogram implements
 #
 #  format is m = m(l,r), where l, m & r are respectively the values
-#                        for the left, middle & right hand scales
+#                        for the left, middle & right hand axes
 ########################################
 
 ###############################################
@@ -45,26 +45,26 @@ def AJh(L, p):
     return h
 
 
-Lmin = 0.5;
-Lmax = 1.0;
-pmin = 0.5;
-pmax = 1.0;
-hmin = AJh(Lmax, pmin);
-hmax = AJh(Lmin, pmax);
+Lmin = 0.5
+Lmax = 1.0
+pmin = 0.5
+pmax = 1.0
+hmin = AJh(Lmax, pmin)
+hmax = AJh(Lmin, pmax)
 
 ###############################################################
 #
-# nr Chebychev nodes needed to define the scales
+# nr Chebyshev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
 NN = 3
 
 ##############################################
 #
-# definitions for the scales for pyNomo
+# definitions for the axes for pyNomo
 # dictionary with key:value pairs
 
-left_scale = {
+left_axis = {
     'u_min': Lmin,
     'u_max': Lmax,
     'title': r'$L$',
@@ -73,7 +73,7 @@ left_scale = {
     'tick_text_levels': 2
 }
 
-right_scale = {
+right_axis = {
     'u_min': pmin,
     'u_max': pmax,
     'title': r'$p$',
@@ -82,7 +82,7 @@ right_scale = {
     'tick_text_levels': 2
 }
 
-middle_scale = {
+middle_axis = {
     'u_min': hmin,
     'u_max': hmax,
     'title': r'$h$',
@@ -93,13 +93,13 @@ middle_scale = {
 
 block_params0 = {
     'block_type': 'type_9',
-    'f1_params': left_scale,
-    'f2_params': middle_scale,
-    'f3_params': right_scale,
+    'f1_params': left_axis,
+    'f2_params': middle_axis,
+    'f3_params': right_axis,
     'transform_ini': False,
-    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max']) / 2, \
+    'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max']) / 2, \
                          'x', \
-                         (right_scale['u_min'] + right_scale['u_max']) / 2]]
+                         (right_axis['u_min'] + right_axis['u_max']) / 2]]
 }
 
 main_params = {
@@ -113,7 +113,7 @@ main_params = {
     'title_str': r'\scriptsize $(1+L)h^2 - Lh(1+p) - {1 \over 3} (1-L)(1+2p) = 0$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'pdegree': NN
+    'npoints': NN
 }
 
 print("calculating the nomogram ...")

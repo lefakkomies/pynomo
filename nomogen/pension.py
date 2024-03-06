@@ -1,6 +1,18 @@
 #!/usr/bin/env python3
 
-# nomogen example program
+"""
+
+ generate a nomogram for a simple model of a pension plan:
+ - invest an amount (= amt) every month
+ - investment grows at 3.5% pa (= i), after inflation + costs
+   so, after y years, the total value of the investment is
+      total = (12*amt) * ((1 + i)**y - 1) / i
+      where i = 3.5
+ - at retirement draw an annual pension of 4% of total investment
+   so,
+      pension = total * 0.04
+
+"""
 
 # pylint: disable=C
 
@@ -15,45 +27,60 @@ from pynomo.nomographer import Nomographer
 ########################################
 #
 #  this is the target function,
-#  - the limits of the variables
 #  - the function that the nonogram implements
+#  - add the limits of the variables below
 #
 #  format is m = m(l,r), where l, m & r are respectively the values
 #                        for the left, middle & right hand axes
-#
-#  also need to specify the limits of the variables
-#
 ########################################
 
 ####################################################
-# future value of $1 invested each year
-# - fv  is return value and will be the middle scale,
-# - first argument is r and will become the right scale
-# - second argument is years and will become the left scale, and
+# savings needed per month to achieve required annual pension
 #
+# - rq is required anual pension
+# - y  is years to retirement
+# - i  is growth rate
+#
+#   future value:
 #   fv = ((1 + i)**y - 1) / i
 #
-def fv(r, y):
-    # r = % rate pa, y = nr years
-    i = r / 100
-    return (((1 + i) ** y) - 1) / i
+
+def amt(rq, y):
+
+    # i = net growth (ie growth above costs + inflation)
+    # total =  Total pension pot = 25 * rq
+    # y = nr years to retirement
+    # amt_pa is yearly contribution
+
+    i = 3.5/100
+    total = rq*25   # required future value at retirement
+
+    # invest this much each year to reach total after y years
+    amt_pa = (i * total) / ((1+i)**y -1)
+
+    return amt_pa / 12
 
 
-rmin = 0.1
-rmax = 10
-ymin = 1
+# range for required pension
+rmin = 10
+rmax = 50
+
+# range for years to retirement
+ymin = 10
 ymax = 40
-fvmin = fv(rmin, ymin)
-fvmax = fv(rmax, ymax)
+
+# range for investment per month
+amtmin = amt(rmin, ymax)
+amtmax = amt(rmax, ymin)
+#print(amtmin, amtmax)
 
 ###############################################################
 #
 # nr Chebyshev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
-# a lower value is faster, makes a smoother curve,
-#     but could be less accurate
-NN = 8
-
+# a lower value increases speed, makes a smoother curve,
+# but could be less accurate
+NN = 7
 
 ##############################################
 #
@@ -63,8 +90,9 @@ NN = 8
 left_axis = {
     'u_min': rmin,
     'u_max': rmax,
-    'title': r'$\% \enspace rate$',
-    'scale_type': 'log smart',
+    'title_x_shift': 1.0,
+    'title': r'$pa \enspace pension$',
+    'scale_type': 'linear smart',
     'tick_levels': 5,
     'tick_text_levels': 3,
 }
@@ -72,57 +100,47 @@ left_axis = {
 right_axis = {
     'u_min': ymin,
     'u_max': ymax,
-    'title': r'$years$',
+    'title': r'$years \enspace to \enspace retirement$',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
 }
 
 middle_axis = {
-    'u_min': fvmin,
-    'u_max': fvmax,
-    'title_x_shift': 1.0,
-    'title': r'$future \enspace value$',
+    'u_min': amtmin,
+    'u_max': amtmax,
+    'title': r'$monthly \enspace contribution$',
     'scale_type': 'log smart',
-    'tick_levels': 3,
+    'tick_levels': 4,
     'tick_text_levels': 2,
 }
 
+# group the scales into a block
 block_params0 = {
     'block_type': 'type_9',
     'f1_params': left_axis,
     'f2_params': middle_axis,
     'f3_params': right_axis,
-    'transform_ini': False,
     'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max']) / 2, \
                          'x', \
                          (right_axis['u_min'] + right_axis['u_max']) / 2]]
 }
 
-
+# the nomogram parameters
 main_params = {
     'filename': __name__ == "__main__" and (
                 __file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
-    'paper_height': 10,  # units are cm
-    'paper_width': 10,
-    'title_x': 5.0,
-    'title_y': 1.0,
+    'paper_height': 25,  # units are cm
+    'paper_width': 16,
     'title_box_width': 8.0,
-    'title_str': r'$future \thinspace value \thinspace of \thinspace \$1 \thinspace invested \thinspace each \thinspace year$',
-    'extra_texts': [
-        {'x': 2,
-         'y': 2,
-         'text': r'$FV = {(1+i)^y-1 \over i}$',
-         'width': 5,
-         }],
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
     'npoints': NN
 }
 
 print("calculating the nomogram ...")
-Nomogen(fv, main_params);  # generate nomogram for fv() function
+Nomogen(amt, main_params);  # generate nomogram for fv() function
 
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
-Nomographer(main_params)
+Nomographer(main_params);

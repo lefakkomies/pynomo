@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # nomogen example program
 
@@ -19,7 +19,7 @@ from pynomo.nomographer import Nomographer
 #  - the function that the nonogram implements
 #
 #  format is m = m(l,r), where l, m & r are respectively the values
-#                        for the left, middle & right hand scales
+#                        for the left, middle & right hand axes
 ########################################
 
 ###############################################
@@ -42,30 +42,29 @@ mmax = 9  # kNewtons
 Wmin = W(mmin, dmax)  # MPa
 Wmax = W(mmax, dmin)
 
-print('Wmin is ', Wmin, ', Wmax is ', Wmax)
+#print('Wmin is ', Wmin, ', Wmax is ', Wmax)
 ###############################################################
 #
-# nr Chebychev nodes needed to define the scales
+# nr Chebyshev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
 NN = 11
 
 ##############################################
 #
-# definitions for the scales for pyNomo
+# definitions for the axes for pyNomo
 # dictionary with key:value pairs
 
-left_scale = {
+left_axis = {
     'u_min': mmin,
     'u_max': mmax,
     'title': r'$m \thinspace kN$',
     'scale_type': 'log smart',
     'tick_levels': 5,
     'tick_text_levels': 4,
-    'grid': False
 }
 
-right_scale = {
+right_axis = {
     'u_min': dmin,
     'u_max': dmax,
     #    'title_x_shift': 0.5,
@@ -73,10 +72,9 @@ right_scale = {
     'scale_type': 'log smart',
     'tick_levels': 5,
     'tick_text_levels': 4,
-    'grid': False
 }
 
-middle_scale = {
+middle_axis = {
     'u_min': Wmin,
     'u_max': Wmax,
     #    'title_x_shift': -0.5,
@@ -84,18 +82,17 @@ middle_scale = {
     'scale_type': 'log smart',
     'tick_levels': 4,
     'tick_text_levels': 2,
-    'grid': False
 }
 
 block_params0 = {
     'block_type': 'type_9',
-    'f1_params': left_scale,
-    'f2_params': middle_scale,
-    'f3_params': right_scale,
+    'f1_params': left_axis,
+    'f2_params': middle_axis,
+    'f3_params': right_axis,
     'transform_ini': False,
-    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max']) / 2, \
+    'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max']) / 2, \
                          'x', \
-                         (right_scale['u_min'] + right_scale['u_max']) / 2]]
+                         (right_axis['u_min'] + right_axis['u_max']) / 2]]
 }
 
 main_params = {
@@ -115,11 +112,11 @@ main_params = {
          }],
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'pdegree': NN
+    'npoints': NN
 }
 
 print("calculating the nomogram ...")
-Nomogen(W, main_params);  # generate nomogram for Q function
+Nomogen(W, main_params)  # generate nomogram for Q function
 
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")

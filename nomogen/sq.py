@@ -1,8 +1,9 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # nomogen example program
 
 import sys
+import math
 
 sys.path.insert(0, "..")
 
@@ -17,73 +18,72 @@ from pynomo.nomographer import Nomographer
 #  - the function that the nonogram implements
 #
 #  format is m = m(l,r), where l, m & r are respectively the values
-#                        for the left, middle & right hand scales
+#                        for the left, middle & right hand axes
 ########################################
 
 
 # simple example
 def sq(u, v):
-    return (u * v) ** 2 / 2
+    return 1/math.hypot(u, v)
+#    return 1/(u*u * v*v) / 2  # FIXME: drawing scale bug
+#    return (u*u * v*v) / 2  # FIXME: drawing scale bug
 
 
 umin = 2
 umax = 10
-vmin = 1
-vmax = 5
-wmin = sq(umin, vmin)
-wmax = sq(umax, vmax)
+vmin = 2
+vmax = 10
+wmin = sq(umax, vmax)
+wmax = sq(umin, vmin)
 
 ###############################################################
 #
-# nr Chebychev nodes needed to define the scales
+# nr Chebyshev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 3
+NN = 10
 
 ##############################################
 #
-# definitions for the scales for pyNomo
+# definitions for the axes for pyNomo
 # dictionary with key:value pairs
 
-left_scale = {
+left_axis = {
     'u_min': umin,
     'u_max': umax,
     'title': r'$u \enspace value$',
-    'scale_type': 'log smart',
+    'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
-    'grid': False
 }
 
-right_scale = {
+right_axis = {
     'u_min': vmin,
     'u_max': vmax,
     'title': r'$v \enspace scale$',
-    'scale_type': 'log smart',
+    'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
-    'grid': False
 }
 
-middle_scale = {
+middle_axis = {
     'u_min': wmin,
     'u_max': wmax,
     'title': r'$w \thinspace scale$',
     'scale_type': 'log smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
-    'grid': False
 }
 
 block_params0 = {
     'block_type': 'type_9',
-    'f1_params': left_scale,
-    'f2_params': middle_scale,
-    'f3_params': right_scale,
+    'f1_params': left_axis,
+    'f2_params': middle_axis,
+    'f3_params': right_axis,
     'transform_ini': False,
-    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max']) / 2, \
+    'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max']) / 2, \
                          'x', \
-                         (right_scale['u_min'] + right_scale['u_max']) / 2]]
+                         (right_axis['u_min'] + right_axis['u_max']) / 2]]
 }
 
 main_params = {
@@ -94,10 +94,10 @@ main_params = {
     'title_x': 7.0,
     'title_y': 2.0,
     'title_box_width': 8.0,
-    'title_str': r'$w = {(uv)^2 \over 2}$',
+    'title_str': r'$w = FIXME:$', #r'$w = {1 \over {2(uv)^2}$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'pdegree': NN
+    'npoints': NN
 }
 
 print("calculating the nomogram ...")
