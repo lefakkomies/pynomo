@@ -21,7 +21,7 @@ import math
 import pyx
 import copy, re
 from scipy.optimize import *
-from scipy import arange
+from numpy import arange
 import warnings
 
 

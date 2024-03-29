@@ -190,7 +190,6 @@ block_1_params={
     'f2_params': middle_axis_feet,
     'f3_params': right_axis_in,
     'isopleth_values': [[ 'x','x','x' ]]
-
 }
 
 
@@ -210,7 +209,7 @@ main_params = {
          'width': 6,
          }],
 
-    # first block is the type_9 nomogram, the dual scale type_8 blocks follow
+    # first block is the type_9 nomogram, the dual scale type_9 block follows
     'block_params': [block_params0, block_1_params],
 
     'transformations': [('scale paper',)],

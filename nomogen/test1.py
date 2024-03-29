@@ -125,8 +125,9 @@ main_params = {
     #'muShape': 0,
 
     # text to appear at the foot of the nomogram
-    # make this null string for nothing
+    # note tha latex rules apply
     # a default string will appear if this is omitted
+    # make this an empty string to have no footer text
     'footer_string': r'$\tiny test1 \enspace project \enspace footer \enspace string$'
 }
 

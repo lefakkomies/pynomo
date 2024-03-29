@@ -34,7 +34,7 @@ examples:
 - pendulum example has extended range, uses custom ticks, larger page size (A4)
 - other tweaks, eg change NN resulting from enabling of even numbered values
 
-- much expanded documentss
+- much expanded documents
 
 0.3.4 (March 2023)
 ==================

@@ -111,7 +111,7 @@ class Nomogen:
         else:
             if NN < 3:
                 sys.exit( "{} must be >= 3 - quitting".format(pstr) )
-        print( "using", NN, "Chebyshev nodes" )
+        print( "using", NN, "Chebyshev points" )
 
 
         if 'muShape' not in main_params:
@@ -894,7 +894,7 @@ error: the v scale line around the region v = {} cannot be represented by a fini
                 else:
                     tolstr = ""
 
-                txt = r'$\tiny \hfil {}: created \thinspace by \thinspace nomogen \thinspace {} {} \hfil$'.format( main_params['filename'], datestr, tolstr)
+                txt = r'$\tiny \hfil {}: created \thinspace by \thinspace nomogen \thinspace {} {} \hfil$'.format( main_params['filename'].replace('\\', ' \\backslash '), datestr, tolstr)
                  # print("txt is \"", txt, "\"", sep='')
 
             footerText = {'x': 0,
@@ -957,7 +957,7 @@ error: the v scale line around the region v = {} cannot be represented by a fini
 
             # check for dual scales
             # the first block holds the type_9 axes, (params_u, etc)
-            # then type_8 blocks follow with the dual scales
+            # then type_8 or maybe type_9 blocks follow with the dual scales
 
             ## TODO:
             # atm the dual scales are considered after calculating the axes.
@@ -977,17 +977,19 @@ error: the v scale line around the region v = {} cannot be represented by a fini
                                 '''.format(ltag) )
                             laxis = b['f_params']
                             if 'tag' in laxis and laxis['tag'] == ltag:
-                                print( 'dual scales found for axes with tag \'{}\''.format(ltag) )
-                                if not 'align_func' in laxis:
-                                    sys.exit('''
-                                    dual axis tag '{}' must have an 'align_func' parameter
-                                    '''.format(ltag) )
-                                fal = laxis['align_func']
-                                # params & fal must be evaluated now, not when 'fuction_?' is called
-                                laxis['function_x'] = functools.partial(lambda u, p, f: p['f'](f(u)),
-                                                                        p=params, f=fal)
-                                laxis['function_y'] = functools.partial(lambda u, p, f: p['g'](f(u)),
-                                                                        p=params, f=fal)
+                                # don't copy function if the user has already defined one
+                                if not 'function_x' in laxis:
+                                    print( 'dual scales found for axes with tag \'{}\''.format(ltag) )
+                                    if not 'align_func' in laxis:
+                                        sys.exit('''
+                                        dual axis tag '{}' must have an 'align_func' parameter
+                                        '''.format(ltag) )
+                                    fal = laxis['align_func']
+                                    # params & fal must be evaluated now, not when 'fuction_?' is called
+                                    laxis['function_x'] = functools.partial(lambda u, p, f: p['f'](f(u)),
+                                                                            p=params, f=fal)
+                                    laxis['function_y'] = functools.partial(lambda u, p, f: p['g'](f(u)),
+                                                                            p=params, f=fal)
 
                         elif b['block_type'] == 'type_9':
                             for fp in [ 'f1_params', 'f2_params', 'f3_params' ]:
@@ -996,19 +998,21 @@ error: the v scale line around the region v = {} cannot be represented by a fini
                                     dual axis tag '{}' should have an '{}' parameter
                                     '''.format(ltag, fp) )
                                 laxis = b[fp]
-                                if 'tag' in laxis and laxis['tag'] == ltag:
-                                    print( 'dual scales found for axes with tag \'{}\''.format(ltag) )
-                                    if not 'align_func' in laxis:
-                                        sys.exit('''
-                                        dual axis tag '{}' must have an 'align_func' parameter
-                                        '''.format(ltag) )
-                                    fal = laxis['align_func']
-                                    # params & fal must be evaluated now, not when 'fuction_?' is called
-                                    laxis['f'] = functools.partial(lambda u, p, f: p['f'](f(u)),
-                                                                            p=params, f=fal)
-                                    laxis['g'] = functools.partial(lambda u, p, f: p['g'](f(u)),
-                                                                            p=params, f=fal)
-                                    laxis['h'] = params['h']
+                                # don't copy function if the user has already defined one
+                                if not 'f' in laxis:
+                                    if 'tag' in laxis and laxis['tag'] == ltag:
+                                        print( 'dual scales found for axes with tag \'{}\''.format(ltag) )
+                                        if not 'align_func' in laxis:
+                                            sys.exit('''
+                                            dual axis tag '{}' must have an 'align_func' parameter
+                                            '''.format(ltag) )
+                                        fal = laxis['align_func']
+                                        # params & fal must be evaluated now, not when 'fuction_?' is called
+                                        laxis['f'] = functools.partial(lambda u, p, f: p['f'](f(u)),
+                                                                                p=params, f=fal)
+                                        laxis['g'] = functools.partial(lambda u, p, f: p['g'](f(u)),
+                                                                                p=params, f=fal)
+                                        laxis['h'] = params['h']
 
 
      # end of __init__

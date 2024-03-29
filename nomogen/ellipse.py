@@ -35,10 +35,10 @@ from pynomo.nomographer import Nomographer
 # return value is circumference, the middle scale
 # a & b are the semi-major & semi-minor axes and respectively the values on the left and right scales
 
-# exact circumference of ellipse, using hypergeometric function
+# circumference of ellipse, using hypergeometric function
 # perimeter = 2*a*pi*hgf(-0.5, 0.5, 1, 1 - b*b/a*a)
 
-def circExact(a, b):
+def circEllipse(a, b):
     aa = abs(a)
     bb = abs(b)
     if aa < bb:
@@ -61,8 +61,8 @@ bmin = amin
 bmax = amax
 
 # range for the w scale (the middle scale)
-wmin = circExact(amin, bmin)
-wmax = circExact(amax, bmax)
+wmin = circEllipse(amin, bmin)
+wmax = circEllipse(amax, bmax)
 
 
 ###############################################################
@@ -149,7 +149,7 @@ main_params = {
 }
 
 print("calculating the nomogram ...")
-Nomogen(circExact, main_params)  # generate nomogram for the target function
+Nomogen(circEllipse, main_params)  # generate nomogram for the target function
 
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
