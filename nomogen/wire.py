@@ -96,8 +96,7 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': __name__ == "__main__" and (
-                __file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
+    'filename': 'wire',
     'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 7,

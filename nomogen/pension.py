@@ -128,8 +128,7 @@ block_params0 = {
 
 # the nomogram parameters
 main_params = {
-    'filename': __name__ == "__main__" and (
-                __file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
+    'filename': 'pension',
     'paper_height': 25,  # units are cm
     'paper_width': 16,
     'title_box_width': 8.0,

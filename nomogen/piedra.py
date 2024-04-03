@@ -194,8 +194,7 @@ block_1_params={
 
 
 main_params = {
-    'filename': __name__ == "__main__" and (
-                __file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
+    'filename': 'piedra',
     'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 4.0,

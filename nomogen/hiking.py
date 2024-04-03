@@ -202,8 +202,7 @@ block_2_params={
 
 # the nomogram parameters
 main_params = {
-    'filename': __name__ == "__main__" and (
-                __file__.endswith(".py") and __file__.replace(".py", "") or "nomogen") or __name__,
+    'filename': 'hiking',
     'paper_height': 24,  # units are cm
     'paper_width': 16,
     'title_x': 7.0,

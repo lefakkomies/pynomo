@@ -159,8 +159,7 @@ block_2_params={
 
 
 main_params = {
-    'filename': __name__ == "__main__" and
-                __file__.endswith(".py") and __file__.replace(".py", "")  or __name__,
+    'filename': 'LC_filter.pdf',
 
     # a4 page, with margins approx 2cm
     'paper_height': 25,  # units are cm
