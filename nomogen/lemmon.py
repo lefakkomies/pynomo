@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # Lemmon equations
 # "Revised Standardized Equation for Hydrogen Gas Densities for Fuel Consumption Applications"
@@ -37,12 +37,12 @@ M = 2.01588  # Molar Mass, g/mol
 R = 8.314472  # Universal Gas Constant,  J/(mol · K)
 
 
-# p pressure in mPa
+# p pressure in MPa
 # T degrees K
 def Z(p, T):
     s = 1
     for i in range( len(a) ):
-        s = s + a[i] * (100 / T) ** b[i] * (p) ** c[i]
+        s = s + a[i] * (100 / T) ** b[i] * p ** c[i]
     return s
 
 
@@ -85,23 +85,22 @@ if not math.isclose(Z(200, 200), 2.85953449, abs_tol=5e-09):
 
 if not correct:
     # print(  Z(1,200), Z(10,300), Z(50,400), Z(200,500), Z(200,200) )
-    print("test points for Z(p,T) failed")
-    sys.exit()
+    sys.exit("test points for Z(p,T) failed")
 
 
 ###############################################################
 #
-# nr Chebychev nodes needed to define the scales
+# nr Chebyshev nodes needed to define the scales
 # a higher value may be necessary if the scales are very non-linear
 # a lower value increases speed, makes a smoother curve, but could introduce errors
-NN = 9
+NN = 7
 
 ##############################################
 #
-# definitions for the scales for pyNomo
+# definitions for the axes for pyNomo
 # dictionary with key:value pairs
 
-left_scale = {
+left_axis = {
     'u_min': pmin,
     'u_max': pmax,
     'title': r'$pressure \enspace MPa$',
@@ -109,10 +108,9 @@ left_scale = {
     'tick_levels': 3,
     'tick_text_levels': 2,
     'tick_side' : 'left',
-    'grid': False
 }
 
-right_scale = {
+right_axis = {
     'u_min': Tmin,
     'u_max': Tmax,
     'title': r'$Temperature \enspace ^\circ K$',
@@ -120,10 +118,9 @@ right_scale = {
     'tick_levels': 3,
     'tick_text_levels': 2,
     'tick_side' : 'left',
-    'grid': False
 }
 
-middle_scale = {
+middle_axis = {
     'u_min': Zmin,
     'u_max': Zmax,
     'title': r'$Z$',
@@ -131,18 +128,17 @@ middle_scale = {
     'tick_levels': 6,
     'tick_text_levels': 5,
     'tick_side' : 'right',
-    'grid': False
 }
 
 block_params0 = {
     'block_type': 'type_9',
-    'f1_params': left_scale,
-    'f2_params': middle_scale,
-    'f3_params': right_scale,
+    'f1_params': left_axis,
+    'f2_params': middle_axis,
+    'f3_params': right_axis,
     'transform_ini': False,
-    'isopleth_values': [[(left_scale['u_min'] + left_scale['u_max']) / 2, \
+    'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max']) / 2, \
                          'x', \
-                         (right_scale['u_min'] + right_scale['u_max']) / 2]]
+                         (right_axis['u_min'] + right_axis['u_max']) / 2]]
 }
 
 main_params = {
@@ -162,12 +158,11 @@ main_params = {
          }],
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'pdegree': NN
+    'npoints': NN
 }
 
 print("calculating the nomogram ...")
 Nomogen(Z, main_params)  # generate nomogram for yrs function
-middle_scale.update({'tick_side': 'left'})
 
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")

@@ -1,6 +1,41 @@
 PyNomo
 
 
+0.3.5 (Mar 2024)
+==================
+
+nomogen.py:
+- speed improvements
+  use library & vector calculations, calculate derivatives using differentiation matrix
+  remove some unused variables & code
+- add dual scale support
+- add muShape
+  this option frees the outer axes from being ties to the corners of the
+  nomogram area
+- replace pdegree with npoints
+  this describes the ideas better.  old pdegree is still (quietly) suported.
+- improved comments and coding
+- enable even numbers of points for chebyshev interpolation
+- improve axis tic_side logic
+- footer text width is wide as the page, text centred
+- other minor nomogen coding efficiencies & updates
+- derivative uses Fornberg's method, so should work with python 3.12
+
+examples:
+- new exampless
+   these illustrate dual scales &
+   nomogen's ability to create nomograms from difficult equations
+- shebang changed to #!/usr/bin/env python3
+- xxx_scales renamed -> xxx_axis
+- pdegree renamed npoints
+- hiking and piedra reflect new dual scales method
+- some examples use the muShape option
+- some examples use "from math import *" to simplify using maths functions
+- pendulum example has extended range, uses custom ticks, larger page size (A4)
+- other tweaks, eg change NN resulting from enabling of even numbered values
+
+- much expanded documents
+
 0.3.4 (March 2023)
 ==================
 - nomogen updates
