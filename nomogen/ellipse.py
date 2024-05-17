@@ -12,12 +12,23 @@
 import sys
 import math
 
+import inspect
+import os
+
 sys.path.insert(0, "..")
 
 import scipy.special as sc
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
+
 
 
 ########################################
@@ -81,8 +92,8 @@ NN = 8
 left_axis = {
     'u_min': amin,
     'u_max': amax,
-    'title': r'$a \enspace axis$',
-    'title_x_shift': 0.5,
+    'title': r'a semi axis',
+    'title_x_shift': 0.7,
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
@@ -91,8 +102,8 @@ left_axis = {
 right_axis = {
     'u_min': bmin,
     'u_max': bmax,
-    'title': r'$b \thinspace axis$',
-    'title_x_shift': 0.5,
+    'title': r'b semi axis',
+    #'title_x_shift': 0.5,
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
@@ -101,7 +112,7 @@ right_axis = {
 middle_axis = {
     'u_min': wmin,
     'u_max': wmax,
-    'title': r'$circumference$',
+    'title': r'circumference',
     'title_x_shift': -0.2,
     'scale_type': 'linear smart',
     'tick_levels': 3,
@@ -124,13 +135,13 @@ block_params0 = {
 
 # the nomogram parameters
 main_params = {
-    'filename': 'ellipse',
+    'filename': myfile,
     'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 7.4,
     'title_y': 8.6,
     'title_box_width': 8.0,
-    'title_str': r'$circumference \thinspace of \thinspace an \thinspace ellipse$',
+    'title_str': r'circumference of an ellipse',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
 
@@ -144,7 +155,7 @@ main_params = {
     # text to appear at the foot of the nomogram
     # make this null string for nothing
     # a default string will appear if this is omitted
-    #'footer_string': r'$\tiny circ \enspace project \enspace configuration \enspace string$'
+    'footer_string': 'ellipse project configuration string'
 }
 
 print("calculating the nomogram ...")

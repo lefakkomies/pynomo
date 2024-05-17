@@ -4,12 +4,23 @@
 
 import sys
 
+import inspect
+import os
+
 sys.path.insert(0, "..")
 
 from math import *
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
+
 
 
 ########################################
@@ -57,7 +68,7 @@ NN = 3
 left_axis = {
     'u_min': fmin,
     'u_max': fmax,
-    'title': r'$f$',
+    'title': r'f',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
@@ -66,7 +77,7 @@ left_axis = {
 right_axis = {
     'u_min': Remin,
     'u_max': Remax,
-    'title': r'$Reynolds \enspace nr$',
+    'title': r'Reynolds nr',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
@@ -93,13 +104,13 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': 'colebrookr',
+    'filename': myfile,
     'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 6.0,
     'title_y': 9.0,
     'title_box_width': 8.0,
-    'title_str': r'$friction \thinspace in \thinspace pipes$',
+    'title_str': r'friction in pipes',
     'extra_texts': [
         {'x': 4,
          'y': 8,

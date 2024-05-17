@@ -4,10 +4,21 @@
 
 import sys
 
+import inspect
+import os
+
 sys.path.insert(0, "..")
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
+
 
 
 ########################################
@@ -53,7 +64,7 @@ NN = 9
 left_axis = {
     'u_min': imin,
     'u_max': imax,
-    'title': r'$interest \thinspace rate$',
+    'title': r'interest rate',
     'scale_type': 'log smart',
     'tick_levels': 4,
     'tick_text_levels': 3,
@@ -62,7 +73,7 @@ left_axis = {
 right_axis = {
     'u_min': ymin,
     'u_max': ymax,
-    'title': r'$years$',
+    'title': r'years',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
@@ -71,7 +82,7 @@ right_axis = {
 middle_axis = {
     'u_min': wmin,
     'u_max': wmax,
-    'title': r'$final \thinspace value$',
+    'title': r'final value',
     'scale_type': 'log smart',
     'tick_levels': 5,
     'tick_text_levels': 4,
@@ -87,7 +98,7 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': 'compound',
+    'filename': myfile,
     'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 5.0,

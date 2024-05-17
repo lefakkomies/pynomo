@@ -1,9 +1,11 @@
+#!/usr/bin/env python3
+
 """
-    GENERATE_ALL.py
+    GENERATE_EXAMPLES.py
 
     Generates example nomographs. Used for testing that software package works.
 
-    Copyright (C) 20124  Leif Roschier
+    Copyright (C) 2024  Leif Roschier
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,6 +24,7 @@ import os
 import re
 import time
 import sys
+import subprocess
 
 sys.path.append('../pynomo')
 sys.path.append('../pynomo/pynomo')
@@ -33,20 +36,35 @@ for root, dirs, files in os.walk('.'):
         filelist = files
 
 filelist.remove('GENERATE_EXAMPLES.py')
+filelist.remove('axestest.py')
+filelist.remove('nomogen.py')
 
 tic_orig = time.time()
-# print filelist
 for filename in filelist:
-    if re.compile(".py").search(filename, 1) is not None:
-        tic = time.time()
+    if filename.endswith( ".py" ):
         print("************************************")
-        print("executing %s" % filename)
-        with open(filename) as f:
-            code = compile(f.read(), filename, 'exec')
+        text = open(filename).read()
+        if 'Nomographer' in text and not 'dual' in text:
+            print("executing %s" % filename)
+            code = compile(text, filename, 'exec')
+            tic = time.time()
             exec(code)
-        # execfile(filename)
-        toc = time.time()
-        print('Took %3.1f s for %s to execute.' % (toc - tic, filename))
+            toc = time.time()
+            print('Took %3.1f s for %s to execute.' % (toc - tic, filename))
+            # execfile(filename)
+            pdffilename = filename.replace("py", "pdf" )
+
+            import platform
+            if not True:
+                pass
+            elif platform.system() == 'Darwin':       # macOS
+                subprocess.call(('open', pdffilename))
+            elif platform.system() == 'Windows':    # Windows
+                os.startfile(pdffilename)
+            else:                                   # linux variants
+                subprocess.call(('xdg-open', pdffilename))
+        else:
+            print( 'file {} is not a nomogram file'.format(filename) )
         print("------------------------------------")
 toc_orig = time.time()
 print('%3.1f s has elapsed overall' % (toc_orig - tic_orig))

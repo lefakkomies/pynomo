@@ -3,13 +3,24 @@
 # nomogen example program
 
 import sys
+import math
+
+import inspect
+import os
+
 
 sys.path.insert(0, "..")
 
-from math import *
-
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
+
 
 
 ########################################
@@ -38,18 +49,18 @@ def AJcheck(L, h, p):
 def AJp(L, h):
     p = ((1 + L) * h ** 2 - L * h - (1 - L) / 3) / (L * h + 2 * (1 - L) / 3)
     # print("result is ", (1+L)*h**2 - L*h*(1+p) - (1-L)*(1+2*p)/3)
-    if not isclose(AJcheck(L, h, p), 0, abs_tol=1e-10):
+    if not math.isclose(AJcheck(L, h, p), 0, abs_tol=1e-10):
         print("AJp equation failed")
         sys.exit("quitting")
     return p
 
 
-Lmin = 0.5;
-Lmax = 1.0;
-hmin = 0.75;
-hmax = 1.0;
-pmin = AJp(Lmax, hmin);  # <-- this clips the p scale, alternatively pmin = AJp(Lmin, hmin);
-pmax = AJp(Lmin, hmax);
+Lmin = 0.5
+Lmax = 1.0
+hmin = 0.75
+hmax = 1.0
+pmin = AJp(Lmax, hmin)  # <-- this clips the p scale, alternatively pmin = AJp(Lmin, hmin)
+pmax = AJp(Lmin, hmax)
 
 # print('pmin is ', pmin, ', pmax is ', pmax);
 
@@ -106,7 +117,7 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': 'AJp',
+    'filename': myfile,
     'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 5,

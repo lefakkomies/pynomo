@@ -18,10 +18,20 @@
 
 import sys
 
+import inspect
+import os
+
 sys.path.insert(0, "..")
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
 
 
 ########################################
@@ -91,7 +101,7 @@ left_axis = {
     'u_min': rmin,
     'u_max': rmax,
     'title_x_shift': 1.0,
-    'title': r'$pa \enspace pension$',
+    'title': r'pa pension',
     'scale_type': 'linear smart',
     'tick_levels': 5,
     'tick_text_levels': 3,
@@ -100,7 +110,7 @@ left_axis = {
 right_axis = {
     'u_min': ymin,
     'u_max': ymax,
-    'title': r'$years \enspace to \enspace retirement$',
+    'title': r'years to retirement',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
@@ -109,7 +119,7 @@ right_axis = {
 middle_axis = {
     'u_min': amtmin,
     'u_max': amtmax,
-    'title': r'$monthly \enspace contribution$',
+    'title': r'monthly contribution',
     'scale_type': 'log smart',
     'tick_levels': 4,
     'tick_text_levels': 2,
@@ -128,7 +138,7 @@ block_params0 = {
 
 # the nomogram parameters
 main_params = {
-    'filename': 'pension',
+    'filename': myfile,
     'paper_height': 25,  # units are cm
     'paper_width': 16,
     'title_box_width': 8.0,

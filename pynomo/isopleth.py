@@ -671,8 +671,8 @@ class Isopleth_Block(object):
             return pyx.color.cmyk.Periwinkle
         if re.match("CadetBlue", color_str, re.IGNORECASE):
             return pyx.color.cmyk.CadetBlue
-        if re.match("CornFlowerBlue", color_str, re.IGNORECASE):
-            return pyx.color.cmyk.CornFlowerBlue
+        if re.match("CornflowerBlue", color_str, re.IGNORECASE):
+            return pyx.color.cmyk.CornflowerBlue
         if re.match("MidnightBlue", color_str, re.IGNORECASE):
             return pyx.color.cmyk.MidnightBlue
         if re.match("NavyBlue", color_str, re.IGNORECASE):
@@ -693,8 +693,8 @@ class Isopleth_Block(object):
             return pyx.color.cmyk.Turquoise
         if re.match("TealBlue", color_str, re.IGNORECASE):
             return pyx.color.cmyk.TealBlue
-        if re.match("AquaMarine", color_str, re.IGNORECASE):
-            return pyx.color.cmyk.AquaMarine
+        if re.match("Aquamarine", color_str, re.IGNORECASE):
+            return pyx.color.cmyk.Aquamarine
         if re.match("BlueGreen", color_str, re.IGNORECASE):
             return pyx.color.cmyk.BlueGreen
         if re.match("Emerald", color_str, re.IGNORECASE):
@@ -732,7 +732,7 @@ class Isopleth_Block(object):
         if re.match("White", color_str, re.IGNORECASE):
             return pyx.color.cmyk.White
         # default
-        print("unknown color: %s" % color)
+        print("unknown color: %s" % color_str)
         return pyx.color.cmyk.Black
 
     def parse_isopleth_params(self, params):
@@ -1126,7 +1126,7 @@ class Isopleth_Block_Type_5(Isopleth_Block):
         #        print "x_range:"
         #        print x_range
         # use complex numbers to filter results with complex part
-        #values = func_opt(x_range.astype(complex))
+        # values = func_opt(x_range.astype(complex))
         values = x_range
         values_list_complex = values.tolist()
         values_list = []
@@ -1193,7 +1193,7 @@ class Isopleth_Block_Type_5(Isopleth_Block):
             distance_1 = self._calc_distance_points_(x1s, y1s, x, y)
             distance_2 = self._calc_distance_points_(x2s, y2s, x, y)
             distance = min(distance_1, distance_2)
-            if min_distance == None:
+            if min_distance is None:
                 min_distance = distance
                 closest_value = self.nomo_block.atom_wd.section_values[idx][0]
             else:
@@ -1218,7 +1218,7 @@ class Isopleth_Block_Type_5(Isopleth_Block):
             distance_1 = self._calc_distance_points_(x1s, y1s, x, y)
             distance_2 = self._calc_distance_points_(x2s, y2s, x, y)
             distance = min(distance_1, distance_2)
-            if min_distance == None:
+            if min_distance is None:
                 min_distance = distance
                 closest_value = self.nomo_block.atom_u.section_values[idx][0]
             else:

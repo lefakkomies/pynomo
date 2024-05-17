@@ -11,13 +11,23 @@ use dual scales for speed & energy axes
 """
 
 # pylint: disable=C
-
 import sys
+
+import inspect
+import os
 
 sys.path.insert(0, "..")
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
+
 
 
 ########################################
@@ -50,10 +60,9 @@ def EE(S,G):
     return 1.44 + t1 + t2 + t3
 
 
-
 # range for speed km/hr
-Smin = 0.1 * 36 /10        # 0.1 m/s -> km/hr
-Smax = 3 * 36 /10          # 3 m/s -> km/hr
+Smin = 0.1 * 36 / 10        # 0.1 m/s -> km/hr
+Smax = 3 * 36 / 10          # 3 m/s -> km/hr
 
 # range for slope
 Gmax = +25
@@ -84,7 +93,7 @@ left_axis = {
     'tag': 'left',            # link to alternative scale
     'u_min': Smin,
     'u_max': Smax,
-    'title': r'$walking \thinspace speed$',
+    'title': r'walking speed',
     'extra_titles':[
         {'dx':-2.5,
          'dy':-0.0,
@@ -100,7 +109,7 @@ left_axis = {
 right_axis = {
     'u_min': Gmin,
     'u_max': Gmax,
-    'title': r'$gradient \thinspace \%$',
+    'title': r'gradient \%',
     'title_x_shift': 0.6,
     'scale_type': 'linear smart',
     'tick_levels': 5,
@@ -118,7 +127,7 @@ middle_axis = {
     'extra_titles':[
         {'dx':-2.0,
          'dy':0.25,
-         'text': r'$Expended \thinspace energy$',
+         'text': r'Expended energy',
          }],
     'scale_type': 'linear smart',
     'tick_levels': 5,
@@ -202,13 +211,13 @@ block_2_params={
 
 # the nomogram parameters
 main_params = {
-    'filename': 'hiking',
+    'filename': myfile,
     'paper_height': 24,  # units are cm
     'paper_width': 16,
     'title_x': 7.0,
     'title_y': 1.0,
     'title_box_width': 8.0,
-    'title_str': r'$energy \thinspace expended \thinspace hiking$',
+    'title_str': r'energy expended hiking',
 
     # first block is the type_9 nomogram, the dual scale type_8 blocks follow
     'block_params': [block_params0, block_1_params, block_2_params],
@@ -220,7 +229,7 @@ main_params = {
     # text to appear at the foot of the nomogram
     # make this null string for nothing
     # a default string will appear if this is omitted
-#    'footer_string': r'$\tiny test1 \enspace project \enspace configuration \enspace string$'
+#    'footer_string': r'hiking project configuration string'
 }
 
 print("calculating the nomogram ...")

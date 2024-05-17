@@ -4,12 +4,23 @@
 
 import sys
 
+import inspect
+import os
+
 sys.path.insert(0, "..")
 
 import math
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
+
 
 
 ########################################
@@ -32,15 +43,15 @@ def Q(d, v):
     return d * d * v * math.pi / 4
 
 
-dmin = 0.1;
-dmax = 0.3;  # metres
-vmin = 0.3;
-vmax = 4.5;  # meters/sec
+dmin = 0.1
+dmax = 0.3  # metres
+vmin = 0.3
+vmax = 4.5  # meters/sec
 
 Qmin = Q(dmin, vmin)
 Qmax = Q(dmax, vmax)
 
-print('Qmin is ', Qmin, ', Qmax is ', Qmax);
+print('Qmin is ', Qmin, ', Qmax is ', Qmax)
 ###############################################################
 #
 # nr Chebyshev nodes needed to define the scales
@@ -94,17 +105,17 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': 'air',
+    'filename': myfile,
     'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 2,
     'title_y': 9.0,
     'title_box_width': 8.0,
-    'title_str': r'\small $ Q = {\pi \over 4} d^2 v $',
+    'title_str': r'$ \small Q = {\pi \over 4} d^2 v $',
     'extra_texts': [
         {'x': 3,
          'y': 10,
-         'text': r'$Air \thinspace flow \thinspace through \thinspace a \thinspace circular \thinspace duct $',
+         'text': r'Air flow through a circular duct',
          'width': 7,
          }],
     'block_params': [block_params0],
