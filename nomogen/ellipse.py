@@ -126,11 +126,9 @@ block_params0 = {
     'f2_params': middle_axis,
     'f3_params': right_axis,
 
-    # the isopleth connects the mid values of the outer axes
-    # edit this for different values
-    'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max']) / 2, \
-                         'x', \
-                         (right_axis['u_min'] + right_axis['u_max']) / 2]]
+    # this isopleth connects both semi axes = 0.5
+    # ie a circle of diameter 1, circumference pi
+    'isopleth_values': [[0.5, 'x', 0.5]]
 }
 
 # the nomogram parameters

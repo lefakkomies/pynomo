@@ -233,10 +233,11 @@ main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
 Nomographer(main_params)
 
-sys.exit()
 
 # check function for both sides of dual scales:
+#print( 'checking dual scales' )
 for i in [left_axis, left_axis_psi, right_axis, right_axis_in]:
+    break  # omit checks
     for k in range(11):
         t = i['u_min']*(10-k)/10 + i['u_max']*k/10
         if 'f' in i:

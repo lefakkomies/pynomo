@@ -20,7 +20,8 @@
 import math
 import pyx
 import copy, re
-from scipy.optimize import *
+#from scipy.optimize import *
+import scipy.optimize
 from numpy import arange
 import warnings
 
@@ -1134,16 +1135,16 @@ class Isopleth_Block_Type_5(Isopleth_Block):
             if value.imag == 0:
                 values_list.append(value.real)
             else:
-                values_list.append(1e12)  # large number
+                values_list.append(math.inf)  # large number
             #        print "values_list:"
             #        print values_list
         min_x_idx = values_list.index(min(values_list))
-        x_init = x_range[min_x_idx]
+        x_init = x_range[min_x_idx].real
         #        print "x_start %g"%x_start
         #        print "x_stop %g"%x_stop
         #        print "x_init %g"%x_init
         # find x point where u meets v = optimization
-        x_opt = fmin(func_opt, [x_init], disp=0, maxiter=1e5, maxfun=1e5, ftol=1e-8, xtol=1e-8)[0]
+        x_opt = scipy.optimize.fmin(func_opt, [x_init], disp=0, maxiter=1e5, maxfun=1e5, ftol=1e-8, xtol=1e-8)[0]
         x_transformed = self.nomo_block._give_trafo_x_(x_opt, u_value)
         y_transformed = self.nomo_block._give_trafo_y_(x_opt, u_value)
         return x_transformed, y_transformed, x_opt, u_value

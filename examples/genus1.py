@@ -83,7 +83,7 @@ left_axis = {
     'f': lambda u: 0,                       # x coordinate
     'g': lambda u: offset_u + scale_u*u,    # y coordinate
     'h': lambda u: 1,                       # constant
-    'title': r'$u$',
+    'title': r'u',
     'scale_type': 'linear smart',
     'tick_levels': 5,
     'tick_text_levels': 3,
@@ -95,7 +95,7 @@ right_axis = {
     'f': lambda v: 1,
     'g': lambda v: offset_v + scale_v*v,
     'h': lambda v: 1,
-    'title': r'$v$',
+    'title': r'v',
     'scale_type': 'linear smart',
     'tick_levels': 5,
     'tick_text_levels': 3,
@@ -109,7 +109,7 @@ middle_axis = {
     'g': lambda w: ( offset_u*scale_v + scale_u*offset_v*w \
                      - scale_u*scale_v*w**3 ) / (scale_u*w+scale_v),
     'h': lambda w: 1,
-    'title': r'$w$',
+    'title': r'w',
     'title_x_shift': 10,
     'scale_type': 'linear smart',
     'tick_levels': 5,
@@ -141,7 +141,7 @@ middle_axis_alt = {
     'function_x': lambda u: middle_axis['f'](u/alt_per_orig),
     'function_y': lambda u: middle_axis['g'](u/alt_per_orig),
     'align_func': lambda u: u / alt_per_orig,
-    'title': r'$9w$',
+    'title': r'9w',
     'title_x_shift': 7,
     'title_y_shift': -3,
     'scale_type': 'linear smart',
@@ -159,7 +159,7 @@ block_2_params={
 
 
 main_params = {
-    'filename': 'LC_filter.pdf',
+    'filename': 'genus1.pdf',
 
     # a4 page, with margins approx 2cm
     'paper_height': 25,  # units are cm
@@ -180,7 +180,6 @@ main_params = {
 
 }
 
-main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
 Nomographer(main_params)
 

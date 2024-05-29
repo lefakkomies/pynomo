@@ -104,7 +104,7 @@ block_2_params = {
 }
 
 main_params = {
-    'filename': 'amortized_loan.pdf',
+    'filename': 'ex_amortized_loan.pdf',
     'paper_height': 20.0,
     'paper_width': 20.0,
     'block_params': [block_1_params, block_2_params],

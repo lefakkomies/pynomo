@@ -21,10 +21,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import os
-import re
 import time
 import sys
 import subprocess
+
+showPdf = False
+for a in sys.argv[1:]:
+    #print( "arg is ", a )
+    if a == '-d':
+        showPdf = True
+
 
 sys.path.append('../pynomo')
 sys.path.append('../pynomo/pynomo')
@@ -35,36 +41,47 @@ for root, dirs, files in os.walk('.'):
     if root == '.':
         filelist = files
 
-filelist.remove('GENERATE_EXAMPLES.py')
-filelist.remove('axestest.py')
-filelist.remove('nomogen.py')
+if 'GENERATE_EXAMPLES.py' in filelist: filelist.remove('GENERATE_EXAMPLES.py')
+if 'nomogen.py' in filelist:  filelist.remove('nomogen.py')
 
+nr_fails = 0
 tic_orig = time.time()
+
 for filename in filelist:
     if filename.endswith( ".py" ):
-        print("************************************")
+        print("\n************************************")
+        #print( filename )
         text = open(filename).read()
-        if 'Nomographer' in text and not 'dual' in text:
+        if 'Nomographer' in text:
             print("executing %s" % filename)
             code = compile(text, filename, 'exec')
             tic = time.time()
-            exec(code)
+            # recover if this test fails
+            try:
+                exec(code)
+            except BaseException as e:
+                print( "test", filename, "failed -", repr(e) )
+                nr_fails = nr_fails + 1
             toc = time.time()
             print('Took %3.1f s for %s to execute.' % (toc - tic, filename))
             # execfile(filename)
             pdffilename = filename.replace("py", "pdf" )
 
-            import platform
-            if not True:
-                pass
-            elif platform.system() == 'Darwin':       # macOS
-                subprocess.call(('open', pdffilename))
-            elif platform.system() == 'Windows':    # Windows
-                os.startfile(pdffilename)
-            else:                                   # linux variants
-                subprocess.call(('xdg-open', pdffilename))
+            if showPdf:
+                import platform
+                if platform.system() == 'Darwin':       # macOS
+                    subprocess.call(('open', pdffilename))
+                elif platform.system() == 'Windows':    # Windows
+                    os.startfile(pdffilename)
+                else:                                   # linux variants
+                    subprocess.call(('xdg-open', pdffilename))
         else:
             print( 'file {} is not a nomogram file'.format(filename) )
-        print("------------------------------------")
+
+
 toc_orig = time.time()
+print( "\nall tests passed" if nr_fails == 0 else
+       "1 failed test" if nr_fails == 1 else
+       "{} failed tests".format(nr_fails) )
 print('%3.1f s has elapsed overall' % (toc_orig - tic_orig))
+
