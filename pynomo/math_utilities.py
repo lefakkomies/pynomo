@@ -60,7 +60,7 @@ class FourPoint(object):
         #        print test2fd
         #        print "goal"
         #        print x1d,y1d,x2d,y2d,x3d,y3d,x4d,y4d
-        self.trafo = np.dot(trafo_1, linalg.inv(trafo_2))
+        self.trafo = np.dot(trafo_1, np.linalg.inv(trafo_2))
         #        print "result"
         #        print np.dot(test1,self.trafo)
         #        print np.dot(test2,self.trafo)
@@ -274,7 +274,7 @@ class FourPoint(object):
                                [o1, o2, o3]])
         # print "trafo_mat_inv"
         # print trafo_mat_inv
-        trafo_mat = linalg.inv(trafo_mat_inv)
+        trafo_mat = np.linalg.inv(trafo_mat_inv)
         return trafo_mat
 
     def affine_trafo_3_points(self, x1, y1, x2, y2, x3, y3, x1d, y1d, x2d, y2d, x3d, y3d):
@@ -290,7 +290,7 @@ class FourPoint(object):
                    [x2d, y2d, 1.0],
                    [x3d, y3d, 1.0]])
         # transformation
-        t = np.dot(linalg.inv(p), d)
+        t = np.dot(np.linalg.inv(p), d)
         return t
 
 

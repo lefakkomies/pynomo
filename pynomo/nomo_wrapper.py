@@ -35,6 +35,7 @@ import copy
 import re
 import pprint
 import random
+import numpy as np
 
 
 class Nomo_Wrapper:
@@ -1640,7 +1641,7 @@ class Nomo_Block_Type_5(Nomo_Block):
         if p['horizontal_guides']:
             line = pyx.path.path()
             nr = p['horizontal_guide_nr']
-            for y in scipy.linspace(self.grid_box.y_top, self.grid_box.y_bottom, nr):
+            for y in np.linspace(self.grid_box.y_top, self.grid_box.y_bottom, nr):
                 xt1 = self._give_trafo_x_(self.grid_box.x_left, y)
                 yt1 = self._give_trafo_y_(self.grid_box.x_left, y)
                 xt2 = self._give_trafo_x_(self.grid_box.x_right, y)
@@ -1659,7 +1660,7 @@ class Nomo_Block_Type_5(Nomo_Block):
         if p['vertical_guides']:
             line = pyx.path.path()
             nr = p['vertical_guide_nr']
-            for x in scipy.linspace(self.grid_box.x_left, self.grid_box.x_right, nr):
+            for x in np.linspace(self.grid_box.x_left, self.grid_box.x_right, nr):
                 xt1 = self._give_trafo_x_(x, self.grid_box.y_top)
                 yt1 = self._give_trafo_y_(x, self.grid_box.y_top)
                 xt2 = self._give_trafo_x_(x, self.grid_box.y_bottom)

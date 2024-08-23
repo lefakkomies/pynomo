@@ -23,6 +23,7 @@ import copy, re
 from scipy.optimize import *
 from numpy import arange
 import warnings
+import numpy as np
 
 
 class Isopleth_Wrapper(object):
