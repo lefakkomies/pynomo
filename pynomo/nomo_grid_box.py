@@ -442,8 +442,9 @@ class Nomo_Grid_Box(object):
             value = func2(x.astype(complex), v)
             if value.imag > 0:
                 return 1e10  # big number
-            else:
-                return (func2(x, v) - max_fu) ** 2
+            if value.imag < 0:
+                return -1e10  # big number
+            return (func2(x, v) - max_fu) ** 2
 
         def func_bottom(x):
             value = func2(x.astype(complex), v)

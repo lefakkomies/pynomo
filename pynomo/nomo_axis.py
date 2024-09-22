@@ -1954,9 +1954,9 @@ def find_tick_directions(list, f, g, side, start, stop, full_angle=False, extra_
                 angle = -math.atan(dx_unit / dy_unit) * 180.0 / math.pi
             else:
                 angle = 0.0
-            if scipy.sign(dx_unit) < 0.0 and scipy.sign(dy_unit) < 0.0:
+            if numpy.sign(dx_unit) < 0.0 and numpy.sign(dy_unit) < 0.0:
                 angle = angle - 180.0
-            if scipy.sign(dy_unit) < 0.0 <= scipy.sign(dx_unit):
+            if numpy.sign(dy_unit) < 0.0 <= numpy.sign(dx_unit):
                 angle += 180.0
         angle += extra_angle
         dx_units.append(dx_unit)
