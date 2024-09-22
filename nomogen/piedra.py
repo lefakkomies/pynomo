@@ -7,12 +7,23 @@
 
 import sys
 
+import inspect
+import os
+
 sys.path.insert(0, "..")
 
 # se ha modificado la siguiente linea que era 'from nomogen.nomogen import Nomogen' para que se ejecute bien.
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
+
 
 
 ########################################
@@ -64,11 +75,11 @@ left_axis = {
     'title': r'$RC$',
     'title_x_shift': 0.1,
     'title_y_shift': 0.5,
-    'extra_titles':[             #  extra title for units
-        {'dx':-1.3,
-         'dy':0.11,
+    'extra_titles': [             # extra title for units
+        {'dx': -1.3,
+         'dy': 0.11,
          'text': r'$\small MPa$',
-         'width':5,
+         'width': 5,
          }],
     'scale_type': 'linear smart',
     'tick_levels': 3,
@@ -83,11 +94,11 @@ right_axis = {
     'title': r'$D$',
     'title_x_shift': 0.1,
     'title_y_shift': 0.5,
-    'extra_titles':[             #  extra title for units
-        {'dx':-1.3,
-         'dy':0.11,
+    'extra_titles': [             # extra title for units
+        {'dx': -1.3,
+         'dy': 0.11,
          'text': r'$\small in$',
-         'width':5,
+         'width': 5,
          }],
     'scale_type': 'log smart',
     'tick_levels': 4,
@@ -100,11 +111,11 @@ middle_axis = {
     'u_min': Vmin,
     'u_max': Vmax,
     'title': r'$V$',
-    'extra_titles':[
-        {'dx':-1.4,
-         'dy':0.11,
-         'text':r'$\small m$',
-         'width':5,
+    'extra_titles': [
+        {'dx': -1.4,
+         'dy': 0.11,
+         'text': r'$\small m$',
+         'width': 5,
          }],
     'scale_type': 'linear smart',
     'tick_levels': 3,
@@ -124,25 +135,25 @@ block_params0 = {
 ######## the second scales ##############
 # this is another type 9 nomogram with the axes overlaid on the above nomogram
 
-#conversion factors
+# conversion factors
 psi_per_MPa = 145.038/1000
 mm_per_inch = 25.4
-feet_per_metre = 1000/25.4/12 # mm per metre / mm per inch / inches per foot
+feet_per_metre = 1000/25.4/12  # mm per metre / mm per inch / inches per foot
 
 
 left_axis_psi = {
     'tag': 'left',
     'u_min': left_axis['u_min'] * psi_per_MPa,
     'u_max': left_axis['u_max'] * psi_per_MPa,
-    'extra_titles':[
-        {'dx':-0.1,
-         'dy':0.11,
-         'text':r'$\small psi$',
-         'width':5,
+    'extra_titles': [
+        {'dx': -0.1,
+         'dy': 0.11,
+         'text': r'$\small psi$',
+         'width': 5,
          }],
     'align_func': lambda u: u / psi_per_MPa,
     'scale_type': 'linear smart',
-    'text_format':r"$%3.0fk$",
+    'text_format': r"%3.0fk",
     'tick_levels': 5,
     'tick_text_levels': 3,
     'tick_side': 'right',
@@ -152,11 +163,11 @@ right_axis_in = {
     'tag': 'right',
     'u_min': Dmin/mm_per_inch,
     'u_max': Dmax/mm_per_inch,
-    'extra_titles':[
-        {'dx':-0.1,
-         'dy':0.11,
-         'text':r'$\small mm$',
-         'width':5,
+    'extra_titles': [
+        {'dx': -0.1,
+         'dy': 0.11,
+         'text': r'$\small mm$',
+         'width': 5,
          }],
     'align_func': lambda u: u * mm_per_inch,
     'scale_type': 'log smart',
@@ -170,11 +181,11 @@ middle_axis_feet = {
     'tag': 'middle',
     'u_min': middle_axis['u_min'] * feet_per_metre,
     'u_max': middle_axis['u_max'] * feet_per_metre,
-    'extra_titles':[
-        {'dx':-0.1,
-         'dy':0.11,
-         'text':r'$\small ft$',
-         'width':5,
+    'extra_titles': [
+        {'dx': -0.1,
+         'dy': 0.11,
+         'text': r'$\small ft$',
+         'width': 5,
          }],
     'align_func': lambda u: u / feet_per_metre,
     'scale_type': 'linear smart',
@@ -184,23 +195,23 @@ middle_axis_feet = {
 }
 
 
-block_1_params={
-    'block_type':'type_9',
+block_1_params = {
+    'block_type': 'type_9',
     'f1_params': left_axis_psi,
     'f2_params': middle_axis_feet,
     'f3_params': right_axis_in,
-    'isopleth_values': [[ 'x','x','x' ]]
+    'isopleth_values': [['x', 'x', 'x']]
 }
 
 
 main_params = {
-    'filename': 'piedra',
+    'filename': myfile,
     'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 4.0,
     'title_y': 9.0,
     'title_box_width': 8.0,
-    'title_str': r'$piedra \thinspace en \thinspace voladuras$',
+    'title_str': r'piedra en voladuras',
     'extra_texts': [
         {'x': 2,
          'y': 8,
@@ -222,20 +233,17 @@ main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
 Nomographer(main_params)
 
-sys.exit()
 
 # check function for both sides of dual scales:
+#print( 'checking dual scales' )
 for i in [left_axis, left_axis_psi, right_axis, right_axis_in]:
+    break  # omit checks
     for k in range(11):
         t = i['u_min']*(10-k)/10 + i['u_max']*k/10
         if 'f' in i:
             print( i['tick_side'], ",", ":", t, i['f'](t), i['g'](t) )
         elif 'function_x' in i:
-            print( i['tick_side'], ",", ":", t, \
+            print( i['tick_side'], ",", ":", t,
                    i['function_x'](t), i['function_y'](t) )
         else:
             print( "'f' not in ", i['tick_side'] )
-
-
-
-

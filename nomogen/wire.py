@@ -4,12 +4,23 @@
 
 import sys
 
+import inspect
+import os
+
 sys.path.insert(0, "..")
 
 import math
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
+
 
 
 ########################################
@@ -58,7 +69,7 @@ NN = 11
 left_axis = {
     'u_min': mmin,
     'u_max': mmax,
-    'title': r'$m \thinspace kN$',
+    'title': r'$m$ kN',
     'scale_type': 'log smart',
     'tick_levels': 5,
     'tick_text_levels': 4,
@@ -68,7 +79,7 @@ right_axis = {
     'u_min': dmin,
     'u_max': dmax,
     #    'title_x_shift': 0.5,
-    'title': r'$d \thinspace mm$',
+    'title': r'$d$ mm',
     'scale_type': 'log smart',
     'tick_levels': 5,
     'tick_text_levels': 4,
@@ -78,7 +89,7 @@ middle_axis = {
     'u_min': Wmin,
     'u_max': Wmax,
     #    'title_x_shift': -0.5,
-    'title': r'$W \thinspace MPa$',
+    'title': r'$W$ MPa',
     'scale_type': 'log smart',
     'tick_levels': 4,
     'tick_text_levels': 2,
@@ -96,17 +107,17 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': 'wire',
+    'filename': myfile,
     'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 7,
     'title_y': 8.1,
     'title_box_width': 8.0,
-    'title_str': r'\small $ W = {m \over {{\pi \over 4} d^2 }}$',
+    'title_str': r'\Large $ W = {m \over {{\pi \over 4} d^2 }}$',
     'extra_texts': [
         {'x': 5.2,
          'y': 8.8,
-         'text': r'\small $breaking \thinspace strain \thinspace of \thinspace a \thinspace wire $',
+         'text': r'breaking strain of a wire',
          'width': 7,
          }],
     'block_params': [block_params0],

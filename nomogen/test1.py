@@ -7,10 +7,20 @@
 import sys
 import math
 
+import inspect
+import os
+
 sys.path.insert(0, "..")
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
 
 
 ########################################
@@ -63,7 +73,7 @@ NN = 3
 left_axis = {
     'u_min': umin,
     'u_max': umax,
-    'title': r'$u \enspace scale$',
+    'title': r'u scale',
     'title_x_shift': 0.5,
     'scale_type': 'linear smart',
     'tick_levels': 3,
@@ -73,7 +83,7 @@ left_axis = {
 right_axis = {
     'u_min': vmin,
     'u_max': vmax,
-    'title': r'$v \thinspace scale$',
+    'title': r'v scale',
     'title_x_shift': 0.5,
     'scale_type': 'linear smart',
     'tick_levels': 3,
@@ -83,7 +93,7 @@ right_axis = {
 middle_axis = {
     'u_min': wmin,
     'u_max': wmax,
-    'title': r'$w \thinspace scale$',
+    'title': r'w scale',
     'title_x_shift': -0.2,
     'scale_type': 'linear smart',
     'tick_levels': 3,
@@ -105,8 +115,9 @@ block_params0 = {
 }
 
 # the nomogram parameters
+
 main_params = {
-    'filename': 'test1',
+    'filename': myfile,
     'paper_height': 10,  # units are cm
     'paper_width': 10,
     'title_x': 7.0,
@@ -124,10 +135,10 @@ main_params = {
     #'muShape': 0,
 
     # text to appear at the foot of the nomogram
-    # note tha latex rules apply
+    # note that latex rules apply
     # a default string will appear if this is omitted
     # make this an empty string to have no footer text
-    'footer_string': r'$\tiny test1 \enspace project \enspace footer \enspace string$'
+    'footer_string': 'test1 project footer string'
 }
 
 print("calculating the nomogram ...")

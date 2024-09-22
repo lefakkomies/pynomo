@@ -83,35 +83,35 @@ class Nomo_Wrapper:
         gamma3 = 1.0
         return alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3
 
-    # def _calc_trafo_(self, x1, y1, x2, y2, x3, y3, x1d, y1d, x2d, y2d, x3d, y3d):
-    #     """
-    #     transforms three points to three points via rotation and scaling
-    #     and transformation
-    #     xd = alpha1*x+beta1*y+gamma1
-    #     yd = alpha2*x+beta2*y+gamma2
-    #     alpha3=0, beta3=0, gamma3=1.0
-    #     """
-    #     matt = np.array([[x1, y1, 1.0, 0.0, 0.0, 0.0],
-    #                      [0.0, 0.0, 0.0, x1, y1, 1.0],
-    #                      [x2, y2, 1.0, 0.0, 0.0, 0.0],
-    #                      [0.0, 0.0, 0.0, x2, y2, 1.0],
-    #                      [x3, y3, 1.0, 0.0, 0.0, 0.0],
-    #                      [0.0, 0.0, 0.0, x3, y3, 1.0]])
-    #     # print rank(mat)
-    #     inverse = np.linalg.inv(matt)
-    #     # vec=dot(inverse,[[x1d,y1d,x2d,y2d,x3d,y3d]])
-    #     dest = np.array([x1d, y1d, x2d, y2d, x3d, y3d])
-    #     vec = np.linalg.solve(matt, dest)
-    #     alpha1 = vec[0]
-    #     beta1 = vec[1]
-    #     gamma1 = vec[2]
-    #     alpha2 = vec[3]
-    #     beta2 = vec[4]
-    #     gamma2 = vec[5]
-    #     alpha3 = 0.0
-    #     beta3 = 0.0
-    #     gamma3 = 1.0
-    #     return alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3
+    def _calc_trafo_(self, x1, y1, x2, y2, x3, y3, x1d, y1d, x2d, y2d, x3d, y3d):
+        """
+        transforms three points to three points via rotation and scaling
+        and transformation
+        xd = alpha1*x+beta1*y+gamma1
+        yd = alpha2*x+beta2*y+gamma2
+        alpha3=0, beta3=0, gamma3=1.0
+        """
+        matt = np.array([[x1, y1, 1.0, 0.0, 0.0, 0.0],
+                         [0.0, 0.0, 0.0, x1, y1, 1.0],
+                         [x2, y2, 1.0, 0.0, 0.0, 0.0],
+                         [0.0, 0.0, 0.0, x2, y2, 1.0],
+                         [x3, y3, 1.0, 0.0, 0.0, 0.0],
+                         [0.0, 0.0, 0.0, x3, y3, 1.0]])
+        # print rank(mat)
+        inverse = np.linalg.inv(matt)
+        # vec=dot(inverse,[[x1d,y1d,x2d,y2d,x3d,y3d]])
+        dest = np.array([x1d, y1d, x2d, y2d, x3d, y3d])
+        vec = np.linalg.solve(matt, dest)
+        alpha1 = vec[0]
+        beta1 = vec[1]
+        gamma1 = vec[2]
+        alpha2 = vec[3]
+        beta2 = vec[4]
+        gamma2 = vec[5]
+        alpha3 = 0.0
+        beta3 = 0.0
+        gamma3 = 1.0
+        return alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3
 
     def _update_trafo_(self):
         """
@@ -304,12 +304,97 @@ class Nomo_Wrapper:
                 c.text(x, y, text_str, [
                     pyx.text.parbox(width)] + pyx_extra_defs)
 
+    def align_blocks_old(self):
+        """
+        aligns blocks w.r.t. each other according to 'tag' fields
+        in Atom params dictionary
+        """
+        #        # translate all blocks initially
+        #        for block in self.block_stack:
+        #            alpha1,beta1,gamma1,alpha2,beta2,gamma2,alpha3,beta3,gamma3=\
+        #            self._return_initial_shift_()
+        #            block.add_transformation(alpha1,beta1,gamma1,
+        #                                     alpha2,beta2,gamma2,
+        #                                     alpha3,beta3,gamma3)
+
+        for idx1, block1 in enumerate(self.block_stack):
+            for idx2, block2 in enumerate(self.block_stack):
+                if idx2 > idx1:
+                    for atom1 in block1.atom_stack:
+                        for atom2 in block2.atom_stack:
+                            if atom1.params['tag'] == atom2.params['tag'] \
+                                    and not atom1.params['tag'] == 'none' \
+                                    and not atom2.params['aligned']:  # align only once
+                                # let's see if need for double align
+                                double_aligned = False
+                                for atom1d in block1.atom_stack:
+                                    for atom2d in block2.atom_stack:
+                                        if atom1d.params['dtag'] == atom2d.params['dtag'] \
+                                                and not atom1d.params['dtag'] == 'none':
+                                            # and not atom1d.params['tag']==atom1.params['tag']:
+                                            # and not atom2d.params['aligned']: # align only once
+                                            # do first pre-alignment
+                                            #                                            alpha1,beta1,gamma1,alpha2,beta2,gamma2,alpha3,beta3,gamma3=\
+                                            #                                            self._find_trafo_2_atoms_(atom1,atom2)
+                                            #                                            block2.add_transformation(alpha1,beta1,gamma1,
+                                            #                                                                      alpha2,beta2,gamma2,
+                                            #                                                                      alpha3,beta3,gamma3)
+                                            # double alignment
+                                            # print "double aligning with tags %s %s" % (
+                                            # atom1.params['tag'], atom1d.params['dtag'])
+                                            #                                            alpha1,beta1,gamma1,alpha2,beta2,gamma2,alpha3,beta3,gamma3=\
+                                            #                                            self._find_trafo_4_atoms_3_points_(atom1,atom1d,atom2,atom2d)
+                                            #                                            block2.add_transformation(alpha1,beta1,gamma1,
+                                            #                                                                      alpha2,beta2,gamma2,
+                                            #                                                                      alpha3,beta3,gamma3)
+                                            alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
+                                                self._find_trafo_4_atoms_(
+                                                    atom1, atom1d, atom2, atom2d)
+                                            block2.add_transformation(alpha1, beta1, gamma1,
+                                                                      alpha2, beta2, gamma2,
+                                                                      alpha3, beta3, gamma3)
+                                            double_aligned = True
+                                        #                                            # DEBUG
+                                        #                                            u_start_1=min(atom1.params['u_min'],atom1.params['u_max'])
+                                        #                                            u_stop_1=max(atom1.params['u_min'],atom1.params['u_max'])
+                                        #                                            u_start_1d=min(atom1d.params['u_min'],atom2.params['u_max'])
+                                        #                                            u_stop_1d=max(atom1d.params['u_min'],atom2.params['u_max'])
+                                        #                                            print "test if same:"
+                                        #                                            print atom1.give_x(u_start_1)
+                                        #                                            print atom1d.give_x(u_start_1d)
+                                        #                                            print atom1.give_y(u_start_1)
+                                        #                                            print atom1d.give_y(u_start_1d)
+                                        #                                            print atom2.give_x(u_start_1)
+                                        #                                            print atom2d.give_x(u_start_1d)
+                                        #                                            print atom2.give_y(u_start_1)
+                                        #                                            print atom2d.give_y(u_start_1d)
+                                # print idx2
+                                # print idx2
+                                if not double_aligned:
+                                    # print "Aligning with tag %s" % atom1.params['tag']
+                                    alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3 = \
+                                        self._find_trafo_2_atoms_(atom1, atom2)
+                                    block2.add_transformation(alpha1, beta1, gamma1,
+                                                              alpha2, beta2, gamma2,
+                                                              alpha3, beta3, gamma3)
+                                # align only once
+                                atom2.params['aligned'] = True
+        # let's make identity matrix that will be changed when optimized
+        for block in self.block_stack:
+            block.add_transformation()
+
     def align_blocks(self):
         """
         aligns blocks w.r.t. each other according to 'tag' fields
         in Atom params dictionary
         """
-
+        #        # translate all blocks initially
+        #        for block in self.block_stack:
+        #            alpha1,beta1,gamma1,alpha2,beta2,gamma2,alpha3,beta3,gamma3=\
+        #            self._return_initial_shift_()
+        #            block.add_transformation(alpha1,beta1,gamma1,
+        #                                     alpha2,beta2,gamma2,
+        #                                     alpha3,beta3,gamma3)
 
         for idx1, block1 in enumerate(self.block_stack):
             for idx2, block2 in enumerate(self.block_stack):
@@ -346,6 +431,7 @@ class Nomo_Wrapper:
                                     block2.add_transformation(alpha1, beta1, gamma1,
                                                               alpha2, beta2, gamma2,
                                                               alpha3, beta3, gamma3)
+                                # atom2.params['aligned']=True # align only once
                                 block2.aligned = True  # align only once
         # let's make identity matrix that will be changed when optimized
         for block in self.block_stack:
@@ -467,7 +553,7 @@ class Nomo_Wrapper:
                  (x3d, y3d),
                  (x4d, y4d),
                  (x5d, y5d)]
-        )
+            )
 
         # print (alpha1,beta1,gamma1,alpha2,beta2,gamma2,alpha3,beta3,gamma3)
         return alpha1, beta1, gamma1, alpha2, beta2, gamma2, alpha3, beta3, gamma3
@@ -476,6 +562,7 @@ class Nomo_Wrapper:
         """
         svd-based solving of affine transformation between two sets of coordinates
         """
+
         def _make_row_(coordinate='x', x=1.0, y=1.0, coord_value=1.0):
             """ Utility to find transformation matrix. See eq.37,a
             in Allcock.
@@ -1396,12 +1483,12 @@ class Nomo_Block_Type_4(Nomo_Block):
 class Nomo_Block_Type_5(Nomo_Block):
     """
              v
-       --------------------
-       |   \    \         |           y
-     u |----\----\--------| w         |           Diagonal "line_func" missing in pic.
-       |-----\----\-------|           |           Pic. without mirrorings.
-       |      \    \      |           |-----> x
-       --------------------
+       ----------------------
+       |   \\    \\         |           y
+     u |----\\----\\--------| w         |           Diagonal "line_func" missing in pic.
+       |-----\\----\\-------|           |           Pic. without mirrorings.
+       |      \\    \\      |           |-----> x
+       ---------------------
               wd
     u,v relate to coordinates x,y in rectangle as
     func_u(u)=y
@@ -1552,6 +1639,8 @@ class Nomo_Block_Type_5(Nomo_Block):
         """"
         draws titles to v-contours
         """
+        title_text = ""
+        text_attr = []  # to be filled
         para_v = self.grid_box.params_v
         if np.sqrt(dx ** 2 + dy ** 2) == 0:
             dx_unit = 0
@@ -1640,7 +1729,7 @@ class Nomo_Block_Type_5(Nomo_Block):
         if p['horizontal_guides']:
             line = pyx.path.path()
             nr = p['horizontal_guide_nr']
-            for y in scipy.linspace(self.grid_box.y_top, self.grid_box.y_bottom, nr):
+            for y in np.linspace(self.grid_box.y_top, self.grid_box.y_bottom, nr):
                 xt1 = self._give_trafo_x_(self.grid_box.x_left, y)
                 yt1 = self._give_trafo_y_(self.grid_box.x_left, y)
                 xt2 = self._give_trafo_x_(self.grid_box.x_right, y)
@@ -1659,7 +1748,7 @@ class Nomo_Block_Type_5(Nomo_Block):
         if p['vertical_guides']:
             line = pyx.path.path()
             nr = p['vertical_guide_nr']
-            for x in scipy.linspace(self.grid_box.x_left, self.grid_box.x_right, nr):
+            for x in np.linspace(self.grid_box.x_left, self.grid_box.x_right, nr):
                 xt1 = self._give_trafo_x_(x, self.grid_box.y_top)
                 yt1 = self._give_trafo_y_(x, self.grid_box.y_top)
                 xt2 = self._give_trafo_x_(x, self.grid_box.y_bottom)

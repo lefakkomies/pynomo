@@ -17,6 +17,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    NOTE: currently this example is broken (Sep 2024)
 """
 import sys
 import numpy as np
@@ -25,6 +27,7 @@ sys.path.insert(0, "..")
 from pynomo.nomographer import Nomographer
 from pynomo.nomo_wrapper import Nomo_Block_Type_5
 
+#np.seterr(all='raise')
 
 # Type 5 contour
 def f1(x, u):
@@ -104,7 +107,7 @@ block_2_params = {
 }
 
 main_params = {
-    'filename': 'amortized_loan.pdf',
+    'filename': 'ex_amortized_loan.pdf',
     'paper_height': 20.0,
     'paper_width': 20.0,
     'block_params': [block_1_params, block_2_params],

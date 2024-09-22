@@ -9,7 +9,7 @@
     generate the pdf with pynomo
 
 
-    Copyright (C) 2021-2023  Trevor Blight
+    Copyright (C) 2021-2024  Trevor Blight
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,7 +42,6 @@ from scipy import interpolate
 
 import functools
 
-from packaging.version import Version
 
 # relevant only for python >= 3.6
 # pylint: disable=consider-using-f-string
@@ -119,6 +118,9 @@ class Nomogen:
         else:
             muShape = 1.0e-14
             print( 'setting nomogram for best measureability, muShape is', muShape )
+
+        global itNr
+        itNr = 0
 
 
         # get the min & max input values
@@ -867,7 +869,7 @@ error: the v scale line around the region v = {} cannot be represented by a fini
             print("alignment error is estimated at less than {:5.2g} mm".format(aler))
             if aler > 0.2:
                 print("alignment errors are possible - please check.")
-                print("This nomogram used a polynomial of degree ", NN)
+                print( "This nomogram used a polynomial defined with {} points ".format(NN) )
                 print("Try increasing this, or reduce the range of one or more scales")
 
             # return the resulting axes into the nomogram parameters
@@ -886,16 +888,28 @@ error: the v scale line around the region v = {} cannot be represented by a fini
 
             # get & print footer info
             if 'footer_string' in main_params:
-                txt = r'$\tiny \hfil {} \hfil$'.format( main_params['footer_string'])
+                txt = r'\tiny \hfil {} \hfil'.format( main_params['footer_string'])
             else:
                 datestr = datetime.datetime.now().strftime("%d %b %y")
                 if aler > 0.1:
-                    tolstr = r",\thinspace est \thinspace tolerance \thinspace {:5.2g} mm".format(aler)
+                    tolstr = r", est tolerance {:5.2g} mm".format(aler)
                 else:
                     tolstr = ""
 
-                txt = r'$\tiny \hfil {}: created \thinspace by \thinspace nomogen \thinspace {} {} \hfil$'.format( main_params['filename'].replace('\\', ' \\backslash '), datestr, tolstr)
-                 # print("txt is \"", txt, "\"", sep='')
+                # '\' char is escape, '_' char is subscript, '$' is math mode, etc
+                escapes = "".maketrans({ '\\': r'$ \backslash $',
+                                         '^': r'\^{}',
+                                         '_': r'\_',
+                                         '~': r'$ \sim $',
+                                         '$': r'\$',
+                                         '#': r'\#',
+                                         '%': r'\%',
+                                         '&': r'\&',
+                                         '{': r'\{',
+                                         '}': r'\}' })
+                txt = r'\tiny \hfil {}: created by nomogen {} {} \hfil'. \
+                      format( main_params['filename'].translate(escapes), datestr, tolstr)
+                #print("txt is \"", txt, "\"", sep='')
 
             footerText = {'x': 0,
                           'y': 0.0,

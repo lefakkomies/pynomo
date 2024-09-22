@@ -7,10 +7,21 @@
 
 import sys
 
+import inspect
+import os
+
 sys.path.insert(0, "..")
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
+
 
 import math
 
@@ -103,7 +114,7 @@ NN = 7
 left_axis = {
     'u_min': pmin,
     'u_max': pmax,
-    'title': r'$pressure \enspace MPa$',
+    'title': r'Pressure MPa',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
@@ -113,7 +124,7 @@ left_axis = {
 right_axis = {
     'u_min': Tmin,
     'u_max': Tmax,
-    'title': r'$Temperature \enspace ^\circ K$',
+    'title': r'Temperature $ ^\circ $K',
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
@@ -142,7 +153,7 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': 'lemmon',
+    'filename': myfile,
     'paper_height': 25,  # units are cm
     'paper_width': 18,
     'title_x': 9.0,
@@ -152,12 +163,17 @@ main_params = {
     'extra_texts': [
         {'x': 6,
          'y': 4,
-         'text': r'$compressibility \thinspace factor \thinspace for \thinspace hydrogen$',
+         'text': r'compressibility factor for hydrogen',
          'width': 10,
          }],
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
-    'npoints': NN
+    'npoints': NN,
+
+    # text to appear at the foot of the nomogram
+    # make this null string for nothing
+    # a default string will appear if this is omitted
+    'footer_string': 'Lemmon equation'
 }
 
 print("calculating the nomogram ...")

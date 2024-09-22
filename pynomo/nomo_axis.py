@@ -20,6 +20,7 @@
 import pyx
 import math
 import scipy
+import numpy
 import random
 import copy #, re, pprint
 import six  # for python 2 and 3 compatibility
@@ -1119,8 +1120,8 @@ class Nomo_Axis:
         thin_line = pyx.path.path(pyx.path.moveto(f(min), g(min)))
         max_decade = math.ceil(math.log10(max))
         min_decade = math.floor(math.log10(min))
-        for decade in scipy.arange(min_decade, max_decade + 1, 1):
-            for number in scipy.concatenate((scipy.arange(1, 2, 0.2), scipy.arange(2, 3, 0.5), scipy.arange(3, 10, 1))):
+        for decade in numpy.arange(min_decade, max_decade + 1, 1):
+            for number in scipy.concatenate((numpy.arange(1, 2, 0.2), numpy.arange(2, 3, 0.5), numpy.arange(3, 10, 1))):
                 u = number * 10.0 ** decade
                 if (u - min) > 0:  # to avoid too big du values
                     du = (u - min) * 1e-6
@@ -1814,8 +1815,8 @@ def find_log_ticks(start, stop):
     min_decade = math.floor(math.log10(min))
     start_ax = None
     stop_ax = None
-    for decade in scipy.arange(min_decade, max_decade + 1, 1):
-        # for number in scipy.concatenate((scipy.arange(1,2,0.2),scipy.arange(2,3,0.5),scipy.arange(3,10,1))):
+    for decade in numpy.arange(min_decade, max_decade + 1, 1):
+        # for number in scipy.concatenate((numpy.arange(1,2,0.2),numpy.arange(2,3,0.5),numpy.arange(3,10,1))):
         for number in [1, 1.2, 1.4, 1.6, 1.8, 2.0, 2.5, 3, 4, 5, 6, 7, 8, 9]:
             u = number * 10.0 ** decade
             if u >= min and u <= max:
@@ -1865,7 +1866,7 @@ def find_log_ticks_smart(start, stop, f, g, turn=1, base_start=None,
     tick_2_list_final = tick_2_list_final + tick_1_list
     tick_3_list_final = tick_3_list_final + tick_2_list
     tick_4_list_final = tick_4_list_final + tick_3_list + tick_4_list
-    for decade in scipy.arange(min_decade + 1, max_decade, 1):
+    for decade in numpy.arange(min_decade + 1, max_decade, 1):
         value = 10.0 ** decade
         start = value
         stop = min(value * 10.0, max_value)
@@ -1953,9 +1954,9 @@ def find_tick_directions(list, f, g, side, start, stop, full_angle=False, extra_
                 angle = -math.atan(dx_unit / dy_unit) * 180.0 / math.pi
             else:
                 angle = 0.0
-            if scipy.sign(dx_unit) < 0.0 and scipy.sign(dy_unit) < 0.0:
+            if numpy.sign(dx_unit) < 0.0 and numpy.sign(dy_unit) < 0.0:
                 angle = angle - 180.0
-            if scipy.sign(dy_unit) < 0.0 <= scipy.sign(dx_unit):
+            if numpy.sign(dy_unit) < 0.0 <= numpy.sign(dx_unit):
                 angle += 180.0
         angle += extra_angle
         dx_units.append(dx_unit)

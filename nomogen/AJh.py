@@ -4,12 +4,23 @@
 
 import sys
 
+import inspect
+import os
+
 sys.path.insert(0, "..")
 
 import math
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
+
 
 
 ########################################
@@ -103,13 +114,13 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': 'AJH',
+    'filename': myfile,
     'paper_height': 15,  # units are cm
     'paper_width': 10,
     'title_x': 4.5,
     'title_y': 1.5,
     'title_box_width': 8.0,
-    'title_str': r'\scriptsize $(1+L)h^2 - Lh(1+p) - {1 \over 3} (1-L)(1+2p) = 0$',
+    'title_str': r'$ \scriptsize (1+L)h^2 - Lh(1+p) - {1 \over 3} (1-L)(1+2p) = 0$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
     'npoints': NN

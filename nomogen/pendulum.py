@@ -10,10 +10,21 @@
 
 import sys
 
+import inspect
+import os
+
 sys.path.insert(0, "..")
 
 from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
+
+# get current file name
+myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
+
+# alternative with no external dependencies - it works most of the time
+#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
+#             or __name__,
+
 
 
 ########################################
@@ -62,7 +73,7 @@ NN = 12
 left_axis = {
     'u_min': umin,
     'u_max': umax,
-    'title': r'$a \thinspace distance$',
+    'title': r'a distance',
     'scale_type': 'linear smart',
     'tick_levels': 4,
     'tick_text_levels': 0,
@@ -83,7 +94,7 @@ left_axis = {
 right_axis = {
     'u_min': vmin,
     'u_max': vmax,
-    'title': r'$b \thinspace distance$',
+    'title': r'b distance',
     'scale_type': 'linear smart',
     'tick_levels': 4,
     'tick_text_levels': 0,
@@ -104,7 +115,7 @@ right_axis = {
 middle_axis = {
     'u_min': wmin,
     'u_max': wmax,
-    'title': r'$L \thinspace distance$',
+    'title': r'L distance',
     'scale_type': 'linear smart',
     'tick_levels': 5,
     'tick_text_levels': 3,
@@ -123,13 +134,13 @@ block_params0 = {
 }
 
 main_params = {
-    'filename': 'pendulum',
+    'filename': myfile,
     # a4 page, with margins approx 2cm
     'paper_height': 25,  # units are cm
     'paper_width':  16,
 
-    'title_x': 12.6,
-    'title_y': 18.0,
+    'title_x': 5.6,
+    'title_y': 24.0,
     'title_box_width': 3.0,
     'title_str': r'$L = {{a^2 + b^2} \over {a + b}}$',
     'block_params': [block_params0],
