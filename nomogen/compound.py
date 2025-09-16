@@ -94,7 +94,11 @@ block_params0 = {
     'f2_params': middle_axis,
     'f3_params': right_axis,
     'transform_ini': False,
-    'isopleth_values': [[(imin * imax * imax) ** (1 / 3), 'x', (ymin + ymax) / 2]]
+    'isopleth_values': [[(imin * imax * imax) ** (1 / 3), 'x', (ymin + ymax) / 2]],
+
+    # log alignment errors
+    # If this is missing or False then alignment error logs are disabled
+    'LogAlignment': False,
 }
 
 main_params = {

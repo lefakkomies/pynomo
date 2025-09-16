@@ -78,7 +78,7 @@ class Nomo_Axis:
             'title_distance_center': 0.5,
             'title_opposite_tick': True,
             'title_draw_center': False,
-            'title_rotate_text':False,
+            'title_rotate_text': False,
             'title_relative_offset': (0, 0),  # relative (dx,dy)
             'title_absolute_offset': (0, 0),  # absolute (dx,dy)
             'text_format': "$%4.4g$",
@@ -952,7 +952,7 @@ class Nomo_Axis:
         # self.text_4_list=tick_4_list
 
     def _make_texts_(self, tick_list, text_list, f, g, dx_units, dy_units, angles,
-                     text_distance, text_size, manual_texts=[]):
+                     text_distance, text_size, manual_texts=None):
         """
         makes list of text definitions
         """
@@ -968,7 +968,7 @@ class Nomo_Axis:
                     text_attr = [pyx.text.valign.middle, pyx.text.halign.left, text_size, pyx.trafo.rotate(angles[idx])]
             if self.axis_appear['text_horizontal_align_center'] == True:
                 text_attr = [pyx.text.valign.top, pyx.text.halign.center, text_size, pyx.trafo.rotate(angles[idx])]
-            if len(manual_texts) > 0:
+            if not manual_texts is None:
                 text_list.append((manual_texts[idx], f(u) + text_distance * dy_units[idx], \
                                   g(u) - text_distance * dx_units[idx], text_attr))
             else:  # make a number

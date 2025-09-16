@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-# generate a nomogen for the circumference of an elipse
-# reference:
-# http://web.tecnico.ulisboa.pt/~mcasquilho/compute/com/,ellips/PerimeterOfEllipse.pdf
+'''
+ generate a nomogen for the circumference of an elipse
+ reference:
+ http://web.tecnico.ulisboa.pt/~mcasquilho/compute/com/,ellips/PerimeterOfEllipse.pdf
 
-# demonstrate generation of a nomogram from a difficult equation
-
+ demonstrate generation of a nomogram from a difficult equation
+'''
 
 # pylint: disable=C
 
@@ -25,11 +26,6 @@ from pynomo.nomographer import Nomographer
 # get current file name
 myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
 
-# alternative with no external dependencies - it works most of the time
-#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
-#             or __name__,
-
-
 
 ########################################
 #
@@ -46,10 +42,11 @@ myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
 # return value is circumference, the middle scale
 # a & b are the semi-major & semi-minor axes and respectively the values on the left and right scales
 
-# circumference of ellipse, using hypergeometric function
-# perimeter = 2*a*pi*hgf(-0.5, 0.5, 1, 1 - b*b/a*a)
-
 def circEllipse(a, b):
+    '''
+     circumference of ellipse, using hypergeometric function
+     perimeter = 2*a*pi*hgf(-0.5, 0.5, 1, 1 - b*b/a*a)
+    '''
     aa = abs(a)
     bb = abs(b)
     if aa < bb:
@@ -103,7 +100,6 @@ right_axis = {
     'u_min': bmin,
     'u_max': bmax,
     'title': r'b semi axis',
-    #'title_x_shift': 0.5,
     'scale_type': 'linear smart',
     'tick_levels': 3,
     'tick_text_levels': 2,
@@ -128,7 +124,11 @@ block_params0 = {
 
     # this isopleth connects both semi axes = 0.5
     # ie a circle of diameter 1, circumference pi
-    'isopleth_values': [[0.5, 'x', 0.5]]
+    'isopleth_values': [[0.5, 'x', 0.5]],
+
+    # log alignment errors
+    # If this is missing or False then alignment error logs are disabled
+    'LogAlignment': False,
 }
 
 # the nomogram parameters
@@ -141,6 +141,7 @@ main_params = {
     'title_box_width': 8.0,
     'title_str': r'circumference of an ellipse',
     'block_params': [block_params0],
+    'isopleth_params': [ {'color': 'Red'}, ],
     'transformations': [('scale paper',)],
 
     'npoints': NN,
@@ -162,3 +163,5 @@ Nomogen(circEllipse, main_params)  # generate nomogram for the target function
 main_params['filename'] += '.pdf'
 print("printing ", main_params['filename'], " ...")
 Nomographer(main_params)
+
+####################### end of ellipse.py #############

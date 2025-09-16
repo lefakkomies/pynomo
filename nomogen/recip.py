@@ -98,7 +98,11 @@ block_params0 = {
     'transform_ini': False,
     'isopleth_values': [[(left_axis['u_min'] ** 2 * left_axis['u_max']) ** (1 / 3), \
                          'x', \
-                         (right_axis['u_min'] * right_axis['u_max'] ** 2) ** (1 / 3)]]
+                         (right_axis['u_min'] * right_axis['u_max'] ** 2) ** (1 / 3)]],
+
+    # log alignment errors
+    # If this is missing or False then alignment error logs are disabled
+    'LogAlignment': False,
 }
 
 # the nomogram parameters

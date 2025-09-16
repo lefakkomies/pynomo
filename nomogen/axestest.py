@@ -13,12 +13,11 @@
       where n is an integer denoting a test number
 
 '''
+
 # pylint: disable=C
 
 import sys
-import platform
-import subprocess
-import os
+from pprint import  pprint
 
 sys.path.insert(0, "..")
 
@@ -26,190 +25,209 @@ from nomogen import Nomogen
 from pynomo.nomographer import Nomographer
 
 
-###############################################################
-#
-# nr Chebyshev nodes needed to define the scales
-# a higher value may be necessary if the scales are very non-linear
-# a lower value is faster, makes a smoother curve,
-#     but could be less accurate
-NN = 3
+# range for the u scale
+umin = 1
+umax = 5
+
+# range for the v scale
+vmin = 1
+vmax = 5
 
 
-# simple axes tests for each test case ...
+def do_test( name_template ):
+    ''' simple axes tests for each test case ... '''
 
-for test_nr in range(1,17):
+#    global scale_type
 
-    if test_nr == 1:
-        w = lambda u,v: u+v
-        scale_type = 'linear smart'
-        title_str = r'$w = u + v$'
-    elif test_nr == 2:
-        w = lambda u, v: u - v
-        scale_type = 'linear smart'
-        title_str = r'$w = u - v$'
-    elif test_nr == 3:
-        w = lambda u, v: -(u + v)
-        scale_type = 'linear smart'
-        title_str = r'$w = -(v + u)$'
-    elif test_nr == 4:
-        w = lambda u, v: v - u
-        scale_type = 'linear smart'
-        title_str = r'$w = v - u$'
-    elif test_nr == 5:
-        w = lambda u, v: u*v
-        scale_type = 'log smart'
-        title_str = r'$w  uv$'
-    elif test_nr == 6:
-        w = lambda u, v: u / v
-        scale_type = 'log smart'
-        title_str = r'$w = {u \over v}$'
-    elif test_nr == 7:
-        w = lambda u, v: 1 / (u*v)
-        scale_type = 'log smart'
-        title_str = r'$w = {1 \over {uv}}$'
-    elif test_nr == 8:
-        w = lambda u, v: v / u
-        scale_type = 'log smart'
-        title_str = r'$w = {v \over u}$'
-    elif test_nr == 9:
-        w = lambda u,v: u*u+v
-        scale_type = 'linear smart'
-        title_str = r'$w = u^2 + v$'
-    elif test_nr == 10:
-        w = lambda u, v: u*u - v
-        scale_type = 'linear smart'
-        title_str = r'$w = u^2-v$'
-    elif test_nr == 11:
-        w = lambda u, v: -(u*u + v)
-        scale_type = 'linear smart'
-        title_str = r'$w = -(u^2 + v)$'
-    elif test_nr == 12:
-        w = lambda u, v: v - u*u
-        scale_type = 'linear smart'
-        title_str = r'$w = v - u^2$'
-    elif test_nr == 13:
-        w = lambda u, v: u*u*v
-        scale_type = 'log smart'
-        title_str = r'$w = u^2v$'
-    elif test_nr == 14:
-        w = lambda u, v: u*u / v
-        scale_type = 'log smart'
-        title_str = r'$w = {u^2 \over v}$'
-    elif test_nr == 15:
-        w = lambda u, v: 1 / (u*u*v)
-        scale_type = 'log'                            # log smart -> bug in printing!
-        title_str = r'$w = {1 \over {u^2v}}$'
-    elif test_nr == 16:
-        w = lambda u, v: v / u / u
-        scale_type = 'log smart'
-        title_str = r'$w = {v \over {u^2}}$'
-    else:
-        sys.exit( 'there is no test number ({})'.format(test_nr) )
+    test_nr = 0
+    while True:  # for test_nr in range(1,17):
+        test_nr += 1
 
-    test_name = 'axtest{}'.format(test_nr)
+        NN = 3        # default nr Chebyshev nodes
 
-    t = test_nr - 1
-    symStr = 'symmetrical' if t %16 < 8 else 'non-symmetrical'
-    scaleStr = 'linear' if t % 8 < 4 else 'log'
-    wStr = 'up' if t % 4 < 2 else 'down'
-    vStr = 'up' if t % 2 == 0 else 'down'
+        if test_nr == 1:
+            w = lambda u,v: u+v
+            scale_type = 'linear smart'
+            title_str = r'$w = u + v$'
+        elif test_nr == 2:
+            w = lambda u, v: u - v
+            scale_type = 'linear smart'
+            title_str = r'$w = u - v$'
+        elif test_nr == 3:
+            w = lambda u, v: -(u + v)
+            scale_type = 'linear smart'
+            title_str = r'$w = -(v + u)$'
+        elif test_nr == 4:
+            w = lambda u, v: v - u
+            scale_type = 'linear smart'
+            title_str = r'$w = v - u$'
+        elif test_nr == 5:
+            w = lambda u, v: u*v
+            scale_type = 'log smart'
+            title_str = r'$w = uv$'
+            if name_template[-1] =='c': NN = 16
+        elif test_nr == 6:
+            w = lambda u, v: u / v
+            scale_type = 'log smart'
+            title_str = r'$w = {u \over v}$'
+            if name_template[-1] =='c': NN = 16
+        elif test_nr == 7:
+            w = lambda u, v: 1 / (u*v)
+            scale_type = 'log smart'
+            title_str = r'$w = {1 \over {uv}}$'
+            if name_template[-1] =='c': NN = 16
+        elif test_nr == 8:
+            w = lambda u, v: v / u
+            scale_type = 'log smart'
+            title_str = r'$w = {v \over u}$'
+            if name_template[-1] =='c': NN = 16
+        elif test_nr == 9:
+            w = lambda u,v: u+v*v
+            scale_type = 'linear smart'
+            title_str = r'$w = u + v^2$'
+        elif test_nr == 10:
+            w = lambda u, v: u*u - v
+            scale_type = 'linear smart'
+            title_str = r'$w = u^2-v$'
+        elif test_nr == 11:
+            w = lambda u, v: -(u + v*v)
+            scale_type = 'linear smart'
+            title_str = r'$w = -(u + v^2)$'
+        elif test_nr == 12:
+            w = lambda u, v: v - u*u
+            scale_type = 'linear smart'
+            title_str = r'$w = v - u^2$'
+            if name_template[-1] =='c': NN = 4
+        elif test_nr == 13:
+            w = lambda u, v: u**1.5*v
+            scale_type = 'log smart'
+            title_str = r'$w = u^{1.5}v$'
+            if name_template[-1] =='c': NN = 16
+        elif test_nr == 14:
+            w = lambda u, v: u**1.5 / v
+            scale_type = 'log smart'
+            title_str = r'$w = {u^{1.5} \over v}$'
+            if name_template[-1] =='c': NN = 16
+        elif test_nr == 15:
+            w = lambda u, v: 1 / (u*u*v)
+            scale_type = 'log smart'
+            title_str = r'$w = {1 \over {u^2v}}$'
+            if name_template[-1] =='c': NN = 9
+        elif test_nr == 16:
+            w = lambda u, v: v / u / u
+            scale_type = 'log smart'
+            title_str = r'$w = {v \over {u^2}}$'
+            if name_template[-1] =='c': NN = 14
+        else:
+            return #sys.exit( 'there is no test number ({})'.format(test_nr) )
 
-    print( 'test "{}", {}, {}, w scale {}, v scale {}'.format(test_name, symStr, scaleStr, wStr, vStr) )
+        test_name = name_template.format(test_nr)
 
-    # range for the u scale
-    umin = 1
-    umax = 5
 
-    # range for the v scale
-    vmin = 1
-    vmax = 5
+        t = test_nr - 1
+        symStr = 'symmetrical' if t %16 < 8 else 'non-symmetrical'
+        scaleStr = 'linear' if t % 8 < 4 else 'log'
+        if name_template[-1] == 'a':
+            wStr = 'down' if t % 4 < 2 else 'up'
+            vStr = 'down' if t % 2 == 0 else 'up'
+        else:
+            wStr = 'up' if t % 4 < 2 else 'down'
+            vStr = 'up' if t % 2 == 0 else 'down'
+        tstr = '{}: {}, {}, w {}, v {}'.format(test_name, symStr, scaleStr, wStr, vStr)
+        print( '\ntest', tstr )
 
-    # automagically get the w scale range
-    tmp = [ w(umin, vmin), w(umax, vmin), w(umin, vmax), w(umax, vmax) ]
-    wmin = min(tmp)
-    wmax = max(tmp)
 
-    #print( 'wmin, wmax is ', wmin, wmax)
+        left_axis = {
+            'u_min': umin,
+            'u_max': umax,
+            'title': r'$u$',
+            'scale_type': scale_type,
+            'tick_levels': 3,
+            'tick_text_levels': 2,
+        }
+        if name_template[-1] == 'a':
+            left_axis['anamorphosis'] = {'func': lambda t: -t, 'inv': lambda t: -t}
 
-    ##############################################
-    #
-    # definitions for the axes for pyNomo
-    # dictionary with key:value pairs
+        right_axis = {
+            'u_min': vmin,
+            'u_max': vmax,
+            'title': r'$v$',
+            'scale_type': scale_type,
+            'tick_levels': 3,
+            'tick_text_levels': 2,
+        }
+        if name_template[-1] == 'b':
+            right_axis['anamorphosis'] = {'func': lambda t: -t/2, 'inv': lambda t: -2*t}
 
-    left_axis = {
-        'u_min': umin,
-        'u_max': umax,
-        'title': r'$u$',
-        'scale_type': scale_type,
-        'tick_levels': 3,
-        'tick_text_levels': 2,
-    }
+        # automagically get the w scale range
+        wtmp = [ w(umin, vmin), w(umax, vmin), w(umin, vmax), w(umax, vmax) ]
+        middle_axis = {
+            'u_min': min(wtmp),
+            'u_max': max(wtmp),
+            'title': r'$w$',
+            'scale_type': scale_type,
+            'tick_levels': 3,
+            'tick_text_levels': 2,
+        }
+        if name_template[-1] == 'c':
+            middle_axis['anamorphosis'] = {'func': lambda t: -t, 'inv': lambda t: -t}
 
-    right_axis = {
-        'u_min': vmin,
-        'u_max': vmax,
-        'title': r'$v$',
-        'scale_type': scale_type,
-        'tick_levels': 3,
-        'tick_text_levels': 2,
-    }
+        # assemble the above 3 axes into a block
+        block_params0 = {
+            'block_type': 'type_9',
+            'f1_params': left_axis,
+            'f2_params': middle_axis,
+            'f3_params': right_axis,
 
-    middle_axis = {
-        'u_min': wmin,
-        'u_max': wmax,
-        'title': r'$w$',
-        'scale_type': scale_type,
-        'tick_levels': 3,
-        'tick_text_levels': 2,
-    }
+            # the isopleth connects the mid values of the outer axes
+            # edit this for different values
+            'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max']) / 2, \
+                                 'x', \
+                                 (right_axis['u_min'] + right_axis['u_max']) / 2]],
+        }
 
-    # assemble the above 3 axes into a block
-    block_params0 = {
-        'block_type': 'type_9',
-        'f1_params': left_axis,
-        'f2_params': middle_axis,
-        'f3_params': right_axis,
+        # the nomogram parameters
+        main_params = {
+            'filename': test_name,
+            'paper_height': 10,  # units are cm
+            'paper_width': 10,
+            'title_x': 5.0 if test_nr in [9, 10, 11, 12] else 7.0,
+            'title_y': 2.0,
+            'title_box_width': 8.0,
+            'title_str': title_str,
+            'block_params': [block_params0],
+            'transformations': [('scale paper',)],
+            'npoints': NN,
 
-        # the isopleth connects the mid values of the outer axes
-        # edit this for different values
-        'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max']) / 2, \
-                             'x', \
-                             (right_axis['u_min'] + right_axis['u_max']) / 2]]
-    }
+            # text to appear at the foot of the nomogram
+            # make this null string for nothing
+            # a default string will appear if this is omitted
+            'footer_string': tstr,
+            #'trace': 'trace_result'
+        }
 
-    # the nomogram parameters
-    main_params = {
-        'filename': test_name,
-        'paper_height': 10,  # units are cm
-        'paper_width': 10,
-        'title_x': 7.0,
-        'title_y': 2.0,
-        'title_box_width': 8.0,
-        'title_str': title_str,
-        'block_params': [block_params0],
-        'transformations': [('scale paper',)],
-        'npoints': NN,
 
-        # text to appear at the foot of the nomogram
-        # make this null string for nothing
-        # a default string will appear if this is omitted
-        'footer_string': '{}: {}, {}, w {}, v {}'.format(test_name, symStr, scaleStr, wStr, vStr)
-    }
 
-    print("calculating the nomogram ...")
-    Nomogen(w, main_params)  # generate nomogram for the target function
+        #pprint( main_params )
 
-    main_params['filename'] += '.pdf'
-    print("printing ", main_params['filename'], " ...")
-    Nomographer(main_params)
+        print("calculating the nomogram ...")
+        try:
+            Nomogen(w, main_params)  # generate nomogram for the target function
+            main_params['filename'] += '.pdf'
+            print("printing ", main_params['filename'], " ...")
+            Nomographer(main_params)
+        except ValueError:
+            print( test_name, 'failed')
 
-    if platform.system() == 'Darwin':       # macOS
-        subprocess.call(('open', main_params['filename']))
-    elif platform.system() == 'Windows':    # Windows
-        os.startfile(main_params['filename'])
-    else:                                   # linux variants
-        subprocess.call(('xdg-open', main_params['filename']))
+    # end of do_test()
 
-# TODO: check that axes are as expected
+
+do_test( 'axtest{}' )  # normal
+
+do_test( 'axtest{}a' )  # anamorphosis on left axis
+do_test( 'axtest{}b' )  # anamorphosis on right axis
+do_test( 'axtest{}c' )  # anamorphosis on middle axis
+
+################# end of axestest.py ###############
 
 

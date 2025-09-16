@@ -7,8 +7,8 @@
 
 import sys
 
-import inspect
 import os
+import inspect
 
 sys.path.insert(0, "..")
 
@@ -19,11 +19,6 @@ from pynomo.nomographer import Nomographer
 
 # get current file name
 myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
-
-# alternative with no external dependencies - it works most of the time
-#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
-#             or __name__,
-
 
 
 ########################################
@@ -78,7 +73,7 @@ left_axis = {
     'extra_titles': [             # extra title for units
         {'dx': -1.3,
          'dy': 0.11,
-         'text': r'$\small MPa$',
+         'text': r'$MPa$',
          'width': 5,
          }],
     'scale_type': 'linear smart',
@@ -97,7 +92,7 @@ right_axis = {
     'extra_titles': [             # extra title for units
         {'dx': -1.3,
          'dy': 0.11,
-         'text': r'$\small in$',
+         'text': r'$in$',
          'width': 5,
          }],
     'scale_type': 'log smart',
@@ -114,7 +109,7 @@ middle_axis = {
     'extra_titles': [
         {'dx': -1.4,
          'dy': 0.11,
-         'text': r'$\small m$',
+         'text': r'$m$',
          'width': 5,
          }],
     'scale_type': 'linear smart',
@@ -129,6 +124,10 @@ block_params0 = {
     'f2_params': middle_axis,
     'f3_params': right_axis,
     'isopleth_values': [[RCmin+(RCmax-RCmin)/12, 'x', Dmin+(Dmax-Dmin)/8]],
+
+    # log alignment errors
+    # If this is missing or False then alignment error logs are disabled
+    'LogAlignment': False,
 }
 
 
@@ -148,7 +147,7 @@ left_axis_psi = {
     'extra_titles': [
         {'dx': -0.1,
          'dy': 0.11,
-         'text': r'$\small psi$',
+         'text': r'$psi$',
          'width': 5,
          }],
     'align_func': lambda u: u / psi_per_MPa,
@@ -166,7 +165,7 @@ right_axis_in = {
     'extra_titles': [
         {'dx': -0.1,
          'dy': 0.11,
-         'text': r'$\small mm$',
+         'text': r'$mm$',
          'width': 5,
          }],
     'align_func': lambda u: u * mm_per_inch,
@@ -184,7 +183,7 @@ middle_axis_feet = {
     'extra_titles': [
         {'dx': -0.1,
          'dy': 0.11,
-         'text': r'$\small ft$',
+         'text': r'$ft$',
          'width': 5,
          }],
     'align_func': lambda u: u / feet_per_metre,
@@ -215,12 +214,13 @@ main_params = {
     'extra_texts': [
         {'x': 2,
          'y': 8,
-         'text': r'$V=({0.19+({{{120-RC}\over{2000}}})})\times D^{0.63}$',
+         'text': r'$V=(0.19+{{120-RC}\over2000})\times D^{0.63}$',
          'width': 6,
          }],
 
     # first block is the type_9 nomogram, the dual scale type_9 block follows
     'block_params': [block_params0, block_1_params],
+    'isopleth_params': [{'color': 'Red'}],
 
     'transformations': [('scale paper',)],
     'npoints': NN

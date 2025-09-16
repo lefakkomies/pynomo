@@ -103,7 +103,11 @@ block_params0 = {
     'transform_ini': False,
     'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max']) / 2, \
                          'x', \
-                         (right_axis['u_min'] + right_axis['u_max']) / 2]]
+                         (right_axis['u_min'] + right_axis['u_max']) / 2]],
+
+    # log alignment errors
+    # If this is missing or False then alignment error logs are disabled
+    'LogAlignment': False,
 }
 
 main_params = {
@@ -113,7 +117,7 @@ main_params = {
     'title_x': 7,
     'title_y': 8.1,
     'title_box_width': 8.0,
-    'title_str': r'\Large $ W = {m \over {{\pi \over 4} d^2 }}$',
+    'title_str': r'$ W = {m \over {{\pi \over 4} d^2 }}$',
     'extra_texts': [
         {'x': 5.2,
          'y': 8.8,

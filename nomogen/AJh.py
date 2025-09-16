@@ -110,7 +110,11 @@ block_params0 = {
     'transform_ini': False,
     'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max']) / 2, \
                          'x', \
-                         (right_axis['u_min'] + right_axis['u_max']) / 2]]
+                         (right_axis['u_min'] + right_axis['u_max']) / 2]],
+
+    # log alignment errors
+    # If this is missing or False then alignment error logs are disabled
+    'LogAlignment': False,
 }
 
 main_params = {
@@ -120,7 +124,7 @@ main_params = {
     'title_x': 4.5,
     'title_y': 1.5,
     'title_box_width': 8.0,
-    'title_str': r'$ \scriptsize (1+L)h^2 - Lh(1+p) - {1 \over 3} (1-L)(1+2p) = 0$',
+    'title_str': r'$(1+L)h^2 - Lh(1+p) - {1 \over 3} (1-L)(1+2p) = 0$',
     'block_params': [block_params0],
     'transformations': [('scale paper',)],
     'npoints': NN

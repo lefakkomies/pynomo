@@ -111,7 +111,11 @@ block_params0 = {
     # edit this for different values
     'isopleth_values': [[(left_axis['u_min'] + left_axis['u_max']) / 2, \
                          'x', \
-                         (right_axis['u_min'] + right_axis['u_max']) / 2]]
+                         (right_axis['u_min'] + right_axis['u_max']) / 2]],
+
+    # log alignment errors
+    # If this is missing or False then alignment error logs are disabled
+    'LogAlignment': False,
 }
 
 # the nomogram parameters
@@ -125,6 +129,10 @@ main_params = {
     'title_box_width': 8.0,
     'title_str': r'$w = {{9u + v} \over {8(u-v) + 10}}$',
     'block_params': [block_params0],
+
+    # set the colour of the ispleth/index line here
+    #'isopleth_params': [ {'color': 'Red'}, ],
+
     'transformations': [('scale paper',)],
 
     'npoints': NN,
@@ -132,7 +140,7 @@ main_params = {
     # instead of forcing the ends of the axes to the corners of the unit square,
     # nomogen can shape the nomogram to minimise parallax errors
     # uncomment the following line to select this option
-    #'muShape': 0,
+    #'muShape': 1,
 
     # text to appear at the foot of the nomogram
     # note that latex rules apply

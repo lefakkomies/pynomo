@@ -129,8 +129,11 @@ block_params0 = {
     'transform_ini': False,
     'isopleth_values': [[left_axis['u_max'] * 0.9, \
                          'x', \
-                         right_axis['u_max'] * 0.95 ]]
-    #    'isopleth_values': [[0.7, 'x', 0.9]]
+                         right_axis['u_max'] * 0.95 ]],
+
+    # log alignment errors
+    # If this is missing or False then alignment error logs are disabled
+    'LogAlignment': False,
 }
 
 main_params = {

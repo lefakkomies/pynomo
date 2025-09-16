@@ -4,8 +4,8 @@
 energy expended while hiking, accounting for slope and speed
 use dual scales for speed & energy axes
 
- https://getpocket.com/explore/item/this-is-how-many-calories-you-burn-on-a-hilly-hike?utm_source=pocket-newtab-global-en-GB
-
+references:
+ https://getpocket.com/explore/item/this-is-how-many-calories-you-burn-on-a-hilly-hike
  https://pubmed.ncbi.nlm.nih.gov/30973477/
 
 """
@@ -23,10 +23,6 @@ from pynomo.nomographer import Nomographer
 
 # get current file name
 myfile = os.path.basename(inspect.stack()[0][1]).replace(".py", "")
-
-# alternative with no external dependencies - it works most of the time
-#  myfile =  __name__ == "__main__" and (__file__.endswith(".py") and __file__.replace(".py", "") or "nomogen")
-#             or __name__,
 
 
 
@@ -52,7 +48,7 @@ G is  gradient %
 def EE(S,G):
 
     # S is km/hr, need m/s
-    S *= 10.0 / 36.0
+    S *= 1000.0 / 3600.0
     t1 = 1.94 * S**0.43
     t2 = 0.24*S**4
     t3 = 0.34*S*G*(1-1.05**(1-1.11**(G+32)))
@@ -61,8 +57,11 @@ def EE(S,G):
 
 
 # range for speed km/hr
-Smin = 0.1 * 36 / 10        # 0.1 m/s -> km/hr
-Smax = 3 * 36 / 10          # 3 m/s -> km/hr
+# note that Smin = 0 is invalid in the function EE
+# nomogen evaluates derivatives by calculating
+# the function marginally beyond the Smin..Smax range
+Smin = 0.1 * 3600 / 1000      # m/s -> km/hr
+Smax = 3 * 3600 / 1000          # m/s -> km/hr
 
 # range for slope
 Gmax = +25
@@ -79,7 +78,7 @@ EEmax = EE(Smax, Gmax)
 # a higher value may be necessary if the scales are very non-linear
 # a lower value is faster, makes a smoother curve,
 #     but could be less accurate
-NN = 15
+NN = 16
 
 
 
@@ -88,16 +87,16 @@ NN = 15
 # definitions for the axes for pyNomo
 # dictionary with key:value pairs
 
-# km/hr scale of the left axis
-left_axis = {
-    'tag': 'left',            # link to alternative scale
+# km/hr scale of the speed axis
+speed_axis = {
+    'tag': 'speed',            # link to alternative scale
     'u_min': Smin,
     'u_max': Smax,
-    'title': r'walking speed',
+    'title': 'walking speed',
     'extra_titles':[
         {'dx':-2.5,
          'dy':-0.0,
-         'text':r'$\small km \thinspace hr^{-1}$',
+         'text':r'$km \thinspace hr^{-1}$',
          'width':5,
          }],
     'scale_type': 'linear smart',
@@ -106,10 +105,10 @@ left_axis = {
     'tick_side': 'left',
 }
 
-right_axis = {
+gradient_axis = {
     'u_min': Gmin,
     'u_max': Gmax,
-    'title': r'gradient \%',
+    'title': 'gradient %',
     'title_x_shift': 0.6,
     'scale_type': 'linear smart',
     'tick_levels': 5,
@@ -117,11 +116,11 @@ right_axis = {
     'tick_side': 'left',
 }
 
-middle_axis = {
-    'tag': 'middle',            # link to alternative scale
+energy_axis = {
+    'tag': 'energy',            # link to alternative scale
     'u_min': EEmin,
     'u_max': EEmax,
-    'title': r'$\small Wkg^{-1}$',
+    'title': r'$W kg^{-1}$',
     'title_draw_center': True,
     'title_distance_center': -1.5,
     'extra_titles':[
@@ -138,29 +137,33 @@ middle_axis = {
 # assemble the above 3 axes into a block
 block_params0 = {
     'block_type': 'type_9',
-    'f1_params': left_axis,
-    'f2_params': middle_axis,
-    'f3_params': right_axis,
+    'f1_params': speed_axis,     # left axis
+    'f2_params': energy_axis,    # middle
+    'f3_params': gradient_axis,  # right
 
     # the isopleth connects the mid values of the outer axes
     # edit this for different values
-    'isopleth_values': [[7, 'x', 0]]
+    'isopleth_values': [[(Smin+Smax)/2, 'x', 0]],
+
+    # log alignment errors
+    # If this is missing or False then alignment error logs are disabled
+    'LogAlignment': True,
 }
 
 
 ######## the second scales ##############
 
-# mph scale for left axis
+# mph scale for speed axis
 
 km_per_mile = 63360 * 25.4 * 1e-6 # inches per mile * mm per inch * km per mm = 1.609344
-left_axis_mph = {
-    'tag': 'left',
-    'u_min': left_axis['u_min'] / km_per_mile,
-    'u_max': left_axis['u_max'] / km_per_mile,
+speed_axis_mph = {
+    'tag': 'speed',
+    'u_min': speed_axis['u_min'] / km_per_mile,
+    'u_max': speed_axis['u_max'] / km_per_mile,
     'extra_titles':[
         {'dx':-0.1,
          'dy':0.0,
-         'text':r'$\small mph$',
+         'text':r'$mph$',
          }],
     'align_func': lambda m: m*km_per_mile,
     'scale_type': 'linear smart',
@@ -171,12 +174,12 @@ left_axis_mph = {
 
 block_1_params={
     'block_type':'type_8',
-    'f_params': left_axis_mph,
+    'f_params': speed_axis_mph,
     'isopleth_values':[['x']],
 }
 
 
-# calorie scale for middle axis
+# calorie scale for energy axis
 
 # 1 nutrition calorie Cal 	= 4186.80 	joules J
 # 1 kg = 2.20462262 lbs
@@ -188,11 +191,11 @@ wlbs = round(80*2.20462262)
 
 watts_per_calph = 4186.80*1000/wkg/3600
 
-middle_axis_cal = {
-    'tag': 'middle',
-    'u_min': middle_axis['u_min'] / watts_per_calph,
-    'u_max': middle_axis['u_max'] / watts_per_calph,
-    'title':r'$\small kcal/hr ({}kg/{}lbs)$'.format(wkg,wlbs),
+energy_axis_cal = {
+    'tag': 'energy',
+    'u_min': energy_axis['u_min'] / watts_per_calph,
+    'u_max': energy_axis['u_max'] / watts_per_calph,
+    'title':r'$kcal/hr ({}kg/{}lbs)$'.format(wkg,wlbs),
     'title_distance_center': 2.0,
     'title_draw_center': True,
     'align_func': lambda c: c*watts_per_calph,
@@ -204,7 +207,7 @@ middle_axis_cal = {
 
 block_2_params={
     'block_type':'type_8',
-    'f_params': middle_axis_cal,
+    'f_params': energy_axis_cal,
     'isopleth_values':[['x']],
 }
 
@@ -223,8 +226,17 @@ main_params = {
     'block_params': [block_params0, block_1_params, block_2_params],
 
     'transformations': [('scale paper',)],
-    'muShape': 0,
+    'isopleth_params': [{'color': 'Red'}],
+
+    # instead of forcing the ends of the axes to the corners of the unit square,
+    # nomogen can shape the nomogram to minimise parallax errors
+    # uncomment the following line to select this option
+    'muShape': 1,
     'npoints': NN,
+
+    # the trace parameter can be set to enable tracing various phases
+    # of generating the nomogram
+    #'trace': 'trace_result',
 
     # text to appear at the foot of the nomogram
     # make this null string for nothing
